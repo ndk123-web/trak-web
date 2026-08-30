@@ -42,12 +42,16 @@ export function Hero() {
         </div>
 
         {/* Main Headline */}
-        <div className="max-w-3xl space-y-4">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
-            The CLI workspace generator for hands-on technical learning.
+        <div className="max-w-3xl space-y-3">
+          <h1 className="font-serif text-2xl sm:text-4xl lg:text-[40px] font-normal tracking-[-0.015em] text-[#f5f4ef] leading-[1.2]">
+            The CLI workspace generator for{" "}
+            <span className="italic font-serif text-emerald-400 font-normal">
+              hands-on
+            </span>{" "}
+            technical learning.
           </h1>
-          <p className="text-base sm:text-lg text-slate-400 font-normal leading-relaxed">
-            Scaffold complete, multi-module engineering labs with working source code, build configs, and structured documentation directly on your local filesystem with a single command.
+          <p className="text-sm sm:text-base text-slate-400 font-sans leading-relaxed max-w-2xl font-normal">
+            Scaffold structured, multi-module engineering laboratories with working source code, build manifests, and documentation directly on your local filesystem.
           </p>
         </div>
 

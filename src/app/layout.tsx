@@ -1,6 +1,26 @@
 import type { Metadata } from "next";
+import { Inter, Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AppLayoutShell } from "@/components/AppLayoutShell";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Trak • Developer Learning Workspace Generator CLI",
@@ -39,8 +59,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className="bg-[#07090e] text-slate-100 antialiased min-h-screen selection:bg-emerald-500/30 selection:text-emerald-300">
+    <html
+      lang="en"
+      className={`dark scroll-smooth ${inter.variable} ${newsreader.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="bg-[#07090e] text-[#ededed] font-sans antialiased min-h-screen selection:bg-emerald-500/30 selection:text-emerald-300">
         <AppLayoutShell>{children}</AppLayoutShell>
       </body>
     </html>

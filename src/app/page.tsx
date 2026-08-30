@@ -57,10 +57,10 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-white/[0.08]">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
               Curriculum Catalog
             </h2>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1">
+            <p className="text-slate-400 text-xs sm:text-sm mt-1 font-sans">
               19 structured blueprints covering systems programming, operating systems, cloud, and DevOps.
             </p>
           </div>
@@ -200,10 +200,10 @@ export default function Home() {
       {/* 3. Technical Architecture & Execution Pipeline */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="pb-4 border-b border-white/[0.08]">
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
             Architecture & Execution Model
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1">
+          <p className="text-slate-400 text-xs sm:text-sm mt-1 font-sans">
             How Trak resolves remote templates and builds local workspaces deterministically.
           </p>
         </div>
@@ -241,7 +241,7 @@ export default function Home() {
       {/* 4. Core Design Guarantees */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="pb-4 border-b border-white/[0.08]">
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
             Design Guarantees
           </h2>
         </div>
