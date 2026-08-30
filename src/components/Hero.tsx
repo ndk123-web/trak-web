@@ -191,30 +191,69 @@ export function Hero() {
             {/* Terminal Body */}
             <div className="p-4 font-mono text-xs leading-relaxed overflow-x-auto text-slate-300 bg-[#06080e] min-h-[260px]">
               {activeTab === "list" && (
-                <div className="space-y-1">
+                <div className="space-y-4">
                   <div className="text-slate-400 flex items-center gap-2">
                     <span className="text-emerald-400">~/workspace</span>
                     <span className="text-cyan-400">$</span>
                     <span className="text-white font-bold">trak list</span>
                   </div>
-                  <div className="pt-2 text-emerald-400 font-bold">🌳 Trak Learning Catalog (v1.0.0)</div>
-                  <div className="text-slate-500">├── 📦 <span className="text-slate-200 font-semibold">Programming Languages (lang)</span></div>
-                  <div className="text-slate-500 pl-4">│   ├── <span className="text-cyan-400 font-semibold">go</span>          <span className="text-slate-400">Goroutines, channels, memory pointers & microservices</span></div>
-                  <div className="text-slate-500 pl-4">│   ├── <span className="text-cyan-400 font-semibold">rust</span>        <span className="text-slate-400">Ownership, lifetimes, Tokio async runtime & Axum</span></div>
-                  <div className="text-slate-500 pl-4">│   ├── <span className="text-cyan-400 font-semibold">typescript</span>  <span className="text-slate-400">Strict tsconfig, discriminated unions, infer & Zod</span></div>
-                  <div className="text-slate-500 pl-4">│   └── <span className="text-cyan-400 font-semibold">python</span>      <span className="text-slate-400">CPython internals, GIL, Asyncio & FastAPI</span></div>
-                  <div className="text-slate-500">├── 🐧 <span className="text-slate-200 font-semibold">Operating Systems & Kernels (os)</span></div>
-                  <div className="text-slate-500 pl-4">│   ├── <span className="text-emerald-400 font-semibold">linux</span>       <span className="text-slate-400">Kernel architecture, systemd, permissions & Bash</span></div>
-                  <div className="text-slate-500 pl-4">│   └── <span className="text-emerald-400 font-semibold">macos</span>       <span className="text-slate-400">Darwin XNU, APFS snapshots, launchd & Homebrew</span></div>
-                  <div className="text-slate-500">├── ☁️ <span className="text-slate-200 font-semibold">Cloud Infrastructure (cloud)</span></div>
-                  <div className="text-slate-500 pl-4">│   └── <span className="text-amber-400 font-semibold">aws</span>         <span className="text-slate-400">IAM zero-trust, VPC networking, EC2/ALB & Aurora</span></div>
-                  <div className="text-slate-500">├── 🗄️ <span className="text-slate-200 font-semibold">Databases & Storage (db)</span></div>
-                  <div className="text-slate-500 pl-4">│   ├── <span className="text-indigo-400 font-semibold">postgres</span>    <span className="text-slate-400">MVCC, JSONB, GIN/BRIN indexes & Autovacuum</span></div>
-                  <div className="text-slate-500 pl-4">│   └── <span className="text-indigo-400 font-semibold">redis</span>       <span className="text-slate-400">Event loop, Streams, RDB/AOF & Sentinel HA</span></div>
-                  <div className="text-slate-500">└── 🛠️ <span className="text-slate-200 font-semibold">DevOps & Developer Tools (tool)</span></div>
-                  <div className="text-slate-500 pl-4">    ├── <span className="text-rose-400 font-semibold">docker</span>      <span className="text-slate-400">Namespaces, cgroups, Multi-stage builds & BuildKit</span></div>
-                  <div className="text-slate-500 pl-4">    ├── <span className="text-rose-400 font-semibold">k8s</span>         <span className="text-slate-400">CKA/CKAD syllabus, Control plane, Pods & Helm</span></div>
-                  <div className="text-slate-500 pl-4">    └── <span className="text-rose-400 font-semibold">terraform</span>   <span className="text-slate-400">HCL syntax, S3 remote state locking & modules</span></div>
+
+                  <div className="text-slate-200 font-bold">
+                    Trak Learning Catalog <span className="text-slate-500 font-normal">(v1.0.0 • 22 Blueprints)</span>
+                  </div>
+
+                  {/* Category 1: Languages */}
+                  <div className="space-y-1">
+                    <div className="text-cyan-400 font-bold">📦 PROGRAMMING LANGUAGES (lang/)</div>
+                    <div className="pl-3 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">go</span><span className="text-slate-400">Comprehensive Go fundamentals, concurrency, channels & memory</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">rust</span><span className="text-slate-400">End-to-end Rust systems programming, ownership, lifetimes & Tokio async</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">typescript</span><span className="text-slate-400">TypeScript mastery: strict tsconfig, discriminated unions, infer & Zod</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">python</span><span className="text-slate-400">Comprehensive Python track: CPython internals, GIL, Asyncio & FastAPI</span></div>
+                    </div>
+                  </div>
+
+                  {/* Category 2: OS & Cloud */}
+                  <div className="space-y-1">
+                    <div className="text-emerald-400 font-bold">🐧 OPERATING SYSTEMS & CLOUD (os/ & cloud/)</div>
+                    <div className="pl-3 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">linux</span><span className="text-slate-400">Linux mastery: Kernel architecture, systemd, process signals & Bash</span></div>
+                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">macos</span><span className="text-slate-400">macOS mastery: Darwin XNU kernel, APFS snapshots, launchd & Apple Silicon</span></div>
+                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">aws</span><span className="text-slate-400">Complete AWS: Zero-trust IAM, VPC networking, EC2/ALB & Aurora</span></div>
+                    </div>
+                  </div>
+
+                  {/* Category 3: Databases */}
+                  <div className="space-y-1">
+                    <div className="text-indigo-400 font-bold">🗄️ DATABASES & STORAGE (db/)</div>
+                    <div className="pl-3 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">postgres</span><span className="text-slate-400">PostgreSQL mastery: MVCC, JSONB, GIN/BRIN indexes & Autovacuum tuning</span></div>
+                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">redis</span><span className="text-slate-400">Redis mastery: Event loop, Streams, RDB/AOF persistence & Sentinel HA</span></div>
+                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">sql</span><span className="text-slate-400">Comprehensive SQL: Schema design, CTEs, Window Functions & EXPLAIN</span></div>
+                    </div>
+                  </div>
+
+                  {/* Category 4: DevOps & Tools */}
+                  <div className="space-y-1">
+                    <div className="text-rose-400 font-bold">🛠️ DEVOPS & DEVELOPER TOOLS (tool/)</div>
+                    <div className="pl-3 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">docker</span><span className="text-slate-400">Complete Docker: Namespaces, cgroups, Overlay2 & multi-stage builds</span></div>
+                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">k8s</span><span className="text-slate-400">Kubernetes mastery (CKA/CKAD): Control plane, Pods, Deployments & Helm</span></div>
+                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">terraform</span><span className="text-slate-400">Terraform mastery: HCL syntax, S3 remote state locking & modules</span></div>
+                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">ansible</span><span className="text-slate-400">Ansible mastery: Playbooks, Jinja2 templates, custom Roles & Molecule</span></div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Footer Box */}
+                  <div className="pt-2 border-t border-white/[0.08] text-[11px] space-y-1 text-slate-400">
+                    <div>
+                      <span className="text-amber-400 font-bold">💡 Initialize any workspace: </span>
+                      <span className="text-emerald-400 font-bold">trak init &lt;category&gt;/&lt;template&gt;</span>
+                    </div>
+                    <div className="text-slate-500">
+                      example: <span className="text-slate-300">trak init lang/go --path ./learn-go</span>
+                    </div>
+                  </div>
                 </div>
               )}
 

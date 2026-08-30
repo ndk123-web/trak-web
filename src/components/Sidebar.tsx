@@ -20,6 +20,7 @@ import {
   Cpu,
 } from "lucide-react";
 import { CATEGORIES, TRACKS } from "@/data/tracks";
+import { TrakLogo } from "./TrakLogo";
 
 interface SidebarProps {
   isOpenMobile?: boolean;
@@ -133,22 +134,14 @@ export function Sidebar({
             }`}
             title="Trak - Developer Workspace Generator"
           >
-            <div className="relative w-8 h-8 rounded-xl overflow-hidden border border-white/10 shadow-sm shrink-0 group-hover:scale-105 transition-transform bg-black/40">
-              <Image
-                src="/trak.png"
-                alt="Trak CLI Logo"
-                fill
-                className="object-contain p-0.5"
-                priority
-              />
-            </div>
+            <TrakLogo size={28} className="group-hover:scale-105" />
 
             {!isCollapsed && (
               <div className="flex items-center gap-2 min-w-0">
                 <span className="font-extrabold text-base tracking-tight text-white group-hover:text-emerald-400 transition-colors">
-                  Trak
+                  trak
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold">
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
                   v1.0.0
                 </span>
               </div>

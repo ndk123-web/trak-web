@@ -15,6 +15,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { QuickSearchModal } from "./QuickSearchModal";
+import { TrakLogo } from "./TrakLogo";
 
 interface AppHeaderProps {
   onMobileMenuToggle?: () => void;
@@ -75,16 +76,8 @@ export function AppHeader({
 
           {/* Logo on mobile only (desktop has it in sidebar) */}
           <Link href="/" className="flex lg:hidden items-center gap-2">
-            <div className="relative w-7 h-7 rounded-lg overflow-hidden border border-white/10 shadow-sm bg-black/40">
-              <Image
-                src="/trak.png"
-                alt="Trak Logo"
-                fill
-                className="object-contain p-0.5"
-                priority
-              />
-            </div>
-            <span className="font-extrabold text-base text-white">Trak</span>
+            <TrakLogo size={24} />
+            <span className="font-extrabold text-base text-white">trak</span>
           </Link>
 
           {/* Breadcrumbs */}
