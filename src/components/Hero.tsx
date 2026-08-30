@@ -57,9 +57,9 @@ export function Hero() {
 
         {/* Installation Bar */}
         <div className="mt-8 max-w-3xl space-y-2.5">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <span className="text-xs font-mono text-slate-400 font-medium">Installation:</span>
-            <div className="flex items-center gap-1 text-[11px] font-mono">
+            <div className="flex flex-wrap items-center gap-1 text-[11px] font-mono">
               <button
                 onClick={() => setInstallMethod("powershell")}
                 className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
@@ -106,7 +106,7 @@ export function Hero() {
           <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950 border border-white/[0.08] text-xs font-mono">
             <div className="flex items-center gap-2 overflow-x-auto text-slate-200">
               <span className="text-emerald-400 font-bold">$</span>
-              <span className="select-all">{installCommands[installMethod]}</span>
+              <span className="select-all whitespace-nowrap">{installCommands[installMethod]}</span>
             </div>
             <button
               onClick={() => copyToClipboard(installCommands[installMethod])}
@@ -121,7 +121,7 @@ export function Hero() {
             </button>
           </div>
 
-          <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[11px] font-mono text-slate-500">
             <span>Restart terminal after running to reload PATH</span>
             <Link href="/quickstart" className="text-emerald-400 hover:underline">
               View Quickstart Guide →
@@ -133,21 +133,21 @@ export function Hero() {
         <div className="mt-10 max-w-4xl">
           <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-[#080b11] shadow-2xl">
             {/* Terminal Window Header */}
-            <div className="px-4 py-2.5 bg-[#0c101a] border-b border-white/[0.06] flex items-center justify-between select-none">
-              <div className="flex items-center gap-2">
+            <div className="px-3.5 py-2.5 bg-[#0c101a] border-b border-white/[0.06] flex items-center justify-between gap-2 select-none">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                 <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
-                <span className="ml-2 text-xs font-mono text-slate-400">
+                <span className="ml-1.5 text-[11px] font-mono text-slate-400 hidden sm:inline">
                   terminal — trak
                 </span>
               </div>
 
               {/* Command Tabs */}
-              <div className="flex items-center gap-1 text-[11px] font-mono">
+              <div className="flex items-center gap-1 text-[11px] font-mono overflow-x-auto scrollbar-none">
                 <button
                   onClick={() => setActiveTab("list")}
-                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer whitespace-nowrap ${
                     activeTab === "list"
                       ? "bg-white/[0.1] text-white font-medium"
                       : "text-slate-500 hover:text-slate-300"
@@ -157,7 +157,7 @@ export function Hero() {
                 </button>
                 <button
                   onClick={() => setActiveTab("init-go")}
-                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer whitespace-nowrap ${
                     activeTab === "init-go"
                       ? "bg-white/[0.1] text-white font-medium"
                       : "text-slate-500 hover:text-slate-300"
@@ -167,7 +167,7 @@ export function Hero() {
                 </button>
                 <button
                   onClick={() => setActiveTab("init-postgres")}
-                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer whitespace-nowrap ${
                     activeTab === "init-postgres"
                       ? "bg-white/[0.1] text-white font-medium"
                       : "text-slate-500 hover:text-slate-300"
@@ -177,7 +177,7 @@ export function Hero() {
                 </button>
                 <button
                   onClick={() => setActiveTab("init-k8s")}
-                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                  className={`px-2 py-0.5 rounded transition-colors cursor-pointer whitespace-nowrap ${
                     activeTab === "init-k8s"
                       ? "bg-white/[0.1] text-white font-medium"
                       : "text-slate-500 hover:text-slate-300"
@@ -204,54 +204,70 @@ export function Hero() {
 
                   {/* Category 1: Languages */}
                   <div className="space-y-1">
-                    <div className="text-cyan-400 font-bold">📦 PROGRAMMING LANGUAGES (lang/)</div>
-                    <div className="pl-3 space-y-0.5 text-[11px]">
-                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">go</span><span className="text-slate-400">Comprehensive Go fundamentals, concurrency, channels & memory</span></div>
-                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">rust</span><span className="text-slate-400">End-to-end Rust systems programming, ownership, lifetimes & Tokio async</span></div>
-                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">typescript</span><span className="text-slate-400">TypeScript mastery: strict tsconfig, discriminated unions, infer & Zod</span></div>
-                      <div className="flex gap-4"><span className="text-cyan-300 w-24 shrink-0 font-semibold">python</span><span className="text-slate-400">Comprehensive Python track: CPython internals, GIL, Asyncio & FastAPI</span></div>
+                    <div className="text-white font-bold flex items-center gap-1.5">
+                      <span>📦</span>
+                      <span>PROGRAMMING LANGUAGES</span>
+                      <span className="text-cyan-400 font-mono font-normal">(lang/)</span>
+                    </div>
+                    <div className="pl-4 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">go</span><span className="text-slate-400">Comprehensive Go fundamentals, concurrency, channels & memory</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">rust</span><span className="text-slate-400">End-to-end Rust systems programming, ownership, lifetimes & Tokio async</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">typescript</span><span className="text-slate-400">TypeScript mastery: strict tsconfig, discriminated unions, infer & Zod</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">python</span><span className="text-slate-400">Comprehensive Python track: CPython internals, GIL, Asyncio & FastAPI</span></div>
                     </div>
                   </div>
 
                   {/* Category 2: OS & Cloud */}
                   <div className="space-y-1">
-                    <div className="text-emerald-400 font-bold">🐧 OPERATING SYSTEMS & CLOUD (os/ & cloud/)</div>
-                    <div className="pl-3 space-y-0.5 text-[11px]">
-                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">linux</span><span className="text-slate-400">Linux mastery: Kernel architecture, systemd, process signals & Bash</span></div>
-                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">macos</span><span className="text-slate-400">macOS mastery: Darwin XNU kernel, APFS snapshots, launchd & Apple Silicon</span></div>
-                      <div className="flex gap-4"><span className="text-emerald-300 w-24 shrink-0 font-semibold">aws</span><span className="text-slate-400">Complete AWS: Zero-trust IAM, VPC networking, EC2/ALB & Aurora</span></div>
+                    <div className="text-white font-bold flex items-center gap-1.5">
+                      <span>🐧</span>
+                      <span>OPERATING SYSTEMS & CLOUD</span>
+                      <span className="text-cyan-400 font-mono font-normal">(os/ & cloud/)</span>
+                    </div>
+                    <div className="pl-4 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">linux</span><span className="text-slate-400">Linux mastery: Kernel architecture, systemd, process signals & Bash</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">macos</span><span className="text-slate-400">macOS mastery: Darwin XNU kernel, APFS snapshots, launchd & Apple Silicon</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">aws</span><span className="text-slate-400">Complete AWS: Zero-trust IAM, VPC networking, EC2/ALB & Aurora</span></div>
                     </div>
                   </div>
 
                   {/* Category 3: Databases */}
                   <div className="space-y-1">
-                    <div className="text-indigo-400 font-bold">🗄️ DATABASES & STORAGE (db/)</div>
-                    <div className="pl-3 space-y-0.5 text-[11px]">
-                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">postgres</span><span className="text-slate-400">PostgreSQL mastery: MVCC, JSONB, GIN/BRIN indexes & Autovacuum tuning</span></div>
-                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">redis</span><span className="text-slate-400">Redis mastery: Event loop, Streams, RDB/AOF persistence & Sentinel HA</span></div>
-                      <div className="flex gap-4"><span className="text-indigo-300 w-24 shrink-0 font-semibold">sql</span><span className="text-slate-400">Comprehensive SQL: Schema design, CTEs, Window Functions & EXPLAIN</span></div>
+                    <div className="text-white font-bold flex items-center gap-1.5">
+                      <span>🗄️</span>
+                      <span>DATABASES & STORAGE</span>
+                      <span className="text-cyan-400 font-mono font-normal">(db/)</span>
+                    </div>
+                    <div className="pl-4 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">postgres</span><span className="text-slate-400">PostgreSQL mastery: MVCC, JSONB, GIN/BRIN indexes & Autovacuum tuning</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">redis</span><span className="text-slate-400">Redis mastery: Event loop, Streams, RDB/AOF persistence & Sentinel HA</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">sql</span><span className="text-slate-400">Comprehensive SQL: Schema design, CTEs, Window Functions & EXPLAIN</span></div>
                     </div>
                   </div>
 
                   {/* Category 4: DevOps & Tools */}
                   <div className="space-y-1">
-                    <div className="text-rose-400 font-bold">🛠️ DEVOPS & DEVELOPER TOOLS (tool/)</div>
-                    <div className="pl-3 space-y-0.5 text-[11px]">
-                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">docker</span><span className="text-slate-400">Complete Docker: Namespaces, cgroups, Overlay2 & multi-stage builds</span></div>
-                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">k8s</span><span className="text-slate-400">Kubernetes mastery (CKA/CKAD): Control plane, Pods, Deployments & Helm</span></div>
-                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">terraform</span><span className="text-slate-400">Terraform mastery: HCL syntax, S3 remote state locking & modules</span></div>
-                      <div className="flex gap-4"><span className="text-rose-300 w-24 shrink-0 font-semibold">ansible</span><span className="text-slate-400">Ansible mastery: Playbooks, Jinja2 templates, custom Roles & Molecule</span></div>
+                    <div className="text-white font-bold flex items-center gap-1.5">
+                      <span>🛠️</span>
+                      <span>DEVOPS & DEVELOPER TOOLS</span>
+                      <span className="text-cyan-400 font-mono font-normal">(tool/)</span>
+                    </div>
+                    <div className="pl-4 space-y-0.5 text-[11px]">
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">docker</span><span className="text-slate-400">Complete Docker: Namespaces, cgroups, Overlay2 & multi-stage builds</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">k8s</span><span className="text-slate-400">Kubernetes mastery (CKA/CKAD): Control plane, Pods, Deployments & Helm</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">terraform</span><span className="text-slate-400">Terraform mastery: HCL syntax, S3 remote state locking & modules</span></div>
+                      <div className="flex gap-4"><span className="text-cyan-400 w-24 shrink-0 font-semibold">ansible</span><span className="text-slate-400">Ansible mastery: Playbooks, Jinja2 templates, custom Roles & Molecule</span></div>
                     </div>
                   </div>
 
                   {/* Bottom Footer Box */}
-                  <div className="pt-2 border-t border-white/[0.08] text-[11px] space-y-1 text-slate-400">
+                  <div className="pt-3 border-t border-white/[0.08] text-[11px] space-y-1 text-slate-400">
                     <div>
                       <span className="text-amber-400 font-bold">💡 Initialize any workspace: </span>
                       <span className="text-emerald-400 font-bold">trak init &lt;category&gt;/&lt;template&gt;</span>
                     </div>
                     <div className="text-slate-500">
-                      example: <span className="text-slate-300">trak init lang/go --path ./learn-go</span>
+                      example: <span className="text-slate-400">trak init lang/go --path ./learn-go</span>
                     </div>
                   </div>
                 </div>
