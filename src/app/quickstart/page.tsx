@@ -75,6 +75,23 @@ export default function QuickstartPage() {
         </p>
       </div>
 
+      {/* Video Walkthrough Card */}
+      <div className="rounded-2xl border border-white/[0.08] bg-[#080b11] p-4 sm:p-6 space-y-3 shadow-xl">
+        <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+          <span className="text-xs font-mono font-bold text-white">1-Minute Video Walkthrough (v1.0.0)</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HD Demo</span>
+        </div>
+        <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/[0.06]">
+          <video
+            src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
+            controls
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-contain"
+          />
+        </div>
+      </div>
+
       {/* Steps List */}
       <div className="space-y-8">
         {steps.map((s, idx) => {

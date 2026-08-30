@@ -53,6 +53,35 @@ export default function Home() {
       {/* 1. Hero Section */}
       <Hero />
 
+      {/* 1.5 Embedded Video Demo Showcase */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#080b11] p-4 sm:p-6 space-y-4 shadow-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
+            <div>
+              <h2 className="font-serif text-lg sm:text-xl font-normal text-[#f5f4ef]">
+                Watch Trak in Action
+              </h2>
+              <p className="text-xs text-slate-400 font-sans mt-0.5">
+                See how Trak resolves remote blueprints and materializes structured, multi-module workspaces in seconds.
+              </p>
+            </div>
+            <span className="text-[11px] font-mono px-2.5 py-1 rounded bg-white/[0.04] text-emerald-400 border border-white/[0.06] w-fit">
+              v1.0.0 Demo Video
+            </span>
+          </div>
+
+          <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/[0.06] shadow-inner flex items-center justify-center">
+            <video
+              src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* 2. Catalog Index Matrix */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-white/[0.08]">

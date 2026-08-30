@@ -7,6 +7,8 @@ import {
   Check,
   RotateCcw,
   Clock,
+  Play,
+  X,
 } from "lucide-react";
 
 type DemoType = "init-go" | "init-postgres" | "init-k8s" | "list";
@@ -125,6 +127,7 @@ export function Hero() {
   const [spinnerFrame, setSpinnerFrame] = useState<number>(0);
   const [revealedLines, setRevealedLines] = useState<number>(0);
   const [isFinished, setIsFinished] = useState<boolean>(false);
+  const [isVideoOpen, setIsVideoOpen] = useState<boolean>(false);
 
   const installCommands = {
     powershell:
@@ -210,13 +213,23 @@ export function Hero() {
   return (
     <section className="relative pt-8 pb-14 lg:pt-12 lg:pb-20 border-b border-white/[0.06]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Calm, Professional Metadata Row (No AI Cliché Badges) */}
-        <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400 mb-5">
-          <span className="font-semibold text-slate-200">Trak v1.0.0</span>
-          <span className="text-slate-600">•</span>
-          <span className="text-slate-400">Last updated: August 30, 2026</span>
-          <span className="text-slate-600 hidden sm:inline">•</span>
-          <span className="text-slate-500 hidden sm:inline">19 Curriculum Tracks</span>
+        {/* Calm, Professional Metadata Row */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400">
+            <span className="font-semibold text-slate-200">Trak v1.0.0</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-400">Last updated: August 30, 2026</span>
+            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="text-slate-500 hidden sm:inline">19 Curriculum Tracks</span>
+          </div>
+
+          <button
+            onClick={() => setIsVideoOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-medium transition-all cursor-pointer"
+          >
+            <Play className="w-3 h-3 fill-current" />
+            <span>Watch Demo Video</span>
+          </button>
         </div>
 
         {/* Main Headline */}
@@ -504,6 +517,40 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Embedded Video Demo Modal */}
+      {isVideoOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setIsVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-[#090b10] border border-white/10 rounded-2xl overflow-hidden shadow-2xl space-y-3 p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-2 pb-2 border-b border-white/[0.06]">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-white">Trak CLI v1.0.0 — Demo Video</span>
+              </div>
+              <button
+                onClick={() => setIsVideoOpen(false)}
+                className="p-1 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="rounded-xl overflow-hidden bg-black aspect-video flex items-center justify-center">
+              <video
+                src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
+                controls
+                autoPlay
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
