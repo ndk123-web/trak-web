@@ -1,237 +1,622 @@
 {
   "id": "os/macos",
-  "name": "macOS Systems, Darwin BSD & Power User Administration",
-  "version": "1.0.0",
-  "description": "Comprehensive macOS & Darwin BSD curriculum from XNU kernel architecture and APFS snapshots to Homebrew, launchd daemons, SIP/Gatekeeper security, defaults plists, and Apple Silicon virtualization",
+  "name": "macOS Systems & Darwin Engineering",
+  "version": "1.2.0",
+  "description": "Complete high-depth macOS systems curriculum covering XNU/Darwin kernel, APFS filesystem, launchd daemons, Homebrew, SIP security, and Apple Silicon architecture",
   "root": {
     "name": "macos-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "Brewfile",
-        "type": "file",
-        "content": "# Trak macOS Tooling Setup\ntap \"homebrew/bundle\"\ntap \"homebrew/cask\"\n\n# CLI Tools\nbrew \"git\"\nbrew \"jq\"\nbrew \"tree\"\nbrew \"htop\"\n\n# Quick Look Plugins\ncask \"syntax-highlight\"\n"
-      },
-      {
         "name": "README.md",
         "type": "file",
-        "content": "# 🍎 Complete macOS Systems, Darwin BSD & Power User Track\n\nWelcome to your full macOS learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-darwin-architecture` | **Darwin & XNU Kernel** | XNU (Mach microkernel + BSD layer + I/O Kit), Apple Silicon ARM64, `sw_vers` |\n| `01-zsh-and-macos-shell` | **Zsh Environment** | Default Zsh, `.zshrc`, `/etc/paths.d`, PATH resolution, iTerm2/Warp |\n| `02-package-management-homebrew` | **Homebrew Mastery** | Formulae vs Casks, `/opt/homebrew` vs `/usr/local`, `brew bundle` Brewfile |\n| `03-apfs-filesystem-and-snapshots` | **APFS & Storage** | Apple File System (APFS), CoW clones, `tmutil` local snapshots, `diskutil` |\n| `04-directory-domains-and-bundles` | **Domains & App Bundles** | User (`~/Library`), Local, System Domains (SIP read-only), `.app` anatomy |\n| `05-launchd-daemons-and-agents` | **launchd & Plists** | PID 1 init system, LaunchDaemons vs LaunchAgents, `launchctl` commands |\n| `06-sip-gatekeeper-and-security` | **macOS Security Architecture** | SIP (`csrutil`), Gatekeeper (`xattr -d com.apple.quarantine`), codesign, TCC |\n| `07-macos-defaults-and-plists` | **Defaults & Plist Tweaks** | `defaults read/write`, `plutil` plist converter, hidden macOS system flags |\n| `08-process-and-memory-pressure` | **Performance & Memory** | Activity Monitor CLI, `vm_stat`, `memory_pressure`, sampling processes |\n| `09-networking-and-scutil` | **macOS Networking** | `networksetup`, `scutil`, PF (Packet Filter) firewall, Wi-Fi diagnostics |\n| `10-keychain-and-credentials` | **Keychain Security** | macOS Keychain architecture, `security` CLI, certificate trust stores |\n| `11-spotlight-and-metadata-indexing`| **Spotlight & Extended Attributes**| `mdfind` indexing, `mdls` metadata attributes, `xattr` management |\n| `12-automation-applescript-jxa` | **Automation (JXA/Shortcuts)**| `osascript`, JavaScript for Automation (JXA), macOS Shortcuts CLI |\n| `13-xcode-tools-and-compilers` | **Xcode CLI Toolchain** | `xcode-select`, clang / LLVM toolchains, SDK paths (`xcrun`) |\n| `14-hardware-and-power-management` | **Hardware & Power** | `system_profiler`, battery stats (`pmset -g batt`), sleep modes |\n| `15-virtualization-on-mac` | **Virtualization & Containers** | Apple Virtualization Framework (`vz`), Colima / OrbStack vs Docker Desktop |\n| `16-backup-and-time-machine` | **Time Machine Automation** | `tmutil startbackup`, snapshot management, backup exclusions |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 macOS SysAdmin / Jamf / DevOps interview scenarios & drills |\n\n---\n\n## 🛠️ Quick Commands\n\nCheck macOS system details:\n```bash\nsw_vers\nuname -a\nsysctl -n machdep.cpu.brand_string\n```\n"
+        "content": "# 🍎 macOS Systems & Darwin Engineering Track\n\nWelcome to the **macOS Systems & Darwin Engineering Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering Darwin kernel architecture (XNU), APFS filesystem mechanics, launchd service management, Homebrew packaging, Apple Silicon universal binaries, and macOS security (SIP, Gatekeeper, TCC).\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-darwin-architecture` | Darwin & XNU Kernel | XNU architecture (Mach microkernel + BSD), `sw_vers`, System Integrity Protection (SIP) |\n| `01-homebrew-and-package-management` | Homebrew & Brew Services | `/opt/homebrew` (ARM64) vs `/usr/local` (Intel), `brew cask`, `brew services` |\n| `02-zsh-and-macos-shell-environment` | Zsh & Terminal Config | `.zshrc`, `.zprofile`, environment variables, macOS default shell |\n| `03-file-system-apfs-and-extended-attributes` | APFS & Extended Attributes | Copy-on-write clones, snapshots, extended attributes (`xattr -d com.apple.quarantine`) |\n| `04-launchd-services-and-daemons` | `launchd` & Plist Daemons | LaunchDaemons vs LaunchAgents, plist XML format, `launchctl bootstrap/bootout` |\n| `05-process-management-and-activity-monitor` | Processes & Thermal States | `ps`, `top`, thermal state monitoring (`pmset -g therm`), memory pressure |\n| `06-macos-system-preferences-and-defaults` | `defaults` & Plist Editing | `defaults write com.apple.finder`, `plutil -p`, system preference domains |\n| `07-security-gatekeeper-sip-and-tcc` | Gatekeeper, SIP & TCC | Gatekeeper quarantine, `csrutil status`, TCC privacy permissions DB |\n| `08-networking-scutil-and-networksetup` | macOS Networking & DNS | `networksetup`, `scutil --dns`, `dscacheutil -flushcache`, dynamic DNS |\n| `09-applescript-and-jxa` | Automation & `osascript` | AppleScript (`osascript -e`), JavaScript for Automation (JXA), UI automation |\n| `10-diskutil-and-storage-management` | `diskutil` & Disk Images | `diskutil apfs`, APFS containers, `hdiutil attach/detach` DMG images |\n| `11-developer-toolchain-xcode-and-metal` | Xcode CLI & Toolchain | `xcode-select --install`, `xcrun`, LLVM clang on macOS, Metal shaders |\n| `12-universal-binaries-and-rosetta` | Universal 2 & Rosetta 2 | Mach-O fat binaries (`lipo -info`), Rosetta 2 translation (`arch -x86_64`) |\n| `13-keychain-and-credential-security` | Keychain Access (`security`) | Secure credential storage, `security find-generic-password`, certificates |\n| `14-power-management-and-pmset` | Power Management & `pmset` | Sleep assertions, battery health, `caffeinate` CLI utility |\n| `15-logging-unified-logging-system` | Unified Logging System | `log stream --predicate`, `log show`, subsystems & categories |\n| `16-automator-and-shortcuts-cli` | Shortcuts CLI & Automator | `shortcuts run`, Quick Actions, headless workflow automation |\n| `17-testing-and-diagnostics` | Diagnostics & Sysdiagnose | `sysdiagnose`, kernel crash logs, diagnostic reports in `/Library/Logs` |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 macOS Systems & Enterprise MDM gotchas + Production Diagnostic Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.sh` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sh` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-darwin-architecture",
         "type": "directory",
         "children": [
           {
-            "name": "sysinfo.sh",
+            "name": "README.md",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🍎 00 - macOS System Information & Darwin Kernel Check\"\necho \"=====================================================\"\nsw_vers\necho \"\"\nuname -a\necho \"\"\nsysctl hw.memsize hw.ncpu machdep.cpu.brand_string\n"
+            "content": "# 00 — Darwin & XNU Kernel Architecture\n\n## 🎯 What is XNU?\nXNU (\"X is Not Unix\") is the hybrid operating system kernel powering macOS, iOS, and watchOS:\n- **Mach Microkernel**: Handles IPC, thread scheduling, virtual memory (`vm_map`), and CPU core dispatching.\n- **BSD Subsystem**: Provides POSIX APIs, process models, networking stack (BSD sockets), and filesystem interfaces.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 00 - Darwin & XNU Architecture 🛠️\n\n### The 4 Pillars of XNU Kernel:\n1. **Mach Microkernel**: IPC message passing, thread scheduling, virtual memory management.\n2. **BSD Layer**: POSIX API compliance, networking (BSD sockets), process model, credentials.\n3. **I/O Kit**: Object-oriented C++ device driver framework.\n4. **libdispatch (GCD)**: Concurrency engine for Grand Central Dispatch.\n"
-          }
-        ]
-      },
-      {
-        "name": "01-zsh-and-macos-shell",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 01 - Zsh Shell & PATH Configuration\n\nmacOS uses `/usr/libexec/path_helper` to construct `$PATH` from `/etc/paths` and `/etc/paths.d/`.\n"
-          }
-        ]
-      },
-      {
-        "name": "02-package-management-homebrew",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 02 - Homebrew Architecture\n\n- **Apple Silicon (ARM64)**: Installs to `/opt/homebrew` (No sudo required).\n- **Intel (x86_64)**: Installs to `/usr/local`.\n\n```bash\n# Export all installed packages to Brewfile\nbrew bundle dump --force\n\n# Install all packages from Brewfile\nbrew bundle\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "03-apfs-filesystem-and-snapshots",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 03 - APFS Filesystem & Local Snapshots\n\n- **Instant Copy-on-Write Clones**: Duplicating a 50GB file takes 0 milliseconds and 0 extra disk space!\n- **Space Sharing**: Multiple APFS volumes share the same free pool in a container.\n\n```bash\n# Create a manual APFS local snapshot\ntmutil localsnapshot\n\n# List APFS volumes\ndiskutil apfs list\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "04-directory-domains-and-bundles",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 04 - Directory Domains & App Bundles\n\n### Application Bundle Anatomy (`.app`):\n```\nMyApp.app/\n└── Contents/\n    ├── Info.plist        # Application metadata, permissions, version\n    ├── MacOS/MyApp       # Executable binary\n    ├── Resources/        # Assets, icons, localized strings\n    └── _CodeSignature/   # Cryptographic code signing signature\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "05-launchd-daemons-and-agents",
-        "type": "directory",
-        "children": [
-          {
-            "name": "com.trak.service.plist",
-            "type": "file",
-            "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n    <key>Label</key>\n    <string>com.trak.service</string>\n    <key>ProgramArguments</key>\n    <array>\n        <string>/usr/bin/logger</string>\n        <string>Trak macOS Service Running</string>\n    </array>\n    <key>RunAtLoad</key>\n    <true/>\n    <key>KeepAlive</key>\n    <false/>\n</dict>\n</plist>\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 00: macOS Darwin Architecture ===\"\nif command -v sw_vers &>/dev/null; then\n  sw_vers\n  echo \"Darwin Kernel: $(uname -v)\"\nelse\n  echo \"Simulated macOS Environment (sw_vers command not in PATH)\"\nfi\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 05 - launchd Daemons & Agents\n\n- **LaunchAgents (`~/Library/LaunchAgents/`)**: Run in the context of the logged-in graphical user.\n- **LaunchDaemons (`/Library/LaunchDaemons/`)**: Run as `root` in the background with no GUI access.\n\n```bash\n# Load and start a LaunchAgent\nlaunchctl bootstrap gui/$(id -u) com.trak.service.plist\n```\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script to detect whether macOS is running on Apple Silicon (arm64) or Intel (x86_64).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nARCH=$(uname -m)\nif [ \"$ARCH\" = \"arm64\" ]; then\n  echo \"✔ Apple Silicon Architecture (arm64)\"\nelif [ \"$ARCH\" = \"x86_64\" ]; then\n  echo \"✔ Intel Architecture (x86_64)\"\nelse\n  echo \"Unknown architecture: $ARCH\"\nfi\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-sip-gatekeeper-and-security",
+        "name": "01-homebrew-and-package-management",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - macOS Security Architecture (SIP, Gatekeeper & TCC)\n\n```bash\n# Check System Integrity Protection status\ncsrutil status\n\n# Remove Gatekeeper quarantine flag from downloaded tool\nxattr -d com.apple.quarantine /path/to/binary\n\n# Verify code signature\ncodesign --verify --deep --strict --verbose=2 /Applications/MyApp.app\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "07-macos-defaults-and-plists",
-        "type": "directory",
-        "children": [
-          {
-            "name": "tweaks.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\n# Show hidden files in Finder\ndefaults write com.apple.finder AppleShowAllFiles -bool true\n\n# Show file path bar in Finder\ndefaults write com.apple.finder ShowPathbar -bool true\n\nkillall Finder\necho \"Finder preferences updated!\"\n"
+            "content": "# 01 — Homebrew Package Management\n\n## 🎯 Architecture Locations\n- **Apple Silicon (ARM64)**: `/opt/homebrew`\n- **Intel (x86_64)**: `/usr/local`\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 07 - User Defaults & plist Tuning\n"
-          }
-        ]
-      },
-      {
-        "name": "08-process-and-memory-pressure",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 08 - Performance & Memory Pressure\n\nmacOS uses **Memory Compression** rather than aggressive disk swapping.\n\n```bash\n# Check system memory page allocation stats\nvm_stat\n\n# Sample call stack of running process for 5 seconds\nsample <PID> 5\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "09-networking-and-scutil",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - macOS Networking & scutil\n\n```bash\n# View DNS servers configured for network interfaces\nscutil --dns\n\n# Flush macOS DNS cache\nsudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "10-keychain-and-credentials",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 10 - macOS Keychain Architecture\n\n```bash\n# Find generic password stored in Keychain via CLI\nsecurity find-generic-password -s \"my-service-name\" -w\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "11-spotlight-and-metadata-indexing",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Spotlight Metadata & mdfind\n\n```bash\n# Search files modified today with 'trak' in name\nmdfind 'kMDItemFSName == \"*trak*\"c && kMDItemFSContentChangeDate >= $time.today'\n\n# View all indexed metadata attributes for a file\nmdls /path/to/file.pdf\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "12-automation-applescript-jxa",
-        "type": "directory",
-        "children": [
-          {
-            "name": "notify.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\n# Display native macOS notification via AppleScript\nosascript -e 'display notification \"Trak workspace materialized!\" with title \"Trak CLI\" subtitle \"Success\"'\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 01: Homebrew Prefix Detection ===\"\nif command -v brew &>/dev/null; then\n  echo \"Brew Prefix: $(brew --prefix)\"\n  echo \"Brew Version: $(brew --version | head -1)\"\nelse\n  echo \"Homebrew not installed.\"\nfi\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 12 - Automation (AppleScript & JXA)\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script that checks if a formula is installed via brew.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nFORMULA=\"git\"\nif command -v brew &>/dev/null && brew list \"$FORMULA\" &>/dev/null; then\n  echo \"✔ $FORMULA is installed via Homebrew!\"\nelse\n  echo \"Formula '$FORMULA' is not installed via brew.\"\nfi\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-xcode-tools-and-compilers",
+        "name": "02-zsh-and-macos-shell-environment",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Xcode Command Line Tools\n\n```bash\n# Print active developer directory\nxcode-select -p\n\n# Show active macOS SDK path\nxcrun --show-sdk-path\n```\n"
+            "content": "# 02 — Zsh & macOS Shell Configuration\n\n## 🎯 Dotfiles Load Order\n1. `/etc/zshenv` -> `~/.zshenv` (Loaded for ALL shells)\n2. `/etc/zprofile` -> `~/.zprofile` (Loaded for login shells)\n3. `/etc/zshrc` -> `~/.zshrc` (Loaded for interactive shells)\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 02: Default Shell Environment ===\"\necho \"Current SHELL: $SHELL\"\necho \"ZSH Version: ${ZSH_VERSION:-N/A}\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if ~/.zshrc exists and has proper permissions.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif [ -f \"$HOME/.zshrc\" ]; then\n  echo \"✔ ~/.zshrc exists (Size: $(stat -f \"%z bytes\" \"$HOME/.zshrc\" 2>/dev/null || echo \"N/A\"))\"\nelse\n  echo \"~/.zshrc does not exist.\"\nfi\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-hardware-and-power-management",
+        "name": "03-file-system-apfs-and-extended-attributes",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Hardware & Power Management (pmset)\n\n```bash\n# View battery status and power source\npmset -g batt\n\n# Prevent Mac from sleeping while running a long job\ncaffeinate -i ./long_running_script.sh\n```\n"
+            "content": "# 03 — APFS & Extended Attributes (`xattr`)\n\n## 🎯 Quarantine Attribute\nWhen downloading files from the internet, macOS attaches `com.apple.quarantine` extended attribute:\n```bash\nxattr -l app.zip\nxattr -d com.apple.quarantine app.zip\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 03: Extended Attributes ===\"\ntouch /tmp/quarantine_demo.txt\nif command -v xattr &>/dev/null; then\n  xattr -w com.trak.demo \"verified\" /tmp/quarantine_demo.txt\n  echo \"Attached custom attribute: $(xattr -p com.trak.demo /tmp/quarantine_demo.txt)\"\nfi\nrm -f /tmp/quarantine_demo.txt\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a command that removes quarantine attributes from all apps in /Applications.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: sudo xattr -r -d com.apple.quarantine /Applications/MyApp.app\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-virtualization-on-mac",
+        "name": "04-launchd-services-and-daemons",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Containers & Virtualization (Apple Silicon)\n\n- **Virtualization Framework (`vz`)**: Native Apple hypervisor API allowing hardware-accelerated Linux virtualization with near-native performance.\n- Lightweight container runtimes: **Colima**, **OrbStack**.\n"
+            "content": "# 04 — `launchd` Daemons & Agents\n\n## 🎯 LaunchAgents vs LaunchDaemons\n- **LaunchAgents (`~/Library/LaunchAgents` / `/Library/LaunchAgents`)**: Run per-user in GUI user session.\n- **LaunchDaemons (`/Library/LaunchDaemons`)**: Run as `root` in system background.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 04: launchd Service Control ===\"\necho \"Inspect loaded services: launchctl list | head -n 10\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Generate a minimal LaunchAgent plist file.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ncat << 'EOF' > /tmp/dev.trak.agent.plist\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n    <key>Label</key>\n    <string>dev.trak.agent</string>\n    <key>ProgramArguments</key>\n    <array>\n        <string>/usr/local/bin/trak</string>\n        <string>daemon</string>\n    </array>\n    <key>RunAtLoad</key>\n    <true/>\n</dict>\n</plist>\nEOF\necho \"✔ Generated LaunchAgent plist file.\"\nrm -f /tmp/dev.trak.agent.plist\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-backup-and-time-machine",
+        "name": "05-process-management-and-activity-monitor",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Time Machine Automation\n\n```bash\n# Start a background Time Machine backup\ntmutil startbackup\n\n# List all completed backups\ntmutil listbackups\n```\n"
+            "content": "# 05 — Process Diagnostics & Memory Pressure\n\n## 🎯 Memory Pressure\nmacOS uses compressed memory rather than standard swap whenever possible. Memory pressure is categorized into Green, Yellow, and Red.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 05: macOS Virtual Memory ===\"\nif command -v vm_stat &>/dev/null; then\n  vm_stat | head -n 8\nelse\n  echo \"vm_stat not available.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check current thermal throttling status with pmset.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v pmset &>/dev/null; then\n  pmset -g therm 2>/dev/null || echo \"Thermal data query executed.\"\nfi\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "06-macos-system-preferences-and-defaults",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield macOS & Apple Systems Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **XNU Kernel Architecture**: Hybrid kernel combining Mach microkernel message-passing with BSD POSIX layer and I/O Kit.\n2. **System Integrity Protection (SIP)**: Prevents even `root` from modifying `/System`, `/usr` (except `/usr/local`), `/bin`, `/sbin` to prevent malware persistence.\n3. **LaunchDaemons vs LaunchAgents**: LaunchDaemons run globally as `root` without GUI access; LaunchAgents run within user login sessions.\n4. **APFS Clones**: Copy-on-Write metadata pointers sharing existing disk blocks with zero immediate allocation cost.\n5. **com.apple.quarantine**: Extended attribute attached by browsers to untrusted downloads, triggering Gatekeeper verification.\n\n🚀 You have completed the complete macOS Systems & Darwin BSD track!\n"
+            "content": "# 06 — Plist Preferences & `defaults` Command\n\n## 🎯 The `defaults` CLI\nAllows programmatic modification of macOS user settings:\n```bash\ndefaults write com.apple.finder AppleShowAllFiles -bool true\nkillall Finder\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 06: Reading Defaults Domain ===\"\nif command -v defaults &>/dev/null; then\n  defaults read -g AppleInterfaceStyle 2>/dev/null && echo \"Dark Mode Active\" || echo \"Light Mode Active\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a command to show hidden files in Finder.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-security-gatekeeper-sip-and-tcc",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Gatekeeper, SIP & TCC Privacy\n\n## 🎯 Security Pillars\n- **SIP (System Integrity Protection)**: Protects `/System`, `/usr`, `/bin` from modifications even by `root`.\n- **TCC (Transparency, Consent & Control)**: Controls app access to Microphone, Camera, Full Disk Access.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 07: SIP Status Check ===\"\nif command -v csrutil &>/dev/null; then\n  csrutil status\nelse\n  echo \"Simulated SIP check: System Integrity Protection is enabled.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Inspect Gatekeeper status with spctl.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v spctl &>/dev/null; then\n  spctl --status\nelse\n  echo \"Gatekeeper status check command: spctl --status\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-networking-scutil-and-networksetup",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — macOS Networking & Dynamic Configuration\n\n## 🎯 DNS Cache Flushing\n```bash\nsudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 08: macOS DNS State ===\"\nif command -v scutil &>/dev/null; then\n  scutil --dns | head -n 12\nelse\n  echo \"scutil not in PATH\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script to list all hardware network interfaces using networksetup.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v networksetup &>/dev/null; then\n  networksetup -listallhardwareports\nelse\n  echo \"networksetup -listallhardwareports\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-applescript-and-jxa",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Automation with AppleScript & `osascript`\n\n## 🎯 Headless Automation\nTrigger native notifications and system dialogs from shell scripts:\n```bash\nosascript -e 'display notification \"Build succeeded!\" with title \"Trak\"'\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: osascript Notification Demo ===\"\nif command -v osascript &>/dev/null; then\n  osascript -e 'display notification \"Trak CLI Ready\" with title \"Trak Engine\"' 2>/dev/null || true\n  echo \"Notification sent.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write an osascript one-liner that returns current system volume.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v osascript &>/dev/null; then\n  osascript -e 'output volume of (get volume settings)' 2>/dev/null || echo \"Volume query executed.\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-diskutil-and-storage-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — `diskutil` & APFS Container Management\n\n## 🎯 APFS Architecture\nAPFS stores multiple volumes inside a single shared container with dynamic space allocation.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 10: APFS Storage List ===\"\nif command -v diskutil &>/dev/null; then\n  diskutil list | head -n 12\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Inspect APFS container details using diskutil apfs list.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v diskutil &>/dev/null; then\n  diskutil apfs list 2>/dev/null | head -n 15 || true\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-developer-toolchain-xcode-and-metal",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Xcode CLI & Developer Tools\n\n## 🎯 `xcode-select` & `xcrun`\n- `xcode-select -p`: Prints active developer tools path.\n- `xcrun --find clang`: Locates SDK-bundled compiler binaries.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 11: Xcode Toolchain Location ===\"\nif command -v xcode-select &>/dev/null; then\n  xcode-select -p\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Query the installed macOS SDK path using xcrun.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v xcrun &>/dev/null; then\n  xcrun --show-sdk-path 2>/dev/null || echo \"macOS SDK located.\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-universal-binaries-and-rosetta",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Universal 2 Binaries & `lipo`\n\n## 🎯 Fat Mach-O Binaries\nUniversal binaries contain slices for both `x86_64` and `arm64`:\n```bash\nlipo -create -output binary_fat binary_arm64 binary_x86_64\nlipo -info binary_fat\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: Binary Architecture Check ===\"\nif command -v lipo &>/dev/null; then\n  lipo -info /bin/ls 2>/dev/null || echo \"Mach-O binary verified.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if Rosetta 2 is installed on Apple Silicon.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif [ -f \"/Library/Apple/usr/libexec/oah/liboah.dylib\" ]; then\n  echo \"✔ Rosetta 2 is installed.\"\nelse\n  echo \"Rosetta 2 is not installed or not applicable.\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-keychain-and-credential-security",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — macOS Keychain Services CLI\n\n## 🎯 `security` Command\n```bash\nsecurity add-generic-password -a \"admin\" -s \"TrakAPI\" -w \"SecretToken\"\nsecurity find-generic-password -a \"admin\" -s \"TrakAPI\" -w\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 13: Keychain Command Inspection ===\"\nif command -v security &>/dev/null; then\n  security default-keychain\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Print the command to find a generic password from Keychain.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: security find-generic-password -s 'ServiceName' -w\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-power-management-and-pmset",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Power Management & `caffeinate`\n\n## 🎯 Prevent Sleep during Long Tasks\n```bash\ncaffeinate -d -s -w <PID>\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: Power Settings ===\"\nif command -v pmset &>/dev/null; then\n  pmset -g\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Demonstrate caffeinate usage.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command to prevent display sleep for 10 seconds: caffeinate -t 10\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-logging-unified-logging-system",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Unified Logging System (`log`)\n\n## 🎯 Querying Unified Logs\n```bash\nlog show --predicate 'subsystem == \"dev.trak\"' --last 1h\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Unified Logging Query ===\"\necho \"Query syntax: log stream --predicate 'process == \"trak\"'\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Print command to show logs from the last 5 minutes.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: log show --last 5m\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-automator-and-shortcuts-cli",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Shortcuts CLI (`shortcuts`)\n\n## 🎯 Headless Workflow Execution\n```bash\nshortcuts list\nshortcuts run \"Deploy Production\"\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 16: Shortcuts CLI ===\"\nif command -v shortcuts &>/dev/null; then\n  shortcuts list | head -n 5\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if shortcuts binary exists.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif command -v shortcuts &>/dev/null; then\n  echo \"✔ Shortcuts CLI is available!\"\nelse\n  echo \"Shortcuts CLI not installed.\"\nfi\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-testing-and-diagnostics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Diagnostics & `sysdiagnose`\n\n## 🎯 Diagnostic Captures\n`sudo sysdiagnose` collects kernel state, process trees, network traces, and thermal statistics into a tarball in `/var/tmp/`.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Diagnostic Logs Location ===\"\necho \"CrashReporter Logs: ~/Library/Logs/DiagnosticReports/\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: List recent crash log files.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nls -lt \"$HOME/Library/Logs/DiagnosticReports\" 2>/dev/null | head -n 5 || echo \"No crash logs found.\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield macOS Systems Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **XNU Hybrid Kernel**: Mach microkernel handles low-level primitives; BSD provides POSIX layer.\n2. **SIP File Locks**: Even root cannot write to `/System` or `/usr/bin` under SIP.\n3. **APFS CoW Clones**: Copying a 10GB file on APFS takes 0ms and uses 0 additional bytes.\n4. **Quarantine Flag**: Blocks downloaded binary execution until approved in Privacy settings.\n5. **LaunchAgent vs LaunchDaemon**: Agents run in GUI user session; Daemons run as system background root.\n6. **Compressed Memory**: macOS aggressively compresses RAM pages instead of writing to disk swap.\n7. **Universal 2 Mach-O**: Contains multiple architecture slices (`lipo`).\n8. **TCC Privacy Database**: Stored in SQLite database protected by SIP.\n9. **Rosetta 2 JIT Translation**: Ahead-of-Time translates x86_64 instructions on first launch.\n10. **Keychain Access ACLs**: Access control lists govern which apps can read specific passwords.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master macOS Systems Drill ===\"\necho \"1. XNU Mach + BSD Architecture\"\necho \"2. SIP Protection & TCC Security\"\necho \"3. APFS Copy-on-Write Clones\"\necho \"4. Universal 2 Mach-O binaries\"\necho \"🚀 You have completed the comprehensive macOS Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Master Drill: Write a script to output macOS system hardware report.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"======================================\"\necho \"      macOS System Information\"\necho \"======================================\"\nif command -v system_profiler &>/dev/null; then\n  system_profiler SPHardwareDataType 2>/dev/null | grep -E \"Model Name|Chip|Memory|Serial\"\nelse\n  uname -a\nfi\necho \"✔ macOS hardware report generated successfully!\"\n"
+              }
+            ]
           }
         ]
       }

@@ -1,8 +1,8 @@
 {
   "id": "cloud/aws",
   "name": "AWS Cloud Architecture & Solutions Engineering Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive AWS curriculum from IAM security, VPC networking, and EC2/ALB/ASG compute to S3/EBS storage, Aurora/DynamoDB databases, Serverless Lambda/EventBridge, ECS/Fargate, and FinOps",
+  "version": "1.2.0",
+  "description": "Complete high-depth AWS curriculum covering Zero-Trust IAM, VPC networking, Multi-AZ Aurora, DynamoDB single-table design, Serverless Lambda, EventBridge, EKS, and production FinOps",
   "root": {
     "name": "aws-workspace",
     "type": "directory",
@@ -10,26 +10,42 @@
       {
         "name": "infra.yaml",
         "type": "file",
-        "content": "AWSTemplateFormatVersion: '2010-09-09'\nDescription: 'Trak AWS Cloud Architecture - Core VPC & Security Stack'\n\nResources:\n  TrakVPC:\n    Type: AWS::EC2::VPC\n    Properties:\n      CidrBlock: 10.0.0.0/16\n      EnableDnsHostnames: true\n      EnableDnsSupport: true\n      Tags:\n        - Key: Name\n          Value: Trak-Production-VPC\n\n  PublicSubnetA:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref TrakVPC\n      CidrBlock: 10.0.1.0/24\n      AvailabilityZone: !Select [ 0, !GetAZs '' ]\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: Trak-Public-Subnet-A\n\nOutputs:\n  VpcId:\n    Description: Created VPC ID\n    Value: !Ref TrakVPC\n"
+        "content": "AWSTemplateFormatVersion: '2010-09-09'\nDescription: 'Trak AWS Cloud Architecture - Production Multi-AZ VPC'\n\nResources:\n  TrakVPC:\n    Type: AWS::EC2::VPC\n    Properties:\n      CidrBlock: 10.0.0.0/16\n      EnableDnsHostnames: true\n      EnableDnsSupport: true\n      Tags:\n        - Key: Name\n          Value: Trak-Production-VPC\n\n  PublicSubnetA:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref TrakVPC\n      CidrBlock: 10.0.1.0/24\n      AvailabilityZone: !Select [ 0, !GetAZs '' ]\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: Trak-Public-Subnet-A\n\n  PrivateSubnetA:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref TrakVPC\n      CidrBlock: 10.0.10.0/24\n      AvailabilityZone: !Select [ 0, !GetAZs '' ]\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: Trak-Private-Subnet-A\n\nOutputs:\n  VpcId:\n    Description: Created VPC ID\n    Value: !Ref TrakVPC\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# ☁️ Complete AWS Cloud Architecture & Solutions Track\n\nWelcome to your full AWS learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-global-infrastructure` | **Global Infrastructure** | Regions, AZs, Edge Locations, Local Zones, AWS CLI setup, `sts get-caller-identity` |\n| `01-iam-and-identity-security` | **IAM & Zero-Trust Security** | JSON Policies (Effect, Action, Resource, Condition), Roles, SCPs, Permission Boundaries |\n| `02-networking-vpc-and-routing` | **VPC & Routing Architecture** | CIDR design, Public/Private Subnets, IGW, NAT Gateway, Transit Gateway, VPC Endpoints |\n| `03-network-security-sg-and-nacl` | **SG vs NACL Security** | Security Groups (Stateful) vs NACLs (Stateless), AWS WAF, Shield DDoS mitigation |\n| `04-compute-ec2-and-ami-lifecycle`| **EC2 Compute & Graviton** | Instance families, Graviton ARM, AMIs, User Data, IMDSv2 metadata, Spot vs Savings |\n| `05-load-balancing-and-auto-scaling`| **ELB & Auto-Scaling** | ALB (Layer 7) vs NLB (Layer 4), Target Groups, ASG scaling policies, Launch Templates |\n| `06-storage-s3-and-glacier-tiers` | **S3 Object Storage & Tiers**| S3 Tiers (Standard, Intelligent, Glacier Deep Archive), Lifecycle rules, Object Lock |\n| `07-block-and-file-storage-ebs-efs`| **EBS & EFS Storage** | EBS volume types (gp3, io2), Snapshots, EFS managed NFS, FSx for Lustre |\n| `08-databases-rds-aurora-dynamodb` | **RDS, Aurora & DynamoDB** | RDS Multi-AZ vs Read Replicas, Aurora distributed storage, DynamoDB Single Table |\n| `09-serverless-lambda-api-gateway` | **Serverless & Lambda** | AWS Lambda concurrency, Cold Starts vs Provisioned, API Gateway (REST, HTTP, WebSockets) |\n| `10-event-driven-sns-sqs-eventbridge`| **Event-Driven Architecture** | SQS (Standard vs FIFO, DLQ), SNS pub/sub fanout, EventBridge event buses & schemas |\n| `11-containers-ecs-fargate-eks` | **Containers (ECS & EKS)** | ECS Task Definitions, AWS Fargate serverless containers, EKS managed K8s, Karpenter |\n| `12-iac-cdk-and-cloudformation` | **IaC (CDK & CloudFormation)**| CloudFormation Stacks, Change Sets, AWS CDK (TypeScript/Python code as infra) |\n| `13-monitoring-cloudwatch-xray` | **CloudWatch & Observability** | Metrics, Alarms, Logs Insights, X-Ray distributed tracing, CloudTrail audit logs |\n| `14-security-kms-secrets-and-waf` | **KMS, Secrets & Cryptography**| Envelope encryption, KMS CMK keys, Secrets Manager automatic rotation, SSM Parameter Store |\n| `15-edge-cdn-cloudfront-route53` | **CloudFront & Route 53** | CloudFront CDN behaviors, Lambda@Edge, Route 53 routing policies (Latency, Geolocation) |\n| `16-well-architected-and-finops` | **Well-Architected & FinOps** | 6 Pillars of Well-Architected Framework, Cost Explorer, Budgets, Reserved Instances |\n| `17-interview-questions-and-drills`| **Interview Master Drill** | Top 10 AWS Solutions Architect & DevOps interview scenarios & design challenges |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Verify AWS CLI authentication and active identity\naws sts get-caller-identity\n\n# List all AWS S3 buckets\naws s3 ls\n```\n"
+        "content": "# ☁️ AWS Cloud Architecture & Solutions Engineering Track\n\nWelcome to the **AWS Cloud Architecture & Solutions Engineering Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering AWS Global Infrastructure, Zero-Trust IAM policy evaluation, VPC subnetting & routing, Multi-AZ Aurora/DynamoDB, Serverless EventBridge architectures, EKS with Karpenter, and FinOps cost optimization.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-global-infrastructure` | Global Infrastructure & CLI | Regions, AZs, Edge Locations, Local Zones, AWS CLI, `sts get-caller-identity` |\n| `01-iam-and-identity-security` | IAM & Zero-Trust Security | JSON Policies (Effect, Action, Resource, Condition), Roles, SCPs, Boundaries |\n| `02-networking-vpc-and-routing` | VPC & Subnet Routing | CIDR design, Public/Private Subnets, IGW, NAT Gateway, Transit Gateway |\n| `03-network-security-sg-and-nacl` | Security Groups & NACLs | SGs (Stateful) vs NACLs (Stateless), AWS WAF, Shield DDoS mitigation |\n| `04-compute-ec2-and-ami-lifecycle` | EC2 & Graviton Compute | Graviton ARM, User Data, AMIs, IMDSv2 token metadata, Spot vs Savings Plans |\n| `05-load-balancing-and-auto-scaling` | Elastic Load Balancing & ASG | ALB (Layer 7) vs NLB (Layer 4), Target Groups, ASG target tracking policies |\n| `06-storage-s3-and-glacier-tiers` | S3 Object Storage & Tiers | Standard, Intelligent-Tiering, Glacier Deep Archive, Lifecycle, Object Lock |\n| `07-block-and-file-storage-ebs-efs` | EBS & EFS Storage | EBS volume types (gp3, io2 Block Express), EFS managed NFS, FSx for Lustre |\n| `08-databases-rds-aurora-dynamodb` | Aurora & DynamoDB | RDS Multi-AZ vs Replicas, Aurora 6-way storage, DynamoDB Single Table |\n| `09-serverless-lambda-api-gateway` | Serverless & Lambda | Concurrency limits, Cold Starts, Provisioned Concurrency, HTTP/REST APIs |\n| `10-event-driven-sns-sqs-eventbridge` | Event-Driven Architecture | SQS (Standard vs FIFO, DLQ), SNS pub/sub fanout, EventBridge schemas |\n| `11-containers-ecs-fargate-eks` | Containers (ECS & EKS) | ECS Task Definitions, Fargate, EKS Managed K8s, Karpenter, IRSA |\n| `12-iac-cdk-and-cloudformation` | IaC (CDK & CloudFormation) | CloudFormation Stacks, Change Sets, AWS CDK L2/L3 constructs |\n| `13-monitoring-cloudwatch-xray` | CloudWatch & Observability | Metrics, Alarms, Logs Insights query syntax, X-Ray distributed tracing |\n| `14-security-kms-secrets-and-waf` | KMS, Secrets & Encryption | Envelope encryption (CMK & DEK), Secrets Manager auto-rotation, SSM |\n| `15-edge-cdn-cloudfront-route53` | CloudFront & Route 53 | CloudFront behaviors, Lambda@Edge, Route 53 latency/failover routing |\n| `16-well-architected-and-finops` | Well-Architected & FinOps | 6 Pillars, Cost Explorer, Budgets, Compute Optimizer, RI/Savings Plans |\n| `17-vpc-endpoints-and-privatelink` | PrivateLink & VPC Endpoints | Interface Endpoints (PrivateLink) vs Gateway Endpoints (S3/DynamoDB) |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 AWS Solutions Architect gotchas + 3-Tier Multi-AZ Design Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `policy.json` / `infra.yaml` / `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.json` / `starter.yaml` — Hands-on problem with `TODO` markers.\n- `exercise/solution.json` / `solution.yaml` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-global-infrastructure",
         "type": "directory",
         "children": [
           {
-            "name": "check_identity.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"☁️ 00 - AWS CLI Configuration & Active Caller Identity\"\necho \"=====================================================\"\naws --version\necho \"\"\naws sts get-caller-identity\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - AWS Global Infrastructure 🛠️\n\n- **Regions**: Geographically isolated areas containing $\\ge 3$ Availability Zones.\n- **Availability Zones (AZs)**: One or more discrete data centers with redundant power, networking, and low-latency interconnects.\n- **Edge Locations**: Global network of PoPs (Points of Presence) delivering cached content via CloudFront CDN and Route 53.\n"
+            "content": "# 00 — AWS Global Infrastructure & CLI Authentication\n\n## 🎯 Infrastructure Hierarchy\n- **Region**: Geographically isolated area containing $\\ge 3$ Availability Zones.\n- **Availability Zone (AZ)**: One or more discrete data centers with redundant power and networking.\n- **Edge Locations**: Global Points of Presence (PoP) for CloudFront CDN caching.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 00: AWS Identity Check ===\"\nif command -v aws &>/dev/null; then\n  aws sts get-caller-identity 2>/dev/null || echo \"AWS CLI configured; authentication pending.\"\nelse\n  echo \"AWS CLI not installed.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: List all available AWS regions using aws ec2 describe-regions.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\naws ec2 describe-regions --query 'Regions[].RegionName' --output table 2>/dev/null || echo \"aws ec2 describe-regions\"\n"
+              }
+            ]
           }
         ]
       },
@@ -38,14 +54,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "least_privilege_policy.json",
-            "type": "file",
-            "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowS3ReadOnlyForSpecificBucket\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::trak-production-bucket\",\n        \"arn:aws:s3:::trak-production-bucket/*\"\n      ],\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"true\"\n        }\n      }\n    }\n  ]\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - IAM Policies & Principle of Least Privilege\n"
+            "content": "# 01 — Zero-Trust IAM & Policy Evaluation Logic\n\n## 🎯 Policy Evaluation Flow\n1. By default, all requests are **Implicitly Denied**.\n2. An **Explicit Deny** anywhere in the evaluation chain overrides all Allows.\n3. An **Explicit Allow** is required for access.\n"
+          },
+          {
+            "name": "policy.json",
+            "type": "file",
+            "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"EnforceTLSRequestsOnly\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:*\",\n      \"Resource\": \"arn:aws:s3:::trak-production-bucket/*\",\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"false\"\n        }\n      }\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.json",
+                "type": "file",
+                "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"TODO_AllowDynamoDBReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"// FILL HERE\"\n      ],\n      \"Resource\": \"arn:aws:dynamodb:*:*:table/Users\"\n    }\n  ]\n}\n"
+              },
+              {
+                "name": "solution.json",
+                "type": "file",
+                "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowDynamoDBReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"dynamodb:GetItem\",\n        \"dynamodb:BatchGetItem\",\n        \"dynamodb:Query\",\n        \"dynamodb:Scan\"\n      ],\n      \"Resource\": \"arn:aws:dynamodb:*:*:table/Users\"\n    }\n  ]\n}\n"
+              }
+            ]
           }
         ]
       },
@@ -56,7 +88,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - VPC Architecture & Subnet Isolation\n\n```\n                    ┌────────────────────────────────────────────────────────┐\n                    │                   VPC (10.0.0.0/16)                    │\n                    │                                                        │\n                    │   ┌───────────────────┐        ┌───────────────────┐   │\nInternet ─────────► │   │   Public Subnet   │ ─────► │  Private Subnet   │   │\nGateway             │   │  (10.0.1.0/24)    │        │  (10.0.2.0/24)    │   │\n                    │   │  [ALB / NAT GW]   │        │  [App / DB]       │   │\n                    │   └───────────────────┘        └───────────────────┘   │\n                    └────────────────────────────────────────────────────────┘\n```\n"
+            "content": "# 02 — VPC Architecture & Subnet Isolation\n\n## 🎯 Subnet Types\n- **Public Subnet**: Route table contains route `0.0.0.0/0 -> igw-xxxx` (Internet Gateway).\n- **Private Subnet**: Route table contains route `0.0.0.0/0 -> nat-xxxx` (NAT Gateway in public subnet).\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "Type: AWS::EC2::RouteTable\nProperties:\n  VpcId: !Ref TrakVPC\n  Tags:\n    - Key: Name\n      Value: Trak-Public-RouteTable\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a CloudFormation route pointing 0.0.0.0/0 to an Internet Gateway.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "PublicDefaultRoute:\n  Type: AWS::EC2::Route\n  Properties:\n    RouteTableId: !Ref PublicRouteTable\n    DestinationCidrBlock: 0.0.0.0/0\n    GatewayId: !Ref InternetGateway\n"
+              }
+            ]
           }
         ]
       },
@@ -67,7 +120,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Security Groups vs Network ACLs\n\n| Feature | Security Group (SG) | Network ACL (NACL) |\n| :--- | :--- | :--- |\n| **Operating Level** | Instance (ENI) level | Subnet level |\n| **Statefulness** | **Stateful** (Return traffic automatically allowed) | **Stateless** (Inbound & outbound must be explicitly allowed) |\n| **Rules Allowed** | Allow rules only | Allow AND Deny rules |\n| **Rule Evaluation**| All rules evaluated together | Evaluated in numerical order (Lowest rule number wins) |\n"
+            "content": "# 03 — Security Groups (Stateful) vs NACLs (Stateless)\n\n| Feature | Security Group | Network ACL |\n| :--- | :--- | :--- |\n| **Level** | Instance / ENI level | Subnet boundary level |\n| **State** | **Stateful** (Return traffic allowed automatically) | **Stateless** (Must allow ephemeral inbound/outbound) |\n| **Rules** | Allow rules only | Allow AND Deny rules (evaluated in numbered order) |\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "WebServerSecurityGroup:\n  Type: AWS::EC2::SecurityGroup\n  Properties:\n    GroupDescription: Allow HTTPS inbound\n    VpcId: !Ref TrakVPC\n    SecurityGroupIngress:\n      - IpProtocol: tcp\n        FromPort: 443\n        ToPort: 443\n        CidrIp: 0.0.0.0/0\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Create a security group rule allowing PostgreSQL port 5432 only from WebServerSecurityGroup.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "DatabaseSecurityGroup:\n  Type: AWS::EC2::SecurityGroup\n  Properties:\n    GroupDescription: Allow PG from Web Tier\n    VpcId: !Ref TrakVPC\n    SecurityGroupIngress:\n      - IpProtocol: tcp\n        FromPort: 5432\n        ToPort: 5432\n        SourceSecurityGroupId: !Ref WebServerSecurityGroup\n"
+              }
+            ]
           }
         ]
       },
@@ -76,14 +150,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "userdata.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\n# EC2 Instance Bootstrap User Data Script\napt update -y && apt install -y nginx\nsystemctl enable --now nginx\necho \"<h1>Hello from Trak EC2 running in AWS $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)</h1>\" > /var/www/html/index.html\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - EC2 Instance Lifecycle & IMDSv2\n"
+            "content": "# 04 — EC2 Graviton & IMDSv2 Token Security\n\n## 🎯 IMDSv2 (Instance Metadata Service v2)\nMitigates SSRF vulnerabilities by requiring a session token header (`X-aws-ec2-metadata-token`) to read instance metadata.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 04: IMDSv2 Token Retrieval ===\"\necho \"TOKEN=$(curl -s -X PUT 'http://169.254.169.254/latest/api/token' -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600')\"\necho \"curl -H 'X-aws-ec2-metadata-token: $TOKEN' http://169.254.169.254/latest/meta-data/instance-id\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write AWS CLI command to enforce IMDSv2 (HttpTokens=required) on an EC2 instance.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws ec2 modify-instance-metadata-options --instance-id i-12345 --http-tokens required --http-endpoint enabled\"\n"
+              }
+            ]
           }
         ]
       },
@@ -94,7 +184,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - Elastic Load Balancing & Auto-Scaling Groups\n\n- **ALB (Application Load Balancer)**: HTTP/HTTPS Layer 7 intelligent routing based on path `/api` or host header.\n- **NLB (Network Load Balancer)**: TCP/UDP Layer 4 ultra-low latency, capable of handling millions of requests/sec with static IP addresses.\n"
+            "content": "# 05 — Application Load Balancers (ALB) & Auto Scaling\n\n## 🎯 Target Tracking Policy\nAutomatically scales instance count up and down to maintain target metric (e.g. Average CPU utilization at 70%).\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "TargetGroup:\n  Type: AWS::ElasticLoadBalancingV2::TargetGroup\n  Properties:\n    HealthCheckPath: /healthz\n    Port: 8080\n    Protocol: HTTP\n    VpcId: !Ref TrakVPC\n    TargetType: ip\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Configure an ALB listener forwarding port 443 traffic to TargetGroup.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "HTTPSListener:\n  Type: AWS::ElasticLoadBalancingV2::Listener\n  Properties:\n    DefaultActions:\n      - Type: forward\n        TargetGroupArn: !Ref TargetGroup\n    LoadBalancerArn: !Ref AppLoadBalancer\n    Port: 443\n    Protocol: HTTPS\n"
+              }
+            ]
           }
         ]
       },
@@ -103,14 +214,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "lifecycle.json",
-            "type": "file",
-            "content": "{\n  \"Rules\": [\n    {\n      \"ID\": \"TransitionToGlacierAndExpire\",\n      \"Status\": \"Enabled\",\n      \"Filter\": { \"Prefix\": \"logs/\" },\n      \"Transitions\": [\n        { \"Days\": 30, \"StorageClass\": \"STANDARD_IA\" },\n        { \"Days\": 90, \"StorageClass\": \"GLACIER\" }\n      ],\n      \"Expiration\": { \"Days\": 365 }\n    }\n  ]\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - S3 Storage Classes & Lifecycle Management\n"
+            "content": "# 06 — S3 Storage Classes & Lifecycle Transitions\n\n## 🎯 Cost Matrix\n- `S3 Standard`: High frequency access.\n- `S3 Intelligent-Tiering`: Automatically moves objects between frequent and infrequent tiers with zero retrieval fees.\n- `S3 Glacier Deep Archive`: Lowest cost storage ($0.00099/GB/mo) with 12-hour retrieval SLA.\n"
+          },
+          {
+            "name": "policy.json",
+            "type": "file",
+            "content": "{\n  \"Rules\": [\n    {\n      \"ID\": \"ArchiveLogsAfter90Days\",\n      \"Status\": \"Enabled\",\n      \"Filter\": { \"Prefix\": \"logs/\" },\n      \"Transitions\": [\n        {\n          \"Days\": 90,\n          \"StorageClass\": \"GLACIER_IR\"\n        },\n        {\n          \"Days\": 365,\n          \"StorageClass\": \"DEEP_ARCHIVE\"\n        }\n      ]\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to enable default server-side KMS encryption on an S3 bucket.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws s3api put-bucket-encryption --bucket my-bucket --server-side-encryption-configuration '{\\\"Rules\\\": [{\\\"ApplyServerSideEncryptionByDefault\\\": {\\\"SSEAlgorithm\\\": \\\"aws:kms\\\"}}]}'\"\n"
+              }
+            ]
           }
         ]
       },
@@ -121,7 +248,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Block Storage (EBS) vs Shared File Storage (EFS)\n"
+            "content": "# 07 — EBS gp3 Volumes & Managed EFS\n\n## 🎯 `gp3` Performance Baseline\n`gp3` provides a baseline 3,000 IOPS and 125 MB/s throughput regardless of storage volume size!\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 07: Storage Type Comparison ===\"\necho \"EBS: Block storage locked to single AZ (single EC2 instance attachment)\"\necho \"EFS: POSIX NFS file system shared across multiple AZs and thousands of instances\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a gp3 EBS volume of size 100GB with 4000 IOPS.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "DataVolume:\n  Type: AWS::EC2::Volume\n  Properties:\n    AvailabilityZone: us-east-1a\n    Size: 100\n    VolumeType: gp3\n    Iops: 4000\n    Throughput: 250\n"
+              }
+            ]
           }
         ]
       },
@@ -132,7 +280,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - AWS Relational & NoSQL Database Engines\n\n- **Amazon Aurora**: Storage is decoupled from compute, automatically replicating 6 copies across 3 AZs with continuous backup to S3.\n- **DynamoDB**: Key-value & document NoSQL database with single-digit millisecond latency at any scale.\n"
+            "content": "# 08 — Amazon Aurora Distributed Storage & DynamoDB\n\n## 🎯 Aurora Storage Architecture\nAurora replicates 6 copies of data across 3 Availability Zones (4 of 6 write quorum, 3 of 6 read quorum) with custom SSD-optimized log-structured storage.\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "AuroraCluster:\n  Type: AWS::RDS::DBCluster\n  Properties:\n    Engine: aurora-postgresql\n    EngineVersion: '15.4'\n    MasterUsername: trakadmin\n    MasterUserPassword: '{{resolve:secretsmanager:db-creds:SecretString:password}}'\n    DatabaseName: trak_production\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a DynamoDB table with PAY_PER_REQUEST on-demand billing mode.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "UsersTable:\n  Type: AWS::DynamoDB::Table\n  Properties:\n    BillingMode: PAY_PER_REQUEST\n    AttributeDefinitions:\n      - AttributeName: PK\n        AttributeType: S\n      - AttributeName: SK\n        AttributeType: S\n    KeySchema:\n      - AttributeName: PK\n        KeyType: HASH\n      - AttributeName: SK\n        KeyType: RANGE\n"
+              }
+            ]
           }
         ]
       },
@@ -141,14 +310,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "handler.py",
-            "type": "file",
-            "content": "import json\nimport os\n\ndef lambda_handler(event, context):\n    \"\"\"Serverless Lambda Handler Function\"\"\"\n    return {\n        'statusCode': 200,\n        'headers': {'Content-Type': 'application/json'},\n        'body': json.dumps({\n            'message': 'Hello from AWS Lambda serverless execution!',\n            'request_id': context.aws_request_id\n        })\n    }\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - Serverless Architecture (Lambda & API Gateway)\n"
+            "content": "# 09 — AWS Lambda & API Gateway\n\n## 🎯 Mitigating Cold Starts\n- Initialize DB connections outside the handler function.\n- Use Provisioned Concurrency for strict latency requirements.\n- Use lightweight runtimes (Node.js, Go, Rust).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: Lambda Function Architecture ===\"\necho \"Global Initialization (Executed once on container cold start)\"\necho \"Handler Function (Executed per invocation)\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Configure a Lambda function with 512MB RAM and ARM64 architecture.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "TrakFunction:\n  Type: AWS::Lambda::Function\n  Properties:\n    Runtime: nodejs20.x\n    Architectures: [\"arm64\"]\n    MemorySize: 512\n    Timeout: 10\n    Handler: index.handler\n"
+              }
+            ]
           }
         ]
       },
@@ -159,7 +344,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Decoupled Event-Driven Architectures (SNS, SQS, EventBridge)\n\n### SNS + SQS Fan-Out Pattern:\n1 publisher sends an event to 1 SNS Topic $\\longrightarrow$ Broadcasts to 5 different SQS queues consumed by 5 independent microservices.\n"
+            "content": "# 10 — Event-Driven Architecture (SQS, SNS, EventBridge)\n\n## 🎯 Event Router Matrix\n- **SQS**: Point-to-point pull queue with consumer polling.\n- **SNS**: Push-based pub/sub topic broadcasting to multiple subscribers.\n- **EventBridge**: Enterprise event bus with advanced JSON payload filtering rules.\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "DeadLetterQueue:\n  Type: AWS::SQS::Queue\n  Properties:\n    MessageRetentionPeriod: 1209600\n\nMainQueue:\n  Type: AWS::SQS::Queue\n  Properties:\n    VisibilityTimeout: 30\n    RedrivePolicy:\n      deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn\n      maxReceiveCount: 3\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Configure an SQS FIFO queue with ContentBasedDeduplication enabled.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "FifoQueue:\n  Type: AWS::SQS::Queue\n  Properties:\n    QueueName: orders.fifo\n    FifoQueue: true\n    ContentBasedDeduplication: true\n"
+              }
+            ]
           }
         ]
       },
@@ -168,14 +374,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "task-definition.json",
-            "type": "file",
-            "content": "{\n  \"family\": \"trak-app-task\",\n  \"networkMode\": \"awsvpc\",\n  \"requiresCompatibilities\": [\"FARGATE\"],\n  \"cpu\": \"256\",\n  \"memory\": \"512\",\n  \"containerDefinitions\": [\n    {\n      \"name\": \"api-service\",\n      \"image\": \"123456789012.dkr.ecr.us-east-1.amazonaws.com/trak-api:v1.0.0\",\n      \"portMappings\": [\n        {\n          \"containerPort\": 8080,\n          \"protocol\": \"tcp\"\n        }\n      ],\n      \"essential\": true\n    }\n  ]\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - Container Orchestration on AWS (ECS & EKS)\n"
+            "content": "# 11 — Containers on AWS: ECS, Fargate & EKS\n\n## 🎯 IRSA (IAM Roles for Service Accounts)\nAllows Kubernetes pods running on EKS to assume specific AWS IAM roles via OIDC federation without hardcoding credentials.\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "ECSTaskDefinition:\n  Type: AWS::ECS::TaskDefinition\n  Properties:\n    RequiresCompatibilities: [\"FARGATE\"]\n    Cpu: '256'\n    Memory: '512'\n    NetworkMode: awsvpc\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Update kubeconfig for EKS cluster 'production-eks' in us-east-1.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws eks update-kubeconfig --region us-east-1 --name production-eks\"\n"
+              }
+            ]
           }
         ]
       },
@@ -186,7 +408,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - AWS CDK & CloudFormation\n\n```bash\n# Synthesize CloudFormation template from CDK code\ncdk synth\n\n# Deploy stack directly to AWS account\ncdk deploy\n```\n"
+            "content": "# 12 — AWS Cloud Development Kit (CDK)\n\n## 🎯 CDK Construct Levels\n- **L1 (CFN Primitives)**: 1:1 mapping to raw CloudFormation resources (`CfnBucket`).\n- **L2 (AWS Curated)**: Batteries-included constructs with secure defaults (`Bucket`).\n- **L3 (Solutions Patterns)**: Multi-service architectures (`ApplicationLoadBalancedFargateService`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: AWS CDK Commands ===\"\necho \"cdk synth    # Compiles TypeScript/Python CDK code to CloudFormation JSON\"\necho \"cdk diff     # Compares deployed stack with local code\"\necho \"cdk deploy   # Deploys stack to AWS\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to bootstrap AWS CDK environment in account 123456789012 region us-east-1.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: cdk bootstrap aws://123456789012/us-east-1\"\n"
+              }
+            ]
           }
         ]
       },
@@ -197,7 +440,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - CloudWatch Metrics, Logs Insights & X-Ray\n\n```sql\n-- CloudWatch Logs Insights query to find 500 error spikes\nfields @timestamp, @message\n| filter status >= 500\n| sort @timestamp desc\n| limit 20\n```\n"
+            "content": "# 13 — CloudWatch Logs Insights & X-Ray Tracing\n\n## 🎯 Logs Insights Query Syntax\n```text\nfields @timestamp, @message\n| filter @message like /ERROR/\n| sort @timestamp desc\n| limit 20\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 13: CloudWatch Alarms ===\"\necho \"aws cloudwatch describe-alarms --state-value ALARM\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Query top 5 slowest API requests using CloudWatch Logs Insights query syntax.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ncat << 'EOF'\nfields @timestamp, @duration, @message\n| filter @type = \"REPORT\"\n| sort @duration desc\n| limit 5\nEOF\n"
+              }
+            ]
           }
         ]
       },
@@ -208,7 +472,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Cryptography & Secrets Management (KMS & Secrets Manager)\n"
+            "content": "# 14 — KMS Envelope Encryption & Secrets Manager\n\n## 🎯 Envelope Encryption\n1. Plaintext data is encrypted using a unique **Data Encryption Key (DEK)**.\n2. The DEK is encrypted using the **KMS Customer Master Key (CMK)**.\n3. Only the encrypted DEK and encrypted ciphertext are stored on disk.\n"
+          },
+          {
+            "name": "policy.json",
+            "type": "file",
+            "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowSecretsManagerGetSecretValue\",\n      \"Effect\": \"Allow\",\n      \"Action\": \"secretsmanager:GetSecretValue\",\n      \"Resource\": \"arn:aws:secretsmanager:*:*:secret:app/production/*\"\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to retrieve a secret value using AWS CLI.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws secretsmanager get-secret-value --secret-id app/production/database --query SecretString --output text\"\n"
+              }
+            ]
           }
         ]
       },
@@ -219,7 +504,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - CloudFront Global CDN & Route 53 DNS Routing\n"
+            "content": "# 15 — CloudFront CDN & Route 53 DNS Routing\n\n## 🎯 Route 53 Routing Policies\n- **Latency**: Routes user to AWS region with lowest round-trip latency.\n- **Failover**: Automated primary-to-secondary disaster recovery routing.\n- **Geolocation**: Routes based on user geographic continent/country.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Invalidate CloudFront Cache ===\"\necho \"aws cloudfront create-invalidation --distribution-id E12345 --paths '/*'\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Create a Route 53 health check checking HTTPS port 443 at path /healthz.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws route53 create-health-check --caller-reference $(date +%s) --health-check-config IPAddress=1.2.3.4,Port=443,Type=HTTPS,ResourcePath=/healthz\"\n"
+              }
+            ]
           }
         ]
       },
@@ -230,18 +536,92 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - AWS Well-Architected Framework & FinOps\n\n### The 6 Pillars:\n1. **Operational Excellence**\n2. **Security**\n3. **Reliability**\n4. **Performance Efficiency**\n5. **Cost Optimization**\n6. **Sustainability**\n"
+            "content": "# 16 — AWS Well-Architected Framework & FinOps\n\n## 🎯 The 6 Pillars\n1. **Operational Excellence** (Run as code, anticipate failure)\n2. **Security** (Apply security at all layers, automate protection)\n3. **Reliability** (Test recovery procedures, scale horizontally)\n4. **Performance Efficiency** (Democratize advanced technologies, go serverless)\n5. **Cost Optimization** (Adopt consumption model, measure ROI)\n6. **Sustainability** (Maximize utilization, reduce idle compute)\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 16: Cost Explorer API ===\"\necho \"aws ce get-cost-and-usage --time-period Start=2026-08-01,End=2026-08-31 --granularity MONTHLY --metrics UnblendedCost\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Query AWS Compute Optimizer recommendations for underutilized EC2 instances.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: aws compute-optimizer get-ec2-instance-recommendations\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "17-vpc-endpoints-and-privatelink",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield AWS Solutions Architect & DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **RDS Multi-AZ vs Read Replicas**: Multi-AZ is synchronous replication to a standby instance in another AZ for Disaster Recovery (no performance gain); Read Replicas are asynchronous for scaling read queries.\n2. **Security Groups vs NACLs**: SGs are stateful at the ENI instance level; NACLs are stateless at the subnet boundary evaluated numerically.\n3. **VPC Peering Transitive Routing**: VPC Peering does NOT support transitive routing (If A peers with B and B with C, A cannot talk to C without a Transit Gateway or direct peering).\n4. **S3 Strong Consistency**: S3 provides strong read-after-write consistency for PUTs and DELETEs of objects in all regions.\n5. **Lambda Cold Starts**: The latency penalty when AWS initializes a new microVM execution environment, downloadable container image, and runtime before executing handler code.\n\n🚀 You have completed the complete AWS Cloud Architecture & Solutions Engineering track!\n"
+            "content": "# 17 — VPC Endpoints & AWS PrivateLink\n\n## 🎯 Gateway vs Interface Endpoints\n- **Gateway Endpoints**: Free routes in route table (available only for **S3** and **DynamoDB**).\n- **Interface Endpoints (PrivateLink)**: Elastic Network Interfaces (ENI) with private IP in subnet (charges per hour + per GB transferred).\n"
+          },
+          {
+            "name": "infra.yaml",
+            "type": "file",
+            "content": "S3GatewayEndpoint:\n  Type: AWS::EC2::VPCEndpoint\n  Properties:\n    VpcId: !Ref TrakVPC\n    ServiceName: !Sub \"com.amazonaws.${AWS::Region}.s3\"\n    VpcEndpointType: Gateway\n    RouteTableIds:\n      - !Ref PrivateRouteTable\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a DynamoDB Gateway Endpoint in CloudFormation.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "DynamoDBGatewayEndpoint:\n  Type: AWS::EC2::VPCEndpoint\n  Properties:\n    VpcId: !Ref TrakVPC\n    ServiceName: !Sub \"com.amazonaws.${AWS::Region}.dynamodb\"\n    VpcEndpointType: Gateway\n    RouteTableIds:\n      - !Ref PrivateRouteTable\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield AWS Solutions Architect Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **NAT Gateway Cross-AZ Traffic Fees**: Placing a single NAT Gateway in AZ-a causes all traffic from AZ-b/c to incur inter-AZ data transfer fees ($0.01/GB each way!).\n2. **S3 Strong Consistency**: S3 now provides strong read-after-write consistency for PUTs and DELETEs of objects in all regions.\n3. **IAM Evaluation Precedence**: SCPs (Organization level) > Permission Boundaries > Identity-based Policies > Resource-based Policies.\n4. **Security Group Statefulness**: SGs track connections automatically; return outbound traffic on high ephemeral ports does NOT need explicit egress rules.\n5. **Aurora Read Replica Lag**: Typically < 10ms because replicas read directly from the shared distributed storage engine without replaying SQL logs.\n6. **Lambda VPC Cold Start Myth**: Hyperplane ENIs pre-attach to VPC; cold starts are no longer driven by ENI attachment.\n7. **DynamoDB Hot Partition**: Uneven partition key distribution exhausts per-partition 1000 WCU / 3000 RCU limits.\n8. **ALB vs NLB**: ALB for path routing, HTTP/2, gRPC, and SSL termination; NLB for static IPs, millions of RPS, and ultra-low latency TCP/UDP.\n9. **EBS Multi-Attach Limitation**: Requires cluster-aware filesystem (e.g. GFS2) to prevent filesystem corruption on standard ext4.\n10. **KMS API Throttling**: Heavy Lambda scale-outs can breach KMS cryptographic operation quotas (use KMS Data Key caching).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master AWS Solutions Architect Drill ===\"\necho \"1. Zero-Trust IAM & SCP boundary enforcement\"\necho \"2. Multi-AZ VPC subnetting & NAT Gateway placement\"\necho \"3. Aurora 6-way distributed quorum storage\"\necho \"4. Serverless EventBridge & SQS FIFO architectures\"\necho \"🚀 You have completed the comprehensive AWS Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.json",
+                "type": "file",
+                "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"TODO_MasterDrill_EnforceIPRestriction\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"NotIpAddress\": {\n          \"aws:SourceIp\": [\"// FILL CORPORATE CIDR\"]\n        }\n      }\n    }\n  ]\n}\n"
+              },
+              {
+                "name": "solution.json",
+                "type": "file",
+                "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"EnforceCorporateIPRestriction\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"NotIpAddress\": {\n          \"aws:SourceIp\": [\n            \"203.0.113.0/24\"\n          ]\n        },\n        \"Bool\": {\n          \"aws:ViaAWSService\": \"false\"\n        }\n      }\n    }\n  ]\n}\n"
+              }
+            ]
           }
         ]
       }

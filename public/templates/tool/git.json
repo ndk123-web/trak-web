@@ -1,232 +1,622 @@
 {
   "id": "tool/git",
-  "name": "Git & Version Control Engineering Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive Git curriculum from object internals (Blobs, Trees, Commits) and Three Trees staging to interactive rebasing, Worktrees, Reflog disaster recovery, Bisect debugging, and Trunk-Based workflows",
+  "name": "Git Internals, Plumbing & Advanced Workflows",
+  "version": "1.2.0",
+  "description": "Complete high-depth Git curriculum covering content-addressable storage (.git/objects), plumbing commands, interactive rebase, reflog recovery, worktrees, bisect, and production branching strategies",
   "root": {
     "name": "git-workspace",
     "type": "directory",
     "children": [
       {
-        "name": ".gitignore",
-        "type": "file",
-        "content": "# Prerequisites\n*.log\n*.tmp\n.DS_Store\nThumbs.db\n\n# Build outputs\nnode_modules/\ndist/\nbin/\nobj/\ntarget/\n\n# Environment & secrets\n.env\n.env.local\n*.pem\n*.key\n"
-      },
-      {
-        "name": ".gitattributes",
-        "type": "file",
-        "content": "# Auto-detect text files and normalize line endings to LF\n* text=auto eol=lf\n\n# Binary files\n*.png binary\n*.jpg binary\n*.zip binary\n"
-      },
-      {
         "name": "README.md",
         "type": "file",
-        "content": "# 🌿 Complete Git & Version Control Engineering Track\n\nWelcome to your full Git learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-git-internals` | **Git Object Model** | `.git/` anatomy, Content-Addressable Storage (Blobs, Trees, Commits, Tags), SHA-1/SHA-256 |\n| `01-three-trees-and-staging-lifecycle` | **The Three Trees** | Working Directory, Index (Staging), Commit History, `git add -p`, `git status` |\n| `02-commit-mechanics-and-history` | **Atomic Commits & Log**| Conventional commits, `git commit --amend`, `git log --graph --oneline`, `git diff --staged` |\n| `03-branching-and-pointer-mechanics`| **Branch Pointers** | Branches as 41-byte pointers in `refs/heads/`, `git switch -c`, Detached HEAD |\n| `04-merging-fast-forward-vs-three-way`| **Merging Strategies**| Fast-Forward vs 3-Way merge, merge conflicts, `git merge --abort` |\n| `05-rebasing-interactive-and-squash` | **Interactive Rebasing**| `git rebase -i HEAD~N` (squash, fixup, reword), The Golden Rule of Rebasing |\n| `06-stashing-and-worktrees` | **Stashing & Worktrees**| `git stash pop`, `git worktree add` (parallel branch workspaces without switching) |\n| `07-undoing-changes-reset-revert` | **Undoing History** | `git restore`, `git reset` (--soft, --mixed, --hard), `git revert` (safe public undo) |\n| `08-reflog-and-disaster-recovery` | **Reflog Recovery** | `git reflog`, recovering deleted branches and commits after `reset --hard` |\n| `09-cherry-picking-and-bisect` | **Cherry-Pick & Bisect**| `git cherry-pick`, Binary search bug hunting with `git bisect run` |\n| `10-remotes-tracking-and-upstream` | **Remotes & Push Safety**| `git fetch` vs `git pull --rebase`, `git push --force-with-lease` |\n| `11-tagging-and-semantic-versioning`| **Semantic Tagging** | Lightweight vs Annotated tags (`git tag -a`), SemVer (`MAJOR.MINOR.PATCH`) |\n| `12-submodules-and-subtrees` | **Submodules & Subtrees**| `.gitmodules`, `git submodule update --init --recursive`, nested repos |\n| `13-git-hooks-and-automation` | **Git Hooks Automation**| Client-side hooks (`pre-commit`, `commit-msg`), Husky integration |\n| `14-git-attributes-and-lfs` | **Attributes & Git LFS**| `.gitattributes`, line-ending LF normalization, Large File Storage (LFS) |\n| `15-gpg-signing-and-commit-security`| **Cryptographic Signing**| GPG / SSH commit signing, `git commit -S`, GitHub Verified commits |\n| `16-advanced-workflows-trunk-based` | **Branching Workflows** | Trunk-Based Development vs GitHub Flow vs GitFlow, PR review strategies |\n| `17-interview-questions-and-drills` | **Interview Master Drill**| Top 10 Git interview questions, resolving detached HEAD, and rebase disasters |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Inspect Git commit graph:\ngit log --graph --oneline --decorate --all\n\n# Safe force push:\ngit push --force-with-lease\n```\n"
+        "content": "# 🐙 Git Internals, Plumbing & Advanced Workflows Track\n\nWelcome to the **Git Internals, Plumbing & Advanced Workflows Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering Git content-addressable object databases (Blobs, Trees, Commits, Tags), plumbing vs porcelain commands, interactive history rewriting (`rebase -i`), reflog disaster recovery, worktrees, bisect automated debugging, and repository maintenance.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-object-database` | Content-Addressable Storage | `.git/objects`, SHA hash addresses, 4 core object types, `git cat-file` |\n| `01-plumbing-vs-porcelain-commands` | Plumbing & Low-Level Git | `hash-object`, `mktree`, `write-tree`, `commit-tree`, building commits manually |\n| `02-staging-area-and-index-file` | Index & Staging Mechanics | `.git/index` binary format, patch staging (`git add -p`), `git diff --cached` |\n| `03-branching-and-symbolic-refs` | References & HEAD | `.git/refs/heads/`, `.git/HEAD`, detached HEAD, lightweight vs annotated tags |\n| `04-merging-strategies-fast-forward-and-recursive` | Merge Engines & Strategies | Fast-Forward, 3-Way Merge (ort engine), Merge Commits, conflict resolution |\n| `05-interactive-rebase-and-history-rewriting` | Interactive Rebase | `git rebase -i` (pick, reword, squash, fixup, drop), linear commit history |\n| `06-git-reset-soft-mixed-hard` | Reset Modes Decoded | `git reset --soft` vs `--mixed` vs `--hard`, staging area & tree states |\n| `07-git-revert-and-safe-undo` | Safe Undoing with Revert | Public branch safety, `git revert -m 1` for merge commits, audit trail |\n| `08-reflog-and-data-recovery` | Reflog & Disaster Recovery | `.git/logs/HEAD`, recovering deleted branches, `git fsck --lost-found` |\n| `09-git-cherry-pick-and-patching` | Cherry-Pick & Patches | `git cherry-pick -x`, `git format-patch`, `git apply`, backporting fixes |\n| `10-git-stash-and-worktrees` | Stash & Multiple Worktrees | `git stash push -u`, `git worktree add` (multi-branch simultaneous checkout) |\n| `11-git-bisect-binary-search-debugging` | Automated Bug Hunting | `git bisect start/good/bad`, automated script execution (`git bisect run`) |\n| `12-git-hooks-client-and-server` | Git Hooks Automation | `.git/hooks/`, `pre-commit`, `commit-msg` linting, Husky integration |\n| `13-submodules-and-subtrees` | Submodules & Subtrees | `git submodule add/update`, `git subtree` monorepo component management |\n| `14-git-lfs-and-large-files` | Git Large File Storage | Git LFS pointer files, `.gitattributes`, tracking large binaries & models |\n| `15-git-attributes-and-ignore` | Attributes & `.gitignore` | Line endings (`text eol=lf`), custom diff filters, merge drivers, ignore rules |\n| `16-distributed-workflows-and-remotes` | Remotes & Upstream | Remote tracking branches, `git pull --rebase`, forks, SSH key security |\n| `17-repository-maintenance-and-packfiles` | Packfiles & Garbage Collection | `.git/objects/pack`, delta compression, `git gc --prune=now`, repo sizing |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Git Internals gotchas + Reflog Branch Resurrection Master Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.sh` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sh` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-git-internals",
+        "name": "00-setup-and-object-database",
         "type": "directory",
         "children": [
           {
-            "name": "setup.sh",
+            "name": "README.md",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🌿 00 - Git Global Configuration & Environment Check\"\necho \"=====================================================\"\ngit --version\necho \"\"\ngit config --global init.defaultBranch main\ngit config --global pull.rebase true\ngit config --global core.autocrlf input\necho \"✔ Standard Git configuration initialized.\"\n"
+            "content": "# 00 — Git Content-Addressable Storage\n\n## 🎯 The 4 Core Object Types\n1. **Blob**: Raw binary file data (does NOT store filename or permissions!).\n2. **Tree**: Directory listing mapping names and mode bits to blob/tree SHA hashes.\n3. **Commit**: Points to root Tree, parent commit SHA(s), author, and commit message.\n4. **Annotated Tag**: GPG-signed reference pointing to a specific commit.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 00 - Git Object Model & Internals 🛠️\n\n### Git's 4 Core Object Types in `.git/objects/`:\n1. **Blob**: Stores raw file content (indexed by SHA-1/SHA-256 hash; does NOT store filename or permissions!).\n2. **Tree**: Directory structure containing list of blobs/trees with filenames and mode permissions.\n3. **Commit**: Points to a root Tree, parent commit(s), author, committer, and commit message.\n4. **Tag**: Annotated reference pointing to a specific commit object with a message and GPG signature.\n"
-          }
-        ]
-      },
-      {
-        "name": "01-three-trees-and-staging-lifecycle",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 01 - The Three Trees Architecture\n\n```\n┌────────────────────────┐       ┌──────────────────────┐       ┌──────────────────────┐\n│   Working Directory    │ ────► │     Staging Area     │ ────► │    Git Repository    │\n│ (Your actual files)    │ <git  │ (Index - Binary Map) │ <git  │ (Immutable Commits)  │\n│                        │ add>  │                      │ commit│                      │\n└────────────────────────┘       └──────────────────────┘       └──────────────────────┘\n```\n\n```bash\n# Stage individual hunks/patches interactively\ngit add -p\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "02-commit-mechanics-and-history",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 02 - Commit Mechanics & Conventional Commits\n\n### Conventional Commit Format:\n```\n<type>(<optional scope>): <description>\n\n[optional body]\n\n[optional footer(s)]\n```\nTypes: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`.\n\n```bash\n# Amend the most recent commit without changing message\ngit commit --amend --no-edit\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "03-branching-and-pointer-mechanics",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 03 - Branching & HEAD Pointer Mechanics\n\nA Git branch is **not a container of commits**; it is simply a 41-byte text file in `.git/refs/heads/<branch>` containing the 40-character SHA hash of its tip commit!\n\n```bash\n# Modern switch command\ngit switch -c feature/new-api\n\n# Return to previous branch\ngit switch -\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "04-merging-fast-forward-vs-three-way",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 04 - Merging Strategies\n\n- **Fast-Forward Merge**: Simply advances branch pointer forward when target branch has no divergent commits.\n- **3-Way Merge (ORT Merge Engine)**: Creates a new merge commit with 2 parents by finding the Common Ancestor (Base).\n\n```bash\n# Force a merge commit even if fast-forward is possible\ngit merge --no-ff feature/auth\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "05-rebasing-interactive-and-squash",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 05 - Interactive Rebasing & Squashing\n\nRebasing replays a series of commits on top of a new base commit, creating a clean linear commit history.\n\n```bash\n# Rebase last 3 commits interactively\ngit rebase -i HEAD~3\n\n# Auto-squash fixup commits\ngit commit --fixup <commit-hash>\ngit rebase -i --autosquash <base-branch>\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "06-stashing-and-worktrees",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 06 - Git Worktrees (Zero Context-Switching)\n\nInstead of stashing changes and switching branches, **Git Worktrees** allow checking out multiple branches simultaneously into separate directories:\n\n```bash\n# Check out hotfix branch in a parallel folder\ngit worktree add ../hotfix-worktree hotfix/urgent-bug\n\n# List active worktrees\ngit worktree list\n\n# Remove worktree when finished\ngit worktree remove ../hotfix-worktree\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "07-undoing-changes-reset-revert",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 07 - Reset vs Revert vs Restore\n\n| Command | Working Dir | Staging Area | History / HEAD | Safe on Public Branches? |\n| :--- | :--- | :--- | :--- | :--- |\n| **`git restore <file>`** | Discards edits | Untouched | Untouched | **Yes** |\n| **`git reset --soft HEAD~1`** | Preserves edits | Preserves edits | Moves HEAD back 1 commit | **No** (Local only) |\n| **`git reset --mixed HEAD~1`**| Preserves edits | Unstages edits | Moves HEAD back 1 commit | **No** (Local only) |\n| **`git reset --hard HEAD~1`** | **Wipes edits** | **Wipes edits** | Moves HEAD back 1 commit | **No** (Dangerous!) |\n| **`git revert <commit>`** | Clean apply | Clean apply | **Appends new inverse commit** | **YES (Recommended)** |\n"
-          }
-        ]
-      },
-      {
-        "name": "08-reflog-and-disaster-recovery",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 08 - The Reflog: Git's Safety Net\n\nThe Reference Log (`git reflog`) tracks every single movement of `HEAD` for 90 days, enabling recovery of deleted branches and commits even after `git reset --hard`.\n\n```bash\n# 1. View reflog history\ngit reflog\n\n# 2. Restore deleted branch from its last HEAD position\ngit branch restored-feature HEAD@{2}\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "09-cherry-picking-and-bisect",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - Git Bisect Automated Bug Hunting\n\n`git bisect` uses binary search to pinpoint the exact commit that introduced a regression among thousands of commits:\n\n```bash\ngit bisect start\ngit bisect bad                 # Current HEAD is broken\ngit bisect good v1.0.0         # v1.0.0 was working\n\n# Automated bisect testing:\ngit bisect run npm test\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "10-remotes-tracking-and-upstream",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 10 - Remotes & Safe Force Pushing\n\nNever use raw `git push --force` because it will overwrite teammates' commits. Always use:\n```bash\ngit push --force-with-lease\n```\nThis verifies that nobody else has pushed commits to the remote branch before overwriting.\n"
-          }
-        ]
-      },
-      {
-        "name": "11-tagging-and-semantic-versioning",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Semantic Versioning & Tags\n\n```bash\n# Create annotated, GPG-signed release tag\ngit tag -s v2.0.0 -m \"Release v2.0.0 - Major Architecture Upgrade\"\n\n# Push tag to remote\ngit push origin v2.0.0\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "12-submodules-and-subtrees",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 12 - Git Submodules & Subtrees\n\n```bash\n# Clone a repository with all nested submodules\ngit clone --recurse-submodules <url>\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "13-git-hooks-and-automation",
-        "type": "directory",
-        "children": [
-          {
-            "name": "pre-commit.sample",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\n# pre-commit hook: Run linter before allowing commit\necho \"[Git Hook] Running static analysis checks...\"\n# npm run lint || exit 1\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 00: Inspecting Git Object Types ===\"\necho \"git cat-file -t <SHA>  # Prints object type\"\necho \"git cat-file -p <SHA>  # Pretty prints content\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 13 - Git Hooks Automation\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Hash a string 'hello world' using git hash-object.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"hello world\" | git hash-object --stdin\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-git-attributes-and-lfs",
+        "name": "01-plumbing-vs-porcelain-commands",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Git LFS (Large File Storage)\n\n```bash\n# Track large binary datasets\ngit lfs track \"*.iso\"\ngit lfs track \"*.weights\"\n```\n"
+            "content": "# 01 — Git Plumbing vs Porcelain Commands\n\n## 🎯 Plumbing Commands\n- `git hash-object -w file.txt`: Creates Blob in `.git/objects/`.\n- `git write-tree`: Captures staged Index as a Tree object.\n- `git commit-tree <tree_sha> -m \"msg\"`: Creates Commit object directly!\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 01: Low-Level Object Construction ===\"\nBLOB_SHA=$(echo \"Content created by Trak\" | git hash-object -w --stdin 2>/dev/null || echo \"hash-calculated\")\necho \"Created Blob SHA: $BLOB_SHA\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Print object size of HEAD commit using git cat-file -s.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ngit cat-file -s HEAD 2>/dev/null || echo \"Object size query executed.\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-gpg-signing-and-commit-security",
+        "name": "02-staging-area-and-index-file",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - GPG & SSH Commit Signing\n\n```bash\n# Configure SSH-based commit signing in Git 2.34+\ngit config --global gpg.format ssh\ngit config --global user.signingkey ~/.ssh/id_ed25519.pub\ngit config --global commit.gpgsign true\n```\n"
+            "content": "# 02 — The Index File (`.git/index`)\n\n## 🎯 Patch Staging\n`git add -p` lets you stage selected hunks of changes within a single file.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 02: Staging Inspection ===\"\ngit status --short\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Inspect cached diff between Index and HEAD.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ngit diff --cached\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-advanced-workflows-trunk-based",
+        "name": "03-branching-and-symbolic-refs",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Trunk-Based Development vs GitFlow\n\n- **Trunk-Based Development**: Short-lived feature branches (< 1-2 days) merged frequently into `main` behind feature flags. Recommended for modern CI/CD.\n- **GitFlow**: Long-lived `develop`, `release/*`, `hotfix/*`, and `main` branches with heavy merge gates.\n"
+            "content": "# 03 — Branches & Symbolic References\n\n## 🎯 What is a Branch?\nA branch is literally a **41-byte text file** in `.git/refs/heads/<branch>` containing a 40-character commit SHA + newline!\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 03: Current Branch & HEAD ===\"\ngit symbolic-ref HEAD 2>/dev/null || echo \"HEAD points to commit\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: List all local branches sorted by most recent commit date.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ngit branch --sort=-committerdate\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "04-merging-strategies-fast-forward-and-recursive",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield Git & Version Control Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Git Object Model**: Blobs store file data, Trees store directory hierarchies and filenames, Commits link trees with metadata and parent hashes.\n2. **Rebase vs Merge**: Merge preserves full non-linear historical context with 2-parent commits; Rebase produces a clean, linear commit log by replaying commits on top of the target base.\n3. **Reset vs Revert**: `reset` rewrites commit history locally; `revert` creates a new inverse commit preserving complete audit history on public branches.\n4. **Worktrees**: Allows working on multiple branches simultaneously across separate directory trees without switching or stashing.\n5. **--force-with-lease**: Safe atomic force-push that checks if remote branch tip matches our local tracking ref before overwriting.\n\n🚀 You have completed the complete Git & Version Control Engineering track!\n"
+            "content": "# 04 — Merge Strategies: Fast-Forward vs 3-Way\n\n## 🎯 Fast-Forward\nIf no new commits exist on target branch, Git simply advances the branch pointer forward.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 04: Merge Visualizer ===\"\ngit log --graph --oneline --decorate -n 5 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to enforce a merge commit even if fast-forward is possible (--no-ff).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git merge --no-ff feature-branch\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "05-interactive-rebase-and-history-rewriting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 — Interactive Rebase (`git rebase -i`)\n\n## 🎯 Golden Rule of Rebasing\n**Never rebase commits that have been pushed to a shared public branch.**\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 05: Interactive Rebase Syntax ===\"\necho \"Commands: pick, reword, edit, squash, fixup, drop\"\necho \"Syntax: git rebase -i HEAD~3\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to autosquash commits marked with 'fixup!' or 'squash!'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git rebase -i --autosquash main\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "06-git-reset-soft-mixed-hard",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 — Reset Modes: `--soft`, `--mixed`, `--hard`\n\n| Mode | Moves HEAD | Updates Index (Staging) | Modifies Working Directory |\n| :--- | :---: | :---: | :---: |\n| `--soft` | ✅ | ❌ | ❌ |\n| `--mixed` (default) | ✅ | ✅ | ❌ |\n| `--hard` | ✅ | ✅ | ✅ (Destructive!) |\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 06: Soft Reset Usage ===\"\necho \"Squash last 3 commits into staging: git reset --soft HEAD~3\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to unstage all files without discarding changes in working directory.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git reset --mixed HEAD (or git restore --staged .)\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-git-revert-and-safe-undo",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Safe Undoing with `git revert`\n\n## 🎯 Reverting Merge Commits\n`git revert -m 1 <merge_commit_sha>` specifies which parent number to retain as mainline.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 07: Revert Commit ===\"\necho \"Syntax: git revert <commit_sha>\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Revert the most recent commit without auto-committing (--no-commit).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git revert --no-commit HEAD\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-reflog-and-data-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — The Git Reflog & Disaster Recovery\n\n## 🎯 What is the Reflog?\nReflog tracks every single movement of the `HEAD` pointer locally, even after accidental `git reset --hard` or deleted branches!\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 08: Recent Reflog History ===\"\ngit reflog -n 5 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Restore branch state to HEAD@{1} using git reset.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git reset --hard HEAD@{1}\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-git-cherry-pick-and-patching",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Cherry-Picking & Patch Files\n\n## 🎯 `cherry-pick -x`\nAppends a line saying `(cherry picked from commit ...)` to preserve original provenance.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: Cherry-Pick Syntax ===\"\necho \"Syntax: git cherry-pick -x <commit_sha>\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Generate a patch file for the last commit using git format-patch.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git format-patch -1 HEAD\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-git-stash-and-worktrees",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Multiple Working Trees (`git worktree`)\n\n## 🎯 Why Worktrees?\nAllows checking out multiple branches into separate directories simultaneously without stashing or context switching!\n```bash\ngit worktree add ../hotfix-branch hotfix\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 10: Active Worktrees ===\"\ngit worktree list 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Stash including untracked files with a custom message.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git stash push -u -m 'Work in progress feature'\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-git-bisect-binary-search-debugging",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Automated Binary Search with `git bisect`\n\n## 🎯 Bisect Workflow\nFinds the exact commit that introduced a bug in O(log N) steps.\n```bash\ngit bisect start\ngit bisect bad HEAD\ngit bisect good v1.0.0\ngit bisect run npm test\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 11: Git Bisect Automation ===\"\necho \"git bisect run ./verify_build.sh\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Reset bisect state back to original HEAD.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git bisect reset\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-git-hooks-client-and-server",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Git Hooks Architecture\n\n## 🎯 Client Hooks\n- `pre-commit`: Runs linters/formatters before commit object is created.\n- `commit-msg`: Validates conventional commit format (`feat:`, `fix:`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: Git Hooks Directory ===\"\nls -la .git/hooks 2>/dev/null || echo \".git/hooks directory\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a minimal pre-commit hook script that forbids committing debugger statements.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ncat << 'EOF' > /tmp/pre-commit.sample\n#!/usr/bin/env bash\nif git diff --cached | grep -E \"console.log|debugger\"; then\n  echo \"❌ Error: Found debug statements in staged diff!\"\n  exit 1\nfi\nEOF\necho \"✔ Sample hook generated!\"\nrm -f /tmp/pre-commit.sample\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-submodules-and-subtrees",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — Git Submodules vs Subtrees\n\n## 🎯 Submodule Invariant\nParent repo records only the **commit SHA** of the submodule, not its file tree.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 13: Submodule Update ===\"\necho \"Command: git submodule update --init --recursive\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to add a submodule repository.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git submodule add https://github.com/org/repo.git vendor/repo\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-git-lfs-and-large-files",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Git Large File Storage (LFS)\n\n## 🎯 Pointer Files\nGit LFS replaces large binary blobs with small text pointers containing the SHA256 checksum and file size.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: Git LFS Tracked Patterns ===\"\ngit lfs track 2>/dev/null || echo \"git lfs track '*.psd'\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Track all .bin and .onnx files with Git LFS.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git lfs track '*.bin' '*.onnx'\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-git-attributes-and-ignore",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — `.gitattributes` & Line Endings\n\n## 🎯 Normalization\nEnforces consistent LF line endings across Windows, Linux, and macOS:\n```text\n* text=auto eol=lf\n*.png binary\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Check Git Attributes ===\"\ngit check-attr -a README.md 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if a file path is ignored according to .gitignore rules.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ngit check-ignore -v node_modules/index.js 2>/dev/null || echo \"git check-ignore -v <path>\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-distributed-workflows-and-remotes",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Remotes & Pull Request Workflows\n\n## 🎯 `git pull --rebase`\nRebases your local commits on top of newly fetched upstream commits, preventing messy non-linear merge bubbles.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 16: Remote Repositories ===\"\ngit remote -v 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Prune stale remote tracking branches during fetch.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git fetch --prune origin\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-repository-maintenance-and-packfiles",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Garbage Collection & Packfiles\n\n## 🎯 Delta Compression\nGit packs loose object files into compressed `.pack` files with binary delta encoding, reducing repo size by up to 90%.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Repository Object Counts ===\"\ngit count-objects -v 2>/dev/null || true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Run aggressive garbage collection on repository.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: git gc --aggressive --prune=now\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield Git Internals Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Blob Immutability**: Blobs only contain file content; moving or renaming a file produces zero new blob objects.\n2. **Dangling Commits**: `git reset --hard` does not delete commits immediately; they remain reachable via `reflog` for 30-90 days.\n3. **Detached HEAD Commit Loss**: Commits created in detached HEAD become unreachable when switching branches unless tagged or branched.\n4. **Merge vs Rebase**: Merge preserves chronological history; Rebase produces a clean linear history.\n5. **Fast-Forward Rejection**: Pushing a rebased branch requires `--force-with-lease` (safer than `--force`).\n6. **Index File Role**: Staging area is a binary cache mapping paths to object SHAs.\n7. **`git revert` vs `git reset`**: Revert creates a new forward commit (safe for public branches); Reset rewinds history.\n8. **Three-Way Merge Base**: Git locates the Least Common Ancestor (LCA) commit to compute diffs.\n9. **Submodule Disconnect**: Cloning a repo does not automatically fetch submodule contents without `--recurse-submodules`.\n10. **Line Ending Corruption**: Committing CRLF into Linux repositories breaks shell scripts.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master Git Internals Drill ===\"\necho \"1. SHA Content-Addressable Objects\"\necho \"2. Interactive Rebase history hygiene\"\necho \"3. Reflog disaster recovery\"\necho \"4. Multiple Git Worktrees\"\necho \"🚀 You have completed the comprehensive Git Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Master Drill: Write a script to find the top 3 largest objects in a git repository.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ngit rev-list --objects --all 2>/dev/null | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' 2>/dev/null | grep '^blob' | sort -k3 -n -r | head -n 3 || echo \"Command simulated.\"\n"
+              }
+            ]
           }
         ]
       }

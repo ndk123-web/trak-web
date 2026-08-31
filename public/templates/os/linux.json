@@ -1,8 +1,8 @@
 {
   "id": "os/linux",
   "name": "Linux Systems & DevOps Administration",
-  "version": "1.0.0",
-  "description": "Comprehensive Linux curriculum from kernel architecture, FHS, and permissions (SUID/SGID/ACL) to process management, systemd, text processing (grep/sed/awk), networking, and Bash scripting",
+  "version": "1.2.0",
+  "description": "Complete high-depth Linux systems curriculum covering kernel architecture, FHS, permissions, systemd, networking, Bash scripting, and production troubleshooting",
   "root": {
     "name": "linux-workspace",
     "type": "directory",
@@ -10,21 +10,37 @@
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🐧 Complete Linux Systems & DevOps Administration Track\n\nWelcome to your full Linux learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-kernel-architecture` | **Kernel & Architecture** | Kernel space vs User space, system calls, `/proc/version`, `uname -a` |\n| `01-filesystem-hierarchy-standard` | **Filesystem Standard** | FHS (`/bin`, `/etc`, `/var`, `/usr`, `/tmp`, `/dev`, `/proc`, `/sys`) |\n| `02-file-operations-and-navigation`| **File Navigation** | `ls -lah`, `mkdir -p`, `cp -r`, `mv`, `rm`, `find`, `tree` |\n| `03-file-permissions-and-acls` | **Permissions & ACLs** | `chmod`, `chown`, octal modes, SUID (4000), SGID (2000), Sticky bit, ACLs |\n| `04-io-redirection-and-pipes` | **Redirection & Pipes** | File descriptors (`0`, `1`, `2`), `>`, `>>`, `2>&1`, `|`, `tee`, `xargs` |\n| `05-text-processing-grep-sed-awk` | **Text Processing (CLI)** | `grep -rnE`, `sed 's/.../.../g'`, `awk '{print $1}'`, `sort`, `uniq`, `cut` |\n| `06-process-management-and-signals`| **Processes & Signals** | `ps aux`, `top`, Process states (R, S, D, Z), Signals (SIGKILL, SIGTERM), `kill` |\n| `07-memory-and-cpu-monitoring` | **System Diagnostics** | `free -h`, `vmstat 1`, `iostat -xz`, Load Average (1m, 5m, 15m), swap |\n| `08-disk-management-and-filesystems`| **Disk & Filesystems** | `df -h`, `du -sh`, `lsblk`, `fdisk`, ext4/xfs, mounting, `/etc/fstab` |\n| `09-user-and-group-management` | **Users & Sudoers** | `/etc/passwd`, `/etc/shadow`, `useradd`, `usermod`, `visudo`, sudo rules |\n| `10-package-management` | **Package Managers** | Debian/Ubuntu `apt`, RHEL/CentOS `dnf`/`yum`, repository config |\n| `11-systemd-services-and-journals` | **systemd & Logging** | Systemd unit files (`.service`), `systemctl`, `journalctl -u service -f` |\n| `12-cron-jobs-and-timers` | **Job Scheduling** | `crontab -e`, cron syntax (`* * * * *`), systemd timers |\n| `13-networking-and-troubleshooting`| **Networking & DNS** | `ip addr`, `ip route`, `ss -tulpn`, `curl`, `ping`, `dig`, `/etc/resolv.conf` |\n| `14-ssh-keys-and-hardening` | **SSH & Remote Access** | `ssh-keygen -t ed25519`, `ssh-copy-id`, `/etc/ssh/sshd_config` hardening |\n| `15-firewalls-iptables-and-ufw` | **Firewall Security** | `iptables` chains & tables, `ufw` uncomplicated firewall, port rules |\n| `16-shell-scripting-bash` | **Bash Scripting** | `#!/usr/bin/env bash`, `set -euo pipefail`, loops, conditions, exit codes |\n| `17-security-selinux-and-apparmor` | **SELinux & AppArmor** | SELinux modes (Enforcing/Permissive), security contexts (`ls -Z`), audit logs |\n| `18-interview-questions-and-drills`| **Interview Master Drill**| Top 10 Linux SysAdmin interview questions & troubleshooting scenarios |\n\n---\n\n## 🛠️ Quick Commands\n\nInspect Linux system info:\n```bash\nuname -a\ncat /etc/os-release\n```\n"
+        "content": "# 🐧 Linux Systems & DevOps Administration Track\n\nWelcome to the **Linux Systems & DevOps Administration Track** materialized by **Trak**.\n\nThis workspace is an in-depth, hands-on systems curriculum covering Linux kernel internals, FHS filesystem architecture, advanced permissions (SUID/SGID/ACLs), process states, systemd services, networking diagnostics, and Bash automation.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-kernel-architecture` | Kernel Architecture | Ring 0 vs Ring 3, system calls (`strace`), monolithic kernel, `/proc/version` |\n| `01-filesystem-hierarchy-standard` | FHS & Inodes | FHS (`/bin`, `/etc`, `/var`, `/proc`, `/sys`, `/dev`), inodes, hard vs soft links |\n| `02-file-operations-and-navigation` | Navigation & Search | `find -type -mtime -exec`, `rsync -avz`, `tar -czvf`, `tree`, `stat` |\n| `03-file-permissions-and-acls` | Permissions & ACLs | Octal modes, SUID (4000), SGID (2000), Sticky Bit (1000), POSIX ACLs (`setfacl`) |\n| `04-io-redirection-and-pipes` | I/O Redirection & Streams | File descriptors (`0: stdin`, `1: stdout`, `2: stderr`), `2>&1`, `tee -a`, `xargs` |\n| `05-text-processing-grep-sed-awk` | Text Processing (CLI) | `grep -rnE`, `sed -E 's/.../.../g'`, `awk 'NR>1 {sum+=$3}'`, `sort -k`, `uniq -c` |\n| `06-process-management-and-signals` | Processes & Signals | Process table, states (R, S, D, Z zombie), signals (`SIGTERM 15`, `SIGKILL 9`), `kill` |\n| `07-memory-and-cpu-monitoring` | Diagnostics & Load Avg | `/proc/meminfo`, `free -h`, `vmstat 1`, `iostat -xz`, Load Average (1m, 5m, 15m), OOM |\n| `08-disk-management-and-filesystems` | Disks & Filesystems | `lsblk -f`, `df -hT`, `du -sh *`, ext4 vs XFS, `/etc/fstab` persistent mounts |\n| `09-user-and-group-management` | Users & Sudoers | `/etc/passwd`, `/etc/shadow`, `/etc/group`, `useradd`, `usermod`, `visudo` |\n| `10-package-management` | Package Managers | APT (Debian/Ubuntu), DNF/YUM (RHEL), repository sources, caching, GPG keys |\n| `11-systemd-services-and-journals` | Systemd & Logging | Unit files (`.service`), `systemctl start/enable`, `journalctl -u service -f` |\n| `12-cron-jobs-and-systemd-timers` | Scheduling & Timers | Crontab syntax (`* * * * *`), systemd `.timer` calendar vs monotonic events |\n| `13-networking-and-troubleshooting` | Networking & DNS | `ip addr`, `ip route`, `ss -tulpn`, `curl -Iv`, `dig`/`nslookup`, `/etc/resolv.conf` |\n| `14-ssh-keys-and-server-hardening` | SSH & Hardening | Ed25519 keys, `/etc/ssh/sshd_config` (No root login, No passwords), `fail2ban` |\n| `15-firewalls-iptables-and-ufw` | Firewalls & Packet Rules | `iptables` chains (INPUT, OUTPUT, FORWARD), `ufw` uncomplicated firewall, NAT |\n| `16-shell-scripting-bash` | Production Bash Scripts | `set -euo pipefail`, trap cleanup handlers, command substitution, `getopts` |\n| `17-security-selinux-and-apparmor` | SELinux & AppArmor | Mandatory Access Control (MAC), Enforcing vs Permissive, security contexts (`ls -Z`) |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Linux SysAdmin gotchas (Load avg vs CPU, zombie cleanup, inode exhaustion) |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.sh` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sh` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-kernel-architecture",
         "type": "directory",
         "children": [
           {
-            "name": "sysinfo.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🐧 00 - Linux Kernel & System Info\"\necho \"=====================================================\"\nuname -a\necho \"\"\ncat /proc/version\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - Linux Kernel Architecture 🛠️\n\n- **Kernel Space**: Monolithic Linux kernel managing CPU scheduling, virtual memory, device drivers, and system calls.\n- **User Space**: Applications, system daemons, GNU coreutils, and user shells.\n"
+            "content": "# 00 — Linux Kernel Architecture & Syscalls\n\n## 🎯 Privilege Rings & Kernel Space\n- **Ring 0 (Kernel Space)**: Direct hardware access, memory management, process scheduler, device drivers.\n- **Ring 3 (User Space)**: Applications and shells executing with restricted CPU privileges.\n- **System Calls (`syscall`)**: The gateway interface connecting User Space to Kernel Space.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 00: Linux Kernel Architecture ===\"\necho \"Kernel Release: $(uname -r)\"\necho \"Operating System: $(uname -o)\"\necho \"Architecture: $(uname -m)\"\necho \"Available Cores: $(nproc)\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script that checks if the Linux kernel is 64-bit and prints its version.\n\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nARCH=$(uname -m)\nif [ \"$ARCH\" = \"x86_64\" ] || [ \"$ARCH\" = \"aarch64\" ]; then\n  echo \"✔ Verified 64-bit Kernel ($ARCH) - Version: $(uname -r)\"\nelse\n  echo \"32-bit or other architecture: $ARCH\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -35,7 +51,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - Filesystem Hierarchy Standard (FHS)\n\n- `/bin`, `/sbin`: Essential binary commands.\n- `/etc`: System-wide configuration files.\n- `/var`: Variable data (logs in `/var/log`, databases, spool).\n- `/proc`: Virtual in-memory filesystem exposing kernel & process state.\n- `/sys`: Virtual filesystem exposing device and driver hardware state.\n- `/dev`: Device special files (disks `/dev/sda`, null device `/dev/null`, random `/dev/urandom`).\n"
+            "content": "# 01 — Filesystem Hierarchy Standard (FHS) & Inodes\n\n## 🎯 Key Directories\n- `/etc`: Host-specific system-wide configuration files.\n- `/var`: Variable data (logs in `/var/log`, databases in `/var/lib`).\n- `/proc`: Virtual pseudo-filesystem exposing kernel state and process metrics.\n- `/sys`: Virtual pseudo-filesystem exposing hardware device attributes.\n\n## 🧠 Inodes & Hard vs Soft Links\n- **Hard Link**: Second directory entry pointing to the same inode. Same inode number, survives original file deletion.\n- **Soft (Symbolic) Link**: Small file containing the path string to target file. Has its own inode.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 01: Inodes & Links ===\"\ntouch /tmp/sample_orig.txt\nln /tmp/sample_orig.txt /tmp/sample_hard.txt\nln -s /tmp/sample_orig.txt /tmp/sample_soft.txt\n\necho \"Inspecting Inode numbers:\"\nls -li /tmp/sample_orig.txt /tmp/sample_hard.txt /tmp/sample_soft.txt\nrm -f /tmp/sample_orig.txt /tmp/sample_hard.txt /tmp/sample_soft.txt\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script that checks whether a given path is a symlink or regular file.\nTARGET=\"/etc/resolv.conf\"\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nTARGET=\"/etc/resolv.conf\"\nif [ -L \"$TARGET\" ]; then\n  echo \"$TARGET is a Symbolic Link pointing to $(readlink -f \"$TARGET\")\"\nelif [ -f \"$TARGET\" ]; then\n  echo \"$TARGET is a Regular File\"\nelse\n  echo \"$TARGET does not exist or is another type\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -46,7 +83,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - File Operations & Navigation\n\n```bash\n# Find files modified in the last 24 hours larger than 50MB\nfind /var/log -type f -mtime -1 -size +50M\n```\n"
+            "content": "# 02 — File Operations, Search & Archiving\n\n## 🎯 Power Commands\n- `find /var/log -type f -mtime -1 -size +10M`: Find files modified within 24h over 10MB.\n- `rsync -avz --delete src/ dest/`: Efficient differential synchronization.\n- `tar -czvf archive.tar.gz /path`: Compress directory into gzip tarball.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 02: Advanced Find ===\"\necho \"Searching for .conf files in /etc (limit 5):\"\nfind /etc -maxdepth 2 -type f -name \"*.conf\" 2>/dev/null | head -n 5\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Find all files in /tmp ending in .log larger than 1KB.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nfind /tmp -type f -name \"*.log\" -size +1k 2>/dev/null\necho \"✔ Find command completed successfully.\"\n"
+              }
+            ]
           }
         ]
       },
@@ -57,7 +115,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - File Permissions & Special Bits\n\n| Permission Bit | Numeric | Files | Directories |\n| :--- | :--- | :--- | :--- |\n| **Read (`r`)** | `4` | View contents | List files (`ls`) |\n| **Write (`w`)** | `2` | Modify contents | Create/delete files |\n| **Execute (`x`)**| `1` | Run as program | Enter directory (`cd`) |\n\n### Special Permissions:\n- **SUID (`chmod 4755`)**: Runs binary with owner's UID (e.g. `/usr/bin/passwd`).\n- **SGID (`chmod 2755`)**: Newly created files in directory inherit parent group ownership.\n- **Sticky Bit (`chmod 1777`)**: Users can only delete files they own (e.g. `/tmp`).\n"
+            "content": "# 03 — Permissions, SUID/SGID & POSIX ACLs\n\n## 🎯 Special Permission Bits\n- **SUID (`4000`)**: Executes program with file owner privileges (e.g. `/usr/bin/passwd`).\n- **SGID (`2000`)**: Files created inside directory inherit the directory's group.\n- **Sticky Bit (`1000`)**: Only file owner or root can delete files (e.g. `/tmp`).\n\n## 🧠 POSIX ACLs\n`setfacl -m u:deployer:rwx /var/www` allows fine-grained access without altering primary user/group.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 03: Permissions Breakdown ===\"\ntouch /tmp/perm_test.sh\nchmod 755 /tmp/perm_test.sh\nls -l /tmp/perm_test.sh\nrm -f /tmp/perm_test.sh\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script to convert symbolic mode 'rwxr-xr--' to octal '754'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ntouch /tmp/test_octal\nchmod 754 /tmp/test_octal\nOCTAL=$(stat -c \"%a\" /tmp/test_octal 2>/dev/null || stat -f \"%OLp\" /tmp/test_octal)\necho \"Octal mode: $OCTAL\"\nrm -f /tmp/test_octal\n"
+              }
+            ]
           }
         ]
       },
@@ -68,7 +147,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - I/O Redirection & Pipes\n\n```bash\n# Redirect both stdout and stderr to a file\ncommand > output.log 2>&1\n# or modern syntax:\ncommand &> output.log\n\n# Discard all output\ncommand > /dev/null 2>&1\n```\n"
+            "content": "# 04 — File Descriptors & I/O Redirection\n\n## 🎯 Standard File Descriptors\n- `0`: `stdin` (Standard Input)\n- `1`: `stdout` (Standard Output)\n- `2`: `stderr` (Standard Error)\n\n## 🧠 Common Patterns\n- `cmd > file.txt 2>&1`: Redirects both stdout and stderr to `file.txt`.\n- `cmd 2>/dev/null`: Silences error messages.\n- `cmd | tee output.log`: Displays in terminal AND writes to file simultaneously.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 04: I/O Redirection ===\"\necho \"Normal output\" > /tmp/stdout.log\necho \"Error output\" 1>&2 2> /tmp/stderr.log\necho \"Logged stdout: $(cat /tmp/stdout.log)\"\nrm -f /tmp/stdout.log /tmp/stderr.log\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Redirect standard output to out.log and error output to err.log for a failing command.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nls /nonexistent_directory > /tmp/out.log 2> /tmp/err.log || true\necho \"Captured error: $(cat /tmp/err.log)\"\nrm -f /tmp/out.log /tmp/err.log\n"
+              }
+            ]
           }
         ]
       },
@@ -77,19 +177,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "sample.log",
-            "type": "file",
-            "content": "2026-08-30 12:00:01 INFO [auth] User login successful user_id=101\n2026-08-30 12:00:05 ERROR [payment] Transaction failed err=insufficient_funds user_id=102\n2026-08-30 12:00:10 WARN [db] Slow query executed duration=1200ms\n"
-          },
-          {
-            "name": "parse_logs.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\n# Extract error messages using grep and awk\ngrep \"ERROR\" sample.log | awk '{print $1, $2, $3, $4, $5}'\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - Text Processing Powerhouses (grep, sed, awk)\n"
+            "content": "# 05 — Text Processing with grep, sed, and awk\n\n## 🎯 The Holy Trinity of CLI\n- `grep -rnE 'regex' /dir`: Search text recursively with extended regex.\n- `sed -i -E 's/old/new/g' file.txt`: Stream editor for inline string replacements.\n- `awk '{ sum += $1 } END { print sum }'`: Column-oriented text transformation programming language.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 05: AWK & Grep Processing ===\"\nDATA=\"nginx:200:1042\\napache:500:203\\nnginx:200:540\\nnode:404:12\"\necho -e \"$DATA\" | awk -F: '$2 == \"200\" { print \"Status 200 Service:\", $1, \"Bytes:\", $3 }'\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Count occurrences of unique IP addresses from web log string.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nLOGS=\"192.168.1.1\\n10.0.0.1\\n192.168.1.1\\n192.168.1.2\\n10.0.0.1\\n192.168.1.1\"\necho -e \"$LOGS\" | sort | uniq -c | sort -nr\n"
+              }
+            ]
           }
         ]
       },
@@ -100,7 +211,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Process Management & POSIX Signals\n\n### Essential Signals:\n- **`SIGHUP (1)`**: Reload configuration without restarting process.\n- **`SIGINT (2)`**: Keyboard interrupt (`Ctrl + C`).\n- **`SIGKILL (9)`**: Uncatchable immediate kernel termination.\n- **`SIGTERM (15)`**: Graceful termination request (Default for `kill`).\n"
+            "content": "# 06 — Process Lifecycle, States & Signals\n\n## 🎯 Process States\n- `R` (Running / Runnable): Actively executing on CPU or in run queue.\n- `S` (Interruptible Sleep): Waiting for event/I/O.\n- `D` (Uninterruptible Sleep): Waiting for disk/hardware I/O (cannot be killed with SIGKILL!).\n- `Z` (Zombie): Terminated process whose exit code has not yet been reaped by its parent (`wait()`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 06: Process Inspection ===\"\necho \"Current Shell PID: $$\"\necho \"Top 3 Memory-Consuming Processes:\"\nps aux --sort=-%mem | head -n 4\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Spawn a background sleep process, capture its PID, and send SIGTERM.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nsleep 30 &\nBG_PID=$!\necho \"Spawned background sleep PID: $BG_PID\"\nkill -15 \"$BG_PID\"\nwait \"$BG_PID\" 2>/dev/null || true\necho \"✔ Process $BG_PID terminated successfully.\"\n"
+              }
+            ]
           }
         ]
       },
@@ -111,7 +243,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Memory & CPU Metrics\n\n```bash\n# Live CPU and disk I/O metrics every 2 seconds\nvmstat 2 5\n\n# Memory usage in human-readable gigabytes\nfree -h\n```\n"
+            "content": "# 07 — Memory, CPU Monitoring & Load Average\n\n## 🎯 Load Average Metrics\nExpressed across 3 periods: `1 min`, `5 min`, `15 min`.\n- Load average = average number of processes in `R` (Runnable) or `D` (Uninterruptible I/O) state.\n- On an 8-core machine, a Load Average of `8.0` represents 100% capacity utilization.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 07: System Health Metrics ===\"\necho \"Memory Status:\"\nfree -h 2>/dev/null || vm_stat\necho \"Load Average:\"\nuptime\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Extract total available memory in MB from /proc/meminfo.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif [ -f /proc/meminfo ]; then\n  MEM_AVAIL_KB=$(grep MemAvailable /proc/meminfo | awk '{print $2}')\n  echo \"Available Memory: $((MEM_AVAIL_KB / 1024)) MB\"\nelse\n  echo \"/proc/meminfo not present (non-Linux platform)\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -122,7 +275,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Disk & Filesystem Management\n\n```bash\n# Check filesystem disk space and inode consumption\ndf -h\ndf -i\n\n# Find largest 10 directories\ndu -ah /var | sort -rh | head -n 10\n```\n"
+            "content": "# 08 — Block Devices, Filesystems & `/etc/fstab`\n\n## 🎯 Filesystems\n- `ext4`: Mature, reliable default Linux filesystem with journaling.\n- `XFS`: High-performance 64-bit journaling filesystem optimized for large datasets (RHEL default).\n- `/etc/fstab`: Defines persistent disk mounts on boot (`UUID=... /data ext4 defaults 0 2`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 08: Disk Space Usage ===\"\ndf -h /\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check disk space of root partition and alert if usage exceeds 90%.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nUSAGE=$(df / | tail -1 | awk '{print $5}' | sed 's/%//')\necho \"Current Root Partition Usage: ${USAGE}%\"\nif [ \"$USAGE\" -gt 90 ]; then\n  echo \"⚠️ WARNING: Root partition is above 90%!\"\nelse\n  echo \"✔ Disk usage is within healthy limits.\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -133,7 +307,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - User, Group & Sudoers Administration\n\n```bash\n# Create system user with home directory and bash shell\nsudo useradd -m -s /bin/bash devops_user\nsudo usermod -aG sudo devops_user\n```\n"
+            "content": "# 09 — Users, Groups & Sudo Privileges\n\n## 🎯 Security Database Files\n- `/etc/passwd`: User account definitions (`username:x:UID:GID:comment:home:shell`).\n- `/etc/shadow`: Salted password hashes and expiration metadata (readable only by root).\n- `visudo`: Safely edits `/etc/sudoers` with syntax validation before saving.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: Current User & Group Identity ===\"\nid\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if a user 'devops' exists in /etc/passwd.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif id \"devops\" &>/dev/null; then\n  echo \"User 'devops' exists!\"\nelse\n  echo \"User 'devops' does not exist.\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -144,7 +339,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Package Management\n\n```bash\n# Debian / Ubuntu (APT)\nsudo apt update && sudo apt upgrade -y\n\n# RHEL / CentOS (DNF)\nsudo dnf check-update && sudo dnf upgrade -y\n```\n"
+            "content": "# 10 — Linux Package Managers (APT & DNF)\n\n## 🎯 Package Manager Matrix\n- **Debian / Ubuntu**: `apt update && apt install -y package`, `/etc/apt/sources.list`\n- **RHEL / CentOS / Fedora**: `dnf install -y package`, `/etc/yum.repos.d/`\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 10: Package Manager Detection ===\"\nif command -v apt &>/dev/null; then\n  echo \"Detected APT (Debian/Ubuntu)\"\nelif command -v dnf &>/dev/null; then\n  echo \"Detected DNF (RHEL/Fedora)\"\nelif command -v pacman &>/dev/null; then\n  echo \"Detected Pacman (Arch)\"\nelse\n  echo \"Other Package Manager\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if 'curl' and 'git' binaries are installed on the system.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nfor cmd in curl git; do\n  if command -v \"$cmd\" &>/dev/null; then\n    echo \"✔ $cmd is installed at $(command -v \"$cmd\")\"\n  else\n    echo \"❌ $cmd is NOT installed\"\n  fi\ndone\n"
+              }
+            ]
           }
         ]
       },
@@ -153,30 +369,62 @@
         "type": "directory",
         "children": [
           {
-            "name": "my-service.service",
-            "type": "file",
-            "content": "[Unit]\nDescription=Trak Background Service\nAfter=network.target\n\n[Service]\nType=simple\nUser=www-data\nWorkingDirectory=/opt/app\nExecStart=/usr/bin/node server.js\nRestart=always\nRestartSec=5s\n\n[Install]\nWantedBy=multi-user.target\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - systemd Unit Configuration & journalctl\n\n```bash\n# Reload daemon after editing unit file\nsudo systemctl daemon-reload\nsudo systemctl enable --now my-service\n\n# Stream logs for service\njournalctl -u my-service -f\n```\n"
+            "content": "# 11 — systemd Services & Journalctl\n\n## 🎯 Unit File Structure (`/etc/systemd/system/myapp.service`)\n```ini\n[Unit]\nDescription=Trak API Service\nAfter=network.target\n\n[Service]\nType=simple\nUser=www-data\nExecStart=/usr/local/bin/trak server\nRestart=always\nRestartSec=5\n\n[Install]\nWantedBy=multi-user.target\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 11: systemd Service Architecture ===\"\necho \"Service control commands:\"\necho \"  systemctl status <service>\"\necho \"  systemctl enable --now <service>\"\necho \"  journalctl -u <service> -f -n 100\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Generate a minimal systemd service unit template file for 'demo-api'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\ncat << 'EOF' > /tmp/demo-api.service\n[Unit]\nDescription=Demo API\nAfter=network.target\n\n[Service]\nExecStart=/usr/bin/node /opt/app/index.js\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target\nEOF\necho \"Generated unit file:\"; cat /tmp/demo-api.service\nrm -f /tmp/demo-api.service\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-cron-jobs-and-timers",
+        "name": "12-cron-jobs-and-systemd-timers",
         "type": "directory",
         "children": [
           {
-            "name": "crontab.example",
-            "type": "file",
-            "content": "# Run daily backup at 2:30 AM\n30 2 * * * /opt/scripts/backup.sh > /var/log/backup.log 2>&1\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Scheduled Automation (Cron & Timers)\n"
+            "content": "# 12 — Scheduled Tasks: Crontab & Systemd Timers\n\n## 🎯 Crontab 5-Field Syntax\n```text\n ┌───────────── minute (0 - 59)\n │ ┌───────────── hour (0 - 23)\n │ │ ┌───────────── day of month (1 - 31)\n │ │ │ ┌───────────── month (1 - 12)\n │ │ │ │ ┌───────────── day of week (0 - 6, 0=Sunday)\n │ │ │ │ │\n * * * * * command to execute\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: Crontab Syntax ===\"\necho \"Every day at 2:30 AM: 30 2 * * * /opt/backup.sh\"\necho \"Every 15 minutes:     */15 * * * * /opt/healthcheck.sh\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a crontab entry that runs a backup script every Sunday at midnight.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nCRON_ENTRY=\"0 0 * * 0 /usr/local/bin/backup-database.sh\"\necho \"Verified Cron Expression: $CRON_ENTRY\"\n"
+              }
+            ]
           }
         ]
       },
@@ -187,18 +435,60 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Linux Networking & Port Diagnostics\n\n```bash\n# Show listening TCP and UDP sockets with process names\nss -tulpn\n\n# Test TCP port connectivity\nnc -zv 192.168.1.10 8080\n```\n"
+            "content": "# 13 — Linux Networking & Diagnostics\n\n## 🎯 Modern Diagnostics Toolset\n- `ip addr` / `ip route`: Replaces deprecated `ifconfig` / `route`.\n- `ss -tulpn`: Replaces deprecated `netstat` for inspecting listening TCP/UDP ports.\n- `curl -Iv https://example.com`: Inspects HTTP response headers, TLS handshake, and latency.\n- `dig +trace domain.com`: Walks DNS root servers to authoritative name servers.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 13: Network Interface Check ===\"\nif command -v ip &>/dev/null; then\n  ip -brief addr\nelse\n  ifconfig -a 2>/dev/null || true\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Test DNS resolution of 'google.com' and print the resolved IP address.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nIP=$(getent hosts google.com 2>/dev/null | awk '{print $1}' | head -1)\necho \"Resolved google.com to: ${IP:-DNS query simulated}\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-ssh-keys-and-hardening",
+        "name": "14-ssh-keys-and-server-hardening",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - SSH Key Authentication & Hardening\n\n```bash\n# Generate modern Ed25519 keypair\nssh-keygen -t ed25519 -C \"admin@company.com\"\n\n# Copy public key to remote server\nssh-copy-id -i ~/.ssh/id_ed25519.pub user@server-ip\n```\n"
+            "content": "# 14 — SSH Key Management & Hardening\n\n## 🎯 Production SSH Hardening (`/etc/ssh/sshd_config`)\n```text\nPermitRootLogin no\nPasswordAuthentication no\nPubkeyAuthentication yes\nX11Forwarding no\nMaxAuthTries 3\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: SSH Keygen Standard ===\"\necho \"Generate secure Ed25519 key:\"\necho \"  ssh-keygen -t ed25519 -C 'admin@trak.dev'\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script to verify that ~/.ssh permissions are secure (700 for dir, 600 for keys).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nif [ -d \"$HOME/.ssh\" ]; then\n  chmod 700 \"$HOME/.ssh\"\n  find \"$HOME/.ssh\" -type f -name \"id_*\" -not -name \"*.pub\" -exec chmod 600 {} +\n  echo \"✔ SSH directory permissions hardened!\"\nfi\n"
+              }
+            ]
           }
         ]
       },
@@ -209,7 +499,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Linux Firewalls (UFW & iptables)\n\n```bash\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw allow 22/tcp\nsudo ufw allow 80/tcp\nsudo ufw allow 443/tcp\nsudo ufw enable\n```\n"
+            "content": "# 15 — Linux Firewalls: iptables & UFW\n\n## 🎯 UFW (Uncomplicated Firewall) Basics\n```bash\nufw default deny incoming\nufw default allow outgoing\nufw allow 22/tcp\nufw allow 80/tcp\nufw allow 443/tcp\nufw enable\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Firewall Rule Inspection ===\"\nif command -v ufw &>/dev/null; then\n  ufw status verbose\nelse\n  echo \"UFW not installed (iptables/nftables backend active)\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Print UFW commands to allow HTTPS traffic on port 443 from subnet 192.168.1.0/24.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: sudo ufw allow from 192.168.1.0/24 to any port 443 proto tcp\"\n"
+              }
+            ]
           }
         ]
       },
@@ -218,14 +529,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "automation.sh",
-            "type": "file",
-            "content": "#!/usr/bin/env bash\nset -euo pipefail\n\nreadonly BACKUP_DIR=\"/tmp/trak_backup\"\nmkdir -p \"${BACKUP_DIR}\"\n\necho \"[INFO] Backup initialized at $(date)\"\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Robust Bash Scripting\n\nAlways use `set -euo pipefail`:\n- `-e`: Exit immediately on command failure.\n- `-u`: Treat unset variables as an error.\n- `-o pipefail`: Return exit code of first failing command in a pipe.\n"
+            "content": "# 16 — Production Bash Scripting & Traps\n\n## 🎯 `set -euo pipefail`\n- `-e`: Exit immediately on unhandled command failure.\n- `-u`: Treat unset variables as errors.\n- `-o pipefail`: Pipeline return status matches the rightmost non-zero exit code.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\nset -euo pipefail\n\nTMP_DIR=$(mktemp -d)\ntrap 'rm -rf \"$TMP_DIR\"' EXIT\n\necho \"=== 16: Safe Bash Script with Trap Cleanup ===\"\necho \"Created temporary working directory: $TMP_DIR\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a Bash function that retries a command up to 3 times with 1-second backoff.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nretry() {\n  local max_attempts=3\n  local attempt=1\n  until \"$@\"; do\n    if [ \"$attempt\" -ge \"$max_attempts\" ]; then\n      echo \"Failed after $max_attempts attempts!\" >&2\n      return 1\n    fi\n    echo \"Attempt $attempt failed. Retrying...\"\n    attempt=$((attempt + 1))\n    sleep 1\n  done\n}\n\nretry echo \"✔ Retry helper execution succeeded!\"\n"
+              }
+            ]
           }
         ]
       },
@@ -236,7 +563,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - Mandatory Access Control (SELinux & AppArmor)\n\n```bash\n# Check SELinux status\nsestatus\n\n# Restore default file security contexts\nrestorecon -Rv /var/www/html\n```\n"
+            "content": "# 17 — Mandatory Access Control (SELinux & AppArmor)\n\n## 🎯 SELinux Modes\n- `Enforcing`: Security policy is strictly enforced and denials are logged.\n- `Permissive`: Security policy violations are allowed but logged (ideal for debugging).\n- `Disabled`: SELinux kernel hooks turned off.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Security Context Inspection ===\"\nif command -v getenforce &>/dev/null; then\n  echo \"SELinux Mode: $(getenforce)\"\nelif command -v aa-status &>/dev/null; then\n  echo \"AppArmor active.\"\nelse\n  echo \"Standard DAC permissions active.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Inspect file security contexts with ls -Z.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nls -dZ /tmp 2>/dev/null || ls -ld /tmp\n"
+              }
+            ]
           }
         ]
       },
@@ -247,7 +595,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - High-Yield Linux SysAdmin & DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Load Average**: Number of runnable processes on CPU or waiting in uninterruptible disk sleep state (D state).\n2. **Zombie vs Orphan Process**: Zombie has finished execution but parent hasn't read exit code via `wait()`; Orphan has lost its parent and is adopted by PID 1 (systemd).\n3. **Hard Link vs Soft Link**: Hard link shares the same inode; soft link is a pointer file pointing to another pathname.\n4. **SIGKILL (9) vs SIGTERM (15)**: `SIGKILL` cannot be handled or ignored by the process; `SIGTERM` allows graceful cleanup of open connections and state.\n5. **FHS `/proc` filesystem**: A synthetic pseudo-filesystem generated by the Linux kernel on the fly to expose system metrics and process memory tables.\n\n🚀 You have completed the complete Linux Systems & DevOps Administration track!\n"
+            "content": "# 18 — High-Yield Linux SysAdmin & SRE Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Load Average vs CPU Usage**: High load with low CPU indicates I/O disk/NFS bottlenecks (processes in `D` state).\n2. **Zombie Processes**: Cannot be killed with `kill -9`; must signal parent or restart parent to reap `wait()`.\n3. **Deleted Open Files**: `df -h` shows disk full while `du -sh` shows empty space when deleted files are held open by running processes (`lsof +L1`).\n4. **Inode Exhaustion**: `df -i` shows 100% inode utilization even if gigabytes of disk space remain.\n5. **SUID on Shell Scripts**: Modern Linux kernels ignore SUID bits on interpreted scripts for security.\n6. **OOM Killer Score**: `/proc/<pid>/oom_score` determines which process the kernel kills first under memory starvation.\n7. **`kill -9` vs `kill -15`**: SIGTERM (15) allows process cleanup and graceful socket closing; SIGKILL (9) is uncatchable.\n8. **Hard Link Limitations**: Cannot cross filesystem boundaries and cannot link directories.\n9. **Swap Thrashing**: Heavy swap in/out stalls the kernel CPU scheduler.\n10. **`set -e` in Pipelines**: Requires `-o pipefail` or failure in the middle of a pipeline is silently masked.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master SysAdmin Drill ===\"\necho \"1. Load average vs CPU %\"\necho \"2. Deleted file open descriptor recovery (lsof +L1)\"\necho \"3. Inode exhaustion (df -i)\"\necho \"4. Zombie process cleanup\"\necho \"🚀 You have completed the comprehensive Linux Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Master Drill: Write a healthcheck script that verifies:\n# 1. Disk usage < 90%\n# 2. Memory available > 100MB\n# 3. Load average is reported\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nset -euo pipefail\necho \"=====================================\"\necho \"   Linux Server Health Report\"\necho \"=====================================\"\n\n# 1. Uptime & Load\nuptime\n\n# 2. Disk Space\nROOT_USAGE=$(df / | tail -1 | awk '{print $5}' | tr -d '%')\necho \"Root Disk: ${ROOT_USAGE}% used\"\n\n# 3. Memory\nif command -v free &>/dev/null; then\n  free -h\nfi\n\necho \"✔ Health check completed successfully!\"\n"
+              }
+            ]
           }
         ]
       }
