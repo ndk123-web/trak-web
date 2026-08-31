@@ -53,30 +53,32 @@ export default function Home() {
       {/* 1. Hero Section */}
       <Hero />
 
-      {/* 1.5 Embedded Video Demo Showcase */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-white/[0.08] bg-[#080b11] p-4 sm:p-6 space-y-4 shadow-2xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
-            <div>
-              <h2 className="font-serif text-lg sm:text-xl font-normal text-[#f5f4ef]">
-                Watch Trak in Action
-              </h2>
-              <p className="text-xs text-slate-400 font-sans mt-0.5">
-                See how Trak resolves remote blueprints and materializes structured, multi-module workspaces in seconds.
-              </p>
+      {/* 1.5 Ambient Showcase Terminal Video */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#080b11] overflow-hidden shadow-2xl">
+          {/* Ambient Window Header */}
+          <div className="px-4 py-2.5 bg-[#0c101a] border-b border-white/[0.06] flex items-center justify-between select-none">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
+              <span className="ml-2 text-[11px] font-mono text-slate-500">
+                trak — live materialization
+              </span>
             </div>
-            <span className="text-[11px] font-mono px-2.5 py-1 rounded bg-white/[0.04] text-emerald-400 border border-white/[0.06] w-fit">
-              v1.0.0 Demo Video
+            <span className="text-[10px] font-mono text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+              v1.0.0
             </span>
           </div>
 
-          <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/[0.06] shadow-inner flex items-center justify-center">
+          <div className="bg-black aspect-video flex items-center justify-center">
             <video
               src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
-              controls
+              autoPlay
+              muted
+              loop
               playsInline
-              preload="metadata"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain pointer-events-none"
             />
           </div>
         </div>

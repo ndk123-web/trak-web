@@ -110,8 +110,19 @@ export function AppHeader({
           </nav>
         </div>
 
-        {/* Right: Quick Search + Install Command + GitHub */}
-        <div className="flex items-center gap-3">
+        {/* Right: Quick Search + Studio + Install Command + GitHub */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Blueprint Studio Link */}
+          <Link
+            href="/studio"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/25 text-emerald-400 text-xs font-mono font-medium transition-all"
+          >
+            <span>Studio</span>
+            <span className="px-1 py-0.2 rounded bg-emerald-400 text-slate-950 font-bold text-[9px]">
+              NEW
+            </span>
+          </Link>
+
           {/* Search Trigger */}
           <button
             onClick={() => setIsSearchOpen(true)}

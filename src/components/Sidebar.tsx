@@ -95,9 +95,10 @@ export function Sidebar({
       ],
     },
     {
-      title: "Interactive",
+      title: "Interactive & Tools",
       items: [
-        { name: "Command Playground", href: "/playground", icon: PlaySquare, isNew: true },
+        { name: "Blueprint Studio", href: "/studio", icon: Code2, isNew: true },
+        { name: "Command Playground", href: "/playground", icon: PlaySquare },
       ],
     },
   ];
