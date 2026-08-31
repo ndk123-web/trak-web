@@ -1,0 +1,310 @@
+{
+  "id": "lang/cpp",
+  "name": "Modern C++ Systems Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive Modern C++ (C++20/C++23) curriculum from low-level memory layout, pointers, and CMake to RAII, Move Semantics, Vtables, Concepts, STL internals, and Concurrency",
+  "root": {
+    "name": "cpp-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "CMakeLists.txt",
+        "type": "file",
+        "content": "cmake_minimum_required(VERSION 3.20)\nproject(CppMastery VERSION 1.0.0 LANGUAGES CXX)\n\nset(CMAKE_CXX_STANDARD 20)\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\n\nadd_executable(CppApp 00-setup-and-cmake-toolchain/main.cpp)\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# ⚙️ Complete Modern C++ (C++20/23) Systems Track\n\nWelcome to your full Modern C++ learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-cmake-toolchain` | **Setup & Toolchain** | Compilation stages (Preprocessor, Compiler, Assembler, Linker), CMake, g++ / clang++ |\n| `01-memory-layout-pointers-references` | **Memory Layout** | Stack vs Heap, BSS/Data/Text segments, Pointers (`T*`) vs References (`T&`), pointer arithmetic |\n| `02-auto-decltype-constexpr` | **Type Deduction** | `auto`, `decltype`, `const`, `constexpr`, `consteval` compile-time computations |\n| `03-strings-and-string-view` | **Strings & Views** | `std::string` (SSO) vs `std::string_view` (zero-copy fat pointer view) |\n| `04-control-flow-and-init-statements` | **Control Flow** | `if` with initializers (`if (auto it = m.find(); ...)`), range-based for loops |\n| `05-functions-lambdas-functional` | **Lambdas & Functions** | Lambdas `[captures](params)`, `std::function`, generic lambdas |\n| `06-raii-and-smart-pointers` | **RAII & Smart Pointers** | RAII idiom, `std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr` cycle prevention |\n| `07-move-semantics-rule-of-5` | **Move Semantics** | Rvalue references (`T&&`), `std::move`, Rule of 0 / 3 / 5, perfect forwarding |\n| `08-oop-vtables-polymorphism` | **OOP & Vtables** | Virtual functions, `vptr` & `vtable` mechanics, virtual destructors, object slicing, diamond problem |\n| `09-templates-and-cpp20-concepts` | **Templates & Concepts** | Function/class templates, template specialization, C++20 `concept` and `requires` constraints |\n| `10-stl-containers-deep-dive` | **STL Containers** | `std::vector` capacity doubling, `std::unordered_map` bucket hashing & rehash, `std::map` RB-tree |\n| `11-stl-algorithms-and-ranges` | **STL & C++20 Ranges** | `std::sort`, `std::transform`, C++20 `std::ranges` pipeline view composition |\n| `12-error-handling-and-std-expected` | **Error Architecture** | Exceptions, `noexcept`, `std::optional`, C++23 `std::expected` |\n| `13-multithreading-mutexes-atomics` | **Concurrency** | `std::jthread`, `std::mutex`, `std::lock_guard`, `std::unique_lock`, `std::atomic<T>` |\n| `14-cpp20-modules-architecture` | **C++20 Modules** | `export module`, `import`, zero header include overhead |\n| `15-filesystem-and-file-io` | **Filesystem & I/O** | `std::filesystem::path`, `std::fstream`, recursive directory iteration |\n| `16-testing-and-sanitizers` | **Testing & Sanitizers** | AddressSanitizer (`-fsanitize=address,undefined`), unit tests |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield C++ interview questions & low-level memory traps |\n\n---\n\n## 🛠️ How to Compile & Run\n\nCompile any module with g++ (C++20):\n```bash\ncd 00-setup-and-cmake-toolchain\ng++ -std=c++20 main.cpp -o main\n./main\n```\n"
+      },
+      {
+        "name": "00-setup-and-cmake-toolchain",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=====================================================\\n\";\n    std::cout << \"⚙️ Welcome to 00 - Modern C++ Setup & Toolchain Check!\\n\";\n    std::cout << \"=====================================================\\n\";\n    std::cout << \"✔ Modern C++ compiler toolchain is active!\\n\";\n    std::cout << \"👉 Next: Head over to 01-memory-layout-pointers-references/main.cpp\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - C++ Toolchain & Build System 🛠️\n\n### The 4 Compilation Stages:\n1. **Preprocessor (`-E`)**: Expands macros, `#include` files.\n2. **Compiler (`-S`)**: Generates assembly code.\n3. **Assembler (`-c`)**: Generates machine object code (`.o` / `.obj`).\n4. **Linker**: Combines object files and libraries into an executable.\n\n### Build with CMake:\n```bash\ncmake -B build\ncmake --build build\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "01-memory-layout-pointers-references",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== 01: Memory Layout, Pointers & References ===\\n\";\n\n    int val = 42;\n    int* ptr = &val; // Pointer: Holds memory address\n    int& ref = val;  // Reference: Immutable alias\n\n    *ptr = 100;\n    std::cout << \"Modified via pointer  : \" << val << \"\\n\";\n\n    ref = 200;\n    std::cout << \"Modified via reference: \" << val << \"\\n\";\n\n    // Pointer Arithmetic\n    int arr[3] = {10, 20, 30};\n    int* pArr = arr;\n    std::cout << \"Second element via ptr arithmetic: \" << *(pArr + 1) << \"\\n\";\n\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Memory Layout & Pointers\n\n- **Pointer (`T*`)**: Can be reassigned, can be `nullptr`, supports arithmetic.\n- **Reference (`T&`)**: Immutable binding, cannot be null.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-auto-decltype-constexpr",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nconstexpr int factorial(int n) {\n    return (n <= 1) ? 1 : n * factorial(n - 1);\n}\n\nconsteval int square(int n) {\n    return n * n; // Must be evaluated at compile-time!\n}\n\nint main() {\n    std::cout << \"=== 02: auto, decltype, constexpr & consteval ===\\n\";\n\n    auto x = 10; // Inferred as int\n    decltype(x) y = 20;\n\n    constexpr int f5 = factorial(5); // Computed at compile-time by compiler\n    constexpr int sq = square(4);\n\n    std::cout << \"Factorial(5) at compile-time: \" << f5 << \"\\n\";\n    std::cout << \"Square(4) at compile-time   : \" << sq << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Type Deduction & Compile-Time Constants\n"
+          }
+        ]
+      },
+      {
+        "name": "03-strings-and-string-view",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <string>\n#include <string_view>\n\n// Zero-allocation string slice\nvoid printPrefix(std::string_view sv, size_t n) {\n    if (n <= sv.size()) {\n        std::cout << \"Prefix: \" << sv.substr(0, n) << \"\\n\";\n    }\n}\n\nint main() {\n    std::cout << \"=== 03: std::string vs std::string_view (C++17) ===\\n\";\n    std::string text = \"Modern Systems Programming in C++\";\n    printPrefix(text, 6); // Zero heap allocations!\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Strings & String Views\n\n`std::string_view` is a non-owning 2-word fat pointer `(const char* ptr, size_t len)` with zero allocation overhead.\n"
+          }
+        ]
+      },
+      {
+        "name": "04-control-flow-and-init-statements",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <map>\n#include <string>\n\nint main() {\n    std::cout << \"=== 04: Control Flow & Init Statements (C++17) ===\\n\";\n\n    std::map<std::string, int> scores = {{\"Alice\", 95}, {\"Bob\", 80}};\n\n    // 'if' with initializer statement: scoped variable inside condition\n    if (auto it = scores.find(\"Alice\"); it != scores.end()) {\n        std::cout << \"Found Alice with score: \" << it->second << \"\\n\";\n    }\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Control Flow & Initializers\n"
+          }
+        ]
+      },
+      {
+        "name": "05-functions-lambdas-functional",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <vector>\n#include <algorithm>\n\nint main() {\n    std::cout << \"=== 05: Modern Lambdas & Functional Utilities ===\\n\";\n\n    int multiplier = 3;\n    // Lambda capturing multiplier by value [=] or reference [&]\n    auto scale = [multiplier](int val) { return val * multiplier; };\n\n    std::vector<int> nums = {1, 2, 3, 4};\n    for (int n : nums) {\n        std::cout << scale(n) << \" \";\n    }\n    std::cout << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Functions & Lambdas\n"
+          }
+        ]
+      },
+      {
+        "name": "06-raii-and-smart-pointers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <memory>\n\nstruct Resource {\n    Resource() { std::cout << \"Resource Allocated\\n\"; }\n    ~Resource() { std::cout << \"Resource Destroyed (RAII Safe)\\n\"; }\n    void use() { std::cout << \"Using Resource...\\n\"; }\n};\n\nint main() {\n    std::cout << \"=== 06: RAII & Smart Pointers (unique_ptr, shared_ptr) ===\\n\";\n\n    // unique_ptr: Exclusive ownership (Zero overhead)\n    std::unique_ptr<Resource> res = std::make_unique<Resource>();\n    res->use();\n    // Automatically deleted when scope exits!\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - RAII & Smart Pointers\n\n- `std::unique_ptr<T>`: Single exclusive owner.\n- `std::shared_ptr<T>`: Reference-counted shared ownership.\n- `std::weak_ptr<T>`: Non-owning observer to break cyclic shared_ptr references.\n"
+          }
+        ]
+      },
+      {
+        "name": "07-move-semantics-rule-of-5",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <vector>\n#include <utility>\n\nclass Buffer {\nprivate:\n    size_t size;\n    int* data;\npublic:\n    // Constructor\n    Buffer(size_t s) : size(s), data(new int[s]) {\n        std::cout << \"Buffer created (\" << size << \" ints)\\n\";\n    }\n    // Destructor\n    ~Buffer() { delete[] data; }\n\n    // Move Constructor (Transfers ownership, zero copying)\n    Buffer(Buffer&& other) noexcept : size(other.size), data(other.data) {\n        other.size = 0;\n        other.data = nullptr;\n        std::cout << \"Buffer MOVED!\\n\";\n    }\n};\n\nint main() {\n    std::cout << \"=== 07: Move Semantics & Rvalues (std::move) ===\\n\";\n    Buffer b1(1000);\n    Buffer b2 = std::move(b1); // Move constructor called\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Move Semantics & Rule of 0/3/5\n\nRule of 5:\n1. Destructor\n2. Copy Constructor\n3. Copy Assignment Operator\n4. Move Constructor\n5. Move Assignment Operator\n"
+          }
+        ]
+      },
+      {
+        "name": "08-oop-vtables-polymorphism",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <memory>\n\nclass Base {\npublic:\n    virtual void speak() const { std::cout << \"Base sound\\n\"; }\n    // Golden Rule: Always provide virtual destructor in polymorphic base classes!\n    virtual ~Base() = default;\n};\n\nclass Derived : public Base {\npublic:\n    void speak() const override { std::cout << \"Derived sound (Vtable resolved!)\\n\"; }\n};\n\nint main() {\n    std::cout << \"=== 08: OOP, Polymorphism & Vtables ===\\n\";\n    std::unique_ptr<Base> obj = std::make_unique<Derived>();\n    obj->speak(); // Dispatches through Vtable to Derived::speak\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - OOP & Vtables\n\n- Virtual functions add a hidden `vptr` pointing to the class's `vtable`.\n- Always declare base class destructors as `virtual` to avoid undefined behavior during deletion.\n"
+          }
+        ]
+      },
+      {
+        "name": "09-templates-and-cpp20-concepts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <concepts>\n\n// C++20 Concept defining numeric requirements\ntemplate <typename T>\nconcept Numeric = std::integral<T> || std::floating_point<T>;\n\ntemplate <Numeric T>\nT add(T a, T b) {\n    return a + b;\n}\n\nint main() {\n    std::cout << \"=== 09: Templates & C++20 Concepts ===\\n\";\n    std::cout << \"Add integers: \" << add(10, 20) << \"\\n\";\n    std::cout << \"Add floats  : \" << add(1.5, 2.5) << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Templates & C++20 Concepts\n\nConcepts replace complex SFINAE (`std::enable_if_t`) with clean, compile-time readable type constraints.\n"
+          }
+        ]
+      },
+      {
+        "name": "10-stl-containers-deep-dive",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <vector>\n#include <unordered_map>\n\nint main() {\n    std::cout << \"=== 10: STL Containers Deep-Dive ===\\n\";\n\n    std::vector<int> vec;\n    std::cout << \"Vector growth capacity check:\\n\";\n    for (int i = 0; i < 5; ++i) {\n        vec.push_back(i);\n        std::cout << \"Size: \" << vec.size() << \" | Capacity: \" << vec.capacity() << \"\\n\";\n    }\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - STL Containers\n\n- `std::vector`: Contiguous buffer with capacity geometric growth.\n- `std::unordered_map`: Bucket hash table.\n- `std::map`: Balanced Red-Black self-balancing BST.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-stl-algorithms-and-ranges",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <vector>\n#include <ranges>\n#include <algorithm>\n\nint main() {\n    std::cout << \"=== 11: STL Algorithms & C++20 Ranges ===\\n\";\n\n    std::vector<int> nums = {1, 2, 3, 4, 5, 6};\n    // C++20 Ranges pipeline composition\n    auto even_squares = nums \n        | std::views::filter([](int n) { return n % 2 == 0; })\n        | std::views::transform([](int n) { return n * n; });\n\n    for (int n : even_squares) {\n        std::cout << n << \" \";\n    }\n    std::cout << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - STL Algorithms & Ranges\n"
+          }
+        ]
+      },
+      {
+        "name": "12-error-handling-and-std-expected",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <optional>\n\nstd::optional<int> safeDivide(int a, int b) {\n    if (b == 0) return std::nullopt;\n    return a / b;\n}\n\nint main() {\n    std::cout << \"=== 12: Modern Error Handling (std::optional, std::expected) ===\\n\";\n    auto res = safeDivide(10, 2);\n    if (res.has_value()) {\n        std::cout << \"Division result: \" << *res << \"\\n\";\n    }\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Error Handling\n"
+          }
+        ]
+      },
+      {
+        "name": "13-multithreading-mutexes-atomics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <thread>\n#include <mutex>\n#include <atomic>\n\nstd::atomic<int> counter{0};\n\nvoid increment() {\n    for (int i = 0; i < 1000; ++i) {\n        counter.fetch_add(1, std::memory_order_relaxed);\n    }\n}\n\nint main() {\n    std::cout << \"=== 13: Multithreading & Atomics ===\\n\";\n    std::jthread t1(increment);\n    std::jthread t2(increment);\n    t1.join();\n    t2.join();\n    std::cout << \"Atomic counter final value: \" << counter.load() << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Concurrency & Atomics\n"
+          }
+        ]
+      },
+      {
+        "name": "14-cpp20-modules-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=== 14: C++20 Modules Architecture ===\\n\";\n    std::cout << \"Modules replace preprocessor text inclusion with compiled translation units.\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - C++20 Modules\n"
+          }
+        ]
+      },
+      {
+        "name": "15-filesystem-and-file-io",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <filesystem>\n\nnamespace fs = std::filesystem;\n\nint main() {\n    std::cout << \"=== 15: Modern Filesystem API (C++17) ===\\n\";\n    fs::path p = fs::current_path();\n    std::cout << \"Current Path: \" << p.string() << \"\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Filesystem API\n"
+          }
+        ]
+      },
+      {
+        "name": "16-testing-and-sanitizers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n#include <cassert>\n\nint add(int a, int b) { return a + b; }\n\nint main() {\n    std::cout << \"=== 16: Testing & Sanitizers ===\\n\";\n    assert(add(2, 3) == 5);\n    std::cout << \"All tests passed!\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Testing & Sanitizers\n\n```bash\ng++ -std=c++20 -fsanitize=address,undefined main.cpp -o test_app\n./test_app\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.cpp",
+            "type": "file",
+            "content": "#include <iostream>\n\nint main() {\n    std::cout << \"=====================================================\\n\";\n    std::cout << \"🎯 17: High-Yield C++ Interview Questions & Drills\\n\";\n    std::cout << \"=====================================================\\n\";\n    std::cout << \"1. RAII: Destructors deterministic release of resources.\\n\";\n    std::cout << \"2. Move Semantics: Transfer heap ownership without buffer re-allocation.\\n\";\n    std::cout << \"3. Virtual Destructors: Prevent undefined behavior deleting derived objects through base pointers.\\n\";\n    std::cout << \"4. string_view: Non-owning fat pointer avoiding heap memory allocations.\\n\";\n    std::cout << \"5. Concepts: Compile-time constraints replacing complex SFINAE metaprogramming.\\n\";\n    std::cout << \"\\n🚀 You have completed the complete Modern C++ Systems track!\\n\";\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield C++ Interview Questions 🎯\n"
+          }
+        ]
+      }
+    ]
+  }
+}

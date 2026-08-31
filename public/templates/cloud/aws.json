@@ -1,0 +1,250 @@
+{
+  "id": "cloud/aws",
+  "name": "AWS Cloud Architecture & Solutions Engineering Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive AWS curriculum from IAM security, VPC networking, and EC2/ALB/ASG compute to S3/EBS storage, Aurora/DynamoDB databases, Serverless Lambda/EventBridge, ECS/Fargate, and FinOps",
+  "root": {
+    "name": "aws-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "infra.yaml",
+        "type": "file",
+        "content": "AWSTemplateFormatVersion: '2010-09-09'\nDescription: 'Trak AWS Cloud Architecture - Core VPC & Security Stack'\n\nResources:\n  TrakVPC:\n    Type: AWS::EC2::VPC\n    Properties:\n      CidrBlock: 10.0.0.0/16\n      EnableDnsHostnames: true\n      EnableDnsSupport: true\n      Tags:\n        - Key: Name\n          Value: Trak-Production-VPC\n\n  PublicSubnetA:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref TrakVPC\n      CidrBlock: 10.0.1.0/24\n      AvailabilityZone: !Select [ 0, !GetAZs '' ]\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: Trak-Public-Subnet-A\n\nOutputs:\n  VpcId:\n    Description: Created VPC ID\n    Value: !Ref TrakVPC\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# ☁️ Complete AWS Cloud Architecture & Solutions Track\n\nWelcome to your full AWS learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-global-infrastructure` | **Global Infrastructure** | Regions, AZs, Edge Locations, Local Zones, AWS CLI setup, `sts get-caller-identity` |\n| `01-iam-and-identity-security` | **IAM & Zero-Trust Security** | JSON Policies (Effect, Action, Resource, Condition), Roles, SCPs, Permission Boundaries |\n| `02-networking-vpc-and-routing` | **VPC & Routing Architecture** | CIDR design, Public/Private Subnets, IGW, NAT Gateway, Transit Gateway, VPC Endpoints |\n| `03-network-security-sg-and-nacl` | **SG vs NACL Security** | Security Groups (Stateful) vs NACLs (Stateless), AWS WAF, Shield DDoS mitigation |\n| `04-compute-ec2-and-ami-lifecycle`| **EC2 Compute & Graviton** | Instance families, Graviton ARM, AMIs, User Data, IMDSv2 metadata, Spot vs Savings |\n| `05-load-balancing-and-auto-scaling`| **ELB & Auto-Scaling** | ALB (Layer 7) vs NLB (Layer 4), Target Groups, ASG scaling policies, Launch Templates |\n| `06-storage-s3-and-glacier-tiers` | **S3 Object Storage & Tiers**| S3 Tiers (Standard, Intelligent, Glacier Deep Archive), Lifecycle rules, Object Lock |\n| `07-block-and-file-storage-ebs-efs`| **EBS & EFS Storage** | EBS volume types (gp3, io2), Snapshots, EFS managed NFS, FSx for Lustre |\n| `08-databases-rds-aurora-dynamodb` | **RDS, Aurora & DynamoDB** | RDS Multi-AZ vs Read Replicas, Aurora distributed storage, DynamoDB Single Table |\n| `09-serverless-lambda-api-gateway` | **Serverless & Lambda** | AWS Lambda concurrency, Cold Starts vs Provisioned, API Gateway (REST, HTTP, WebSockets) |\n| `10-event-driven-sns-sqs-eventbridge`| **Event-Driven Architecture** | SQS (Standard vs FIFO, DLQ), SNS pub/sub fanout, EventBridge event buses & schemas |\n| `11-containers-ecs-fargate-eks` | **Containers (ECS & EKS)** | ECS Task Definitions, AWS Fargate serverless containers, EKS managed K8s, Karpenter |\n| `12-iac-cdk-and-cloudformation` | **IaC (CDK & CloudFormation)**| CloudFormation Stacks, Change Sets, AWS CDK (TypeScript/Python code as infra) |\n| `13-monitoring-cloudwatch-xray` | **CloudWatch & Observability** | Metrics, Alarms, Logs Insights, X-Ray distributed tracing, CloudTrail audit logs |\n| `14-security-kms-secrets-and-waf` | **KMS, Secrets & Cryptography**| Envelope encryption, KMS CMK keys, Secrets Manager automatic rotation, SSM Parameter Store |\n| `15-edge-cdn-cloudfront-route53` | **CloudFront & Route 53** | CloudFront CDN behaviors, Lambda@Edge, Route 53 routing policies (Latency, Geolocation) |\n| `16-well-architected-and-finops` | **Well-Architected & FinOps** | 6 Pillars of Well-Architected Framework, Cost Explorer, Budgets, Reserved Instances |\n| `17-interview-questions-and-drills`| **Interview Master Drill** | Top 10 AWS Solutions Architect & DevOps interview scenarios & design challenges |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Verify AWS CLI authentication and active identity\naws sts get-caller-identity\n\n# List all AWS S3 buckets\naws s3 ls\n```\n"
+      },
+      {
+        "name": "00-setup-and-global-infrastructure",
+        "type": "directory",
+        "children": [
+          {
+            "name": "check_identity.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"☁️ 00 - AWS CLI Configuration & Active Caller Identity\"\necho \"=====================================================\"\naws --version\necho \"\"\naws sts get-caller-identity\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - AWS Global Infrastructure 🛠️\n\n- **Regions**: Geographically isolated areas containing $\\ge 3$ Availability Zones.\n- **Availability Zones (AZs)**: One or more discrete data centers with redundant power, networking, and low-latency interconnects.\n- **Edge Locations**: Global network of PoPs (Points of Presence) delivering cached content via CloudFront CDN and Route 53.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-iam-and-identity-security",
+        "type": "directory",
+        "children": [
+          {
+            "name": "least_privilege_policy.json",
+            "type": "file",
+            "content": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowS3ReadOnlyForSpecificBucket\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::trak-production-bucket\",\n        \"arn:aws:s3:::trak-production-bucket/*\"\n      ],\n      \"Condition\": {\n        \"Bool\": {\n          \"aws:SecureTransport\": \"true\"\n        }\n      }\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - IAM Policies & Principle of Least Privilege\n"
+          }
+        ]
+      },
+      {
+        "name": "02-networking-vpc-and-routing",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - VPC Architecture & Subnet Isolation\n\n```\n                    ┌────────────────────────────────────────────────────────┐\n                    │                   VPC (10.0.0.0/16)                    │\n                    │                                                        │\n                    │   ┌───────────────────┐        ┌───────────────────┐   │\nInternet ─────────► │   │   Public Subnet   │ ─────► │  Private Subnet   │   │\nGateway             │   │  (10.0.1.0/24)    │        │  (10.0.2.0/24)    │   │\n                    │   │  [ALB / NAT GW]   │        │  [App / DB]       │   │\n                    │   └───────────────────┘        └───────────────────┘   │\n                    └────────────────────────────────────────────────────────┘\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-network-security-sg-and-nacl",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Security Groups vs Network ACLs\n\n| Feature | Security Group (SG) | Network ACL (NACL) |\n| :--- | :--- | :--- |\n| **Operating Level** | Instance (ENI) level | Subnet level |\n| **Statefulness** | **Stateful** (Return traffic automatically allowed) | **Stateless** (Inbound & outbound must be explicitly allowed) |\n| **Rules Allowed** | Allow rules only | Allow AND Deny rules |\n| **Rule Evaluation**| All rules evaluated together | Evaluated in numerical order (Lowest rule number wins) |\n"
+          }
+        ]
+      },
+      {
+        "name": "04-compute-ec2-and-ami-lifecycle",
+        "type": "directory",
+        "children": [
+          {
+            "name": "userdata.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\n# EC2 Instance Bootstrap User Data Script\napt update -y && apt install -y nginx\nsystemctl enable --now nginx\necho \"<h1>Hello from Trak EC2 running in AWS $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)</h1>\" > /var/www/html/index.html\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - EC2 Instance Lifecycle & IMDSv2\n"
+          }
+        ]
+      },
+      {
+        "name": "05-load-balancing-and-auto-scaling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Elastic Load Balancing & Auto-Scaling Groups\n\n- **ALB (Application Load Balancer)**: HTTP/HTTPS Layer 7 intelligent routing based on path `/api` or host header.\n- **NLB (Network Load Balancer)**: TCP/UDP Layer 4 ultra-low latency, capable of handling millions of requests/sec with static IP addresses.\n"
+          }
+        ]
+      },
+      {
+        "name": "06-storage-s3-and-glacier-tiers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "lifecycle.json",
+            "type": "file",
+            "content": "{\n  \"Rules\": [\n    {\n      \"ID\": \"TransitionToGlacierAndExpire\",\n      \"Status\": \"Enabled\",\n      \"Filter\": { \"Prefix\": \"logs/\" },\n      \"Transitions\": [\n        { \"Days\": 30, \"StorageClass\": \"STANDARD_IA\" },\n        { \"Days\": 90, \"StorageClass\": \"GLACIER\" }\n      ],\n      \"Expiration\": { \"Days\": 365 }\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - S3 Storage Classes & Lifecycle Management\n"
+          }
+        ]
+      },
+      {
+        "name": "07-block-and-file-storage-ebs-efs",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Block Storage (EBS) vs Shared File Storage (EFS)\n"
+          }
+        ]
+      },
+      {
+        "name": "08-databases-rds-aurora-dynamodb",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - AWS Relational & NoSQL Database Engines\n\n- **Amazon Aurora**: Storage is decoupled from compute, automatically replicating 6 copies across 3 AZs with continuous backup to S3.\n- **DynamoDB**: Key-value & document NoSQL database with single-digit millisecond latency at any scale.\n"
+          }
+        ]
+      },
+      {
+        "name": "09-serverless-lambda-api-gateway",
+        "type": "directory",
+        "children": [
+          {
+            "name": "handler.py",
+            "type": "file",
+            "content": "import json\nimport os\n\ndef lambda_handler(event, context):\n    \"\"\"Serverless Lambda Handler Function\"\"\"\n    return {\n        'statusCode': 200,\n        'headers': {'Content-Type': 'application/json'},\n        'body': json.dumps({\n            'message': 'Hello from AWS Lambda serverless execution!',\n            'request_id': context.aws_request_id\n        })\n    }\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Serverless Architecture (Lambda & API Gateway)\n"
+          }
+        ]
+      },
+      {
+        "name": "10-event-driven-sns-sqs-eventbridge",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Decoupled Event-Driven Architectures (SNS, SQS, EventBridge)\n\n### SNS + SQS Fan-Out Pattern:\n1 publisher sends an event to 1 SNS Topic $\\longrightarrow$ Broadcasts to 5 different SQS queues consumed by 5 independent microservices.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-containers-ecs-fargate-eks",
+        "type": "directory",
+        "children": [
+          {
+            "name": "task-definition.json",
+            "type": "file",
+            "content": "{\n  \"family\": \"trak-app-task\",\n  \"networkMode\": \"awsvpc\",\n  \"requiresCompatibilities\": [\"FARGATE\"],\n  \"cpu\": \"256\",\n  \"memory\": \"512\",\n  \"containerDefinitions\": [\n    {\n      \"name\": \"api-service\",\n      \"image\": \"123456789012.dkr.ecr.us-east-1.amazonaws.com/trak-api:v1.0.0\",\n      \"portMappings\": [\n        {\n          \"containerPort\": 8080,\n          \"protocol\": \"tcp\"\n        }\n      ],\n      \"essential\": true\n    }\n  ]\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Container Orchestration on AWS (ECS & EKS)\n"
+          }
+        ]
+      },
+      {
+        "name": "12-iac-cdk-and-cloudformation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - AWS CDK & CloudFormation\n\n```bash\n# Synthesize CloudFormation template from CDK code\ncdk synth\n\n# Deploy stack directly to AWS account\ncdk deploy\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "13-monitoring-cloudwatch-xray",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - CloudWatch Metrics, Logs Insights & X-Ray\n\n```sql\n-- CloudWatch Logs Insights query to find 500 error spikes\nfields @timestamp, @message\n| filter status >= 500\n| sort @timestamp desc\n| limit 20\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "14-security-kms-secrets-and-waf",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Cryptography & Secrets Management (KMS & Secrets Manager)\n"
+          }
+        ]
+      },
+      {
+        "name": "15-edge-cdn-cloudfront-route53",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - CloudFront Global CDN & Route 53 DNS Routing\n"
+          }
+        ]
+      },
+      {
+        "name": "16-well-architected-and-finops",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - AWS Well-Architected Framework & FinOps\n\n### The 6 Pillars:\n1. **Operational Excellence**\n2. **Security**\n3. **Reliability**\n4. **Performance Efficiency**\n5. **Cost Optimization**\n6. **Sustainability**\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield AWS Solutions Architect & DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **RDS Multi-AZ vs Read Replicas**: Multi-AZ is synchronous replication to a standby instance in another AZ for Disaster Recovery (no performance gain); Read Replicas are asynchronous for scaling read queries.\n2. **Security Groups vs NACLs**: SGs are stateful at the ENI instance level; NACLs are stateless at the subnet boundary evaluated numerically.\n3. **VPC Peering Transitive Routing**: VPC Peering does NOT support transitive routing (If A peers with B and B with C, A cannot talk to C without a Transit Gateway or direct peering).\n4. **S3 Strong Consistency**: S3 provides strong read-after-write consistency for PUTs and DELETEs of objects in all regions.\n5. **Lambda Cold Starts**: The latency penalty when AWS initializes a new microVM execution environment, downloadable container image, and runtime before executing handler code.\n\n🚀 You have completed the complete AWS Cloud Architecture & Solutions Engineering track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

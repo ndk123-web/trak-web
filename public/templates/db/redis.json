@@ -1,0 +1,301 @@
+{
+  "id": "db/redis",
+  "name": "Redis In-Memory Architecture & Caching Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive Redis curriculum from event-loop internals, data structures (Strings, Hashes, Sorted Sets), and Streams to RDB/AOF persistence, Sentinel HA, Cluster sharding, and caching design patterns",
+  "root": {
+    "name": "redis-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "docker-compose.yml",
+        "type": "file",
+        "content": "version: '3.8'\n\nservices:\n  redis:\n    image: redis:7-alpine\n    command: [\"redis-server\", \"--appendonly\", \"yes\", \"--maxmemory\", \"256mb\", \"--maxmemory-policy\", \"allkeys-lru\"]\n    ports:\n      - \"6379:6379\"\n    volumes:\n      - redis_data:/data\n    restart: unless-stopped\n\nvolumes:\n  redis_data:\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# ⚡ Complete Redis In-Memory Architecture & Caching Track\n\nWelcome to your full Redis learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-server-architecture` | **Setup & Event Loop** | Single-threaded reactor event loop (epoll/kqueue), in-memory speed, `redis-cli` |\n| `01-strings-and-binary-safety` | **Strings & Integers** | `SET`, `GET`, `INCR`, `DECR`, `MGET`/`MSET`, binary safety, atomic counters |\n| `02-key-expiration-and-ttl` | **Expiration & Eviction** | `EXPIRE`, `TTL`, eviction policies (`allkeys-lru`, `volatile-lru`, `allkeys-lfu`) |\n| `03-lists-and-message-queues` | **Lists & Queues** | `LPUSH`, `RPUSH`, `LPOP`, `RPOP`, `BLPOP` blocking queues, reliable queues |\n| `04-sets-and-mathematical-operations` | **Sets & Tagging** | `SADD`, `SMEMBERS`, `SISMEMBER`, `SINTER` intersections, tag indexing |\n| `05-hashes-and-object-storage` | **Hashes & Objects** | `HSET`, `HGET`, `HGETALL`, `HINCRBY`, memory-efficient listpack encoding |\n| `06-sorted-sets-and-skiplists` | **Sorted Sets & SkipLists** | `ZADD`, `ZRANGE`, `ZRANK`, SkipList internals, leaderboards, rate limiters |\n| `07-bitmaps-and-hyperloglogs` | **Bitmaps & HyperLogLog** | Bitmaps (`SETBIT`/`BITCOUNT` for DAU), HyperLogLog (`PFADD`/`PFCOUNT` cardinality) |\n| `08-geospatial-indexes` | **Geospatial Indexes** | `GEOADD`, `GEODIST`, `GEOSEARCH`, proximity queries via Geohash |\n| `09-streams-and-consumer-groups` | **Streams & Consumer Groups** | `XADD`, `XREAD`, Consumer Groups (`XGROUP`, `XREADGROUP`), `XACK`, pending entries |\n| `10-pubsub-and-event-streaming` | **Pub/Sub Messaging** | `PUBLISH`, `SUBSCRIBE`, `PSUBSCRIBE` pattern matching vs Streams |\n| `11-transactions-and-optimistic-locking` | **Transactions & WATCH** | `MULTI`, `EXEC`, `DISCARD`, optimistic concurrency control with `WATCH` |\n| `12-lua-scripting-and-functions` | **Lua Scripting** | Atomic server-side `EVAL`, Redis Functions (`FUNCTION LOAD`), atomic rate limiters |\n| `13-persistence-rdb-vs-aof` | **RDB & AOF Persistence** | RDB snapshotting (`fork()` CoW) vs AOF logging (`fsync: everysec`), hybrid persistence |\n| `14-replication-and-sentinel-ha` | **Replication & Sentinel** | Primary-Replica async replication, Redis Sentinel auto-failover and quorum |\n| `15-redis-cluster-and-sharding` | **Cluster & Hash Slots** | 16,384 hash slots, CRC16 hashing, hash tags (`{user:123}`), `MOVED`/`ASK` redirects |\n| `16-caching-patterns-and-anti-patterns` | **Caching Architecture** | Cache-Aside, Write-Through, Cache Stampede, Cache Penetration, Bloom Filters |\n| `17-security-acl-and-tls` | **Security & ACL** | Redis ACL (`ACL SETUSER`), command whitelisting, password auth, TLS |\n| `18-interview-questions-and-drills` | **Interview Master Drill** | Top 10 Redis interview questions, distributed locking (Redlock), memory traps |\n\n---\n\n## 🛠️ Quick Commands\n\nStart local Redis server:\n```bash\ndocker compose up -d\n```\nConnect using `redis-cli`:\n```bash\nredis-cli\n```\n"
+      },
+      {
+        "name": "00-setup-and-server-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 00: Server Information & Diagnostics\nINFO server\nINFO memory\nPING\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Redis Architecture & Event Loop 🛠️\n\n### Why Redis is Ultra Fast:\n1. **In-Memory Storage**: All primary data structures reside in RAM (sub-millisecond latency).\n2. **Non-Blocking I/O Multiplexing**: Single-threaded event loop (`epoll` on Linux, `kqueue` on macOS) handles 100,000+ operations/sec without context-switching or lock contention overhead.\n3. **C-Optimized Data Structures**: Custom SDS (Simple Dynamic Strings), SkipLists, and Dicts.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-strings-and-binary-safety",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 01: Strings & Atomic Operations\nSET user:101:name \"Navnath\"\nGET user:101:name\n\n-- Atomic Counter\nSET page:views:home 0\nINCR page:views:home\nINCRBY page:views:home 10\nGET page:views:home\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Strings & Atomic Counters\n\nStrings are binary-safe (can store text, JSON, serialized bytes, or raw images up to 512MB).\n"
+          }
+        ]
+      },
+      {
+        "name": "02-key-expiration-and-ttl",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 02: Expiration and TTL\nSET session:token:xyz \"user_logged_in\" EX 60\nTTL session:token:xyz\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Key Expiration & Eviction Policies\n\n### Memory Eviction Policies (`maxmemory-policy`):\n- `allkeys-lru`: Evicts least recently used keys out of all keys.\n- `volatile-lru`: Evicts LRU keys among those with an expiration set.\n- `allkeys-lfu`: Evicts least frequently used keys.\n- `noeviction`: Returns out-of-memory error when RAM is full (Default).\n"
+          }
+        ]
+      },
+      {
+        "name": "03-lists-and-message-queues",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 03: FIFO Queue\nRPUSH task_queue \"job_1\" \"job_2\" \"job_3\"\nLPOP task_queue\n\n-- Blocking Pop (Waits up to 5 seconds for a job)\nBLPOP task_queue 5\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Lists & Message Queues\n"
+          }
+        ]
+      },
+      {
+        "name": "04-sets-and-mathematical-operations",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 04: Sets & Tagging\nSADD user:1:skills \"go\" \"rust\" \"docker\"\nSADD user:2:skills \"rust\" \"python\" \"k8s\"\n\n-- Intersection: Common skills\nSINTER user:1:skills user:2:skills\n\n-- Union: All unique skills\nSUNION user:1:skills user:2:skills\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Sets & Relational Intersections\n"
+          }
+        ]
+      },
+      {
+        "name": "05-hashes-and-object-storage",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 05: Hashes for Storing Objects\nHSET user:profile:100 name \"Alice\" email \"alice@example.com\" age 28\nHGETALL user:profile:100\nHINCRBY user:profile:100 age 1\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Hashes & Object Fields\n"
+          }
+        ]
+      },
+      {
+        "name": "06-sorted-sets-and-skiplists",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 06: Sorted Sets (Leaderboards & Priority Queues)\nZADD leaderboard 1500 \"player_alpha\"\nZADD leaderboard 2300 \"player_beta\"\nZADD leaderboard 1800 \"player_gamma\"\n\n-- Top players ordered by highest score\nZREVRANGE leaderboard 0 -1 WITHSCORES\n\n-- Check player rank\nZREVRANK leaderboard \"player_beta\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Sorted Sets & SkipLists\n\nSorted Sets maintain elements ordered by a floating-point `score` backed by a **SkipList + HashTable** ($O(\\log N)$ insertion, deletion, and range queries).\n"
+          }
+        ]
+      },
+      {
+        "name": "07-bitmaps-and-hyperloglogs",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 1. Bitmaps: Daily Active Users (DAU)\nSETBIT dau:2026-08-30 101 1\nSETBIT dau:2026-08-30 105 1\nBITCOUNT dau:2026-08-30\n\n-- 2. HyperLogLog: Unique Visitor Cardinality\nPFADD unique_visitors \"ip_1.2.3.4\" \"ip_5.6.7.8\" \"ip_1.2.3.4\"\nPFCOUNT unique_visitors\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Bitmaps & HyperLogLog\n\n- **Bitmaps**: Extreme memory efficiency (1 million daily active users takes only ~122 KB of RAM!).\n- **HyperLogLog**: Probabilistic cardinality estimation using a fixed 12 KB memory footprint with standard error of 0.81%.\n"
+          }
+        ]
+      },
+      {
+        "name": "08-geospatial-indexes",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 08: Geospatial Queries\nGEOADD locations 73.8567 18.5204 \"Pune\" 72.8777 19.0760 \"Mumbai\"\nGEODIST locations \"Pune\" \"Mumbai\" km\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Geospatial Indexes\n"
+          }
+        ]
+      },
+      {
+        "name": "09-streams-and-consumer-groups",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 09: Redis Streams (Kafka-like Append-Only Log)\nXADD orders_stream * order_id \"ord_99\" amount 250.00\n\n-- Create Consumer Group\nXGROUP CREATE orders_stream billing_group $ MKSTREAM\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Redis Streams & Consumer Groups\n\nProvides durable log persistence, consumer groups, message acknowledgments (`XACK`), and Pending Entries List (`PEL`) for reliable stream processing.\n"
+          }
+        ]
+      },
+      {
+        "name": "10-pubsub-and-event-streaming",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 10: Pub/Sub Messaging\nPUBLISH notifications \"New system alert!\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Pub/Sub vs Streams\n\n- **Pub/Sub**: Fire-and-forget message distribution (No message buffering or persistence).\n- **Streams**: Durable, pull-based append-only log with history.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-transactions-and-optimistic-locking",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 11: Atomic Transaction Block\nWATCH balance:user:1\nMULTI\nDECRBY balance:user:1 50\nINCRBY balance:user:2 50\nEXEC\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Transactions & Optimistic Locking\n"
+          }
+        ]
+      },
+      {
+        "name": "12-lua-scripting-and-functions",
+        "type": "directory",
+        "children": [
+          {
+            "name": "rate_limiter.lua",
+            "type": "file",
+            "content": "-- Atomic Sliding Window Rate Limiter in Lua\nlocal key = KEYS[1]\nlocal limit = tonumber(ARGV[1])\nlocal current = redis.call('INCR', key)\n\nif current == 1 then\n    redis.call('EXPIRE', key, 60)\nend\n\nif current > limit then\n    return 0 -- Rejected\nelse\n    return 1 -- Allowed\nend\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Lua Scripting & Redis Functions\n\nLua scripts run **atomically** inside the Redis engine, guaranteeing no other commands execute in between.\n"
+          }
+        ]
+      },
+      {
+        "name": "13-persistence-rdb-vs-aof",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Persistence: RDB vs AOF\n\n| Feature | RDB (Snapshot) | AOF (Append-Only File) |\n| :--- | :--- | :--- |\n| **Mechanism** | Point-in-time binary snapshot (`fork()`) | Logs every write operation (`appendonly.aof`) |\n| **Data Safety** | Potential data loss between snapshot intervals | Near zero data loss (`fsync: everysec`) |\n| **Recovery Speed** | **Extremely Fast** (Direct binary load) | Slower (Replays command history) |\n| **File Size** | Compact binary | Larger (requires periodic background rewrite `BGREWRITEAOF`) |\n"
+          }
+        ]
+      },
+      {
+        "name": "14-replication-and-sentinel-ha",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Primary-Replica & Redis Sentinel\n\n- **Replication**: Asynchronous streaming replication from Primary to Read-Replicas.\n- **Sentinel**: Monitoring daemon quorum providing automated master failure detection, promotion, and client reconfiguration.\n"
+          }
+        ]
+      },
+      {
+        "name": "15-redis-cluster-and-sharding",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Redis Cluster & 16,384 Hash Slots\n\n- Redis Cluster distributes keys across **16,384 logical hash slots** calculated via `CRC16(key) % 16384`.\n- **Hash Tags**: Use `{user:101}.profile` and `{user:101}.orders` to force multiple keys to hash to the exact same cluster node.\n"
+          }
+        ]
+      },
+      {
+        "name": "16-caching-patterns-and-anti-patterns",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Caching Patterns & Failure Modes\n\n1. **Cache-Aside (Lazy Loading)**: App checks cache -> on miss queries DB -> writes back to cache.\n2. **Cache Stampede (Thundering Herd)**: Key expires under heavy load -> thousands of concurrent requests hammer DB. Fix: Distributed lock (`Redlock`) or probabilistic early expiration (XFetch).\n3. **Cache Penetration**: Querying keys that exist neither in cache nor in DB. Fix: Cache null values or use **Bloom Filters**.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-security-acl-and-tls",
+        "type": "directory",
+        "children": [
+          {
+            "name": "commands.redis",
+            "type": "file",
+            "content": "-- 17: Redis ACL Management\nACL SETUSER appuser on >StrongPassword123 ~app:* +@read +@write -@dangerous\nACL LIST\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - Security & Access Control Lists (ACL)\n"
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - High-Yield Redis Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Single-Threaded Speed**: Memory access, non-blocking I/O multiplexing, zero locking overhead.\n2. **RDB vs AOF**: Snapshotting speed vs write-log durability.\n3. **Sorted Set Implementation**: Dual structure containing SkipList + HashTable.\n4. **Distributed Locking (Redlock)**: Using `SET key val NX PX 30000` with unique random tokens.\n5. **Cluster Sharding**: 16,384 hash slots with CRC16 hashing and hash tags.\n\n🚀 You have completed the complete Redis In-Memory Architecture track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

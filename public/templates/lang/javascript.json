@@ -1,0 +1,379 @@
+{
+  "id": "lang/javascript",
+  "name": "JavaScript Deep-Dive & V8 Internals",
+  "version": "1.0.0",
+  "description": "Comprehensive JavaScript curriculum from V8 internals, execution contexts, and event loop to closures, prototypes, async streaming, Proxy/Reflect, and modern ES2024+",
+  "root": {
+    "name": "javascript-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "package.json",
+        "type": "file",
+        "content": "{\n  \"name\": \"javascript-workspace\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test\"\n  }\n}\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 💛 Complete JavaScript Deep-Dive & V8 Internals Track\n\nWelcome to your full JavaScript learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-node-runtime` | **Setup & Runtime** | Node.js, Bun, pnpm, `package.json`, ESM vs CJS |\n| `01-v8-engine-and-memory-layout` | **V8 & Memory Layout** | AST, Ignition bytecode, TurboFan JIT, Call stack vs Heap, Mark-and-Sweep GC, memory leaks |\n| `02-execution-context-and-hoisting` | **Execution Context** | Creation vs execution phase, Variable Environment, TDZ with `let`/`const` |\n| `03-scopes-lexical-env-closures` | **Scopes & Closures** | Scope chain, lexical environment, closures, private state, memoization |\n| `04-data-types-coercion-equality` | **Types & Coercion** | 7 Primitives, 1 Object, `==` vs `===` vs `Object.is()`, implicit coercion rules |\n| `05-this-keyword-and-binding-rules` | **The this Keyword** | Default, Implicit, Explicit (`call`/`apply`/`bind`), `new` binding, Lexical arrow functions |\n| `06-prototypes-and-inheritance` | **Prototypes & OOP** | Prototype chain, `[[Prototype]]`, `Object.create()`, Prototypal inheritance |\n| `07-objects-immutability-cloning` | **Objects & Immutability** | Shallow vs Deep copy (`structuredClone`), `Object.freeze()`, `Object.seal()` |\n| `08-arrays-and-functional-methods` | **Arrays & Methods** | `map`, `filter`, `reduce`, `flatMap`, `Array.from()`, `slice` vs `splice` |\n| `09-promises-and-async-await` | **Async & Promises** | Promise state machine, `Promise.all`, `allSettled`, `race`, `any`, `async`/`await` |\n| `10-event-loop-microtasks-macrotasks` | **Event Loop** | Call Stack, Microtasks (`queueMicrotask`, Promises) vs Macrotasks (`setTimeout`, I/O) |\n| `11-generators-and-async-iterators` | **Generators** | `function*`, `yield`, `for...of`, `Symbol.asyncIterator`, `for await...of` |\n| `12-symbols-and-well-known-symbols` | **Symbols & Metaprogramming** | `Symbol()`, `Symbol.iterator`, `Symbol.toPrimitive`, `Symbol.hasInstance` |\n| `13-map-set-weakmap-weakset` | **Collections** | `Map` vs `Object`, `Set` vs `Array`, `WeakMap` garbage collection & DOM caching |\n| `14-proxy-and-reflect-api` | **Proxy & Reflect** | Metaprogramming, Proxy traps (`get`, `set`, `deleteProperty`), `Reflect` API |\n| `15-streams-buffers-data-processing` | **Streams & Buffers** | `ArrayBuffer`, `TypedArray`, `DataView`, `ReadableStream`, Node `Buffer` |\n| `16-modern-es-features-es2020-2024` | **Modern ECMAScript** | Optional chaining `?.`, nullish coalescing `??`, logical assignment, `Object.groupBy` |\n| `17-dom-and-event-delegation` | **DOM & Events** | Event flow (Capturing, Target, Bubbling), event delegation, debounce vs throttle |\n| `18-modules-esm-vs-cjs` | **Modules System** | ESM (`import`/`export`) vs CJS (`require`/`module.exports`), dynamic `import()` |\n| `19-concurrency-and-worker-threads` | **Concurrency** | Web Workers / Node `worker_threads`, message passing, `SharedArrayBuffer`, `Atomics` |\n| `20-testing-and-profiling` | **Testing & Profiling** | Native Node test runner, `performance.now()`, memory leak profiling |\n| `21-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield JavaScript interview questions & tricky output puzzles |\n\n---\n\n## 🛠️ How to Navigate & Run\n\nRun any module with Node.js:\n```bash\ncd 00-setup-and-node-runtime\nnode index.js\n```\n"
+      },
+      {
+        "name": "00-setup-and-node-runtime",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=====================================================\");\nconsole.log(\"💛 Welcome to 00 - JavaScript Setup & Runtime Check!\");\nconsole.log(\"=====================================================\");\nconsole.log(`✔ Node.js Version: ${process.version}`);\nconsole.log(`✔ Architecture    : ${process.arch}`);\nconsole.log(`✔ Platform        : ${process.platform}`);\nconsole.log(\"\\n👉 Next: Head over to 01-v8-engine-and-memory-layout/index.js\");\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - JavaScript Setup & Node.js Runtime 🛠️\n"
+          }
+        ]
+      },
+      {
+        "name": "01-v8-engine-and-memory-layout",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=== 01: V8 Engine Pipeline & Memory Layout ===\");\nconsole.log(\"V8 Execution: Parser -> AST -> Ignition (Bytecode) -> TurboFan (JIT)\");\n\nconst mem = process.memoryUsage();\nconsole.log(\"Memory Usage (MB):\");\nconsole.log(`- Heap Used : ${(mem.heapUsed / 1024 / 1024).toFixed(2)} MB`);\nconsole.log(`- Heap Total: ${(mem.heapTotal / 1024 / 1024).toFixed(2)} MB`);\nconsole.log(`- RSS Total : ${(mem.rss / 1024 / 1024).toFixed(2)} MB`);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - V8 Engine & Memory Layout\n\n- **Call Stack**: Fixed-size LIFO execution frames.\n- **Memory Heap**: Dynamic object allocations managed by Generational Mark-and-Sweep GC.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-execution-context-and-hoisting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=== 02: Execution Context & Hoisting ===\");\n\n// var is hoisted and initialized to undefined\nconsole.log(\"Hoisted var a:\", typeof a, a); // undefined\nvar a = 10;\n\n// let and const are hoisted but UNINITIALIZED (in Temporal Dead Zone - TDZ)\n// console.log(b); // ReferenceError!\nlet b = 20;\n\nconsole.log(\"After initialization: a =\", a, \"b =\", b);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Execution Context & Hoisting\n"
+          }
+        ]
+      },
+      {
+        "name": "03-scopes-lexical-env-closures",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "function createCounter(initial = 0) {\n  let count = initial; // Private state closed over\n  return {\n    increment: () => ++count,\n    decrement: () => --count,\n    getCount: () => count,\n  };\n}\n\nconst counter = createCounter(10);\nconsole.log(\"=== 03: Closures & Lexical Scopes ===\");\nconsole.log(\"Count:\", counter.increment());\nconsole.log(\"Count:\", counter.increment());\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Scopes & Closures\n"
+          }
+        ]
+      },
+      {
+        "name": "04-data-types-coercion-equality",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=== 04: Data Types & Implicit Coercion Rules ===\");\nconsole.log(\"[] + []     :\", JSON.stringify([] + []));         // \"\"\nconsole.log(\"[] + {}     :\", [] + {});                         // \"[object Object]\"\nconsole.log(\"'5' - 3     :\", \"5\" - 3);                         // 2\nconsole.log(\"'5' + 3     :\", \"5\" + 3);                         // \"53\"\nconsole.log(\"NaN === NaN :\", NaN === NaN);                     // false\nconsole.log(\"Object.is(NaN, NaN):\", Object.is(NaN, NaN));      // true\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Data Types & Coercion\n"
+          }
+        ]
+      },
+      {
+        "name": "05-this-keyword-and-binding-rules",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const user = {\n  name: \"Alice\",\n  greetRegular: function () { return `Hello, ${this.name}`; },\n  greetArrow: () => `Hello, ${this?.name}`,\n};\n\nconst context = { name: \"Navnath\" };\n\nconsole.log(\"=== 05: The 'this' Keyword Binding Rules ===\");\nconsole.log(\"Implicit:\", user.greetRegular());\nconsole.log(\"Explicit call():\", user.greetRegular.call(context));\nconsole.log(\"Arrow function (lexical):\", user.greetArrow());\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - The `this` Keyword\n"
+          }
+        ]
+      },
+      {
+        "name": "06-prototypes-and-inheritance",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "function Animal(name) {\n  this.name = name;\n}\nAnimal.prototype.speak = function () {\n  return `${this.name} makes a sound.`;\n};\n\nconst dog = new Animal(\"Rex\");\nconsole.log(\"=== 06: Prototypes & Prototype Chain ===\");\nconsole.log(dog.speak());\nconsole.log(\"dog prototype link:\", Object.getPrototypeOf(dog) === Animal.prototype);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Prototypes & Inheritance\n"
+          }
+        ]
+      },
+      {
+        "name": "07-objects-immutability-cloning",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const original = { a: 1, nested: { b: 2 } };\n\n// Deep Clone (native in modern JS)\nconst deepCloned = structuredClone(original);\ndeepCloned.nested.b = 99;\n\nconsole.log(\"=== 07: Objects & structuredClone ===\");\nconsole.log(\"Original nested.b:\", original.nested.b); // 2 (Untouched!)\nconsole.log(\"Cloned nested.b  :\", deepCloned.nested.b); // 99\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Object Immutability & Cloning\n"
+          }
+        ]
+      },
+      {
+        "name": "08-arrays-and-functional-methods",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const nums = [1, 2, 3, 4, 5];\nconst sumOfEvenSquares = nums\n  .filter(x => x % 2 === 0)\n  .map(x => x ** 2)\n  .reduce((acc, x) => acc + x, 0);\n\nconsole.log(\"=== 08: Array Functional Pipeline ===\");\nconsole.log(\"Sum of even squares:\", sumOfEvenSquares);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Arrays & Functional Methods\n"
+          }
+        ]
+      },
+      {
+        "name": "09-promises-and-async-await",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "async function fetchPipeline() {\n  const p1 = Promise.resolve(\"Result 1\");\n  const p2 = Promise.resolve(\"Result 2\");\n  const results = await Promise.all([p1, p2]);\n  return results;\n}\n\nfetchPipeline().then(res => {\n  console.log(\"=== 09: Promises & Async/Await ===\");\n  console.log(\"Combined Promise Results:\", res);\n});\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Promises & Async/Await\n"
+          }
+        ]
+      },
+      {
+        "name": "10-event-loop-microtasks-macrotasks",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"1. Synchronous Code\");\n\nsetTimeout(() => {\n  console.log(\"4. Macrotask (setTimeout)\");\n}, 0);\n\nqueueMicrotask(() => {\n  console.log(\"3. Microtask (queueMicrotask)\");\n});\n\nPromise.resolve().then(() => {\n  console.log(\"2. Microtask (Promise .then)\");\n});\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Event Loop Mechanics\n\n- **Call Stack** runs first until empty.\n- **Microtask Queue** executes ALL pending microtasks before any macrotask.\n- **Macrotask Queue** picks the next macrotask (timers, I/O).\n"
+          }
+        ]
+      },
+      {
+        "name": "11-generators-and-async-iterators",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "function* idGenerator() {\n  let id = 1;\n  while (true) {\n    yield `ID_${id++}`;\n  }\n}\n\nconst gen = idGenerator();\nconsole.log(\"=== 11: Generators & Yield ===\");\nconsole.log(gen.next().value);\nconsole.log(gen.next().value);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Generators & Iterators\n"
+          }
+        ]
+      },
+      {
+        "name": "12-symbols-and-well-known-symbols",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const iterableObj = {\n  data: [\"A\", \"B\", \"C\"],\n  [Symbol.iterator]() {\n    let index = 0;\n    return {\n      next: () => ({\n        value: this.data[index++],\n        done: index > this.data.length,\n      }),\n    };\n  },\n};\n\nconsole.log(\"=== 12: Well-Known Symbols (Symbol.iterator) ===\");\nfor (const item of iterableObj) {\n  console.log(\"Item:\", item);\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Symbols & Well-Known Symbols\n"
+          }
+        ]
+      },
+      {
+        "name": "13-map-set-weakmap-weakset",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const map = new Map();\nconst keyObj = { id: 1 };\nmap.set(keyObj, \"Active Session\");\n\nconsole.log(\"=== 13: Map, Set, WeakMap & WeakSet ===\");\nconsole.log(\"Map value for object key:\", map.get(keyObj));\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Collections (Map/Set/WeakMap)\n"
+          }
+        ]
+      },
+      {
+        "name": "14-proxy-and-reflect-api",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const target = { price: 100 };\n\nconst proxy = new Proxy(target, {\n  get(target, prop, receiver) {\n    console.log(`[Proxy Trap] Reading property '${String(prop)}'`);\n    return Reflect.get(target, prop, receiver);\n  },\n  set(target, prop, value, receiver) {\n    if (prop === \"price\" && value < 0) throw new Error(\"Price cannot be negative\");\n    return Reflect.set(target, prop, value, receiver);\n  },\n});\n\nconsole.log(\"=== 14: Metaprogramming with Proxy & Reflect ===\");\nconsole.log(\"Price:\", proxy.price);\nproxy.price = 150;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Proxy & Reflect API\n"
+          }
+        ]
+      },
+      {
+        "name": "15-streams-buffers-data-processing",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const buffer = Buffer.from(\"Trak JavaScript Track\", \"utf-8\");\nconsole.log(\"=== 15: Streams, Buffers & Binary Data ===\");\nconsole.log(\"Buffer raw bytes:\", buffer);\nconsole.log(\"Buffer hex string:\", buffer.toString(\"hex\"));\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Streams & Buffers\n"
+          }
+        ]
+      },
+      {
+        "name": "16-modern-es-features-es2020-2024",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "const data = { user: { profile: null } };\n\n// Optional Chaining & Nullish Coalescing\nconst bio = data?.user?.profile?.bio ?? \"Default Bio\";\nconsole.log(\"=== 16: Modern ECMAScript Features ===\");\nconsole.log(\"Extracted Bio:\", bio);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Modern ECMAScript (ES2020 - ES2024+)\n"
+          }
+        ]
+      },
+      {
+        "name": "17-dom-and-event-delegation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "// Debounce helper\nfunction debounce(fn, delayMs) {\n  let timeoutId;\n  return function (...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => fn.apply(this, args), delayMs);\n  };\n}\n\nconst debouncedLog = debounce((msg) => console.log(\"Debounced:\", msg), 100);\nconsole.log(\"=== 17: DOM, Event Delegation & Debouncing ===\");\ndebouncedLog(\"Search input changed\");\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - DOM Manipulation & Event Patterns\n"
+          }
+        ]
+      },
+      {
+        "name": "18-modules-esm-vs-cjs",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "export function calculateTotal(prices) {\n  return prices.reduce((acc, p) => acc + p, 0);\n}\n\nconsole.log(\"=== 18: Modules (ESM vs CommonJS) ===\");\nconsole.log(\"Total:\", calculateTotal([10, 20, 30]));\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - Modules & Interoperability\n"
+          }
+        ]
+      },
+      {
+        "name": "19-concurrency-and-worker-threads",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=== 19: Concurrency & Worker Threads ===\");\nconsole.log(\"Worker threads allow running CPU-intensive JavaScript on separate OS threads.\");\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 - Concurrency & Worker Threads\n"
+          }
+        ]
+      },
+      {
+        "name": "20-testing-and-profiling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "calc.js",
+            "type": "file",
+            "content": "export function multiply(a, b) {\n  return a * b;\n}\n"
+          },
+          {
+            "name": "calc.test.js",
+            "type": "file",
+            "content": "import assert from \"node:assert\";\nimport test from \"node:test\";\nimport { multiply } from \"./calc.js\";\n\ntest(\"multiplies numbers\", () => {\n  assert.strictEqual(multiply(4, 5), 20);\n});\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 20 - Testing in JavaScript\n\n```bash\nnode --test calc.test.js\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "21-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "index.js",
+            "type": "file",
+            "content": "console.log(\"=====================================================\");\nconsole.log(\"🎯 21: High-Yield JavaScript Interview Questions & Drills\");\nconsole.log(\"=====================================================\");\nconsole.log(\"1. Event Loop: Microtasks (Promises) always run before Macrotasks (setTimeout).\");\nconsole.log(\"2. Closures: Functions retain access to their lexical scope even when executed outside.\");\nconsole.log(\"3. this binding: 5 rules - new, explicit, implicit, default, and lexical arrow.\");\nconsole.log(\"4. Hoisting & TDZ: let/const are in Temporal Dead Zone until initialized.\");\nconsole.log(\"5. structuredClone: Native deep copy handling cyclic references & TypedArrays.\");\nconsole.log(\"\\n🚀 You have completed the complete JavaScript Mastery curriculum!\");\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 21 - High-Yield JavaScript Interview Questions 🎯\n"
+          }
+        ]
+      }
+    ]
+  }
+}

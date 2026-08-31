@@ -1,0 +1,300 @@
+{
+  "id": "db/postgres",
+  "name": "PostgreSQL Architecture, Internals & DBA Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive PostgreSQL curriculum from process architecture, MVCC, and JSONB to GIN/BRIN indexing, EXPLAIN BUFFERS, Autovacuum tuning, Streaming Replication, and PITR",
+  "root": {
+    "name": "postgres-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "docker-compose.yml",
+        "type": "file",
+        "content": "version: '3.8'\n\nservices:\n  postgres:\n    image: postgres:16-alpine\n    environment:\n      POSTGRES_DB: trak_db\n      POSTGRES_USER: trak_admin\n      POSTGRES_PASSWORD: secretpassword\n    ports:\n      - \"5432:5432\"\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n      - ./init.sql:/docker-entrypoint-initdb.d/init.sql\n    restart: unless-stopped\n\nvolumes:\n  pgdata:\n"
+      },
+      {
+        "name": "init.sql",
+        "type": "file",
+        "content": "-- Enable core extensions\nCREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";\nCREATE EXTENSION IF NOT EXISTS \"pg_stat_statements\";\nCREATE EXTENSION IF NOT EXISTS \"pg_trgm\";\n\n-- Sample ecommerce events table\nCREATE TABLE events (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    user_id BIGINT NOT NULL,\n    event_type VARCHAR(50) NOT NULL,\n    payload JSONB NOT NULL DEFAULT '{}'::jsonb,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\n-- Create GIN index on JSONB payload for fast key-value containment queries\nCREATE INDEX idx_events_payload ON events USING gin (payload);\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🐘 Complete PostgreSQL Architecture, Internals & DBA Track\n\nWelcome to your full PostgreSQL learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-server-architecture` | **Process & Memory Model** | Postmaster, Background Writer, Checkpointer, WAL Writer, Shared Buffers, `psql` |\n| `01-data-types-and-jsonb-mastery` | **JSONB & Advanced Types** | `UUID`, `INET`, `TIMESTAMPTZ`, `JSONB` binary format, operators (`->`, `->>`, `@>`, `?`) |\n| `02-mvcc-and-transaction-isolation`| **MVCC Internals** | Tuple headers (`xmin`, `xmax`, `ctid`), Visibility Map, SSI Isolation, vacuuming |\n| `03-vacuum-autovacuum-and-bloat` | **Vacuum & Bloat Control** | Dead tuples, Table & Index bloat, Autovacuum tuning (`scale_factor`, `threshold`) |\n| `04-wal-and-checkpointing` | **WAL & Crash Recovery** | Write-Ahead Logging, Checkpoints (`checkpoint_completion_target`), LSN |\n| `05-advanced-indexing-strategies` | **Index Engines** | B-Tree, GIN (JSONB/Arrays), GiST (Spatial/Ranges), BRIN (Massive Time-Series), Partial |\n| `06-query-optimization-and-plans` | **EXPLAIN & Query Tuning** | `EXPLAIN (ANALYZE, BUFFERS)`, Nested Loop vs Hash Join, `pg_stat_statements` |\n| `07-full-text-search-fts` | **Full-Text Search (FTS)** | `tsvector`, `tsquery`, `to_tsvector()`, `@@` match operator, `ts_rank()`, GIN index |\n| `08-table-partitioning-and-sharding`| **Partitioning & FDW** | Range, List & Hash partitioning, Partition pruning, `postgres_fdw` foreign tables |\n| `09-stored-procedures-and-plpgsql` | **PL/pgSQL & Triggers** | `CREATE FUNCTION`, `CREATE PROCEDURE` transactions, `BEFORE`/`AFTER` triggers |\n| `10-connection-pooling-pgbouncer` | **Connection Pooling** | Backend process memory overhead, PgBouncer (Session vs Transaction pooling) |\n| `11-replication-and-high-availability`| **Streaming Replication** | Physical Streaming Replication, Replication Slots, Synchronous vs Async, Logical |\n| `12-backup-and-pitr-recovery` | **Backups & PITR** | `pg_dump`, `pg_basebackup`, continuous WAL archiving, Point-In-Time Recovery |\n| `13-row-level-security-and-rbac` | **Security, RBAC & RLS** | Roles, Grants, Row-Level Security (`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`) |\n| `14-extensions-ecosystem` | **Extensions Ecosystem** | `pgcrypto`, `pg_trgm` (fuzzy matching), `hstore`, PostGIS geospatial |\n| `15-concurrency-locking-advisory` | **Locking & Job Queues** | Row locks (`FOR UPDATE`, `SKIP LOCKED` queues), Advisory Locks (`pg_advisory_lock`) |\n| `16-production-server-tuning` | **Production Tuning** | `shared_buffers` (25% RAM), `work_mem`, `effective_cache_size`, `random_page_cost` |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 PostgreSQL DBA & Backend interview questions & production outage scenarios |\n\n---\n\n## 🛠️ Quick Commands\n\nStart local PostgreSQL database:\n```bash\ndocker compose up -d\n```\nConnect with `psql`:\n```bash\npsql -h localhost -p 5432 -U trak_admin -d trak_db\n```\n"
+      },
+      {
+        "name": "00-setup-and-server-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- 00: Server Information & Process Inspection\nSELECT version();\nSELECT name, setting, unit, short_desc FROM pg_settings WHERE name IN ('shared_buffers', 'work_mem', 'max_connections');\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - PostgreSQL Server & Process Architecture 🛠️\n\n### Process Hierarchy:\n1. **Postmaster (Main Server Process)**: Listens for incoming client connections and forks a dedicated backend process per client.\n2. **Background Processes**:\n   - **Writer (BGWriter)**: Flushes dirty shared memory buffer pages to disk.\n   - **Checkpointer**: Periodically creates consistent disk checkpoints.\n   - **WAL Writer**: Writes WAL buffers to disk.\n   - **Autovacuum Launcher/Workers**: Cleans dead tuples and updates table statistics.\n   - **Stats Collector**: Collects query and server performance metrics.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-data-types-and-jsonb-mastery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- 01: JSONB Queries\nINSERT INTO events (user_id, event_type, payload) VALUES\n(1001, 'ORDER_COMPLETED', '{\"order_id\": \"ord_123\", \"total\": 99.50, \"items\": [\"book\", \"pen\"]}'::jsonb);\n\n-- Extract scalar field as text (->>)\nSELECT payload->>'order_id' AS order_id, payload->>'total' AS total FROM events;\n\n-- JSONB Containment Query (@> utilizes GIN index!)\nSELECT * FROM events WHERE payload @> '{\"order_id\": \"ord_123\"}';\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - JSON vs JSONB\n\n- `JSON`: Stores exact text representation (re-parsed on every read, preserves whitespace and key order).\n- `JSONB`: Stores decomposed binary format (indexed, fast lookups, supports GIN indexing).\n"
+          }
+        ]
+      },
+      {
+        "name": "02-mvcc-and-transaction-isolation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Inspect internal tuple header fields\nSELECT xmin, xmax, ctid, * FROM events;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - MVCC (Multi-Version Concurrency Control)\n\nIn Postgres, `UPDATE` never overwrites rows in-place. It writes a **brand new tuple version** and marks the old tuple with `xmax` (creating a dead tuple to be collected by Vacuum).\n"
+          }
+        ]
+      },
+      {
+        "name": "03-vacuum-autovacuum-and-bloat",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Inspect dead tuples across user tables\nSELECT relname, n_live_tup, n_dead_tup, last_vacuum, last_autovacuum\nFROM pg_stat_user_tables;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Vacuuming & Bloat Mitigation\n\n- `VACUUM`: Marks dead tuple space as reusable for new inserts (Non-blocking).\n- `VACUUM FULL`: Rewrites the entire table to a new disk file to reclaim OS space (Takes exclusive table lock!).\n"
+          }
+        ]
+      },
+      {
+        "name": "04-wal-and-checkpointing",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Current WAL write location\nSELECT pg_current_wal_lsn();\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Write-Ahead Logging (WAL)\n"
+          }
+        ]
+      },
+      {
+        "name": "05-advanced-indexing-strategies",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- 1. Partial Index (Indexes only active records, 10x smaller)\nCREATE INDEX idx_active_users ON events (user_id) WHERE event_type = 'ORDER_COMPLETED';\n\n-- 2. Expression / Functional Index\nCREATE INDEX idx_lower_event_type ON events (LOWER(event_type));\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Specialized Index Types (GIN, GiST, BRIN)\n\n- **B-Tree**: Default for scalar comparisons (`=`, `<`, `>`).\n- **GIN**: Composite values (Arrays, JSONB, Full-Text Search).\n- **GiST**: Geometric and range data types.\n- **BRIN (Block Range Index)**: For multi-billion row time-series tables sorted by timestamp (tiny index footprint).\n"
+          }
+        ]
+      },
+      {
+        "name": "06-query-optimization-and-plans",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Explain Query with memory buffer hit analysis\nEXPLAIN (ANALYZE, BUFFERS, VERBOSE)\nSELECT * FROM events WHERE user_id = 1001;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - EXPLAIN (ANALYZE, BUFFERS)\n"
+          }
+        ]
+      },
+      {
+        "name": "07-full-text-search-fts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Full-Text Search Query with Stemming\nSELECT to_tsvector('english', 'PostgreSQL database performance optimization') @@ to_tsquery('english', 'optimize & databases');\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Full-Text Search (FTS)\n"
+          }
+        ]
+      },
+      {
+        "name": "08-table-partitioning-and-sharding",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Range-partitioned table by month\nCREATE TABLE measurement (\n    city_id int not null,\n    logdate date not null,\n    peaktemp int\n) PARTITION BY RANGE (logdate);\n\nCREATE TABLE measurement_y2026m08 PARTITION OF measurement\n    FOR VALUES FROM ('2026-08-01') TO ('2026-09-01');\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Declarative Table Partitioning\n"
+          }
+        ]
+      },
+      {
+        "name": "09-stored-procedures-and-plpgsql",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "CREATE OR REPLACE FUNCTION get_user_event_count(p_user_id BIGINT)\nRETURNS BIGINT AS $$\nDECLARE\n    v_count BIGINT;\nBEGIN\n    SELECT COUNT(*) INTO v_count FROM events WHERE user_id = p_user_id;\n    RETURN v_count;\nEND;\n$$ LANGUAGE plpgsql;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - PL/pgSQL Functions & Procedures\n"
+          }
+        ]
+      },
+      {
+        "name": "10-connection-pooling-pgbouncer",
+        "type": "directory",
+        "children": [
+          {
+            "name": "pgbouncer.ini",
+            "type": "file",
+            "content": "[databases]\ntrak_db = host=127.0.0.1 port=5432 dbname=trak_db\n\n[pgbouncer]\nlisten_port = 6432\nlisten_addr = 0.0.0.0\nauth_type = md5\npool_mode = transaction\nmax_client_conn = 5000\ndefault_pool_size = 50\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - PgBouncer Pooling Modes\n\n- **Session Pooling**: Connection assigned for entire client lifetime.\n- **Transaction Pooling**: Server connection released back to pool immediately after transaction commits (Recommended for high concurrency microservices!).\n"
+          }
+        ]
+      },
+      {
+        "name": "11-replication-and-high-availability",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Check active standby replication state\nSELECT client_addr, state, sync_state, replay_lsn FROM pg_stat_replication;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Physical Streaming & Logical Replication\n"
+          }
+        ]
+      },
+      {
+        "name": "12-backup-and-pitr-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Point-In-Time Recovery (PITR)\n\n```bash\n# Base backup\npg_basebackup -h localhost -U replicator -D /var/lib/postgresql/backup -Fp -Xs -P -R\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "13-row-level-security-and-rbac",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Enable RLS on events table\nALTER TABLE events ENABLE ROW LEVEL SECURITY;\n\n-- Create Policy isolating tenant data\nCREATE POLICY tenant_isolation_policy ON events\nFOR ALL\nUSING (user_id = current_setting('app.current_user_id')::bigint);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Row-Level Security (RLS) Multi-Tenancy\n"
+          }
+        ]
+      },
+      {
+        "name": "14-extensions-ecosystem",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- Fuzzy Trigram Search using pg_trgm\nSELECT similarity('PostgreSQL', 'Postgres');\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - PostgreSQL Extensions (`pg_trgm`, `pgcrypto`)\n"
+          }
+        ]
+      },
+      {
+        "name": "15-concurrency-locking-advisory",
+        "type": "directory",
+        "children": [
+          {
+            "name": "queries.sql",
+            "type": "file",
+            "content": "-- High-performance job queue pattern with SKIP LOCKED\nBEGIN;\nSELECT id FROM events \nWHERE event_type = 'PENDING'\nORDER BY created_at\nLIMIT 1\nFOR UPDATE SKIP LOCKED;\n-- Process job...\nCOMMIT;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Locking & Job Queue (`SKIP LOCKED`)\n"
+          }
+        ]
+      },
+      {
+        "name": "16-production-server-tuning",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - `postgresql.conf` Production Tuning Rules of Thumb\n\n- `shared_buffers`: Set to **25% of total system RAM**.\n- `effective_cache_size`: Set to **75% of total system RAM**.\n- `work_mem`: Set to `(Total RAM - shared_buffers) / (max_connections * 3)`.\n- `random_page_cost`: Lower from `4.0` down to `1.1` for NVMe/SSD storage.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield PostgreSQL DBA & Backend Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **MVCC Tuple Lifecycle**: Rows are immutable; `UPDATE` appends a new version and sets `xmax` on the old version, necessitating Autovacuum.\n2. **JSON vs JSONB**: JSON is raw text; JSONB is decomposed binary with fast GIN index search capabilities.\n3. **GIN vs BRIN**: GIN indexes multi-value components like JSONB keys and array elements; BRIN indexes min/max values per disk block range for massive time-series tables.\n4. **PgBouncer Transaction Pooling**: Reuses underlying database connections across transactions to handle 10,000+ client connections without exhausting RAM.\n5. **FOR UPDATE SKIP LOCKED**: Allows multiple concurrent worker processes to pop items from a database queue without blocking each other or deadlocking.\n\n🚀 You have completed the complete PostgreSQL Architecture & DBA Mastery track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

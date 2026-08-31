@@ -1,0 +1,363 @@
+{
+  "id": "lang/python",
+  "name": "Python Mastery & Backend Architecture",
+  "version": "1.0.0",
+  "description": "Comprehensive Python curriculum from CPython internals, memory management, and GIL to decorators, OOP, Pydantic, Asyncio, and FastAPI backend architecture",
+  "root": {
+    "name": "python-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "pyproject.toml",
+        "type": "file",
+        "content": "[project]\nname = \"python-workspace\"\nversion = \"0.1.0\"\ndescription = \"Comprehensive Python Learning Track\"\nrequires-python = \">=3.11\"\ndependencies = []\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🐍 Complete Python Mastery & Backend Architecture Track\n\nWelcome to your full Python learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-package-management` | **Setup & Tooling** | Python 3.12+, `uv`, `venv`, `pip`, `pyproject.toml` standards |\n| `01-cpython-internals-and-gil` | **CPython & GIL** | Execution pipeline (AST, Bytecode, PVM), Reference counting (`ob_refcnt`), Generational GC, GIL |\n| `02-variables-scopes-and-legb` | **Scopes & LEGB** | Local, Enclosing, Global, Built-in lookup, `global` vs `nonlocal` keywords |\n| `03-data-types-mutability-memory` | **Memory & Types** | `is` vs `==`, small integer caching (-5..256), shallow vs deep copy |\n| `04-strings-slicing-formatting` | **Strings & Slicing** | Slicing `[start:stop:step]`, modern f-string debugging (`f\"{var=}\"`) |\n| `05-control-flow-pattern-matching` | **Pattern Matching** | Structural pattern matching (`match`/`case` PEP 634), guards |\n| `06-functions-args-and-closures` | **Functions & Args** | `*args`, `**kwargs`, keyword-only parameters, closures & scoping |\n| `07-decorators-and-metaprogramming` | **Decorators** | `@functools.wraps`, parameterized decorators, class decorators |\n| `08-data-structures-and-collections` | **Collections** | `dict`, `set`, `defaultdict`, `Counter`, `deque`, `namedtuple` |\n| `09-comprehensions-and-iterators` | **Comprehensions** | List/Dict/Set comprehensions, `__iter__` and `__next__` protocol |\n| `10-generators-yield-pipelines` | **Generators & Yield** | Lazy evaluation, `yield`, `yield from`, memory-efficient data pipelines |\n| `11-oop-and-dunder-methods` | **OOP & Dunder** | `__new__` vs `__init__`, `__repr__`, `__slots__`, MRO & C3 linearization |\n| `12-dataclasses-and-pydantic` | **Data Modeling** | `@dataclass`, Pydantic `BaseModel`, field validation, serialization |\n| `13-error-and-exception-handling` | **Exceptions** | `try`/`except`/`else`/`finally`, custom exceptions, `ExceptionGroup` |\n| `14-context-managers-with-statement` | **Context Managers** | `__enter__`/`__exit__` protocol, `@contextmanager` generator helper |\n| `15-static-typing-and-type-hints` | **Type Hints** | PEP 484/695 type annotations, `Union`, `Optional`, `Generic`, `Protocol` |\n| `16-concurrency-threads-processes-asyncio` | **Concurrency** | Threading (I/O) vs Multiprocessing (CPU) vs Asyncio event loop & `TaskGroup` |\n| `17-modern-web-backends-fastapi` | **FastAPI Backend** | FastAPI router, dependency injection, async request handling, OpenAPI docs |\n| `18-file-io-serialization-requests` | **I/O & Networking** | `pathlib.Path`, JSON streaming, async HTTP with `httpx` |\n| `19-testing-benchmarking-profiling` | **Testing & Profiling** | `pytest`, `pytest-asyncio`, fixtures, `cProfile` performance analysis |\n| `20-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield Python interview questions & tricky mental models |\n\n---\n\n## 🛠️ How to Navigate & Run\n\nRun any module with Python:\n```bash\ncd 00-setup-and-package-management\npython main.py\n```\n"
+      },
+      {
+        "name": "00-setup-and-package-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "import sys\nimport platform\n\ndef main():\n    print(\"=====================================================\")\n    print(\"🐍 Welcome to 00 - Python Setup & Environment Check!\")\n    print(\"=====================================================\")\n    print(f\"✔ Python Version     : {sys.version.split()[0]}\")\n    print(f\"✔ Python Implementation: {platform.python_implementation()}\")\n    print(f\"✔ Operating System   : {platform.system()} {platform.release()}\")\n    print(f\"✔ Executable Path    : {sys.executable}\")\n    print(\"\\n👉 Next: Head over to 01-cpython-internals-and-gil/main.py\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Python Setup & Package Management 🛠️\n\n## 1. Modern Package Managers\n- **`uv` (Recommended)**: Ultra-fast Rust-based package installer and resolver (`uv venv`, `uv pip install <pkg>`).\n- **`poetry`**: Dependency resolution and virtual environment management.\n- **`venv + pip`**: Built-in standard toolchain.\n\n### Creating a Virtual Environment:\n```bash\npython -m venv .venv\n# On Windows:\n.venv\\Scripts\\activate\n# On macOS/Linux:\nsource .venv/bin/activate\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "01-cpython-internals-and-gil",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "import sys\nimport gc\n\ndef main():\n    print(\"=== 01: CPython Internals, Memory Management & The GIL ===\")\n\n    # 1. Reference Counting\n    a = [1, 2, 3]\n    print(f\"Initial ref count of 'a': {sys.getrefcount(a)}\") # 2 (a + arg into getrefcount)\n    b = a\n    print(f\"Ref count after b = a   : {sys.getrefcount(a)}\") # 3\n    del b\n    print(f\"Ref count after del b   : {sys.getrefcount(a)}\") # 2\n\n    # 2. Generational Garbage Collector\n    print(f\"GC Counts per generation (Gen0, Gen1, Gen2): {gc.get_count()}\")\n    print(f\"GC Thresholds: {gc.get_threshold()}\")\n\n    # 3. GIL (Global Interpreter Lock) Reality:\n    # - Protects CPython memory and ref counts from concurrent thread corruption.\n    # - Threads release GIL during I/O operations (network, disk, sleep).\n    # - CPU-bound operations require multiprocessing instead of threading.\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - CPython Internals & The GIL\n\n### Core Internals\n- **Reference Counting**: Primary deallocation mechanism when `ob_refcnt == 0`.\n- **Cyclic Generational GC**: Scans Gen 0, Gen 1, and Gen 2 to resolve cyclic references.\n- **GIL**: Single mutex allowing only 1 native thread to execute Python bytecode at any instant.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-variables-scopes-and-legb",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "x = \"GLOBAL\"\n\ndef outer():\n    x = \"ENCLOSING\"\n\n    def inner_modify_global():\n        global x\n        x = \"MUTATED_GLOBAL\"\n\n    def inner_modify_enclosing():\n        nonlocal x\n        x = \"MUTATED_ENCLOSING\"\n\n    inner_modify_enclosing()\n    print(f\"Outer scope x: {x}\") # MUTATED_ENCLOSING\n    inner_modify_global()\n\ndef main():\n    print(\"=== 02: Scopes & The LEGB Rule ===\")\n    print(\"LEGB Order: 1. Local -> 2. Enclosing -> 3. Global -> 4. Built-in\")\n    outer()\n    print(f\"Global x after functions: {x}\") # MUTATED_GLOBAL\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Scopes & LEGB Rule\n\n- `global`: Binds assignment to module top-level scope.\n- `nonlocal`: Binds assignment to nearest outer enclosing function scope.\n"
+          }
+        ]
+      },
+      {
+        "name": "03-data-types-mutability-memory",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "import copy\n\ndef main():\n    print(\"=== 03: Data Types, Memory & 'is' vs '==' ===\")\n\n    # 1. Small Integer Caching (-5 to 256 pre-allocated in CPython)\n    a = 256\n    b = 256\n    print(f\"256 is 256 (Small int cache): {a is b}\") # True\n\n    # 2. Shallow vs Deep Copy\n    original = [1, [2, 3], 4]\n    shallow = original.copy()\n    deep = copy.deepcopy(original)\n\n    original[1].append(99)\n    print(f\"Original List : {original}\") # [1, [2, 3, 99], 4]\n    print(f\"Shallow Copy  : {shallow}\")  # [1, [2, 3, 99], 4] -> Mutated!\n    print(f\"Deep Copy     : {deep}\")     # [1, [2, 3], 4] -> Untouched!\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Data Types & Mutability\n\n- `==` checks value equality (`__eq__`).\n- `is` checks memory address equality (`id(a) == id(b)`).\n"
+          }
+        ]
+      },
+      {
+        "name": "04-strings-slicing-formatting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "def main():\n    print(\"=== 04: Strings, Slicing & Modern f-Strings ===\")\n\n    text = \"PythonMastery\"\n    print(f\"Slice [0:6]  : {text[0:6]}\")\n    print(f\"Reverse [::-1]: {text[::-1]}\")\n\n    user = \"Navnath\"\n    score = 98.4567\n    price = 1000000\n\n    # Modern f-string debugging (Python 3.8+)\n    print(f\"{user=}\")\n    print(f\"Formatted Price: ${price:,}\")\n    print(f\"Formatted Score: {score:.2f}%\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Strings & Slicing\n"
+          }
+        ]
+      },
+      {
+        "name": "05-control-flow-pattern-matching",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "def process_command(cmd):\n    match cmd:\n        case {\"action\": \"login\", \"user\": username}:\n            return f\"Logging in user: {username}\"\n        case {\"action\": \"payment\", \"amount\": int(amt)} if amt > 0:\n            return f\"Processing payment of ${amt}\"\n        case [\"navigate\", str(path)]:\n            return f\"Navigating to {path}\"\n        case _:\n            return \"Unknown command\"\n\ndef main():\n    print(\"=== 05: Structural Pattern Matching (PEP 634) ===\")\n    print(process_command({\"action\": \"login\", \"user\": \"Alice\"}))\n    print(process_command({\"action\": \"payment\", \"amount\": 500}))\n    print(process_command([\"navigate\", \"/dashboard\"]))\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Pattern Matching in Python 3.10+\n"
+          }
+        ]
+      },
+      {
+        "name": "06-functions-args-and-closures",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "# TRAP: Never use mutable default arguments like def bad_func(items=[])!\ndef good_func(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items\n\n# Keyword-only arguments after '*'\ndef configure_server(host, port, *, debug=False, timeout=30):\n    return f\"Server at {host}:{port} (debug={debug}, timeout={timeout}s)\"\n\ndef main():\n    print(\"=== 06: Functions, Mutable Default Trap & Closures ===\")\n    print(good_func(\"A\"))\n    print(good_func(\"B\"))\n    print(configure_server(\"127.0.0.1\", 8000, debug=True))\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Functions & Argument Binding\n"
+          }
+        ]
+      },
+      {
+        "name": "07-decorators-and-metaprogramming",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "import functools\nimport time\n\ndef timing_decorator(func):\n    @functools.wraps(func) # Preserves original function __name__ and __doc__\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = func(*args, **kwargs)\n        duration = time.perf_counter() - start\n        print(f\"Function '{func.__name__}' executed in {duration:.6f}s\")\n        return result\n    return wrapper\n\n@timing_decorator\ndef compute_squares(n):\n    return [x**2 for x in range(n)]\n\ndef main():\n    print(\"=== 07: Decorators & Metaprogramming ===\")\n    res = compute_squares(100_000)\n    print(f\"Squares computed: {len(res)}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Decorators in Python\n\n- Always use `@functools.wraps` to preserve docstrings, names, and introspection.\n"
+          }
+        ]
+      },
+      {
+        "name": "08-data-structures-and-collections",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "from collections import defaultdict, Counter, deque\n\ndef main():\n    print(\"=== 08: Data Structures & Collections Module ===\")\n\n    # Counter\n    words = [\"apple\", \"banana\", \"apple\", \"orange\", \"banana\", \"apple\"]\n    counts = Counter(words)\n    print(f\"Word Counts: {counts.most_common(2)}\")\n\n    # DefaultDict (no KeyError!)\n    grouped = defaultdict(list)\n    grouped[\"fruits\"].append(\"Mango\")\n    print(f\"DefaultDict: {dict(grouped)}\")\n\n    # Deque (O(1) pops and appends from both ends)\n    queue = deque([1, 2, 3])\n    queue.appendleft(0)\n    queue.pop()\n    print(f\"Deque: {queue}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Collections Module\n"
+          }
+        ]
+      },
+      {
+        "name": "09-comprehensions-and-iterators",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "class Countdown:\n    def __init__(self, start):\n        self.current = start\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        val = self.current\n        self.current -= 1\n        return val\n\ndef main():\n    print(\"=== 09: Comprehensions & Custom Iterator Protocol ===\")\n    even_squares = [x**2 for x in range(10) if x % 2 == 0]\n    print(f\"List Comprehension: {even_squares}\")\n\n    print(\"Custom Iterator:\")\n    for num in Countdown(3):\n        print(f\"Count: {num}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Comprehensions & Iteration Protocol\n"
+          }
+        ]
+      },
+      {
+        "name": "10-generators-yield-pipelines",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "def fibonacci_generator(limit):\n    a, b = 0, 1\n    for _ in range(limit):\n        yield a\n        a, b = b, a + b\n\ndef main():\n    print(\"=== 10: Generators, Yield & Memory-Efficient Pipelines ===\")\n    fib = list(fibonacci_generator(8))\n    print(f\"First 8 Fibonacci numbers: {fib}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Generators & Yield\n\n- Generators compute values lazily on-demand with $O(1)$ memory consumption.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-oop-and-dunder-methods",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "class Vector:\n    __slots__ = (\"x\", \"y\") # Optimizes memory by preventing per-instance __dict__\n\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __repr__(self):\n        return f\"Vector(x={self.x}, y={self.y})\"\n\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n\ndef main():\n    print(\"=== 11: OOP, Dunder Methods & __slots__ Optimization ===\")\n    v1 = Vector(2, 3)\n    v2 = Vector(5, 7)\n    v3 = v1 + v2\n    print(f\"Vector Addition: {v3}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - OOP & Dunder Methods\n\n- `__slots__` prevents creation of `__dict__`, reducing memory per object up to 40-50%.\n"
+          }
+        ]
+      },
+      {
+        "name": "12-dataclasses-and-pydantic",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\ntype UserData:\n    id: int\n    username: str\n    email: str\n\ndef main():\n    print(\"=== 12: Modern Data Modeling (Dataclasses & Pydantic) ===\")\n    user = UserData(id=1, username=\"navnath\", email=\"navnath@example.com\")\n    print(f\"Immutable Dataclass: {user}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Dataclasses & Pydantic\n"
+          }
+        ]
+      },
+      {
+        "name": "13-error-and-exception-handling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "class ValidationError(Exception):\n    \"\"\"Custom business validation exception.\"\"\"\n    pass\n\ndef validate_age(age):\n    if age < 0:\n        raise ValidationError(f\"Age cannot be negative: {age}\")\n    return True\n\ndef main():\n    print(\"=== 13: Error & Exception Handling Architecture ===\")\n    try:\n        validate_age(-5)\n    except ValidationError as e:\n        print(f\"Caught Custom Error: {e}\")\n    finally:\n        print(\"Cleanup block executed.\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Exceptions in Python\n"
+          }
+        ]
+      },
+      {
+        "name": "14-context-managers-with-statement",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "from contextlib import contextmanager\n\n@contextmanager\ndef managed_resource(name):\n    print(f\"Acquiring resource: {name}\")\n    try:\n        yield name.upper()\n    finally:\n        print(f\"Releasing resource: {name}\")\n\ndef main():\n    print(\"=== 14: Context Managers & the 'with' Statement ===\")\n    with managed_resource(\"db_connection\") as res:\n        print(f\"Inside with block using: {res}\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Context Managers\n"
+          }
+        ]
+      },
+      {
+        "name": "15-static-typing-and-type-hints",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "from typing import Optional, Union, Sequence\n\ndef get_user_name(user_id: int, fallback: Optional[str] = None) -> str:\n    if user_id == 1:\n        return \"Navnath\"\n    return fallback or \"Anonymous\"\n\ndef main():\n    print(\"=== 15: Static Typing & Type Hints (PEP 484-695) ===\")\n    print(\"User 1:\", get_user_name(1))\n    print(\"User 2:\", get_user_name(2, fallback=\"Guest\"))\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Static Typing in Python\n"
+          }
+        ]
+      },
+      {
+        "name": "16-concurrency-threads-processes-asyncio",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "import asyncio\n\nasync def fetch_data(id: int, delay: float):\n    await asyncio.sleep(delay)\n    return f\"Data from source {id}\"\n\nasync def async_main():\n    print(\"=== 16: Concurrency & Asyncio Structured Concurrency ===\")\n    # Python 3.11+ TaskGroup\n    async with asyncio.TaskGroup() as tg:\n        t1 = tg.create_task(fetch_data(1, 0.1))\n        t2 = tg.create_task(fetch_data(2, 0.1))\n\n    print(f\"Task 1: {t1.result()}\")\n    print(f\"Task 2: {t2.result()}\")\n\ndef main():\n    asyncio.run(async_main())\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Concurrency: Threads vs Processes vs Asyncio\n\n- **Threading**: Great for I/O bounds in CPython (GIL releases during I/O).\n- **Multiprocessing**: Solves CPU bounds by creating separate processes with isolated PVMs.\n- **Asyncio**: Single-threaded cooperative concurrency for high-concurrency network services.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-modern-web-backends-fastapi",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "# Production FastAPI Pattern\n\"\"\"\nfrom fastapi import FastAPI\n\napp = FastAPI(title=\"Trak Production Backend\")\n\n@app.get(\"/health\")\nasync def health_check():\n    return {\"status\": \"healthy\", \"framework\": \"FastAPI\"}\n\"\"\"\n\ndef main():\n    print(\"=== 17: Modern Web Backends with FastAPI & Async Architecture ===\")\n    print(\"FastAPI uses Pydantic for validation and Starlette for high-performance async HTTP.\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - FastAPI Web Backend Architecture\n"
+          }
+        ]
+      },
+      {
+        "name": "18-file-io-serialization-requests",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "from pathlib import Path\nimport json\n\ndef main():\n    print(\"=== 18: File I/O, Pathlib & JSON Serialization ===\")\n    data = {\"platform\": \"Trak\", \"modules\": 21, \"status\": \"active\"}\n    path = Path(\"sample_output.json\")\n    path.write_text(json.dumps(data, indent=2))\n\n    content = json.loads(path.read_text())\n    print(f\"Read JSON back: {content}\")\n    path.unlink() # Cleanup\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - Modern File I/O with Pathlib\n"
+          }
+        ]
+      },
+      {
+        "name": "19-testing-benchmarking-profiling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "calc.py",
+            "type": "file",
+            "content": "def add(a: int, b: int) -> int:\n    return a + b\n"
+          },
+          {
+            "name": "test_calc.py",
+            "type": "file",
+            "content": "from calc import add\n\ndef test_add():\n    assert add(2, 3) == 5\n    assert add(-1, 1) == 0\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 - Testing & Pytest\n\n```bash\npytest -v\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "20-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.py",
+            "type": "file",
+            "content": "def main():\n    print(\"=====================================================\")\n    print(\"🎯 20: High-Yield Python Interview Questions & Reality Check\")\n    print(\"=====================================================\")\n    print(\"1. The GIL: Prevents multi-core CPU parallelism in threads, but I/O releases it.\")\n    print(\"2. Mutable Default Arg: Function defaults evaluate ONCE at definition time, not call time.\")\n    print(\"3. Memory: Reference counting (immediate) + Generational GC for cyclic loops.\")\n    print(\"4. 'is' vs '==': Address equality vs Value equality (__eq__).\")\n    print(\"5. LEGB Rule: Local -> Enclosing -> Global -> Built-in.\")\n    print(\"\\n🚀 You have completed the complete Python Mastery curriculum!\")\n\nif __name__ == \"__main__\":\n    main()\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 20 - Python Interview Questions 🎯\n"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,294 @@
+{
+  "id": "lang/c",
+  "name": "C Systems & Low-Level Architecture",
+  "version": "1.0.0",
+  "description": "Comprehensive C (C99/C11/C17) curriculum from compilation pipeline, pointers, and memory layout to dynamic heap allocation, struct padding, POSIX threads, and bit manipulation",
+  "root": {
+    "name": "c-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "Makefile",
+        "type": "file",
+        "content": "CC = gcc\nCFLAGS = -Wall -Wextra -Wpedantic -O2 -std=c17\nTARGET = app\n\nall: $(TARGET)\n\n$(TARGET): 00-setup-and-compilation-pipeline/main.c\n\t$(CC) $(CFLAGS) $< -o $@\n\nclean:\n\trm -f $(TARGET)\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🧱 Complete C Systems & Low-Level Architecture Track\n\nWelcome to your full C learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-compilation-pipeline` | **Compilation Pipeline** | 4 Compilation stages (Preprocessor, Compiler, Assembler, Linker), Makefile, GCC |\n| `01-memory-layout-of-c-program` | **Process Memory Layout** | Text, Data, BSS, Heap, Stack segments, Stack overflow |\n| `02-data-types-and-stdint` | **Data Types & stdint** | Primitive types, format specifiers (`%d`, `%zu`), `<stdint.h>` (`uint32_t`, `int64_t`) |\n| `03-pointers-and-pointer-arithmetic` | **Pointers Mastery** | Address-of (`&`), Dereference (`*`), Double pointers (`**`), `void*` generic pointers |\n| `04-arrays-strings-and-decay` | **Arrays & Strings** | Array-to-pointer decay, null terminator (`\\0`), string manipulation (`<string.h>`) |\n| `05-dynamic-memory-heap-management` | **Dynamic Memory** | `malloc`, `calloc`, `realloc`, `free`, memory leaks, dangling pointers |\n| `06-structs-unions-and-padding` | **Structs & Memory Alignment** | `struct`, `union`, memory alignment padding, `#pragma pack(1)`, bit-fields |\n| `07-functions-and-function-pointers` | **Function Pointers** | Function declarations, recursion, function pointers, callbacks, `qsort` |\n| `08-storage-classes-and-scope` | **Storage Classes** | `auto`, `register`, `static` (local persistence & file-scoping), `extern` |\n| `09-type-qualifiers-const-volatile-restrict` | **Type Qualifiers** | `const`, `volatile` (hardware I/O registers), `restrict` (pointer aliasing optimization) |\n| `10-c-preprocessor-macros` | **C Preprocessor** | `#define`, safe macro parentheses, `#` stringification, `##` token pasting |\n| `11-bit-manipulation-and-bitwise-ops` | **Bit Manipulation** | Bitwise AND/OR/XOR/NOT/Shifts, Set/Clear/Toggle bits, Endianness detection |\n| `12-file-handling-and-stdio` | **File I/O** | `fopen`, `fclose`, `fread`, `fwrite`, `fprintf`, `fscanf`, stream buffers |\n| `13-error-handling-and-signals` | **Error & Signals** | `errno`, `perror`, `strerror`, POSIX signals (`<signal.h>`), `sigaction` |\n| `14-concurrency-posix-threads-pthreads` | **POSIX Threads** | `pthread_create`, `pthread_join`, `pthread_mutex_t`, race conditions |\n| `15-debugging-and-sanitizers` | **Debugging & Sanitizers** | AddressSanitizer (`-fsanitize=address,undefined`), Valgrind, GDB |\n| `16-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield low-level C interview questions & memory traps |\n\n---\n\n## 🛠️ How to Compile & Run\n\nCompile any module with gcc:\n```bash\ncd 00-setup-and-compilation-pipeline\ngcc -std=c17 -Wall -Wextra main.c -o main\n./main\n```\n"
+      },
+      {
+        "name": "00-setup-and-compilation-pipeline",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=====================================================\\n\");\n    printf(\"🧱 Welcome to 00 - C Setup & Compilation Pipeline!\\n\");\n    printf(\"=====================================================\\n\");\n    printf(\"✔ C compiler toolchain (GCC/Clang) is active and running!\\n\");\n    printf(\"👉 Next: Head over to 01-memory-layout-of-c-program/main.c\\n\");\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - C Compilation Pipeline 🛠️\n\n### The 4 Compilation Stages:\n1. **Preprocessor (`gcc -E`)**: Expands `#include`, `#define`, strips comments -> `.i`\n2. **Compiler (`gcc -S`)**: Translates C into assembly -> `.s`\n3. **Assembler (`gcc -c`)**: Converts assembly into machine object code -> `.o`\n4. **Linker (`gcc / ld`)**: Links object files with CRT and system libraries -> Executable\n"
+          }
+        ]
+      },
+      {
+        "name": "01-memory-layout-of-c-program",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint global_initialized = 42;    // Data Segment\nint global_uninitialized;       // BSS Segment (Zero-initialized by OS)\n\nint main(void) {\n    printf(\"=== 01: Memory Layout of a C Program ===\\n\");\n\n    int local_stack_var = 10;   // Stack Frame\n    int* heap_var = (int*)malloc(sizeof(int)); // Heap\n    *heap_var = 100;\n\n    printf(\"Address of Data Segment (global_initialized)  : %p\\n\", (void*)&global_initialized);\n    printf(\"Address of BSS Segment  (global_uninitialized): %p\\n\", (void*)&global_uninitialized);\n    printf(\"Address of Heap Memory  (heap_var)            : %p\\n\", (void*)heap_var);\n    printf(\"Address of Stack Memory (local_stack_var)     : %p\\n\", (void*)&local_stack_var);\n\n    free(heap_var);\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Memory Layout of a C Program\n\n- **Text Segment**: Read-only machine code.\n- **Data Segment**: Initialized global/static variables.\n- **BSS Segment**: Uninitialized global/static variables (zeroed at startup).\n- **Heap**: Dynamic memory (`malloc`/`free`) growing upwards.\n- **Stack**: Function stack frames (local variables) growing downwards.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-data-types-and-stdint",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <stdint.h>\n\nint main(void) {\n    printf(\"=== 02: Primitive Types & <stdint.h> Fixed-Width Integers ===\\n\");\n\n    int8_t  small_val = -128;\n    uint8_t byte_val  = 255;\n    int32_t fixed_32  = 1000000;\n    uint64_t fixed_64 = 18446744073709551615ULL;\n\n    printf(\"int8_t : %d (size: %zu byte)\\n\", small_val, sizeof(small_val));\n    printf(\"uint8_t: %u (size: %zu byte)\\n\", byte_val, sizeof(byte_val));\n    printf(\"int32_t: %d (size: %zu bytes)\\n\", fixed_32, sizeof(fixed_32));\n    printf(\"uint64_t: %llu (size: %zu bytes)\\n\", (unsigned long long)fixed_64, sizeof(fixed_64));\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Data Types & `<stdint.h>`\n"
+          }
+        ]
+      },
+      {
+        "name": "03-pointers-and-pointer-arithmetic",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 03: Pointers, Double Pointers & Arithmetic ===\\n\");\n\n    int val = 42;\n    int* ptr = &val;     // Pointer\n    int** dptr = &ptr;   // Double pointer (pointer to pointer)\n\n    printf(\"Value direct            : %d\\n\", val);\n    printf(\"Value via pointer (*ptr) : %d\\n\", *ptr);\n    printf(\"Value via dptr (**dptr)  : %d\\n\", **dptr);\n\n    // Pointer Arithmetic\n    int arr[3] = {10, 20, 30};\n    int* pArr = arr;\n    printf(\"arr[0]: %d | *(pArr + 1): %d | *(pArr + 2): %d\\n\", *pArr, *(pArr + 1), *(pArr + 2));\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Pointers & Pointer Arithmetic\n"
+          }
+        ]
+      },
+      {
+        "name": "04-arrays-strings-and-decay",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <string.h>\n\nint main(void) {\n    printf(\"=== 04: Arrays, Pointer Decay & Null-Terminated Strings ===\\n\");\n\n    char str[] = \"Hello, C!\"; // Null-terminated array: ['H','e','l','l','o',',',' ','C','!','\\0']\n    printf(\"String: %s | Length: %zu | sizeof: %zu\\n\", str, strlen(str), sizeof(str));\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Arrays & Strings\n\nStrings in C are null-terminated (`\\0`) character arrays.\n"
+          }
+        ]
+      },
+      {
+        "name": "05-dynamic-memory-heap-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <stdlib.h>\n\nint main(void) {\n    printf(\"=== 05: Dynamic Memory (malloc, calloc, realloc, free) ===\\n\");\n\n    // 1. malloc: Allocates uninitialized memory\n    int* nums = (int*)malloc(3 * sizeof(int));\n    if (!nums) return 1;\n\n    nums[0] = 10; nums[1] = 20; nums[2] = 30;\n\n    // 2. realloc: Resizes memory buffer\n    int* expanded = (int*)realloc(nums, 5 * sizeof(int));\n    if (!expanded) { free(nums); return 1; }\n    nums = expanded;\n    nums[3] = 40; nums[4] = 50;\n\n    for (int i = 0; i < 5; ++i) printf(\"%d \", nums[i]);\n    printf(\"\\n\");\n\n    free(nums); // Always free to avoid memory leaks!\n    nums = NULL; // Avoid dangling pointer\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Dynamic Memory Allocation\n\n- `malloc(size)`: Allocates raw bytes.\n- `calloc(num, size)`: Allocates and zero-initializes memory.\n- `realloc(ptr, new_size)`: Resizes existing block.\n- `free(ptr)`: Releases heap memory back to allocator.\n"
+          }
+        ]
+      },
+      {
+        "name": "06-structs-unions-and-padding",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\n// Struct with default memory alignment padding\nstruct Padded {\n    char c;    // 1 byte + 3 bytes padding\n    int i;     // 4 bytes\n    short s;   // 2 bytes + 2 bytes padding\n};             // Total = 12 bytes!\n\n// Packed struct with zero padding\n#pragma pack(push, 1)\nstruct Packed {\n    char c;    // 1 byte\n    int i;     // 4 bytes\n    short s;   // 2 bytes\n};             // Total = 7 bytes!\n#pragma pack(pop)\n\nint main(void) {\n    printf(\"=== 06: Structs, Alignment & Padding ===\\n\");\n    printf(\"Size of Padded struct: %zu bytes\\n\", sizeof(struct Padded));\n    printf(\"Size of Packed struct: %zu bytes\\n\", sizeof(struct Packed));\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Structs, Unions & Memory Alignment\n"
+          }
+        ]
+      },
+      {
+        "name": "07-functions-and-function-pointers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint add(int a, int b) { return a + b; }\nint multiply(int a, int b) { return a * b; }\n\n// Higher-order function taking a function pointer callback\nvoid executeOp(int (*op)(int, int), int x, int y) {\n    printf(\"Operation Result: %d\\n\", op(x, y));\n}\n\nint main(void) {\n    printf(\"=== 07: Function Pointers & Callbacks ===\\n\");\n    executeOp(add, 5, 10);\n    executeOp(multiply, 5, 10);\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Function Pointers & Callbacks\n"
+          }
+        ]
+      },
+      {
+        "name": "08-storage-classes-and-scope",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nvoid counterFunction(void) {\n    static int callCount = 0; // Preserves value across function calls (in Data/BSS)\n    callCount++;\n    printf(\"Function call count: %d\\n\", callCount);\n}\n\nint main(void) {\n    printf(\"=== 08: Storage Classes (auto, static, extern) ===\\n\");\n    counterFunction();\n    counterFunction();\n    counterFunction();\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Storage Classes & Scope\n"
+          }
+        ]
+      },
+      {
+        "name": "09-type-qualifiers-const-volatile-restrict",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\n// restrict: Tells compiler pointers do not alias, enabling vectorization\nvoid addArrays(int* restrict a, const int* restrict b, size_t n) {\n    for (size_t i = 0; i < n; ++i) {\n        a[i] += b[i];\n    }\n}\n\nint main(void) {\n    printf(\"=== 09: Type Qualifiers: const, volatile & restrict ===\\n\");\n    int arr1[3] = {1, 2, 3};\n    int arr2[3] = {10, 20, 30};\n    addArrays(arr1, arr2, 3);\n    printf(\"Result: %d %d %d\\n\", arr1[0], arr1[1], arr1[2]);\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Type Qualifiers\n\n- `const`: Read-only data.\n- `volatile`: Tells compiler variable can change unexpectedly (e.g. memory-mapped hardware).\n- `restrict`: Compiler optimization asserting pointer exclusivity.\n"
+          }
+        ]
+      },
+      {
+        "name": "10-c-preprocessor-macros",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\n// Safe macro with parenthesis\n#define SQUARE(x) ((x) * (x))\n\n// Stringification (#) and Token Pasting (##)\n#define PRINT_VAR(var) printf(#var \" = %d\\n\", var)\n#define CONCAT(a, b) a##b\n\nint main(void) {\n    printf(\"=== 10: Preprocessor Macros & Metaprogramming ===\\n\");\n    int num = 5;\n    PRINT_VAR(num);\n    printf(\"Square(num + 1) = %d\\n\", SQUARE(num + 1)); // ((5+1) * (5+1)) = 36\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - C Preprocessor\n"
+          }
+        ]
+      },
+      {
+        "name": "11-bit-manipulation-and-bitwise-ops",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\n#define SET_BIT(reg, bit)    ((reg) |= (1U << (bit)))\n#define CLEAR_BIT(reg, bit)  ((reg) &= ~(1U << (bit)))\n#define TOGGLE_BIT(reg, bit) ((reg) ^= (1U << (bit)))\n#define CHECK_BIT(reg, bit)  (((reg) >> (bit)) & 1U)\n\nint main(void) {\n    printf(\"=== 11: Bit Manipulation & Bitwise Operators ===\\n\");\n    unsigned char reg = 0;\n    SET_BIT(reg, 3); // Set 3rd bit\n    printf(\"Register value after SET_BIT(3): %u | Check bit 3: %u\\n\", reg, CHECK_BIT(reg, 3));\n\n    // Endianness Check\n    unsigned int test = 1;\n    char* byte = (char*)&test;\n    if (*byte == 1) {\n        printf(\"Host Architecture is Little-Endian\\n\");\n    } else {\n        printf(\"Host Architecture is Big-Endian\\n\");\n    }\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Bit Manipulation & Endianness\n"
+          }
+        ]
+      },
+      {
+        "name": "12-file-handling-and-stdio",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 12: File I/O & Streams ===\\n\");\n    FILE* fp = fopen(\"trak_test.txt\", \"w\");\n    if (!fp) return 1;\n\n    fprintf(fp, \"Trak C Systems Track\\n\");\n    fclose(fp);\n\n    printf(\"File created and closed safely.\\n\");\n    remove(\"trak_test.txt\"); // Cleanup\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - File I/O\n"
+          }
+        ]
+      },
+      {
+        "name": "13-error-handling-and-signals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <errno.h>\n#include <string.h>\n\nint main(void) {\n    printf(\"=== 13: Error Handling with errno & strerror ===\\n\");\n    FILE* fp = fopen(\"non_existent_file.xyz\", \"r\");\n    if (!fp) {\n        printf(\"fopen failed! errno = %d (%s)\\n\", errno, strerror(errno));\n    }\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Error Handling & Signals\n"
+          }
+        ]
+      },
+      {
+        "name": "14-concurrency-posix-threads-pthreads",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=== 14: POSIX Threads (pthreads) & Mutexes ===\\n\");\n    printf(\"pthreads provide OS-level multithreading with pthread_create and pthread_mutex_t.\\n\");\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - POSIX Threads (pthreads)\n\n```bash\ngcc -pthread main.c -o thread_app\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "15-debugging-and-sanitizers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n#include <assert.h>\n\nint add(int a, int b) { return a + b; }\n\nint main(void) {\n    printf(\"=== 15: Debugging, Assertions & AddressSanitizer ===\\n\");\n    assert(add(2, 3) == 5);\n    printf(\"Assertion passed!\\n\");\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Debugging & AddressSanitizer\n\n```bash\ngcc -fsanitize=address,undefined -g main.c -o debug_app\n./debug_app\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "16-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.c",
+            "type": "file",
+            "content": "#include <stdio.h>\n\nint main(void) {\n    printf(\"=====================================================\\n\");\n    printf(\"🎯 16: High-Yield C Interview Questions & Memory Traps\\n\");\n    printf(\"=====================================================\\n\");\n    printf(\"1. Memory Layout: Text (code), Data (init globals), BSS (uninit globals), Heap, Stack.\\n\");\n    printf(\"2. Pointer Arithmetic: Advances by sizeof(T) bytes per increment.\\n\");\n    printf(\"3. Struct Padding: Aligns data to CPU word boundaries (#pragma pack(1) disables it).\\n\");\n    printf(\"4. Dangling Pointers: Pointer pointing to freed/out-of-scope stack memory.\\n\");\n    printf(\"5. volatile keyword: Prevents compiler caching memory-mapped registers into CPU cache.\\n\");\n    printf(\"\\n🚀 You have completed the complete C Systems Mastery curriculum!\\n\");\n    return 0;\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - High-Yield C Interview Questions 🎯\n"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "id": "os/windows",
+  "name": "Windows Systems & PowerShell Administration",
+  "version": "1.0.0",
+  "description": "Comprehensive Windows & PowerShell curriculum from Windows NT kernel architecture, Registry, and NTFS ACLs to Event Logs, WinRM remoting, WSL2, CIM/WMI, and Sysinternals",
+  "root": {
+    "name": "windows-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🪟 Complete Windows Systems & PowerShell Administration Track\n\nWelcome to your full Windows learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-windows-architecture` | **Kernel & NT Architecture** | Windows NT Kernel (User vs Kernel mode), Executive Services, HAL, `$PSVersionTable` |\n| `01-powershell-cmdlets-and-pipeline`| **PowerShell Object Pipeline** | Verb-Noun cmdlets, object pipeline vs text streaming, `Get-Member`, `Where-Object` |\n| `02-filesystem-and-psdrives` | **PSDrives & Filesystem** | `%SystemRoot%`, `%AppData%`, PSDrives (`HKLM:`, `Cert:`, `Env:`), `Get-ChildItem` |\n| `03-registry-internals-and-management` | **Windows Registry** | Hives (`HKLM`, `HKCU`), `Get-ItemProperty`, `Set-ItemProperty`, `reg.exe` |\n| `04-process-and-service-management` | **Processes & Services** | `Get-Process`, `Stop-Process`, Windows Services (`Get-Service`, `sc.exe`) |\n| `05-windows-event-logs-and-auditing`| **Event Logs & Auditing** | Event Viewer channels (Security, System), `Get-WinEvent`, XPath queries, Event IDs |\n| `06-user-and-group-management` | **Users & SIDs** | Local accounts vs Domain accounts, SIDs, UAC, `Get-LocalUser`, `New-LocalUser` |\n| `07-ntfs-permissions-and-icacls` | **NTFS ACLs & Security** | DACLs, NTFS inheritance, `Get-Acl`, `Set-Acl`, `icacls.exe`, Alternate Data Streams |\n| `08-windows-networking-and-firewall`| **Networking & Firewall** | `Get-NetIPAddress`, `Test-NetConnection`, `Get-NetTCPConnection`, Windows Firewall rules |\n| `09-scheduled-tasks-and-cim-wmi` | **Tasks & CIM/WMI** | Windows Task Scheduler (`Register-ScheduledTask`), `Get-CimInstance` hardware queries |\n| `10-package-management-winget` | **Package Management** | `winget` CLI, Chocolatey, Scoop, PowerShell Gallery modules |\n| `11-wsl2-architecture-and-usage` | **WSL2 Architecture** | WSL2 lightweight Hyper-V VM, `/mnt/c/` filesystem interop, `wsl --install` |\n| `12-remote-management-winrm` | **WinRM & PSRemoting** | `Enable-PSRemoting`, `Enter-PSSession`, `Invoke-Command`, JEA security |\n| `13-hyper-v-and-windows-sandbox` | **Virtualization** | Type-1 Hypervisor, Windows Sandbox, Virtual Switches (External/Internal) |\n| `14-powershell-scripting-automation`| **Advanced Scripting** | `[CmdletBinding()]`, parameter validation, `try`/`catch`, `$ErrorActionPreference` |\n| `15-sysinternals-and-diagnostics` | **Sysinternals Suite** | Process Explorer, ProcMon, Sysmon, Autoruns, live kernel diagnostics |\n| `16-active-directory-and-gpo` | **Active Directory & GPO**| Domain Controllers, OUs, Group Policy Objects (`gpupdate /force`, `gpresult /r`) |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 Windows SysAdmin & DevOps interview questions & troubleshooting drills |\n\n---\n\n## 🛠️ Quick Commands\n\nCheck Windows & PowerShell info:\n```powershell\n$PSVersionTable\nGet-ComputerInfo | Select-Object WindowsProductName, WindowsVersion, TotalPhysicalMemory\n```\n"
+      },
+      {
+        "name": "00-setup-and-windows-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "sysinfo.ps1",
+            "type": "file",
+            "content": "Write-Host \"=====================================================\" -ForegroundColor Cyan\nWrite-Host \"🪟 00 - Windows Architecture & PowerShell Environment\"\nWrite-Host \"=====================================================\"\n$PSVersionTable\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Windows NT Architecture & PowerShell 🛠️\n\n### Windows Architecture Layers:\n- **User Mode**: Subsystems (Win32, POSIX, WSL), user applications, service processes.\n- **Kernel Mode**: Executive Services (Object Manager, Process/Thread Manager, Memory Manager), Kernel, Hardware Abstraction Layer (HAL), device drivers.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-powershell-cmdlets-and-pipeline",
+        "type": "directory",
+        "children": [
+          {
+            "name": "pipeline_demo.ps1",
+            "type": "file",
+            "content": "# Objects flowing through pipeline (not plain text strings)\nGet-Process | Where-Object WorkingSet64 -gt 100MB | Select-Object Name, Id, @{Name='RAM(MB)'; Expression={[math]::Round($_.WorkingSet64 / 1MB, 2)}} | Sort-Object 'RAM(MB)' -Descending | Select-Object -First 5\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - PowerShell Object Pipeline\n\nUnlike Linux Bash (which passes text streams), PowerShell passes **structured .NET objects** down the pipeline `|`, enabling type-safe property inspection with `Get-Member`.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-filesystem-and-psdrives",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - PSDrives & Navigation\n\nPowerShell treats filesystems, environment variables, certificates, and the registry uniformly as **PSDrives**:\n```powershell\nGet-PSDrive\nSet-Location HKLM:\\Software\nSet-Location Env:\nSet-Location Cert:\\LocalMachine\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-registry-internals-and-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "registry.ps1",
+            "type": "file",
+            "content": "# Query Windows CurrentVersion info from registry\nGet-ItemProperty -Path \"HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\" -Name ProductName, CurrentBuildNumber\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Windows Registry Architecture\n\n- `HKLM (HKEY_LOCAL_MACHINE)`: System-wide settings.\n- `HKCU (HKEY_CURRENT_USER)`: Logged-in user profile preferences.\n"
+          }
+        ]
+      },
+      {
+        "name": "04-process-and-service-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "services.ps1",
+            "type": "file",
+            "content": "# List running services related to network\nGet-Service | Where-Object { $_.Status -eq 'Running' -and $_.Name -like '*net*' }\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Processes & Windows Services (SvcHost)\n"
+          }
+        ]
+      },
+      {
+        "name": "05-windows-event-logs-and-auditing",
+        "type": "directory",
+        "children": [
+          {
+            "name": "events.ps1",
+            "type": "file",
+            "content": "# Fetch last 5 error events from System log\nGet-WinEvent -FilterHashtable @{LogName='System'; Level=2} -MaxEvents 5 | Select-Object TimeCreated, Id, ProviderName, Message\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Windows Event Logs & Security Auditing\n\n### Essential Security Event IDs:\n- **`4624`**: Successful logon.\n- **`4625`**: Failed logon (Brute-force indicator).\n- **`4672`**: Special privileges assigned to new logon.\n- **`7036`**: Service entered a stopped or started state.\n"
+          }
+        ]
+      },
+      {
+        "name": "06-user-and-group-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Users, Groups & Security Identifiers (SIDs)\n\n```powershell\n# List local administrators group members\nGet-LocalGroupMember -Group \"Administrators\"\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "07-ntfs-permissions-and-icacls",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - NTFS File Permissions & icacls\n\n```powershell\n# View access control list of a directory\nGet-Acl -Path C:\\Windows | Format-List\n\n# Grant Full Control to a user with icacls\nicacls \"C:\\Data\" /grant:r \"DomainUsers:(OI)(CI)F\" /T\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "08-windows-networking-and-firewall",
+        "type": "directory",
+        "children": [
+          {
+            "name": "networking.ps1",
+            "type": "file",
+            "content": "# Test port connectivity (equivalent to nc / telnet)\nTest-NetConnection -ComputerName \"google.com\" -Port 443\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Networking & Windows Defender Firewall\n\n```powershell\n# Open TCP port 8080 in Windows Firewall\nNew-NetFirewallRule -DisplayName \"Allow App 8080\" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "09-scheduled-tasks-and-cim-wmi",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Scheduled Tasks & CIM Hardware Queries\n\n```powershell\n# Query physical disk information via CIM\nGet-CimInstance -ClassName Win32_LogicalDisk | Select-Object DeviceID, FileSystem, FreeSpace, Size\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "10-package-management-winget",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Package Management with WinGet\n\n```powershell\nwinget search git\nwinget install --id Git.Git -e --source winget\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "11-wsl2-architecture-and-usage",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Windows Subsystem for Linux (WSL2)\n\nWSL2 runs a genuine Linux kernel inside a lightweight utility VM on top of Hyper-V technology with full dynamic memory allocation.\n\n```powershell\nwsl --list --verbose\nwsl --set-default-version 2\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "12-remote-management-winrm",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - WinRM & PowerShell Remoting\n\n```powershell\n# Execute commands across remote servers concurrently\nInvoke-Command -ComputerName \"Server01\", \"Server02\" -ScriptBlock {\n    Get-Service -Name \"w3svc\"\n}\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "13-hyper-v-and-windows-sandbox",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Hyper-V Virtualization & Sandbox\n"
+          }
+        ]
+      },
+      {
+        "name": "14-powershell-scripting-automation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "CustomTool.ps1",
+            "type": "file",
+            "content": "function Invoke-TrakBackup {\n    [CmdletBinding()]\n    param (\n        [Parameter(Mandatory = $true)]\n        [ValidateNotNullOrEmpty()]\n        [string]$SourcePath,\n\n        [Parameter(Mandatory = $false)]\n        [string]$DestinationPath = \"$env:TEMP\\TrakBackup\"\n    )\n\n    try {\n        Write-Verbose \"Creating destination folder: $DestinationPath\"\n        New-Item -ItemType Directory -Path $DestinationPath -Force | Out-Null\n        Copy-Item -Path \"$SourcePath\\*\" -Destination $DestinationPath -Recurse -Force\n        Write-Host \"[SUCCESS] Backup completed successfully to: $DestinationPath\" -ForegroundColor Green\n    }\n    catch {\n        Write-Error \"[ERROR] Backup failed: $($_.Exception.Message)\"\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Advanced PowerShell Functions & Error Handling\n"
+          }
+        ]
+      },
+      {
+        "name": "15-sysinternals-and-diagnostics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Sysinternals Suite & Troubleshooting\n\n- **Process Explorer**: Advanced Task Manager with DLL handles, thread stacks, and GPU graphs.\n- **Process Monitor (ProcMon)**: Real-time file system, Registry, and thread activity monitor.\n- **Autoruns**: Comprehensive view of auto-starting locations and services.\n"
+          }
+        ]
+      },
+      {
+        "name": "16-active-directory-and-gpo",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Active Directory & Group Policy (GPO)\n\n```powershell\n# Force immediate group policy refresh\ngpupdate /force\n\n# Generate GPO applied policy report\ngpresult /r\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield Windows & PowerShell Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Object Pipeline vs Text Stream**: PowerShell passes strongly-typed .NET objects rather than unstructured raw byte/text strings.\n2. **NTFS Permissions vs Share Permissions**: Most restrictive permission applies when accessing files over the network.\n3. **WinRM (5985/5986)**: Standard remote management protocol for PowerShell remoting.\n4. **WSL2 vs WSL1**: WSL1 translates system calls on Windows NT kernel; WSL2 runs a real Linux kernel in a lightweight Hyper-V container.\n5. **Event ID 4625**: Crucial for tracking failed authentication attempts and brute-force attacks in SIEM environments.\n\n🚀 You have completed the complete Windows Systems & PowerShell Administration track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "id": "tool/git",
+  "name": "Git & Version Control Engineering Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive Git curriculum from object internals (Blobs, Trees, Commits) and Three Trees staging to interactive rebasing, Worktrees, Reflog disaster recovery, Bisect debugging, and Trunk-Based workflows",
+  "root": {
+    "name": "git-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": ".gitignore",
+        "type": "file",
+        "content": "# Prerequisites\n*.log\n*.tmp\n.DS_Store\nThumbs.db\n\n# Build outputs\nnode_modules/\ndist/\nbin/\nobj/\ntarget/\n\n# Environment & secrets\n.env\n.env.local\n*.pem\n*.key\n"
+      },
+      {
+        "name": ".gitattributes",
+        "type": "file",
+        "content": "# Auto-detect text files and normalize line endings to LF\n* text=auto eol=lf\n\n# Binary files\n*.png binary\n*.jpg binary\n*.zip binary\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🌿 Complete Git & Version Control Engineering Track\n\nWelcome to your full Git learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-git-internals` | **Git Object Model** | `.git/` anatomy, Content-Addressable Storage (Blobs, Trees, Commits, Tags), SHA-1/SHA-256 |\n| `01-three-trees-and-staging-lifecycle` | **The Three Trees** | Working Directory, Index (Staging), Commit History, `git add -p`, `git status` |\n| `02-commit-mechanics-and-history` | **Atomic Commits & Log**| Conventional commits, `git commit --amend`, `git log --graph --oneline`, `git diff --staged` |\n| `03-branching-and-pointer-mechanics`| **Branch Pointers** | Branches as 41-byte pointers in `refs/heads/`, `git switch -c`, Detached HEAD |\n| `04-merging-fast-forward-vs-three-way`| **Merging Strategies**| Fast-Forward vs 3-Way merge, merge conflicts, `git merge --abort` |\n| `05-rebasing-interactive-and-squash` | **Interactive Rebasing**| `git rebase -i HEAD~N` (squash, fixup, reword), The Golden Rule of Rebasing |\n| `06-stashing-and-worktrees` | **Stashing & Worktrees**| `git stash pop`, `git worktree add` (parallel branch workspaces without switching) |\n| `07-undoing-changes-reset-revert` | **Undoing History** | `git restore`, `git reset` (--soft, --mixed, --hard), `git revert` (safe public undo) |\n| `08-reflog-and-disaster-recovery` | **Reflog Recovery** | `git reflog`, recovering deleted branches and commits after `reset --hard` |\n| `09-cherry-picking-and-bisect` | **Cherry-Pick & Bisect**| `git cherry-pick`, Binary search bug hunting with `git bisect run` |\n| `10-remotes-tracking-and-upstream` | **Remotes & Push Safety**| `git fetch` vs `git pull --rebase`, `git push --force-with-lease` |\n| `11-tagging-and-semantic-versioning`| **Semantic Tagging** | Lightweight vs Annotated tags (`git tag -a`), SemVer (`MAJOR.MINOR.PATCH`) |\n| `12-submodules-and-subtrees` | **Submodules & Subtrees**| `.gitmodules`, `git submodule update --init --recursive`, nested repos |\n| `13-git-hooks-and-automation` | **Git Hooks Automation**| Client-side hooks (`pre-commit`, `commit-msg`), Husky integration |\n| `14-git-attributes-and-lfs` | **Attributes & Git LFS**| `.gitattributes`, line-ending LF normalization, Large File Storage (LFS) |\n| `15-gpg-signing-and-commit-security`| **Cryptographic Signing**| GPG / SSH commit signing, `git commit -S`, GitHub Verified commits |\n| `16-advanced-workflows-trunk-based` | **Branching Workflows** | Trunk-Based Development vs GitHub Flow vs GitFlow, PR review strategies |\n| `17-interview-questions-and-drills` | **Interview Master Drill**| Top 10 Git interview questions, resolving detached HEAD, and rebase disasters |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Inspect Git commit graph:\ngit log --graph --oneline --decorate --all\n\n# Safe force push:\ngit push --force-with-lease\n```\n"
+      },
+      {
+        "name": "00-setup-and-git-internals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "setup.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🌿 00 - Git Global Configuration & Environment Check\"\necho \"=====================================================\"\ngit --version\necho \"\"\ngit config --global init.defaultBranch main\ngit config --global pull.rebase true\ngit config --global core.autocrlf input\necho \"✔ Standard Git configuration initialized.\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Git Object Model & Internals 🛠️\n\n### Git's 4 Core Object Types in `.git/objects/`:\n1. **Blob**: Stores raw file content (indexed by SHA-1/SHA-256 hash; does NOT store filename or permissions!).\n2. **Tree**: Directory structure containing list of blobs/trees with filenames and mode permissions.\n3. **Commit**: Points to a root Tree, parent commit(s), author, committer, and commit message.\n4. **Tag**: Annotated reference pointing to a specific commit object with a message and GPG signature.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-three-trees-and-staging-lifecycle",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - The Three Trees Architecture\n\n```\n┌────────────────────────┐       ┌──────────────────────┐       ┌──────────────────────┐\n│   Working Directory    │ ────► │     Staging Area     │ ────► │    Git Repository    │\n│ (Your actual files)    │ <git  │ (Index - Binary Map) │ <git  │ (Immutable Commits)  │\n│                        │ add>  │                      │ commit│                      │\n└────────────────────────┘       └──────────────────────┘       └──────────────────────┘\n```\n\n```bash\n# Stage individual hunks/patches interactively\ngit add -p\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "02-commit-mechanics-and-history",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Commit Mechanics & Conventional Commits\n\n### Conventional Commit Format:\n```\n<type>(<optional scope>): <description>\n\n[optional body]\n\n[optional footer(s)]\n```\nTypes: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`.\n\n```bash\n# Amend the most recent commit without changing message\ngit commit --amend --no-edit\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-branching-and-pointer-mechanics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Branching & HEAD Pointer Mechanics\n\nA Git branch is **not a container of commits**; it is simply a 41-byte text file in `.git/refs/heads/<branch>` containing the 40-character SHA hash of its tip commit!\n\n```bash\n# Modern switch command\ngit switch -c feature/new-api\n\n# Return to previous branch\ngit switch -\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "04-merging-fast-forward-vs-three-way",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Merging Strategies\n\n- **Fast-Forward Merge**: Simply advances branch pointer forward when target branch has no divergent commits.\n- **3-Way Merge (ORT Merge Engine)**: Creates a new merge commit with 2 parents by finding the Common Ancestor (Base).\n\n```bash\n# Force a merge commit even if fast-forward is possible\ngit merge --no-ff feature/auth\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "05-rebasing-interactive-and-squash",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Interactive Rebasing & Squashing\n\nRebasing replays a series of commits on top of a new base commit, creating a clean linear commit history.\n\n```bash\n# Rebase last 3 commits interactively\ngit rebase -i HEAD~3\n\n# Auto-squash fixup commits\ngit commit --fixup <commit-hash>\ngit rebase -i --autosquash <base-branch>\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "06-stashing-and-worktrees",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Git Worktrees (Zero Context-Switching)\n\nInstead of stashing changes and switching branches, **Git Worktrees** allow checking out multiple branches simultaneously into separate directories:\n\n```bash\n# Check out hotfix branch in a parallel folder\ngit worktree add ../hotfix-worktree hotfix/urgent-bug\n\n# List active worktrees\ngit worktree list\n\n# Remove worktree when finished\ngit worktree remove ../hotfix-worktree\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "07-undoing-changes-reset-revert",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Reset vs Revert vs Restore\n\n| Command | Working Dir | Staging Area | History / HEAD | Safe on Public Branches? |\n| :--- | :--- | :--- | :--- | :--- |\n| **`git restore <file>`** | Discards edits | Untouched | Untouched | **Yes** |\n| **`git reset --soft HEAD~1`** | Preserves edits | Preserves edits | Moves HEAD back 1 commit | **No** (Local only) |\n| **`git reset --mixed HEAD~1`**| Preserves edits | Unstages edits | Moves HEAD back 1 commit | **No** (Local only) |\n| **`git reset --hard HEAD~1`** | **Wipes edits** | **Wipes edits** | Moves HEAD back 1 commit | **No** (Dangerous!) |\n| **`git revert <commit>`** | Clean apply | Clean apply | **Appends new inverse commit** | **YES (Recommended)** |\n"
+          }
+        ]
+      },
+      {
+        "name": "08-reflog-and-disaster-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - The Reflog: Git's Safety Net\n\nThe Reference Log (`git reflog`) tracks every single movement of `HEAD` for 90 days, enabling recovery of deleted branches and commits even after `git reset --hard`.\n\n```bash\n# 1. View reflog history\ngit reflog\n\n# 2. Restore deleted branch from its last HEAD position\ngit branch restored-feature HEAD@{2}\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "09-cherry-picking-and-bisect",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Git Bisect Automated Bug Hunting\n\n`git bisect` uses binary search to pinpoint the exact commit that introduced a regression among thousands of commits:\n\n```bash\ngit bisect start\ngit bisect bad                 # Current HEAD is broken\ngit bisect good v1.0.0         # v1.0.0 was working\n\n# Automated bisect testing:\ngit bisect run npm test\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "10-remotes-tracking-and-upstream",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Remotes & Safe Force Pushing\n\nNever use raw `git push --force` because it will overwrite teammates' commits. Always use:\n```bash\ngit push --force-with-lease\n```\nThis verifies that nobody else has pushed commits to the remote branch before overwriting.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-tagging-and-semantic-versioning",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Semantic Versioning & Tags\n\n```bash\n# Create annotated, GPG-signed release tag\ngit tag -s v2.0.0 -m \"Release v2.0.0 - Major Architecture Upgrade\"\n\n# Push tag to remote\ngit push origin v2.0.0\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "12-submodules-and-subtrees",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Git Submodules & Subtrees\n\n```bash\n# Clone a repository with all nested submodules\ngit clone --recurse-submodules <url>\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "13-git-hooks-and-automation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "pre-commit.sample",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\n# pre-commit hook: Run linter before allowing commit\necho \"[Git Hook] Running static analysis checks...\"\n# npm run lint || exit 1\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Git Hooks Automation\n"
+          }
+        ]
+      },
+      {
+        "name": "14-git-attributes-and-lfs",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Git LFS (Large File Storage)\n\n```bash\n# Track large binary datasets\ngit lfs track \"*.iso\"\ngit lfs track \"*.weights\"\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "15-gpg-signing-and-commit-security",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - GPG & SSH Commit Signing\n\n```bash\n# Configure SSH-based commit signing in Git 2.34+\ngit config --global gpg.format ssh\ngit config --global user.signingkey ~/.ssh/id_ed25519.pub\ngit config --global commit.gpgsign true\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "16-advanced-workflows-trunk-based",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Trunk-Based Development vs GitFlow\n\n- **Trunk-Based Development**: Short-lived feature branches (< 1-2 days) merged frequently into `main` behind feature flags. Recommended for modern CI/CD.\n- **GitFlow**: Long-lived `develop`, `release/*`, `hotfix/*`, and `main` branches with heavy merge gates.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield Git & Version Control Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Git Object Model**: Blobs store file data, Trees store directory hierarchies and filenames, Commits link trees with metadata and parent hashes.\n2. **Rebase vs Merge**: Merge preserves full non-linear historical context with 2-parent commits; Rebase produces a clean, linear commit log by replaying commits on top of the target base.\n3. **Reset vs Revert**: `reset` rewrites commit history locally; `revert` creates a new inverse commit preserving complete audit history on public branches.\n4. **Worktrees**: Allows working on multiple branches simultaneously across separate directory trees without switching or stashing.\n5. **--force-with-lease**: Safe atomic force-push that checks if remote branch tip matches our local tracking ref before overwriting.\n\n🚀 You have completed the complete Git & Version Control Engineering track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

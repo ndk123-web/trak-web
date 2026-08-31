@@ -1,0 +1,374 @@
+{
+  "id": "lang/rust",
+  "name": "Rust Systems Mastery Track",
+  "version": "1.0.0",
+  "description": "Complete end-to-end Rust curriculum from rustup & cargo, ownership, borrowing, and lifetimes to traits, smart pointers, Tokio async, Axum web backend, SQLx, and concurrency",
+  "root": {
+    "name": "rust-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "Cargo.toml",
+        "type": "file",
+        "content": "[package]\nname = \"rust-workspace\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🦀 Complete Rust Systems Mastery Track\n\nWelcome to your full Rust learning workspace initialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics |\n| :--- | :--- | :--- |\n| `00-setup-and-cargo-toolchain` | **Setup & Toolchain** | `rustup`, `cargo`, `rustc`, toolchain components (`clippy`, `rustfmt`) |\n| `01-basics-and-variables` | **Basics & Variables** | Immutability by default, `mut`, `const`, `static`, variable shadowing |\n| `02-data-types-and-memory` | **Data Types & Memory** | Primitives, Tuples, Stack-allocated Arrays, scalar types |\n| `03-strings-and-slices` | **Strings & Slices** | `String` (Heap) vs `&str` (Fat Pointer), slice references `&[T]` |\n| `04-control-flow-pattern-matching` | **Control Flow** | `if` expressions, `loop` with break value, exhaustive `match`, `if let`, `let else` |\n| `05-functions-and-closures` | **Functions & Closures** | Pure functions, `Fn`, `FnMut`, `FnOnce`, `move` closures |\n| `06-ownership-borrowing-lifetimes` | **Ownership & Lifetimes** | Move semantics, Copy vs Clone, Aliasing XOR Mutability (`&` vs `&mut`), Lifetimes `'a` |\n| `07-structs-enums-methods` | **Structs & Enums** | Named structs, tuple structs, unit structs, enum payloads, `impl` blocks |\n| `08-traits-and-generics` | **Traits & Generics** | Trait definitions, trait bounds, Static (`impl Trait`) vs Dynamic dispatch (`dyn Trait`) |\n| `09-collections-and-iterators` | **Collections & Iterators** | `Vec<T>`, `HashMap<K, V>`, `BTreeMap`, lazy iterators: `map`, `filter`, `fold` |\n| `10-error-handling-custom-errors` | **Error Architecture** | `Option<T>`, `Result<T, E>`, `?` carrier operator, custom error enums |\n| `11-smart-pointers-interior-mutability` | **Smart Pointers** | `Box<T>`, `Rc<T>`, `Arc<T>`, `RefCell<T>`, `Mutex<T>`, interior mutability |\n| `12-modules-packages-imports` | **Modules & Crates** | Modern 2018+ module tree, `pub(crate)`, re-exports `pub use` |\n| `13-attributes-and-serde` | **Attributes & Serde** | Derive macros, JSON serialization/deserialization with `serde` |\n| `14-async-rust-and-tokio` | **Async & Tokio** | `async`/`await`, `Future` trait, `tokio::spawn`, async channels `mpsc` |\n| `15-backend-web-with-axum` | **Axum Web Framework** | Routing, State extractors, JSON response handlers, middleware |\n| `16-database-access-with-sqlx` | **Database with SQLx** | Async connection pool, compile-time query verification |\n| `17-cli-applications-file-io` | **CLI & File I/O** | `std::fs`, `BufReader`/`BufWriter`, command-line arguments |\n| `18-multithreading-concurrency` | **Multithreading** | `std::thread`, message passing `mpsc`, shared state `Arc<Mutex<T>>` |\n| `19-testing-benchmarking-tooling` | **Testing & Quality** | `#[test]`, `#[should_panic]`, integration tests, `cargo clippy` |\n| `20-unsafe-rust-and-ffi` | **Unsafe & FFI** | Raw pointers (`*const T`, `*mut T`), `unsafe` blocks, C FFI binding |\n| `21-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield Rust questions with runnable explanations |\n\n---\n\n## 🛠️ Run Any Module\n```bash\ncd 00-setup-and-cargo-toolchain\ncargo run\n# or\nrustc main.rs && ./main\n```\n"
+      },
+      {
+        "name": "00-setup-and-cargo-toolchain",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=====================================================\");\n    println!(\"🦀 Welcome to 00 - Rust Setup & Toolchain Check!\");\n    println!(\"=====================================================\");\n    println!(\"✔ Rust compiler (rustc) and Cargo build system are ready!\");\n    println!(\"👉 Next: Head over to 01-basics-and-variables/main.rs\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Rust Setup & Installation Guide 🛠️\n\n## 1. What is Rust?\nRust is a modern systems programming language focusing on safety, speed, and concurrency without requiring a garbage collector.\n\n---\n\n## 2. Installing Rust via `rustup` (Official)\n\n### 🪟 Windows\n1. Download `rustup-init.exe` from [https://rustup.rs/](https://rustup.rs/).\n2. Requires Microsoft C++ Build Tools (Visual Studio).\n\n### 🍎 macOS & 🐧 Linux\nRun in terminal:\n```bash\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\nsource $HOME/.cargo/env\n```\n\n---\n\n## 3. Essential Toolchain Commands\n```bash\nrustc --version\ncargo --version\nrustup update\nrustup component add clippy rustfmt\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "01-basics-and-variables",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "const MAX_CONNECTIONS: u32 = 10_000;\nstatic SERVER_NAME: &str = \"TRAK_RUST_CORE\";\n\nfn main() {\n    println!(\"=== 01: Basics, Immutability & Shadowing ===\");\n\n    // 1. Immutable by default\n    let x = 5;\n    println!(\"Immutable x = {x}\");\n\n    // 2. Mutable variable with 'mut'\n    let mut y = 10;\n    y += 5;\n    println!(\"Mutable y = {y}\");\n\n    // 3. Variable Shadowing (can change type)\n    let spaces = \"   \";\n    let spaces = spaces.len(); // Shadowed to usize!\n    println!(\"Shadowed spaces count = {spaces}\");\n\n    println!(\"Constants: MAX_CONNECTIONS={MAX_CONNECTIONS}, SERVER={SERVER_NAME}\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Basics & Variables\n\n- In Rust, variables are **immutable by default**.\n- `const` requires explicit type annotation and is evaluated at compile time.\n- **Shadowing** with `let` allows redeclaring a variable in the same scope.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-data-types-and-memory",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 02: Data Types & Stack Memory Layout ===\");\n\n    // Primitives\n    let integer: i32 = 42;\n    let float: f64 = 3.14159;\n    let boolean: bool = true;\n    let character: char = '🦀'; // 4 bytes (Unicode Scalar)\n\n    println!(\"Scalar Types: int={integer}, float={float}, bool={boolean}, char={character}\");\n\n    // Tuples\n    let tuple: (i32, f64, u8) = (500, 6.4, 1);\n    let (a, b, c) = tuple;\n    println!(\"Tuple: a={a}, b={b}, c={c}, indexed={}\", tuple.0);\n\n    // Fixed-size Stack-allocated Array\n    let arr: [i32; 5] = [1, 2, 3, 4, 5];\n    println!(\"Array on stack: len={}, first={}\", arr.len(), arr[0]);\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Data Types & Memory\n\n- `char` is **4 bytes** representing a full Unicode scalar value.\n- Arrays `[T; N]` are allocated directly on the **stack**.\n"
+          }
+        ]
+      },
+      {
+        "name": "03-strings-and-slices",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 03: String vs &str and Fat Pointers ===\");\n\n    // String: Heap allocated, owned, growable\n    let mut owned = String::from(\"Hello\");\n    owned.push_str(\", Rust Systems!\");\n\n    // &str: String slice (Fat pointer: [ptr, len])\n    let slice: &str = &owned[0..5];\n    println!(\"Owned String: {owned}\");\n    println!(\"Borrowed Slice: {slice}\");\n\n    // Array slice (&[T])\n    let nums = [10, 20, 30, 40, 50];\n    let num_slice: &[i32] = &nums[1..4]; // [20, 30, 40]\n    println!(\"Array slice: {:?}, len={}\", num_slice, num_slice.len());\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Strings & Slices\n\n- `String`: Owned heap buffer `(ptr, len, cap)` on stack.\n- `&str`: Borrowed view `(ptr, len)` into UTF-8 data.\n"
+          }
+        ]
+      },
+      {
+        "name": "04-control-flow-pattern-matching",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 04: Control Flow & Pattern Matching ===\");\n\n    // 1. if as an expression\n    let is_fast = true;\n    let speed = if is_fast { 100 } else { 20 };\n    println!(\"Speed: {speed}\");\n\n    // 2. loop with break value\n    let mut counter = 0;\n    let result = loop {\n        counter += 1;\n        if counter == 5 {\n            break counter * 10;\n        }\n    };\n    println!(\"Loop result: {result}\");\n\n    // 3. Exhaustive match\n    let number = 3;\n    match number {\n        1 => println!(\"One\"),\n        2 | 3 => println!(\"Two or Three\"),\n        4..=10 => println!(\"Between 4 and 10\"),\n        _ => println!(\"Something else\"),\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Control Flow & Pattern Matching\n\n- In Rust, `if` is an expression.\n- `match` branches must be exhaustive.\n"
+          }
+        ]
+      },
+      {
+        "name": "05-functions-and-closures",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 05: Functions & Closures (Fn, FnMut, FnOnce) ===\");\n\n    let factor = 2;\n    // Closure capturing environment by reference\n    let multiplier = |x: i32| x * factor;\n    println!(\"Closure result: {}\", multiplier(10));\n\n    // Move closure: takes ownership of captured values\n    let message = String::from(\"Rust\");\n    let consumer = move || println!(\"Consumed message: {message}\");\n    consumer();\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Functions & Closures\n\n- `Fn`: Borrows captured variables immutably.\n- `FnMut`: Borrows captured variables mutably.\n- `FnOnce`: Takes ownership of captured variables.\n"
+          }
+        ]
+      },
+      {
+        "name": "06-ownership-borrowing-lifetimes",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n\nfn main() {\n    println!(\"=== 06: Ownership, Borrowing & Lifetimes ===\");\n\n    // 1. Move Semantics\n    let s1 = String::from(\"hello\");\n    let s2 = s1; // s1 moved to s2! s1 is invalid now.\n    println!(\"Owned s2: {s2}\");\n\n    // 2. Borrowing: Aliasing XOR Mutability\n    let mut data = String::from(\"trak\");\n    {\n        let r1 = &data; // Immutable borrow\n        let r2 = &data; // Multiple immutable borrows OK\n        println!(\"Borrows: {r1}, {r2}\");\n    }\n\n    let r_mut = &mut data; // Exclusive mutable borrow\n    r_mut.push_str(\"-engine\");\n    println!(\"Mutated data: {r_mut}\");\n\n    // 3. Lifetimes\n    let str1 = \"short\";\n    let str2 = \"longer_string\";\n    println!(\"Longest: {}\", longest(str1, str2));\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Ownership, Borrowing & Lifetimes\n\n### The Golden Rule of Borrowing:\nAt any given time, you can have **either** one mutable reference `&mut T` **OR** any number of immutable references `&T`, but not both.\n"
+          }
+        ]
+      },
+      {
+        "name": "07-structs-enums-methods",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "enum Command {\n    Quit,\n    Move { x: i32, y: i32 },\n    Write(String),\n}\n\nstruct Player {\n    name: String,\n    health: u32,\n}\n\nimpl Player {\n    fn new(name: &str) -> Self {\n        Self { name: name.to_string(), health: 100 }\n    }\n\n    fn take_damage(&mut self, dmg: u32) {\n        self.health = self.health.saturating_sub(dmg);\n    }\n}\n\nfn main() {\n    println!(\"=== 07: Structs, Enums & Methods ===\");\n    let mut p = Player::new(\"Fighter\");\n    p.take_damage(30);\n    println!(\"Player '{}' Health: {}\", p.name, p.health);\n\n    let cmd = Command::Move { x: 10, y: 20 };\n    match cmd {\n        Command::Quit => println!(\"Quit command\"),\n        Command::Move { x, y } => println!(\"Move to ({x}, {y})\"),\n        Command::Write(msg) => println!(\"Message: {msg}\"),\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Structs, Enums & Methods\n"
+          }
+        ]
+      },
+      {
+        "name": "08-traits-and-generics",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "trait Summary {\n    fn summarize(&self) -> String;\n}\n\nstruct Article {\n    headline: String,\n}\n\nimpl Summary for Article {\n    fn summarize(&self) -> String {\n        format!(\"Article: {}\", self.headline)\n    }\n}\n\n// Static dispatch (monomorphization) with impl Trait\nfn notify(item: &impl Summary) {\n    println!(\"Notification: {}\", item.summarize());\n}\n\nfn main() {\n    println!(\"=== 08: Traits, Generics & Static vs Dynamic Dispatch ===\");\n    let a = Article { headline: String::from(\"Rust 2024 Edition Released!\") };\n    notify(&a);\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Traits & Generics\n\n- `impl Trait`: Static dispatch via monomorphization (zero runtime overhead).\n- `dyn Trait`: Dynamic dispatch via vtable fat pointers.\n"
+          }
+        ]
+      },
+      {
+        "name": "09-collections-and-iterators",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "use std::collections::HashMap;\n\nfn main() {\n    println!(\"=== 09: Collections & Functional Iterators ===\");\n\n    let mut map = HashMap::new();\n    map.insert(\"key1\", 100);\n    println!(\"Map entry: {:?}\", map.get(\"key1\"));\n\n    let nums = vec![1, 2, 3, 4, 5];\n    let sum_of_even_squares: i32 = nums\n        .iter()\n        .filter(|&&x| x % 2 == 0)\n        .map(|&x| x * x)\n        .sum();\n\n    println!(\"Sum of even squares: {sum_of_even_squares}\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Collections & Iterators\n"
+          }
+        ]
+      },
+      {
+        "name": "10-error-handling-custom-errors",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn divide(a: f64, b: f64) -> Result<f64, String> {\n    if b == 0.0 {\n        Err(String::from(\"Cannot divide by zero\"))\n    } else {\n        Ok(a / b)\n    }\n}\n\nfn calculate() -> Result<f64, String> {\n    let val = divide(10.0, 2.0)?;\n    Ok(val * 3.0)\n}\n\nfn main() {\n    println!(\"=== 10: Error Handling with Option & Result ===\");\n    match calculate() {\n        Ok(res) => println!(\"Calculation success: {res}\"),\n        Err(e) => println!(\"Error: {e}\"),\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Error Handling\n\n- `Option<T>` for nullable values (`Some(T)` or `None`).\n- `Result<T, E>` for recoverable errors (`Ok(T)` or `Err(E)`).\n- `?` operator unwraps `Ok` or returns early on `Err`.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-smart-pointers-interior-mutability",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "use std::rc::Rc;\nuse std::cell::RefCell;\n\nfn main() {\n    println!(\"=== 11: Smart Pointers (Box, Rc, RefCell) ===\");\n\n    // Box<T>: Heap allocation\n    let b = Box::new(42);\n    println!(\"Boxed value on heap: {b}\");\n\n    // Rc<RefCell<T>>: Shared reference with interior mutability\n    let shared = Rc::new(RefCell::new(10));\n    let clone1 = Rc::clone(&shared);\n    *clone1.borrow_mut() += 5;\n\n    println!(\"Shared mutable value: {}\", shared.borrow());\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Smart Pointers & Interior Mutability\n\n- `Box<T>`: Single owner on heap.\n- `Rc<T>` / `Arc<T>`: Reference counted multiple ownership (single-threaded / multithreaded).\n- `RefCell<T>` / `Mutex<T>`: Interior mutability with runtime borrow checks.\n"
+          }
+        ]
+      },
+      {
+        "name": "12-modules-packages-imports",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "mod network {\n    pub fn connect() {\n        println!(\"Connected to network service\");\n    }\n}\n\nfn main() {\n    println!(\"=== 12: Modules, Packages & Visibility ===\");\n    network::connect();\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Modules & Crates\n"
+          }
+        ]
+      },
+      {
+        "name": "13-attributes-and-serde",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "// Requires serde & serde_json in Cargo.toml\nfn main() {\n    println!(\"=== 13: Serde Serialization & Attributes ===\");\n    println!(\"Serde derive macros: #[derive(Serialize, Deserialize)]\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Attributes & Serde\n"
+          }
+        ]
+      },
+      {
+        "name": "14-async-rust-and-tokio",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "async fn async_task(id: u32) -> u32 {\n    id * 2\n}\n\nfn main() {\n    println!(\"=== 14: Async Rust & Tokio Runtime ===\");\n    println!(\"Async functions return anonymous types implementing Future trait\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Async Rust & Tokio\n"
+          }
+        ]
+      },
+      {
+        "name": "15-backend-web-with-axum",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 15: Backend Web Services with Axum ===\");\n    println!(\"Axum builds on top of Tokio, Tower, and Hyper with typed state extraction.\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Backend Web with Axum\n"
+          }
+        ]
+      },
+      {
+        "name": "16-database-access-with-sqlx",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 16: Database Access with SQLx ===\");\n    println!(\"SQLx provides async connection pooling and compile-time verified queries.\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Database Access with SQLx\n"
+          }
+        ]
+      },
+      {
+        "name": "17-cli-applications-file-io",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "use std::fs;\n\nfn main() {\n    println!(\"=== 17: CLI Applications & File I/O ===\");\n    let content = \"Trak Rust Curriculum\";\n    let _ = fs::write(\"test_output.txt\", content);\n    if let Ok(read) = fs::read_to_string(\"test_output.txt\") {\n        println!(\"Read file content: {read}\");\n        let _ = fs::remove_file(\"test_output.txt\");\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - CLI Applications & File I/O\n"
+          }
+        ]
+      },
+      {
+        "name": "18-multithreading-concurrency",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    println!(\"=== 18: Multithreading & Shared State ===\");\n\n    let counter = Arc::new(Mutex::new(0));\n    let mut handles = vec![];\n\n    for _ in 0..5 {\n        let counter_clone = Arc::clone(&counter);\n        let handle = thread::spawn(move || {\n            let mut num = counter_clone.lock().unwrap();\n            *num += 1;\n        });\n        handles.push(handle);\n    }\n\n    for h in handles {\n        h.join().unwrap();\n    }\n\n    println!(\"Final Counter: {}\", *counter.lock().unwrap());\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - Multithreading & Concurrency\n\n- `Arc<T>` allows multiple threads to share ownership.\n- `Mutex<T>` guarantees mutual exclusion.\n"
+          }
+        ]
+      },
+      {
+        "name": "19-testing-benchmarking-tooling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\nfn main() {\n    println!(\"Run tests with 'cargo test'\");\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn test_add() {\n        assert_eq!(add(2, 3), 5);\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 19 - Testing & Tooling\n\n```bash\ncargo test\ncargo clippy\ncargo fmt\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "20-unsafe-rust-and-ffi",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=== 20: Unsafe Rust & Raw Pointers ===\");\n    let mut num = 42;\n    let r1 = &num as *const i32;\n    let r2 = &mut num as *mut i32;\n\n    unsafe {\n        println!(\"Dereferencing raw pointer: {}\", *r1);\n        *r2 = 99;\n        println!(\"Mutated via raw pointer: {}\", *r2);\n    }\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 20 - Unsafe Rust & FFI\n\n- Raw pointers `*const T` and `*mut T` ignore borrow checker rules.\n- Dereferencing raw pointers requires an `unsafe` block.\n"
+          }
+        ]
+      },
+      {
+        "name": "21-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "main.rs",
+            "type": "file",
+            "content": "fn main() {\n    println!(\"=====================================================\");\n    println!(\"🎯 21: High-Yield Rust Interview Questions & Reality Check\");\n    println!(\"=====================================================\");\n    println!(\"1. Ownership rules: Each value has a single owner, dropped when out of scope.\");\n    println!(\"2. Aliasing XOR Mutability: &T (many) OR &mut T (one), never both.\");\n    println!(\"3. String vs &str: Owned growable heap buffer vs fat pointer view.\");\n    println!(\"4. Smart pointers: Box (heap), Rc/Arc (ref count), RefCell/Mutex (interior mut).\");\n    println!(\"5. Zero-cost abstractions: Monomorphization compiles generics to concrete machine code.\");\n    println!(\"\\n🚀 You have completed the complete Rust Systems mastery track!\");\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 21 - High-Yield Rust Interview Questions 🎯\n"
+          }
+        ]
+      }
+    ]
+  }
+}

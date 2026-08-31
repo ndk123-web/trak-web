@@ -1,0 +1,311 @@
+{
+  "id": "tool/k8s",
+  "name": "Kubernetes & Cloud-Native Architecture",
+  "version": "1.0.0",
+  "description": "Comprehensive Kubernetes (CKA/CKAD) curriculum from control plane internals, Pods, and Deployments to Services, Ingress, StatefulSets, Storage, RBAC, NetworkPolicies, Helm, and Operators",
+  "root": {
+    "name": "k8s-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# ☸️ Complete Kubernetes (K8s) & Cloud-Native Architecture Track\n\nWelcome to your full Kubernetes learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-cluster-architecture` | **Cluster Architecture** | Control Plane (API server, etcd, scheduler, controller-mgr), Worker Nodes (kubelet, kube-proxy, CRI), `kubectl` |\n| `01-pods-and-lifecycle` | **Pods & Sidecars** | Pod manifests, init containers, sidecars, lifecycle phases (Pending, Running, CrashLoopBackOff) |\n| `02-replica-sets-and-deployments` | **Deployments & Rollouts** | RollingUpdate vs Recreate, maxSurge, maxUnavailable, rollbacks (`kubectl rollout undo`) |\n| `03-services-and-networking` | **Services & Discovery** | ClusterIP, NodePort, LoadBalancer, ExternalName, kube-proxy iptables/IPVS, CoreDNS discovery |\n| `04-ingress-and-gateway-api` | **Ingress & Gateway** | Ingress Controllers (NGINX/Traefik), TLS termination, Cert-Manager, Gateway API |\n| `05-configmaps-and-secrets` | **Configuration & Secrets** | ConfigMaps, Opaque/TLS Secrets, base64 vs encryption-at-rest, external secret stores |\n| `06-storage-pv-pvc-storageclasses` | **Persistent Storage** | StorageClasses, Dynamic Volume Provisioning, PVs, PVCs, access modes (RWO, RWX) |\n| `07-statefulsets-and-headless-services` | **Stateful Workloads** | StatefulSets (Postgres/Kafka), deterministic hostnames (`pod-0`), headless services (`clusterIP: None`) |\n| `08-daemonsets-and-jobs` | **DaemonSets & CronJobs** | DaemonSets (node agents), run-to-completion Jobs, scheduled CronJobs |\n| `09-health-probes-and-lifecycle-hooks` | **Health Probes** | LivenessProbe, ReadinessProbe, StartupProbe, preStop graceful shutdown hooks |\n| `10-resource-management-and-qos` | **Resource Requests & Limits**| CPU/Memory requests & limits, QoS classes (Guaranteed, Burstable, BestEffort), OOMKilled |\n| `11-autoscaling-hpa-vpa-keda` | **Autoscaling** | Horizontal Pod Autoscaler (HPA), Metrics Server, Vertical Pod Autoscaler (VPA), KEDA |\n| `12-scheduling-taints-tolerations-affinity` | **Advanced Scheduling** | NodeSelector, NodeAffinity, PodAntiAffinity (topologyKey), Taints & Tolerations |\n| `13-security-rbac-serviceaccounts` | **RBAC & Authorization** | ServiceAccounts, Roles, RoleBindings, ClusterRoles, ClusterRoleBindings, least privilege |\n| `14-network-policies-and-cni` | **NetworkPolicies & CNI** | Ingress/Egress firewall rules, default-deny all, CNI plugins (Calico, Cilium eBPF) |\n| `15-helm-package-management` | **Helm Chart Mastery** | Chart anatomy, `values.yaml`, Go template functions, `helm install/upgrade/rollback` |\n| `16-crds-and-operator-pattern` | **CRDs & Operators** | Custom Resource Definitions, reconciliation control loop, Kubebuilder / Operator SDK |\n| `17-monitoring-logging-observability` | **Observability** | Prometheus, Grafana, OpenTelemetry, Fluentbit/Loki, `kubectl top` |\n| `18-interview-questions-and-drills` | **CKA/CKAD Master Drill** | Top 10 high-yield Kubernetes interview scenarios & troubleshooting commands |\n\n---\n\n## 🛠️ Quick Commands\n\nApply manifests using `kubectl`:\n```bash\nkubectl apply -f 02-replica-sets-and-deployments/deployment.yaml\nkubectl get pods -w\n```\n"
+      },
+      {
+        "name": "00-setup-and-cluster-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Kubernetes Cluster Architecture 🛠️\n\n### 1. Control Plane Components:\n- **kube-apiserver**: Front door of the cluster; exposes the Kubernetes REST API.\n- **etcd**: Consistent, highly-available distributed key-value store for all cluster state.\n- **kube-scheduler**: Watches for unscheduled Pods and selects nodes based on resources and affinity.\n- **kube-controller-manager**: Runs core controllers (NodeController, DeploymentController, ReplicaSetController).\n- **cloud-controller-manager**: Integrates with cloud provider APIs (LoadBalancers, routing, storage).\n\n### 2. Worker Node Components:\n- **kubelet**: Agent running on each node ensuring containers are running in Pods as described by PodSpecs.\n- **kube-proxy**: Maintains network routing rules on nodes (iptables/IPVS) for Service traffic.\n- **Container Runtime (CRI)**: `containerd` / `CRI-O` executing container images.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-pods-and-lifecycle",
+        "type": "directory",
+        "children": [
+          {
+            "name": "pod.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: app-pod\n  labels:\n    app: web\nspec:\n  initContainers:\n    - name: wait-for-db\n      image: busybox:1.36\n      command: ['sh', '-c', 'echo Waiting for DB... && sleep 2']\n  containers:\n    - name: web-app\n      image: nginx:alpine\n      ports:\n        - containerPort: 80\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Pods & Lifecycle\n\n- **Pod**: Smallest deployable unit in Kubernetes representing one or more co-located containers sharing network namespace (`localhost`) and storage volumes.\n- **Phases**: `Pending` -> `Running` -> `Succeeded` / `Failed`.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-replica-sets-and-deployments",
+        "type": "directory",
+        "children": [
+          {
+            "name": "deployment.yaml",
+            "type": "file",
+            "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-deployment\n  labels:\n    app: web\nspec:\n  replicas: 3\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  selector:\n    matchLabels:\n      app: web\n  template:\n    metadata:\n      labels:\n        app: web\n    spec:\n      containers:\n        - name: nginx\n          image: nginx:1.25-alpine\n          ports:\n            - containerPort: 80\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Deployments & Rolling Updates\n\n```bash\n# Check rollout status\nkubectl rollout status deployment/web-deployment\n\n# Undo last rollout\nkubectl rollout undo deployment/web-deployment\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-services-and-networking",
+        "type": "directory",
+        "children": [
+          {
+            "name": "service.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web-service\nspec:\n  type: ClusterIP\n  selector:\n    app: web\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 80\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Services & Networking\n\n- **ClusterIP (Default)**: Exposes service on internal cluster IP.\n- **NodePort**: Exposes service on each node's static port (`30000-32767`).\n- **LoadBalancer**: Provisions cloud provider load balancer.\n- **CoreDNS**: In-cluster DNS format `<service-name>.<namespace>.svc.cluster.local`.\n"
+          }
+        ]
+      },
+      {
+        "name": "04-ingress-and-gateway-api",
+        "type": "directory",
+        "children": [
+          {
+            "name": "ingress.yaml",
+            "type": "file",
+            "content": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: web-ingress\n  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /\nspec:\n  ingressClassName: nginx\n  rules:\n    - host: app.example.com\n      http:\n        paths:\n          - path: /\n            pathType: Prefix\n            backend:\n              service:\n                name: web-service\n                port:\n                  number: 80\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Ingress & Gateway API\n"
+          }
+        ]
+      },
+      {
+        "name": "05-configmaps-and-secrets",
+        "type": "directory",
+        "children": [
+          {
+            "name": "configmap.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  APP_ENV: \"production\"\n  LOG_LEVEL: \"info\"\n"
+          },
+          {
+            "name": "secret.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Secret\nmetadata:\n  name: app-secret\ntype: Opaque\nstringData:\n  DB_PASSWORD: \"supersecretpass123\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - ConfigMaps & Secrets\n"
+          }
+        ]
+      },
+      {
+        "name": "06-storage-pv-pvc-storageclasses",
+        "type": "directory",
+        "children": [
+          {
+            "name": "pvc.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: data-pvc\nspec:\n  accessModes:\n    - ReadWriteOnce\n  resources:\n    requests:\n      storage: 10Gi\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Persistent Volumes & Claims\n\n- **Access Modes**:\n  - `ReadWriteOnce (RWO)`: Mounted by single node.\n  - `ReadOnlyMany (ROX)`: Mounted read-only by multiple nodes.\n  - `ReadWriteMany (RWX)`: Mounted read-write by multiple nodes (NFS, Ceph).\n"
+          }
+        ]
+      },
+      {
+        "name": "07-statefulsets-and-headless-services",
+        "type": "directory",
+        "children": [
+          {
+            "name": "statefulset.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: postgres-headless\nspec:\n  clusterIP: None\n  selector:\n    app: postgres\n  ports:\n    - port: 5432\n---\napiVersion: apps/v1\nkind: StatefulSet\nmetadata:\n  name: postgres\nspec:\n  serviceName: postgres-headless\n  replicas: 2\n  selector:\n    matchLabels:\n      app: postgres\n  template:\n    metadata:\n      labels:\n        app: postgres\n    spec:\n      containers:\n        - name: postgres\n          image: postgres:16-alpine\n          ports:\n            - containerPort: 5432\n          env:\n            - name: POSTGRES_PASSWORD\n              value: example\n  volumeClaimTemplates:\n    - metadata:\n        name: pgdata\n      spec:\n        accessModes: [ \"ReadWriteOnce\" ]\n        resources:\n          requests:\n            storage: 5Gi\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - StatefulSets & Headless Services\n"
+          }
+        ]
+      },
+      {
+        "name": "08-daemonsets-and-jobs",
+        "type": "directory",
+        "children": [
+          {
+            "name": "cronjob.yaml",
+            "type": "file",
+            "content": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: db-backup\nspec:\n  schedule: \"0 2 * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          containers:\n            - name: backup\n              image: busybox:1.36\n              command: [\"sh\", \"-c\", \"echo Database backup complete!\"]\n          restartPolicy: OnFailure\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - DaemonSets & Jobs\n"
+          }
+        ]
+      },
+      {
+        "name": "09-health-probes-and-lifecycle-hooks",
+        "type": "directory",
+        "children": [
+          {
+            "name": "probes.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: probe-pod\nspec:\n  containers:\n    - name: web\n      image: nginx:alpine\n      livenessProbe:\n        httpGet:\n          path: /\n          port: 80\n        initialDelaySeconds: 10\n        periodSeconds: 10\n      readinessProbe:\n        httpGet:\n          path: /\n          port: 80\n        initialDelaySeconds: 5\n        periodSeconds: 5\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Health Probes (Liveness vs Readiness vs Startup)\n\n- **Startup Probe**: Determines if application has initialized.\n- **Liveness Probe**: Detects deadlocks; kubelet restarts container on failure.\n- **Readiness Probe**: Checks if container is ready to accept traffic; removes from Service endpoints on failure.\n"
+          }
+        ]
+      },
+      {
+        "name": "10-resource-management-and-qos",
+        "type": "directory",
+        "children": [
+          {
+            "name": "resources.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: qos-guaranteed-pod\nspec:\n  containers:\n    - name: app\n      image: nginx:alpine\n      resources:\n        requests:\n          cpu: \"250m\"\n          memory: \"256Mi\"\n        limits:\n          cpu: \"250m\"\n          memory: \"256Mi\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Resource Requests, Limits & QoS Classes\n\n1. **Guaranteed**: Requests == Limits for all CPU & Memory.\n2. **Burstable**: Requests < Limits.\n3. **BestEffort**: No requests or limits set (First to be evicted when node runs low on RAM).\n"
+          }
+        ]
+      },
+      {
+        "name": "11-autoscaling-hpa-vpa-keda",
+        "type": "directory",
+        "children": [
+          {
+            "name": "hpa.yaml",
+            "type": "file",
+            "content": "apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: web-hpa\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: web-deployment\n  minReplicas: 2\n  maxReplicas: 10\n  metrics:\n    - type: Resource\n      resource:\n        name: cpu\n        target:\n          type: Utilization\n          averageUtilization: 75\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Horizontal Pod Autoscaler (HPA)\n"
+          }
+        ]
+      },
+      {
+        "name": "12-scheduling-taints-tolerations-affinity",
+        "type": "directory",
+        "children": [
+          {
+            "name": "affinity.yaml",
+            "type": "file",
+            "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: anti-affinity-app\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: api\n  template:\n    metadata:\n      labels:\n        app: api\n    spec:\n      affinity:\n        podAntiAffinity:\n          requiredDuringSchedulingIgnoredDuringExecution:\n            - labelSelector:\n                matchExpressions:\n                  - key: app\n                    operator: In\n                    values:\n                      - api\n              topologyKey: \"kubernetes.io/hostname\"\n      containers:\n        - name: api\n          image: nginx:alpine\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Scheduling & Pod Anti-Affinity\n"
+          }
+        ]
+      },
+      {
+        "name": "13-security-rbac-serviceaccounts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "rbac.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: app-reader-sa\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: pod-reader\nrules:\n  - apiGroups: [\"\"]\n    resources: [\"pods\"]\n    verbs: [\"get\", \"list\", \"watch\"]\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: read-pods-binding\nsubjects:\n  - kind: ServiceAccount\n    name: app-reader-sa\nroleRef:\n    kind: Role\n    name: pod-reader\n    apiGroup: rbac.authorization.k8s.io\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Role-Based Access Control (RBAC)\n"
+          }
+        ]
+      },
+      {
+        "name": "14-network-policies-and-cni",
+        "type": "directory",
+        "children": [
+          {
+            "name": "network-policy.yaml",
+            "type": "file",
+            "content": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: deny-all-ingress\nspec:\n  podSelector: {}\n  policyTypes:\n    - Ingress\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Network Policies & CNI Security\n"
+          }
+        ]
+      },
+      {
+        "name": "15-helm-package-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Chart.yaml",
+            "type": "file",
+            "content": "apiVersion: v2\nname: my-app\ndescription: A Helm chart for Trak Kubernetes App\nversion: 0.1.0\nappVersion: \"1.0.0\"\n"
+          },
+          {
+            "name": "values.yaml",
+            "type": "file",
+            "content": "replicaCount: 3\nimage:\n  repository: nginx\n  tag: alpine\nservice:\n  type: ClusterIP\n  port: 80\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Helm Chart Package Management\n"
+          }
+        ]
+      },
+      {
+        "name": "16-crds-and-operator-pattern",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - CRDs & The Operator Pattern\n\nAn Operator combines Custom Resource Definitions (CRDs) with custom controllers that continuously reconcile desired state with actual cluster state.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-monitoring-logging-observability",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - Observability in Kubernetes\n\n```bash\n# Pod resource usage\nkubectl top pods\n\n# Node resource usage\nkubectl top nodes\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - CKA / CKAD High-Yield Interview Scenarios 🎯\n\n### Top 5 Troubleshooting Scenarios:\n1. **CrashLoopBackOff**: Container starts and immediately exits (check `kubectl logs --previous` and `kubectl describe pod`).\n2. **OOMKilled**: Container memory limit exceeded; increase memory limits or investigate memory leaks.\n3. **ImagePullBackOff**: Typo in image name/tag, private registry credentials missing (`imagePullSecrets`).\n4. **Pending Pod**: No node with enough CPU/memory requests, or node taints not tolerated.\n5. **Service Endpoint Empty**: Selector labels on Service do not match labels in Pod template.\n\n🚀 You have completed the complete Kubernetes & Cloud-Native Architecture track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

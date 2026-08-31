@@ -1,0 +1,260 @@
+{
+  "id": "tool/docker",
+  "name": "Docker & Container Architecture Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive Docker & Containerization curriculum from Linux namespaces, cgroups, and storage drivers (Overlay2) to multi-stage Dockerfiles, Compose orchestration, networking, security, and multi-arch BuildKit",
+  "root": {
+    "name": "docker-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "docker-compose.yml",
+        "type": "file",
+        "content": "version: '3.8'\n\nservices:\n  app:\n    build:\n      context: ./05-dockerfile-mastery\n      dockerfile: Dockerfile\n    ports:\n      - \"8080:8080\"\n    environment:\n      - NODE_ENV=production\n    depends_on:\n      db:\n        condition: service_healthy\n    networks:\n      - app-net\n\n  db:\n    image: postgres:16-alpine\n    environment:\n      POSTGRES_DB: trak_db\n      POSTGRES_USER: trak_user\n      POSTGRES_PASSWORD: trak_password\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U trak_user -d trak_db\"]\n      interval: 5s\n      timeout: 5s\n      retries: 5\n    networks:\n      - app-net\n\nvolumes:\n  pgdata:\n\nnetworks:\n  app-net:\n    driver: bridge\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🐳 Complete Docker & Container Architecture Track\n\nWelcome to your full Docker learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-docker-engine` | **Docker Engine & OCI** | Daemon (`dockerd`), containerd, runc, OCI specifications, `docker info` |\n| `01-container-isolation-internals` | **Isolation Internals** | Linux Namespaces (PID, NET, MNT, IPC, UTS), cgroups v2, pivot_root |\n| `02-docker-architecture-and-cli` | **Architecture & Socket** | Client-Server model, `/var/run/docker.sock`, REST API, Docker CLI |\n| `03-container-lifecycle-management` | **Lifecycle Management** | `run`, `start`, `stop`, `rm`, `kill`, exit codes, restart policies |\n| `04-image-layers-and-storage-drivers` | **Overlay2 & Storage** | UnionFS, Overlay2 lower/upper/merged dirs, copy-on-write (CoW) |\n| `05-dockerfile-mastery` | **Dockerfile Mastery** | `FROM`, `RUN`, `COPY`, `WORKDIR`, `ENV`, `ARG`, `CMD` vs `ENTRYPOINT` |\n| `06-multistage-builds-and-optimization` | **Multi-Stage Builds** | Layer caching, minimizing attack surface, Alpine & Distroless images |\n| `07-storage-volumes-and-bind-mounts` | **Volumes & Mounts** | Named volumes, bind mounts, `tmpfs`, data persistence guarantees |\n| `08-networking-modes-and-dns` | **Networking Modes** | Bridge, Host, None, Overlay, embedded DNS server (`127.0.0.11`) |\n| `09-port-mapping-and-reverse-proxies` | **Port Publishing** | `-p host:container`, `-P`, Nginx reverse proxy container architecture |\n| `10-environment-variables-and-secrets` | **Secrets & BuildKit** | `--env-file`, BuildKit `--secret id=...`, preventing secret leakage |\n| `11-docker-compose-orchestration` | **Compose Orchestration**| `docker-compose.yml`, dependencies, healthchecks, networks, volumes |\n| `12-healthchecks-and-monitoring` | **Health & Metrics** | `HEALTHCHECK`, `docker inspect`, `docker stats`, container log drivers |\n| `13-security-and-rootless-docker` | **Container Security** | Non-root `USER`, `--cap-drop=ALL`, `--read-only`, Trivy image scanning |\n| `14-registries-and-image-distribution` | **Registries & Buildx**| Docker Hub, GHCR, multi-architecture manifests (`linux/amd64`, `linux/arm64`) |\n| `15-logging-and-troubleshooting` | **Troubleshooting** | `docker logs`, `docker exec -it`, `docker top`, `docker events` |\n| `16-production-ci-cd-docker-pipeline` | **CI/CD Automation** | GitHub Actions container build, test, and push workflows |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield DevOps container interview questions & scenarios |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Build and start complete stack with Compose:\ndocker compose up -d\n\n# View live logs:\ndocker compose logs -f\n```\n"
+      },
+      {
+        "name": "00-setup-and-docker-engine",
+        "type": "directory",
+        "children": [
+          {
+            "name": "check_engine.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🐳 00 - Docker Engine & Runtime Environment Check\"\necho \"=====================================================\"\ndocker version\necho \"\"\ndocker info | grep -E \"(Storage Driver|Logging Driver|Cgroup Version|Architecture)\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Docker Engine & Architecture 🛠️\n\n- **Client**: `docker` CLI command line interface.\n- **Daemon (`dockerd`)**: Listens on `/var/run/docker.sock` and manages containers, images, networks, and volumes.\n- **containerd & runc**: Standard OCI low-level container runtime.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-container-isolation-internals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Linux Namespaces & cgroups Internals\n\nContainers are NOT lightweight virtual machines. They are **standard Linux processes** isolated using kernel features:\n\n### 1. Linux Namespaces (Isolation):\n- **PID Namespace**: Process IDs inside container start at `1`.\n- **NET Namespace**: Dedicated virtual network interface, IP routing table, and ports.\n- **MNT (Mount) Namespace**: Isolated filesystem view.\n- **IPC Namespace**: Inter-process communication isolation (shared memory, message queues).\n- **UTS Namespace**: Isolated hostname and domain name.\n- **USER Namespace**: Map container root UID `0` to unprivileged host UID `100000`.\n\n### 2. Control Groups (cgroups v2 - Resource Limits):\n- Limits and meters CPU shares (`--cpus=2`), Memory (`--memory=512m`), and Disk I/O.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-docker-architecture-and-cli",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - Docker Architecture & Unix Socket\n\nThe Docker CLI communicates with the Docker Daemon via Unix socket `/var/run/docker.sock` or TCP socket using a REST API.\n\n```bash\n# Inspect Docker socket directly\ncurl --unix-socket /var/run/docker.sock http://localhost/v1.43/containers/json\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-container-lifecycle-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "lifecycle.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\n# Run an interactive alpine container in detached mode with restart policy\ndocker run -d \\\n  --name demo-container \\\n  --restart unless-stopped \\\n  alpine:latest sleep 3600\n\n# Check container status\ndocker ps --filter name=demo-container\n\n# Stop and remove\ndocker stop demo-container\ndocker rm demo-container\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Container Lifecycle Management\n\n- `docker create`: Creates container without starting.\n- `docker start`: Starts stopped container.\n- `docker run`: Equivalent to `create` + `start`.\n- `docker stop` vs `docker kill`: `SIGTERM` (graceful 10s wait) vs `SIGKILL` (immediate termination).\n"
+          }
+        ]
+      },
+      {
+        "name": "04-image-layers-and-storage-drivers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Overlay2 Storage Driver & Image Layers\n\n### Layered Filesystem Architecture:\n1. **Read-Only Image Layers (lowerdir)**: Shared across all containers from the same image.\n2. **Read-Write Container Layer (upperdir)**: Unique to each running container.\n3. **Merged View (mergeddir)**: Unified filesystem presented to the container.\n4. **Copy-on-Write (CoW)**: When a container modifies an existing file from an image layer, the file is copied up to the upperdir before writing.\n"
+          }
+        ]
+      },
+      {
+        "name": "05-dockerfile-mastery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Dockerfile",
+            "type": "file",
+            "content": "# Production NodeJS Dockerfile\nFROM node:20-alpine\n\n# Create unprivileged application user\nRUN addgroup -S appgroup && adduser -S appuser -G appgroup\n\nWORKDIR /app\n\n# Copy package manifests first for optimal layer caching\nCOPY package*.json ./\nRUN npm ci --only=production\n\n# Copy application source code\nCOPY . .\n\n# Switch to non-root user\nUSER appuser\n\nEXPOSE 8080\n\n# ENTRYPOINT sets default executable, CMD sets default arguments\nENTRYPOINT [\"node\"]\nCMD [\"server.js\"]\n"
+          },
+          {
+            "name": "server.js",
+            "type": "file",
+            "content": "const http = require('http');\nconst PORT = process.env.PORT || 8080;\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'Content-Type': 'application/json' });\n  res.end(JSON.stringify({ status: 'ok', message: 'Trak Docker Service Running!' }));\n});\n\nserver.listen(PORT, () => console.log(`Server listening on port ${PORT}`));\n"
+          },
+          {
+            "name": "package.json",
+            "type": "file",
+            "content": "{\n  \"name\": \"docker-service\",\n  \"version\": \"1.0.0\",\n  \"main\": \"server.js\"\n}\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Dockerfile Instructions\n\n- `CMD vs ENTRYPOINT`: `ENTRYPOINT` specifies the command that will always run, `CMD` provides default arguments that can be overridden at runtime (`docker run img arg1`).\n- `COPY vs ADD`: Prefer `COPY`. Use `ADD` only for auto-extracting tar archives.\n"
+          }
+        ]
+      },
+      {
+        "name": "06-multistage-builds-and-optimization",
+        "type": "directory",
+        "children": [
+          {
+            "name": "Dockerfile",
+            "type": "file",
+            "content": "# ==========================================\n# Stage 1: Build Stage (Includes full SDK)\n# ==========================================\nFROM golang:1.22-alpine AS builder\nWORKDIR /src\nCOPY go.mod ./\nRUN go mod download\nCOPY . .\nRUN CGO_ENABLED=0 GOOS=linux go build -ldflags=\"-s -w\" -o /bin/app main.go\n\n# ==========================================\n# Stage 2: Minimal Distroless Runtime Stage\n# ==========================================\nFROM gcr.io/distroless/static-debian12:nonroot\nWORKDIR /\nCOPY --from=builder /bin/app /bin/app\nUSER nonroot:nonroot\nEXPOSE 8080\nENTRYPOINT [\"/bin/app\"]\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Multi-Stage Builds\n\nMulti-stage builds separate the build environment (compilers, devDependencies, header files) from the production image, reducing final image size from 1GB+ down to < 20MB!\n"
+          }
+        ]
+      },
+      {
+        "name": "07-storage-volumes-and-bind-mounts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Storage Volumes vs Bind Mounts\n\n| Storage Type | Host Location | Managed By | Use Case |\n| :--- | :--- | :--- | :--- |\n| **Named Volume** | `/var/lib/docker/volumes/` | Docker Engine | Databases, persistent production state |\n| **Bind Mount** | Any arbitrary path (`/home/user/code`) | Host OS | Live code reloading in development |\n| **tmpfs Mount** | Host System RAM | Linux Kernel | Sensitive temporary secrets, performance |\n\n```bash\n# Named volume\ndocker run -v dbdata:/var/lib/postgresql/data postgres:16\n\n# Bind mount\ndocker run -v $(pwd)/src:/app/src node:20-alpine\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "08-networking-modes-and-dns",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Docker Networking Modes\n\n1. **`bridge` (Default)**: Private virtual network on host (`docker0`). Containers connect via IP addresses.\n2. **`host`**: Bypasses network isolation; container directly uses host's network stack and port namespace.\n3. **`none`**: Completely disables networking for air-gapped tasks.\n4. **`overlay`**: Multi-host networking across Docker Swarm / Kubernetes clusters.\n\n### Service Discovery via Custom Bridge Network:\nOn user-defined bridge networks, Docker provides an **embedded DNS server** at `127.0.0.11` enabling containers to talk to each other by container name (e.g. `http://api-service:8080`).\n"
+          }
+        ]
+      },
+      {
+        "name": "09-port-mapping-and-reverse-proxies",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - Port Mapping & Reverse Proxies\n\n- `-p 8080:80`: Publishes host port 8080 to container port 80 via iptables NAT rules.\n- `-P`: Publishes all exposed ports to random high ports on host (`32768-60999`).\n"
+          }
+        ]
+      },
+      {
+        "name": "10-environment-variables-and-secrets",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Environment Variables & BuildKit Secrets\n\nNever pass secrets using `ENV` or `ARG` in Dockerfile because they remain permanently accessible in image layer history (`docker history`)!\n\n### BuildKit Secret Mount (Zero Layer Leakage):\n```dockerfile\n# syntax=docker/dockerfile:1\nFROM alpine\nRUN --mount=type=secret,id=npmrc,target=/root/.npmrc \\\n    npm install\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "11-docker-compose-orchestration",
+        "type": "directory",
+        "children": [
+          {
+            "name": "docker-compose.dev.yml",
+            "type": "file",
+            "content": "version: '3.8'\n\nservices:\n  web:\n    image: nginx:alpine\n    ports:\n      - \"80:80\"\n    volumes:\n      - ./nginx.conf:/etc/nginx/nginx.conf:ro\n    restart: always\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - Docker Compose Orchestration\n\n```bash\n# Start containers in background\ndocker compose up -d\n\n# Stop and remove all containers, networks, and volumes\ndocker compose down -v\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "12-healthchecks-and-monitoring",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Container Healthchecks & Stats\n\n```dockerfile\nHEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \\\n  CMD curl -f http://localhost:8080/health || exit 1\n```\n\n```bash\n# Live resource consumption metrics\ndocker stats --no-stream\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "13-security-and-rootless-docker",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Container Security Hardening Checklist\n\n1. **Run as Non-Root**: Never run as root inside production containers (`USER 1001`).\n2. **Drop Linux Capabilities**: `docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE`.\n3. **Read-Only Root Filesystem**: `docker run --read-only --tmpfs /tmp`.\n4. **Prevent Privilege Escalation**: `--security-opt=no-new-privileges:true`.\n5. **Vulnerability Scanning**: `trivy image my-image:latest`.\n"
+          }
+        ]
+      },
+      {
+        "name": "14-registries-and-image-distribution",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Multi-Architecture Builds with Buildx\n\n```bash\n# Create multi-architecture builder\ndocker buildx create --name multi-builder --use\n\n# Build and push for both ARM64 (Apple Silicon/AWS Graviton) and AMD64\ndocker buildx build --platform linux/amd64,linux/arm64 -t myorg/app:1.0.0 --push .\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "15-logging-and-troubleshooting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Troubleshooting & Diagnostic Commands\n\n```bash\n# Stream logs with timestamps\ndocker logs -f --tail 100 --timestamps <container_id>\n\n# Interactive shell inside container\ndocker exec -it <container_id> /bin/sh\n\n# View processes running inside container\ndocker top <container_id>\n\n# Real-time daemon events\ndocker events\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "16-production-ci-cd-docker-pipeline",
+        "type": "directory",
+        "children": [
+          {
+            "name": "ci.yml",
+            "type": "file",
+            "content": "name: Docker CI/CD Pipeline\n\non:\n  push:\n    branches: [ main ]\n\njobs:\n  build-and-push:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v3\n      - name: Build and Test Image\n        uses: docker/build-push-action@v5\n        with:\n          context: .\n          push: false\n          tags: app:test\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Production CI/CD Docker Pipeline\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield Docker & DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Containers vs VMs**: Containers share the host Linux kernel and use namespaces/cgroups; VMs run a full guest OS on a hypervisor.\n2. **CMD vs ENTRYPOINT**: `ENTRYPOINT` defines fixed binary; `CMD` supplies default parameters overridable via CLI arguments.\n3. **Overlay2 Driver**: Lowerdir (read-only image layers) + Upperdir (read-write container layer) -> Merged view with Copy-on-Write (CoW).\n4. **Security Hardening**: Non-root `USER`, `--cap-drop=ALL`, `--read-only` rootfs, and BuildKit secrets.\n5. **Multi-Stage Builds**: Drastically reduces image sizes by discarding compilers, headers, and intermediate build tools from the final runtime image.\n\n🚀 You have completed the complete Docker & Container Architecture track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}

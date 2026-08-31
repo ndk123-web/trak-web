@@ -1,0 +1,310 @@
+{
+  "id": "db/sql",
+  "name": "SQL & Relational Database Mastery",
+  "version": "1.0.0",
+  "description": "Comprehensive SQL curriculum from relational schema design, CRUD, and advanced joins to CTEs, Window Functions, B-Tree indexes, EXPLAIN ANALYZE, and ACID transactions",
+  "root": {
+    "name": "sql-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "init_schema.sql",
+        "type": "file",
+        "content": "-- Master Schema Initialization for Trak SQL Track\nCREATE TABLE departments (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE\n);\n\nCREATE TABLE employees (\n    id INTEGER PRIMARY KEY,\n    department_id INTEGER,\n    name TEXT NOT NULL,\n    email TEXT UNIQUE NOT NULL,\n    salary REAL NOT NULL,\n    hired_at DATE NOT NULL,\n    FOREIGN KEY (department_id) REFERENCES departments(id)\n);\n\nINSERT INTO departments (id, name) VALUES (1, 'Engineering'), (2, 'Product'), (3, 'Marketing');\nINSERT INTO employees (id, department_id, name, email, salary, hired_at) VALUES\n(101, 1, 'Alice Smith', 'alice@company.com', 120000.0, '2022-03-15'),\n(102, 1, 'Bob Jones', 'bob@company.com', 110000.0, '2023-01-10'),\n(103, 2, 'Charlie Brown', 'charlie@company.com', 95000.0, '2021-08-01'),\n(104, 1, 'David Miller', 'david@company.com', 135000.0, '2020-05-20'),\n(105, 3, 'Eva Green', 'eva@company.com', 88000.0, '2023-09-01');\n"
+      },
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🗄️ Complete SQL & Relational Database Mastery Track\n\nWelcome to your full SQL learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-environment` | **Setup & Sandbox** | SQLite / PostgreSQL CLI setup, loading sample databases |\n| `01-relational-model-and-ddl` | **Relational Schema & DDL** | `CREATE TABLE`, `ALTER`, `DROP`, Primary Key, Foreign Key, `CHECK`, `UNIQUE` |\n| `02-dml-crud-operations` | **DML & CRUD** | `INSERT`, `SELECT`, `UPDATE`, `DELETE`, `RETURNING` clause |\n| `03-filtering-and-sorting` | **Filtering & Ordering** | `WHERE`, `LIKE`, `ILIKE`, `IN`, `BETWEEN`, `ORDER BY`, `LIMIT`, `OFFSET` |\n| `04-aggregations-and-grouping` | **Aggregations & Grouping** | `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`, `GROUP BY`, `HAVING` filter |\n| `05-joins-and-relational-algebra` | **Joins Deep-Dive** | `INNER`, `LEFT`, `RIGHT`, `FULL OUTER`, `CROSS`, `SELF JOIN` |\n| `06-subqueries-and-exists` | **Subqueries** | Scalar subqueries, `IN` vs `EXISTS`, correlated subqueries |\n| `07-common-table-expressions-ctes` | **CTEs & Recursion** | `WITH` clause, Recursive CTEs for hierarchical tree traversal |\n| `08-window-functions` | **Window Functions** | `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `LEAD()`, `LAG()`, `OVER (PARTITION BY ...)` |\n| `09-indexes-and-b-tree-internals` | **B-Tree Indexes** | Single vs Composite indexes, Leftmost prefix rule, Index-Only Scans |\n| `10-query-planning-explain-analyze` | **Query Execution Plans** | `EXPLAIN ANALYZE`, Sequential Scan vs Index Scan vs Bitmap Heap Scan |\n| `11-acid-transactions-and-isolation` | **ACID Transactions** | `BEGIN`, `COMMIT`, `ROLLBACK`, Isolation Levels (Dirty Read, Non-repeatable, Phantom) |\n| `12-locking-and-concurrency` | **Locking & Deadlocks** | Shared vs Exclusive locks, `SELECT FOR UPDATE`, deadlock resolution |\n| `13-database-normalization-1nf-to-bcnf` | **Normalization** | 1NF, 2NF, 3NF, BCNF rules, denormalization performance trade-offs |\n| `14-views-and-materialized-views` | **Views & Materialization** | `CREATE VIEW`, `MATERIALIZED VIEW`, caching query computations |\n| `15-stored-procedures-and-triggers` | **Procedures & Triggers** | Stored procedures, user-defined functions (UDF), `BEFORE`/`AFTER` triggers |\n| `16-schema-migrations` | **Migrations** | Zero-downtime migrations, column add/drop safely, backfilling data |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield SQL interview queries & performance puzzles |\n\n---\n\n## 🛠️ How to Run Queries\n\nRun queries with SQLite (built into Python / available as `sqlite3` CLI):\n```bash\nsqlite3 practice.db < init_schema.sql\nsqlite3 practice.db < 05-joins-and-relational-algebra/query.sql\n```\n"
+      },
+      {
+        "name": "00-setup-and-environment",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 00: Environment Verification Query\nSELECT \n    'SQLite / PostgreSQL Connected!' AS status,\n    CURRENT_TIMESTAMP AS executed_at;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - SQL Environment Setup 🛠️\n\n### Running SQLite in terminal:\n```bash\nsqlite3 mydb.db\n.read init_schema.sql\nSELECT * FROM employees;\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "01-relational-model-and-ddl",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 01: DDL Schema Definition\nCREATE TABLE products (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    sku TEXT UNIQUE NOT NULL,\n    price REAL NOT NULL CHECK (price >= 0.0),\n    stock_quantity INTEGER NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- Alter table constraint\nALTER TABLE products ADD COLUMN description TEXT;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Relational Model & DDL\n\n- `PRIMARY KEY`: Unique non-null identifier.\n- `FOREIGN KEY`: Referential integrity link.\n- `CHECK`: Declarative business validation constraint.\n"
+          }
+        ]
+      },
+      {
+        "name": "02-dml-crud-operations",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 02: DML CRUD Operations\n\n-- Create (Insert)\nINSERT INTO departments (id, name) VALUES (4, 'Human Resources');\n\n-- Read (Select)\nSELECT name, salary FROM employees WHERE salary > 100000;\n\n-- Update\nUPDATE employees SET salary = salary * 1.10 WHERE department_id = 1;\n\n-- Delete\nDELETE FROM employees WHERE id = 999;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - DML CRUD Operations\n"
+          }
+        ]
+      },
+      {
+        "name": "03-filtering-and-sorting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 03: Filtering & Ordering\nSELECT id, name, salary, hired_at\nFROM employees\nWHERE salary BETWEEN 90000 AND 130000\n  AND email LIKE '%@company.com'\nORDER BY salary DESC, hired_at ASC\nLIMIT 3 OFFSET 0;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - Filtering, Search & Sorting\n"
+          }
+        ]
+      },
+      {
+        "name": "04-aggregations-and-grouping",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 04: Aggregations & Grouping\nSELECT \n    d.name AS department_name,\n    COUNT(e.id) AS total_employees,\n    AVG(e.salary) AS average_salary,\n    MAX(e.salary) AS top_salary\nFROM departments d\nLEFT JOIN employees e ON d.id = e.department_id\nGROUP BY d.id, d.name\nHAVING COUNT(e.id) >= 1\nORDER BY average_salary DESC;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - Aggregations & Grouping\n\n- `WHERE` filters rows **before** aggregation.\n- `HAVING` filters aggregated group metrics **after** `GROUP BY`.\n"
+          }
+        ]
+      },
+      {
+        "name": "05-joins-and-relational-algebra",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 05: Joins Comparison\n\n-- 1. INNER JOIN (Matching records in both tables)\nSELECT e.name, d.name AS department\nFROM employees e\nINNER JOIN departments d ON e.department_id = d.id;\n\n-- 2. LEFT JOIN (All rows from left, matching from right)\nSELECT d.name AS department, e.name AS employee\nFROM departments d\nLEFT JOIN employees e ON d.id = e.department_id;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Joins & Relational Algebra\n"
+          }
+        ]
+      },
+      {
+        "name": "06-subqueries-and-exists",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 06: Subqueries vs Correlated Queries\n\n-- 1. Scalar Subquery: Find employees earning more than the company average\nSELECT name, salary\nFROM employees\nWHERE salary > (SELECT AVG(salary) FROM employees);\n\n-- 2. Correlated Subquery with EXISTS\nSELECT d.name\nFROM departments d\nWHERE EXISTS (\n    SELECT 1 FROM employees e \n    WHERE e.department_id = d.id AND e.salary > 120000\n);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Subqueries & EXISTS\n"
+          }
+        ]
+      },
+      {
+        "name": "07-common-table-expressions-ctes",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 07: Common Table Expressions (CTEs)\n\n-- Non-recursive CTE\nWITH DeptSalaryStats AS (\n    SELECT \n        department_id,\n        AVG(salary) AS avg_dept_salary\n    FROM employees\n    GROUP BY department_id\n)\nSELECT \n    e.name,\n    e.salary,\n    s.avg_dept_salary,\n    (e.salary - s.avg_dept_salary) AS salary_diff_from_avg\nFROM employees e\nJOIN DeptSalaryStats s ON e.department_id = s.department_id;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Common Table Expressions (CTEs)\n"
+          }
+        ]
+      },
+      {
+        "name": "08-window-functions",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 08: Window Functions (Row Number, Rank, Lead/Lag)\nSELECT \n    id,\n    department_id,\n    name,\n    salary,\n    -- Ranks employees by salary within their respective departments\n    DENSE_RANK() OVER (\n        PARTITION BY department_id \n        ORDER BY salary DESC\n    ) AS salary_rank_in_dept,\n    -- Previous employee's salary in same dept\n    LAG(salary, 1) OVER (\n        PARTITION BY department_id \n        ORDER BY salary DESC\n    ) AS prev_higher_salary\nFROM employees;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Window Functions\n\nWindow functions compute calculations across a set of table rows without collapsing individual rows like `GROUP BY` does.\n"
+          }
+        ]
+      },
+      {
+        "name": "09-indexes-and-b-tree-internals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 09: B-Tree Index Creation\n\n-- Single column index\nCREATE INDEX idx_employees_email ON employees(email);\n\n-- Composite index (Order matters! Leftmost prefix rule)\nCREATE INDEX idx_emp_dept_salary ON employees(department_id, salary DESC);\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - B-Tree Indexes\n\n- **B-Tree Structure**: Balanced tree providing $O(\\log N)$ lookups, range scans, and sorting.\n- **Leftmost Prefix Rule**: A composite index on `(A, B)` speeds up queries on `(A)` and `(A, B)`, but NOT `(B)` alone.\n"
+          }
+        ]
+      },
+      {
+        "name": "10-query-planning-explain-analyze",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 10: Query Execution Plan Inspection\n-- SQLite syntax: EXPLAIN QUERY PLAN\nEXPLAIN QUERY PLAN\nSELECT name, salary \nFROM employees \nWHERE department_id = 1 AND salary > 100000;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Query Execution Plans (EXPLAIN)\n\n- **Sequential Scan (Seq Scan)**: Reads every page from disk ($O(N)$).\n- **Index Scan**: Walks B-Tree to find row pointers, then fetches table rows ($O(\\log N)$).\n- **Index Only Scan**: Resolves entire query directly from index pages without touching heap table.\n"
+          }
+        ]
+      },
+      {
+        "name": "11-acid-transactions-and-isolation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 11: ACID Transaction Block\nBEGIN TRANSACTION;\n\nUPDATE employees SET salary = salary - 5000 WHERE id = 101;\nUPDATE employees SET salary = salary + 5000 WHERE id = 102;\n\n-- Commit if all succeed, or ROLLBACK on failure\nCOMMIT;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - ACID Transactions & Isolation Levels\n\n- **Atomicity**: All or nothing.\n- **Consistency**: Invariants preserved.\n- **Isolation**: Concurrent transactions do not interfere.\n- **Durability**: Committed data persists across power loss.\n"
+          }
+        ]
+      },
+      {
+        "name": "12-locking-and-concurrency",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 12: Pessimistic Locking with SELECT FOR UPDATE (Postgres/MySQL syntax)\n-- BEGIN;\n-- SELECT * FROM employees WHERE id = 101 FOR UPDATE;\n-- UPDATE employees SET salary = salary + 1000 WHERE id = 101;\n-- COMMIT;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Locking & Concurrency\n"
+          }
+        ]
+      },
+      {
+        "name": "13-database-normalization-1nf-to-bcnf",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 13: Normalization Guide\n-- 1NF: Atomic columns (no repeating comma-separated values)\n-- 2NF: 1NF + No partial dependencies on composite primary key\n-- 3NF: 2NF + No transitive dependencies (non-key attributes depend only on primary key)\n-- BCNF: Strict 3NF where every determinant is a candidate key\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Database Normalization (1NF to BCNF)\n"
+          }
+        ]
+      },
+      {
+        "name": "14-views-and-materialized-views",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 14: Virtual Views\nCREATE VIEW v_high_earners AS\nSELECT e.name, e.salary, d.name AS department\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > 100000;\n\nSELECT * FROM v_high_earners;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - Views & Materialized Views\n"
+          }
+        ]
+      },
+      {
+        "name": "15-stored-procedures-and-triggers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 15: Trigger Audit Pattern\nCREATE TABLE audit_log (\n    id INTEGER PRIMARY KEY,\n    action TEXT NOT NULL,\n    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TRIGGER after_employee_insert\nAFTER INSERT ON employees\nBEGIN\n    INSERT INTO audit_log (action) VALUES ('New employee created');\nEND;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Procedures & Triggers\n"
+          }
+        ]
+      },
+      {
+        "name": "16-schema-migrations",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 16: Zero-Downtime Migration Pattern\n-- Step 1: Add new nullable column\nALTER TABLE employees ADD COLUMN phone_number TEXT;\n\n-- Step 2: Backfill data in small batches\n-- Step 3: Add NOT NULL constraint or default\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Schema Migrations\n"
+          }
+        ]
+      },
+      {
+        "name": "17-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "query.sql",
+            "type": "file",
+            "content": "-- 17: Classic Interview Query: Find 2nd Highest Salary in Company\nSELECT MAX(salary) AS second_highest_salary\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);\n\n-- Alternatively with DENSE_RANK():\nWITH RankedSalaries AS (\n    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rank\n    FROM employees\n)\nSELECT salary FROM RankedSalaries WHERE rank = 2 LIMIT 1;\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - High-Yield SQL Interview Questions 🎯\n\n### Top 5 Interview Concepts:\n1. **Find N-th highest salary**: Subquery vs `DENSE_RANK()` window function.\n2. **`WHERE` vs `HAVING`**: Row filter before aggregation vs group metric filter after aggregation.\n3. **`UNION` vs `UNION ALL`**: Deduplication overhead vs fast concatenation.\n4. **Leftmost prefix index rule**: Why `(A, B)` index doesn't speed up `WHERE B = 10`.\n5. **Deadlocks**: Prevention via consistent lock acquisition ordering.\n"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "id": "os/linux",
+  "name": "Linux Systems & DevOps Administration",
+  "version": "1.0.0",
+  "description": "Comprehensive Linux curriculum from kernel architecture, FHS, and permissions (SUID/SGID/ACL) to process management, systemd, text processing (grep/sed/awk), networking, and Bash scripting",
+  "root": {
+    "name": "linux-workspace",
+    "type": "directory",
+    "children": [
+      {
+        "name": "README.md",
+        "type": "file",
+        "content": "# 🐧 Complete Linux Systems & DevOps Administration Track\n\nWelcome to your full Linux learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-kernel-architecture` | **Kernel & Architecture** | Kernel space vs User space, system calls, `/proc/version`, `uname -a` |\n| `01-filesystem-hierarchy-standard` | **Filesystem Standard** | FHS (`/bin`, `/etc`, `/var`, `/usr`, `/tmp`, `/dev`, `/proc`, `/sys`) |\n| `02-file-operations-and-navigation`| **File Navigation** | `ls -lah`, `mkdir -p`, `cp -r`, `mv`, `rm`, `find`, `tree` |\n| `03-file-permissions-and-acls` | **Permissions & ACLs** | `chmod`, `chown`, octal modes, SUID (4000), SGID (2000), Sticky bit, ACLs |\n| `04-io-redirection-and-pipes` | **Redirection & Pipes** | File descriptors (`0`, `1`, `2`), `>`, `>>`, `2>&1`, `|`, `tee`, `xargs` |\n| `05-text-processing-grep-sed-awk` | **Text Processing (CLI)** | `grep -rnE`, `sed 's/.../.../g'`, `awk '{print $1}'`, `sort`, `uniq`, `cut` |\n| `06-process-management-and-signals`| **Processes & Signals** | `ps aux`, `top`, Process states (R, S, D, Z), Signals (SIGKILL, SIGTERM), `kill` |\n| `07-memory-and-cpu-monitoring` | **System Diagnostics** | `free -h`, `vmstat 1`, `iostat -xz`, Load Average (1m, 5m, 15m), swap |\n| `08-disk-management-and-filesystems`| **Disk & Filesystems** | `df -h`, `du -sh`, `lsblk`, `fdisk`, ext4/xfs, mounting, `/etc/fstab` |\n| `09-user-and-group-management` | **Users & Sudoers** | `/etc/passwd`, `/etc/shadow`, `useradd`, `usermod`, `visudo`, sudo rules |\n| `10-package-management` | **Package Managers** | Debian/Ubuntu `apt`, RHEL/CentOS `dnf`/`yum`, repository config |\n| `11-systemd-services-and-journals` | **systemd & Logging** | Systemd unit files (`.service`), `systemctl`, `journalctl -u service -f` |\n| `12-cron-jobs-and-timers` | **Job Scheduling** | `crontab -e`, cron syntax (`* * * * *`), systemd timers |\n| `13-networking-and-troubleshooting`| **Networking & DNS** | `ip addr`, `ip route`, `ss -tulpn`, `curl`, `ping`, `dig`, `/etc/resolv.conf` |\n| `14-ssh-keys-and-hardening` | **SSH & Remote Access** | `ssh-keygen -t ed25519`, `ssh-copy-id`, `/etc/ssh/sshd_config` hardening |\n| `15-firewalls-iptables-and-ufw` | **Firewall Security** | `iptables` chains & tables, `ufw` uncomplicated firewall, port rules |\n| `16-shell-scripting-bash` | **Bash Scripting** | `#!/usr/bin/env bash`, `set -euo pipefail`, loops, conditions, exit codes |\n| `17-security-selinux-and-apparmor` | **SELinux & AppArmor** | SELinux modes (Enforcing/Permissive), security contexts (`ls -Z`), audit logs |\n| `18-interview-questions-and-drills`| **Interview Master Drill**| Top 10 Linux SysAdmin interview questions & troubleshooting scenarios |\n\n---\n\n## 🛠️ Quick Commands\n\nInspect Linux system info:\n```bash\nuname -a\ncat /etc/os-release\n```\n"
+      },
+      {
+        "name": "00-setup-and-kernel-architecture",
+        "type": "directory",
+        "children": [
+          {
+            "name": "sysinfo.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"🐧 00 - Linux Kernel & System Info\"\necho \"=====================================================\"\nuname -a\necho \"\"\ncat /proc/version\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 - Linux Kernel Architecture 🛠️\n\n- **Kernel Space**: Monolithic Linux kernel managing CPU scheduling, virtual memory, device drivers, and system calls.\n- **User Space**: Applications, system daemons, GNU coreutils, and user shells.\n"
+          }
+        ]
+      },
+      {
+        "name": "01-filesystem-hierarchy-standard",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 - Filesystem Hierarchy Standard (FHS)\n\n- `/bin`, `/sbin`: Essential binary commands.\n- `/etc`: System-wide configuration files.\n- `/var`: Variable data (logs in `/var/log`, databases, spool).\n- `/proc`: Virtual in-memory filesystem exposing kernel & process state.\n- `/sys`: Virtual filesystem exposing device and driver hardware state.\n- `/dev`: Device special files (disks `/dev/sda`, null device `/dev/null`, random `/dev/urandom`).\n"
+          }
+        ]
+      },
+      {
+        "name": "02-file-operations-and-navigation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 - File Operations & Navigation\n\n```bash\n# Find files modified in the last 24 hours larger than 50MB\nfind /var/log -type f -mtime -1 -size +50M\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "03-file-permissions-and-acls",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 - File Permissions & Special Bits\n\n| Permission Bit | Numeric | Files | Directories |\n| :--- | :--- | :--- | :--- |\n| **Read (`r`)** | `4` | View contents | List files (`ls`) |\n| **Write (`w`)** | `2` | Modify contents | Create/delete files |\n| **Execute (`x`)**| `1` | Run as program | Enter directory (`cd`) |\n\n### Special Permissions:\n- **SUID (`chmod 4755`)**: Runs binary with owner's UID (e.g. `/usr/bin/passwd`).\n- **SGID (`chmod 2755`)**: Newly created files in directory inherit parent group ownership.\n- **Sticky Bit (`chmod 1777`)**: Users can only delete files they own (e.g. `/tmp`).\n"
+          }
+        ]
+      },
+      {
+        "name": "04-io-redirection-and-pipes",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 - I/O Redirection & Pipes\n\n```bash\n# Redirect both stdout and stderr to a file\ncommand > output.log 2>&1\n# or modern syntax:\ncommand &> output.log\n\n# Discard all output\ncommand > /dev/null 2>&1\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "05-text-processing-grep-sed-awk",
+        "type": "directory",
+        "children": [
+          {
+            "name": "sample.log",
+            "type": "file",
+            "content": "2026-08-30 12:00:01 INFO [auth] User login successful user_id=101\n2026-08-30 12:00:05 ERROR [payment] Transaction failed err=insufficient_funds user_id=102\n2026-08-30 12:00:10 WARN [db] Slow query executed duration=1200ms\n"
+          },
+          {
+            "name": "parse_logs.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\n# Extract error messages using grep and awk\ngrep \"ERROR\" sample.log | awk '{print $1, $2, $3, $4, $5}'\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 - Text Processing Powerhouses (grep, sed, awk)\n"
+          }
+        ]
+      },
+      {
+        "name": "06-process-management-and-signals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 - Process Management & POSIX Signals\n\n### Essential Signals:\n- **`SIGHUP (1)`**: Reload configuration without restarting process.\n- **`SIGINT (2)`**: Keyboard interrupt (`Ctrl + C`).\n- **`SIGKILL (9)`**: Uncatchable immediate kernel termination.\n- **`SIGTERM (15)`**: Graceful termination request (Default for `kill`).\n"
+          }
+        ]
+      },
+      {
+        "name": "07-memory-and-cpu-monitoring",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 - Memory & CPU Metrics\n\n```bash\n# Live CPU and disk I/O metrics every 2 seconds\nvmstat 2 5\n\n# Memory usage in human-readable gigabytes\nfree -h\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "08-disk-management-and-filesystems",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 - Disk & Filesystem Management\n\n```bash\n# Check filesystem disk space and inode consumption\ndf -h\ndf -i\n\n# Find largest 10 directories\ndu -ah /var | sort -rh | head -n 10\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "09-user-and-group-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 - User, Group & Sudoers Administration\n\n```bash\n# Create system user with home directory and bash shell\nsudo useradd -m -s /bin/bash devops_user\nsudo usermod -aG sudo devops_user\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "10-package-management",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 - Package Management\n\n```bash\n# Debian / Ubuntu (APT)\nsudo apt update && sudo apt upgrade -y\n\n# RHEL / CentOS (DNF)\nsudo dnf check-update && sudo dnf upgrade -y\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "11-systemd-services-and-journals",
+        "type": "directory",
+        "children": [
+          {
+            "name": "my-service.service",
+            "type": "file",
+            "content": "[Unit]\nDescription=Trak Background Service\nAfter=network.target\n\n[Service]\nType=simple\nUser=www-data\nWorkingDirectory=/opt/app\nExecStart=/usr/bin/node server.js\nRestart=always\nRestartSec=5s\n\n[Install]\nWantedBy=multi-user.target\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 - systemd Unit Configuration & journalctl\n\n```bash\n# Reload daemon after editing unit file\nsudo systemctl daemon-reload\nsudo systemctl enable --now my-service\n\n# Stream logs for service\njournalctl -u my-service -f\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "12-cron-jobs-and-timers",
+        "type": "directory",
+        "children": [
+          {
+            "name": "crontab.example",
+            "type": "file",
+            "content": "# Run daily backup at 2:30 AM\n30 2 * * * /opt/scripts/backup.sh > /var/log/backup.log 2>&1\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 - Scheduled Automation (Cron & Timers)\n"
+          }
+        ]
+      },
+      {
+        "name": "13-networking-and-troubleshooting",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 - Linux Networking & Port Diagnostics\n\n```bash\n# Show listening TCP and UDP sockets with process names\nss -tulpn\n\n# Test TCP port connectivity\nnc -zv 192.168.1.10 8080\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "14-ssh-keys-and-hardening",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 - SSH Key Authentication & Hardening\n\n```bash\n# Generate modern Ed25519 keypair\nssh-keygen -t ed25519 -C \"admin@company.com\"\n\n# Copy public key to remote server\nssh-copy-id -i ~/.ssh/id_ed25519.pub user@server-ip\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "15-firewalls-iptables-and-ufw",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 - Linux Firewalls (UFW & iptables)\n\n```bash\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw allow 22/tcp\nsudo ufw allow 80/tcp\nsudo ufw allow 443/tcp\nsudo ufw enable\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "16-shell-scripting-bash",
+        "type": "directory",
+        "children": [
+          {
+            "name": "automation.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\nset -euo pipefail\n\nreadonly BACKUP_DIR=\"/tmp/trak_backup\"\nmkdir -p \"${BACKUP_DIR}\"\n\necho \"[INFO] Backup initialized at $(date)\"\n"
+          },
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 - Robust Bash Scripting\n\nAlways use `set -euo pipefail`:\n- `-e`: Exit immediately on command failure.\n- `-u`: Treat unset variables as an error.\n- `-o pipefail`: Return exit code of first failing command in a pipe.\n"
+          }
+        ]
+      },
+      {
+        "name": "17-security-selinux-and-apparmor",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 - Mandatory Access Control (SELinux & AppArmor)\n\n```bash\n# Check SELinux status\nsestatus\n\n# Restore default file security contexts\nrestorecon -Rv /var/www/html\n```\n"
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 - High-Yield Linux SysAdmin & DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Load Average**: Number of runnable processes on CPU or waiting in uninterruptible disk sleep state (D state).\n2. **Zombie vs Orphan Process**: Zombie has finished execution but parent hasn't read exit code via `wait()`; Orphan has lost its parent and is adopted by PID 1 (systemd).\n3. **Hard Link vs Soft Link**: Hard link shares the same inode; soft link is a pointer file pointing to another pathname.\n4. **SIGKILL (9) vs SIGTERM (15)**: `SIGKILL` cannot be handled or ignored by the process; `SIGTERM` allows graceful cleanup of open connections and state.\n5. **FHS `/proc` filesystem**: A synthetic pseudo-filesystem generated by the Linux kernel on the fly to expose system metrics and process memory tables.\n\n🚀 You have completed the complete Linux Systems & DevOps Administration track!\n"
+          }
+        ]
+      }
+    ]
+  }
+}
