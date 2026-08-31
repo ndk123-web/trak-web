@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   FileCode,
   Eye,
@@ -18,7 +18,151 @@ interface EditorPaneProps {
   onChangeContent: (newContent: string) => void;
 }
 
-// Rich Markdown Live Renderer
+// ----------------------------------------------------
+// 1. Language-Aware VS Code Syntax Highlighter
+// ----------------------------------------------------
+
+function tokenizeAndHighlightLine(line: string, ext: string): React.ReactNode[] {
+  // Comments check first
+  const trimmed = line.trimStart();
+  const leadingSpaces = line.substring(0, line.length - trimmed.length);
+
+  // Line comments
+  if (
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("--") ||
+    trimmed.startsWith("/*")
+  ) {
+    return [
+      leadingSpaces,
+      <span key="comment" className="text-[#6a9955] italic">
+        {trimmed}
+      </span>,
+    ];
+  }
+
+  // Generalized VS Code token regex matching Strings, Keywords, Types, Functions, Numbers, Operators
+  const tokenRegex =
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"|'(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\'])*'|`[^`]*`|\b(?:package|import|func|def|fn|function|class|interface|type|struct|enum|impl|trait|public|private|protected|extends|implements|return|if|elif|else|for|while|loop|range|match|switch|case|break|continue|defer|go|chan|select|try|except|catch|finally|throw|raise|with|as|async|await|yield|lambda|const|let|var|mut|pub|unsafe|use|mod|crate|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|JOIN|LEFT|INNER|GROUP|ORDER|BY|HAVING|LIMIT|OFFSET|UNION|AND|OR|NOT|IN|IS|PRIMARY|KEY|FOREIGN|REFERENCES|include|define|pragma|namespace|using|echo|export)\b|\b(?:string|int|int64|int32|uint|uint64|float64|float32|bool|byte|rune|error|any|void|char|double|size_t|Vec|Option|Result|Some|None|Ok|Err|String|Self|self|str|list|dict|set|tuple|VARCHAR|INTEGER|BOOLEAN|TIMESTAMP|TEXT|NUMBER|BIGINT|UUID)\b|\b(?:true|false|nil|None|null|undefined|TRUE|FALSE|NULL)\b|\b\d+(?:\.\d*)?\b|[a-zA-Z0-9_]+(?=\()|[a-zA-Z0-9_]+(?=:)|[{}()[\],;=+\-*/%&|^!<>:]+)/g;
+
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  tokenRegex.lastIndex = 0;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(line.substring(lastIndex, match.index));
+    }
+
+    const token = match[0];
+    const upperToken = token.toUpperCase();
+
+    // 1. Strings (Orange)
+    if (
+      (token.startsWith('"') && token.endsWith('"')) ||
+      (token.startsWith("'") && token.endsWith("'")) ||
+      (token.startsWith("`") && token.endsWith("`"))
+    ) {
+      parts.push(
+        <span key={match.index} className="text-[#ce9178]">
+          {token}
+        </span>
+      );
+    }
+    // 2. Control Keywords (Pink / Purple)
+    else if (
+      /^(package|import|func|def|fn|function|class|interface|type|struct|enum|impl|trait|return|if|elif|else|for|while|loop|range|match|switch|case|break|continue|defer|go|chan|select|try|except|catch|finally|throw|raise|with|as|async|await|yield|lambda|const|let|var|mut|pub|unsafe|use|mod|crate|include|define|pragma|namespace|using|echo|export)$/.test(
+        token
+      )
+    ) {
+      parts.push(
+        <span key={match.index} className="text-[#c586c0] font-medium">
+          {token}
+        </span>
+      );
+    }
+    // 3. SQL Keywords (Purple / Cyan)
+    else if (
+      /^(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|JOIN|LEFT|INNER|GROUP|ORDER|BY|HAVING|LIMIT|OFFSET|UNION|AND|OR|NOT|IN|IS|PRIMARY|KEY|FOREIGN|REFERENCES)$/.test(
+        upperToken
+      )
+    ) {
+      parts.push(
+        <span key={match.index} className="text-[#569cd6] font-semibold">
+          {token}
+        </span>
+      );
+    }
+    // 4. Data Types (Teal / Cyan)
+    else if (
+      /^(string|int|int64|int32|uint|uint64|float64|float32|bool|byte|rune|error|any|void|char|double|size_t|Vec|Option|Result|Some|None|Ok|Err|String|Self|self|str|list|dict|set|tuple|VARCHAR|INTEGER|BOOLEAN|TIMESTAMP|TEXT|NUMBER|BIGINT|UUID)$/.test(
+        token
+      )
+    ) {
+      parts.push(
+        <span key={match.index} className="text-[#4ec9b0]">
+          {token}
+        </span>
+      );
+    }
+    // 5. Booleans & Constants (Cyan / Blue)
+    else if (/^(true|false|nil|None|null|undefined|TRUE|FALSE|NULL)$/.test(token)) {
+      parts.push(
+        <span key={match.index} className="text-[#569cd6] font-medium">
+          {token}
+        </span>
+      );
+    }
+    // 6. Numbers (Mint Green)
+    else if (/^\d+(?:\.\d*)?$/.test(token)) {
+      parts.push(
+        <span key={match.index} className="text-[#b5cea8]">
+          {token}
+        </span>
+      );
+    }
+    // 7. Function Calls (Yellow)
+    else if (line.charAt(match.index + token.length) === "(") {
+      parts.push(
+        <span key={match.index} className="text-[#dcdcaa]">
+          {token}
+        </span>
+      );
+    }
+    // 8. YAML/JSON Keys before colon (Light Blue)
+    else if (line.charAt(match.index + token.length) === ":") {
+      parts.push(
+        <span key={match.index} className="text-[#9cdcfe]">
+          {token}
+        </span>
+      );
+    }
+    // 9. Default Token
+    else {
+      parts.push(
+        <span key={match.index} className="text-[#e4e4e7]">
+          {token}
+        </span>
+      );
+    }
+
+    lastIndex = tokenRegex.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    parts.push(line.substring(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : [line];
+}
+
+// ----------------------------------------------------
+// 2. Rich Markdown Document Renderer
+// ----------------------------------------------------
+
 function renderMarkdownDocument(mdText: string) {
   const lines = mdText.split("\n");
   let inCodeBlock = false;
@@ -160,7 +304,6 @@ function renderMarkdownDocument(mdText: string) {
 
 // Inline Markdown formatter (**bold**, `code`, *italic*)
 function formatInlineMarkdown(text: string): React.ReactNode {
-  // Simple token parser for `code` and **bold**
   const parts: React.ReactNode[] = [];
   const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
 
@@ -206,6 +349,10 @@ function formatInlineMarkdown(text: string): React.ReactNode {
   return parts.length > 0 ? parts : text;
 }
 
+// ----------------------------------------------------
+// 3. Main EditorPane Component
+// ----------------------------------------------------
+
 export function EditorPane({
   filePath,
   content,
@@ -213,6 +360,9 @@ export function EditorPane({
 }: EditorPaneProps) {
   const [copied, setCopied] = useState(false);
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit");
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const highlightRef = useRef<HTMLDivElement>(null);
 
   if (!filePath) {
     return (
@@ -229,7 +379,8 @@ export function EditorPane({
   }
 
   const fileName = filePath.split("/").pop() || filePath;
-  const isMarkdown = fileName.endsWith(".md") || fileName.endsWith(".markdown");
+  const ext = fileName.split(".").pop()?.toLowerCase() || "";
+  const isMarkdown = ext === "md" || ext === "markdown";
 
   const lines = content.split("\n");
   const lineCount = lines.length;
@@ -238,6 +389,14 @@ export function EditorPane({
     navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Sync scroll between textarea and syntax highlight backdrop
+  const handleScroll = () => {
+    if (textareaRef.current && highlightRef.current) {
+      highlightRef.current.scrollTop = textareaRef.current.scrollTop;
+      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -275,7 +434,7 @@ export function EditorPane({
             <div className="flex items-center bg-white/[0.04] p-0.5 rounded-md text-[11px] font-mono border border-white/[0.06]">
               <button
                 onClick={() => setPreviewMode("edit")}
-                className={`px-2 py-0.5 rounded transition-colors ${
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
                   previewMode === "edit"
                     ? "bg-white/10 text-emerald-400 font-semibold"
                     : "text-slate-400 hover:text-white"
@@ -286,7 +445,7 @@ export function EditorPane({
               </button>
               <button
                 onClick={() => setPreviewMode("preview")}
-                className={`px-2 py-0.5 rounded transition-colors ${
+                className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
                   previewMode === "preview"
                     ? "bg-white/10 text-emerald-400 font-semibold"
                     : "text-slate-400 hover:text-white"
@@ -324,7 +483,7 @@ export function EditorPane({
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex overflow-hidden font-mono text-xs leading-relaxed bg-[#18181b]">
+        <div className="flex-1 flex overflow-hidden font-mono text-xs leading-[1.6] bg-[#18181b] relative">
           {/* Line Numbers Gutter */}
           <div className="py-4 pl-3 pr-3 select-none text-[#71717a] text-right bg-[#141416] border-r border-white/[0.04] shrink-0 font-mono text-[11px]">
             {Array.from({ length: lineCount }).map((_, i) => (
@@ -334,15 +493,32 @@ export function EditorPane({
             ))}
           </div>
 
-          {/* Textarea Code Input */}
-          <textarea
-            value={content}
-            onChange={(e) => onChangeContent(e.target.value)}
-            onKeyDown={handleKeyDown}
-            spellCheck={false}
-            className="flex-1 p-4 bg-transparent text-[#e4e4e7] outline-none resize-none overflow-y-auto font-mono text-xs leading-[1.6] scrollbar-thin selection:bg-[#264f78]"
-            placeholder="// Write code or markdown content here..."
-          />
+          {/* Syntax Highlighted View & Transparent Typing Input Layer */}
+          <div className="flex-1 relative overflow-hidden">
+            {/* Syntax Highlighted Backdrop */}
+            <div
+              ref={highlightRef}
+              className="absolute inset-0 p-4 font-mono text-xs leading-[1.6] pointer-events-none overflow-hidden whitespace-pre select-none"
+            >
+              {lines.map((line, lineIdx) => (
+                <div key={lineIdx} className="leading-[1.6] whitespace-pre">
+                  {tokenizeAndHighlightLine(line, ext)}
+                </div>
+              ))}
+            </div>
+
+            {/* Interactive Typing Layer */}
+            <textarea
+              ref={textareaRef}
+              value={content}
+              onChange={(e) => onChangeContent(e.target.value)}
+              onScroll={handleScroll}
+              onKeyDown={handleKeyDown}
+              spellCheck={false}
+              className="absolute inset-0 p-4 bg-transparent text-transparent caret-white outline-none resize-none overflow-auto font-mono text-xs leading-[1.6] selection:bg-[#264f78]/60 whitespace-pre"
+              placeholder="// Write code or markdown content here..."
+            />
+          </div>
         </div>
       )}
 
@@ -351,6 +527,7 @@ export function EditorPane({
         <div className="flex items-center gap-3">
           <span>{lineCount} lines</span>
           <span>{content.length} chars</span>
+          <span className="uppercase text-slate-400">{ext || "TXT"}</span>
           <span>UTF-8</span>
         </div>
         <div className="flex items-center gap-1.5 text-emerald-400">

@@ -331,7 +331,7 @@ export function FileTreePane({
       </div>
 
       {/* Tree Content */}
-      <div className="flex-1 overflow-y-auto p-1 space-y-0.5 scrollbar-thin">
+      <div className="flex-1 overflow-auto p-1 space-y-0.5">
         {(!root.children || root.children.length === 0) ? (
           <div className="p-4 text-center text-slate-500 font-mono text-xs space-y-2">
             <p>Empty workspace</p>
