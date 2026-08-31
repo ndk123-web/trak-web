@@ -7,9 +7,8 @@ import {
   Edit3,
   Copy,
   Check,
-  Code2,
 } from "lucide-react";
-import { getFileIconDetails } from "@/types/studio";
+import { getFileBadge } from "@/types/studio";
 
 interface EditorPaneProps {
   filePath: string | null;
@@ -27,13 +26,13 @@ export function EditorPane({
 
   if (!filePath) {
     return (
-      <div className="flex flex-col items-center justify-center h-full bg-[#06080e] text-slate-500 font-mono text-xs space-y-3 p-8 select-none">
+      <div className="flex flex-col items-center justify-center h-full bg-[#18181b] text-slate-500 font-mono text-xs space-y-3 p-8 select-none">
         <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-slate-400">
           <FileCode className="w-6 h-6" />
         </div>
-        <p className="text-slate-400 font-medium">No File Selected</p>
-        <p className="text-slate-600 text-[11px] max-w-xs text-center">
-          Click any file in the Explorer on the left to edit its code or markdown, or click + to create a new file.
+        <p className="text-slate-300 font-medium">No File Open</p>
+        <p className="text-slate-500 text-[11px] max-w-xs text-center">
+          Select a file from the explorer on the left, or click <span className="text-emerald-400">+ File</span> to start editing.
         </p>
       </div>
     );
@@ -41,7 +40,7 @@ export function EditorPane({
 
   const fileName = filePath.split("/").pop() || filePath;
   const isMarkdown = fileName.endsWith(".md") || fileName.endsWith(".markdown");
-  const fileMeta = getFileIconDetails(fileName);
+  const badge = getFileBadge(fileName);
 
   const lines = content.split("\n");
   const lineCount = lines.length;
@@ -72,16 +71,17 @@ export function EditorPane({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#06080e] border-r border-white/[0.08]">
-      {/* Editor Tab Bar */}
-      <div className="px-3 py-2 bg-[#0c101a] border-b border-white/[0.06] flex items-center justify-between gap-2 select-none">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-sm">{fileMeta.icon}</span>
+    <div className="flex flex-col h-full bg-[#18181b]">
+      {/* VS Code Active Tab Bar */}
+      <div className="px-3 py-1.5 bg-[#121215] border-b border-white/[0.06] flex items-center justify-between gap-2 select-none">
+        <div className="flex items-center gap-2 min-w-0 bg-[#18181b] px-3 py-1 rounded-t-md border-t-2 border-emerald-500 border-x border-white/[0.06]">
+          <span
+            className={`text-[9px] font-mono font-black px-1 py-0.2 rounded border shrink-0 leading-none ${badge.bgColor} ${badge.color} ${badge.borderColor}`}
+          >
+            {badge.label}
+          </span>
           <span className="font-mono text-xs font-semibold text-slate-200 truncate">
             {fileName}
-          </span>
-          <span className="text-[10px] font-mono text-slate-500 truncate hidden sm:inline">
-            {filePath}
           </span>
         </div>
 
@@ -92,7 +92,7 @@ export function EditorPane({
                 onClick={() => setPreviewMode("edit")}
                 className={`px-2 py-0.5 rounded transition-colors ${
                   previewMode === "edit"
-                    ? "bg-emerald-500/20 text-emerald-400 font-semibold"
+                    ? "bg-white/10 text-emerald-400 font-semibold"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
@@ -103,7 +103,7 @@ export function EditorPane({
                 onClick={() => setPreviewMode("preview")}
                 className={`px-2 py-0.5 rounded transition-colors ${
                   previewMode === "preview"
-                    ? "bg-emerald-500/20 text-emerald-400 font-semibold"
+                    ? "bg-white/10 text-emerald-400 font-semibold"
                     : "text-slate-400 hover:text-white"
                 }`}
               >
@@ -129,17 +129,21 @@ export function EditorPane({
 
       {/* Editor Body */}
       {previewMode === "preview" && isMarkdown ? (
-        <div className="flex-1 overflow-y-auto p-5 prose prose-invert max-w-none text-xs font-sans leading-relaxed">
-          <div className="whitespace-pre-wrap font-sans text-slate-300">
-            {content || <span className="italic text-slate-600">Empty markdown document...</span>}
+        <div className="flex-1 overflow-y-auto p-6 bg-[#18181b] text-slate-200 leading-relaxed font-sans text-xs">
+          <div className="max-w-3xl space-y-4">
+            <div className="whitespace-pre-wrap font-sans text-slate-300">
+              {content || <span className="italic text-slate-600">Empty markdown document...</span>}
+            </div>
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex overflow-hidden font-mono text-xs leading-relaxed">
-          {/* Line Numbers */}
-          <div className="py-4 pl-3 pr-2 select-none text-slate-600 text-right bg-[#05070c] border-r border-white/[0.04] shrink-0 font-mono text-[11px]">
+        <div className="flex-1 flex overflow-hidden font-mono text-xs leading-relaxed bg-[#18181b]">
+          {/* Line Numbers Gutter */}
+          <div className="py-4 pl-3 pr-3 select-none text-[#71717a] text-right bg-[#141416] border-r border-white/[0.04] shrink-0 font-mono text-[11px]">
             {Array.from({ length: lineCount }).map((_, i) => (
-              <div key={i}>{i + 1}</div>
+              <div key={i} className="leading-[1.6]">
+                {i + 1}
+              </div>
             ))}
           </div>
 
@@ -149,22 +153,22 @@ export function EditorPane({
             onChange={(e) => onChangeContent(e.target.value)}
             onKeyDown={handleKeyDown}
             spellCheck={false}
-            className="flex-1 p-4 bg-transparent text-slate-200 outline-none resize-none overflow-y-auto font-mono text-xs leading-relaxed scrollbar-thin selection:bg-emerald-500/30"
+            className="flex-1 p-4 bg-transparent text-[#e4e4e7] outline-none resize-none overflow-y-auto font-mono text-xs leading-[1.6] scrollbar-thin selection:bg-[#264f78]"
             placeholder="// Write code or markdown content here..."
           />
         </div>
       )}
 
       {/* Editor Status Bar */}
-      <div className="px-3 py-1.5 bg-[#07090e] border-t border-white/[0.04] text-[10px] font-mono text-slate-500 flex items-center justify-between">
+      <div className="px-3 py-1 bg-[#121215] border-t border-white/[0.04] text-[10px] font-mono text-slate-500 flex items-center justify-between select-none">
         <div className="flex items-center gap-3">
           <span>{lineCount} lines</span>
-          <span>{content.length} characters</span>
+          <span>{content.length} chars</span>
           <span>UTF-8</span>
         </div>
-        <div className="flex items-center gap-2 text-emerald-400">
+        <div className="flex items-center gap-1.5 text-emerald-400">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span>Synced to AST</span>
+          <span>AST Synchronized</span>
         </div>
       </div>
     </div>

@@ -4,18 +4,17 @@ import React, { useState } from "react";
 import {
   Folder,
   FolderOpen,
-  FileCode,
-  Plus,
-  FolderPlus,
-  Trash2,
-  Edit2,
   ChevronRight,
   ChevronDown,
   Check,
   X,
   FilePlus,
+  FolderPlus,
+  Edit2,
+  Trash2,
+  PanelLeftClose,
 } from "lucide-react";
-import { TemplateNode, getFileIconDetails } from "@/types/studio";
+import { TemplateNode, getFileBadge } from "@/types/studio";
 
 interface FileTreePaneProps {
   root: TemplateNode;
@@ -24,6 +23,7 @@ interface FileTreePaneProps {
   onAddNode: (parentPath: string, name: string, type: "file" | "directory") => void;
   onRenameNode: (nodePath: string, newName: string) => void;
   onDeleteNode: (nodePath: string) => void;
+  onCollapse?: () => void;
 }
 
 export function FileTreePane({
@@ -33,6 +33,7 @@ export function FileTreePane({
   onAddNode,
   onRenameNode,
   onDeleteNode,
+  onCollapse,
 }: FileTreePaneProps) {
   // Set of expanded folder paths
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
@@ -69,10 +70,9 @@ export function FileTreePane({
     e: React.MouseEvent
   ) => {
     e.stopPropagation();
-    // Ensure parent is expanded
     setExpandedFolders((prev) => new Set(prev).add(parentPath));
     setCreatingIn({ parentPath, type });
-    setNewItemName(type === "file" ? "untitled.go" : "new-module");
+    setNewItemName(type === "file" ? "main.go" : "00-setup");
   };
 
   const handleConfirmCreate = () => {
@@ -113,7 +113,7 @@ export function FileTreePane({
     const isRenaming = renamingPath === node.id;
     const isCreatingHere = creatingIn?.parentPath === node.id;
 
-    const fileMeta = !isDir ? getFileIconDetails(node.name) : null;
+    const badge = !isDir ? getFileBadge(node.name) : null;
 
     return (
       <div key={node.id} className="select-none text-xs">
@@ -129,7 +129,7 @@ export function FileTreePane({
           style={{ paddingLeft: `${depth * 14 + 10}px` }}
           className={`group flex items-center justify-between py-1.5 pr-2 rounded-md cursor-pointer transition-colors ${
             isSelected
-              ? "bg-emerald-500/15 text-emerald-300 font-medium"
+              ? "bg-[#04395e] text-white font-medium shadow-sm"
               : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
           }`}
         >
@@ -150,16 +150,20 @@ export function FileTreePane({
               <span className="w-3.5 shrink-0" />
             )}
 
-            {/* Icon */}
+            {/* Folder / File Badge Icon */}
             {isDir ? (
               isExpanded ? (
-                <FolderOpen className="w-4 h-4 text-cyan-400 shrink-0" />
+                <FolderOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               ) : (
-                <Folder className="w-4 h-4 text-cyan-500/80 shrink-0" />
+                <Folder className="w-3.5 h-3.5 text-amber-500/90 shrink-0" />
               )
-            ) : (
-              <span className="text-sm shrink-0 leading-none">{fileMeta?.icon}</span>
-            )}
+            ) : badge ? (
+              <span
+                className={`text-[9px] font-mono font-black px-1 py-0.2 rounded border shrink-0 leading-none ${badge.bgColor} ${badge.color} ${badge.borderColor}`}
+              >
+                {badge.label}
+              </span>
+            ) : null}
 
             {/* Name / Rename Input */}
             {isRenaming ? (
@@ -176,23 +180,25 @@ export function FileTreePane({
                     if (e.key === "Escape") setRenamingPath(null);
                   }}
                   autoFocus
-                  className="w-full px-1.5 py-0.5 bg-slate-950 border border-emerald-500/50 rounded text-xs text-white font-mono outline-none"
+                  className="w-full px-1.5 py-0.5 bg-[#18181b] border border-cyan-500 rounded text-xs text-white font-mono outline-none"
                 />
                 <button
                   onClick={handleConfirmRename}
                   className="p-0.5 hover:bg-white/10 rounded text-emerald-400"
                 >
-                  <Check className="w-3.5 h-3.5" />
+                  <Check className="w-3 h-3" />
                 </button>
                 <button
                   onClick={() => setRenamingPath(null)}
                   className="p-0.5 hover:bg-white/10 rounded text-slate-400"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <X className="w-3 h-3" />
                 </button>
               </div>
             ) : (
-              <span className="truncate font-mono text-[12px]">{node.name}</span>
+              <span className="truncate font-mono text-[11.5px] leading-tight">
+                {node.name}
+              </span>
             )}
           </div>
 
@@ -251,9 +257,11 @@ export function FileTreePane({
             className="flex items-center gap-1.5 py-1 pr-2 my-0.5 bg-white/[0.02] rounded"
           >
             {creatingIn.type === "directory" ? (
-              <Folder className="w-4 h-4 text-cyan-400 shrink-0" />
+              <Folder className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             ) : (
-              <FileCode className="w-4 h-4 text-slate-400 shrink-0" />
+              <span className="text-[9px] font-mono font-bold px-1 bg-white/10 text-slate-300 rounded border border-white/20">
+                +
+              </span>
             )}
             <input
               type="text"
@@ -267,19 +275,19 @@ export function FileTreePane({
                 creatingIn.type === "directory" ? "folder-name" : "file.ext"
               }
               autoFocus
-              className="flex-1 px-1.5 py-0.5 bg-slate-950 border border-emerald-500 rounded text-xs text-white font-mono outline-none"
+              className="flex-1 px-1.5 py-0.5 bg-[#18181b] border border-cyan-500 rounded text-xs text-white font-mono outline-none"
             />
             <button
               onClick={handleConfirmCreate}
               className="p-1 hover:bg-white/10 rounded text-emerald-400"
             >
-              <Check className="w-3.5 h-3.5" />
+              <Check className="w-3 h-3" />
             </button>
             <button
               onClick={() => setCreatingIn(null)}
               className="p-1 hover:bg-white/10 rounded text-slate-400"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-3 h-3" />
             </button>
           </div>
         )}
@@ -294,11 +302,11 @@ export function FileTreePane({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#080b11] border-r border-white/[0.08]">
+    <div className="flex flex-col h-full bg-[#11131a] select-none">
       {/* Explorer Header */}
-      <div className="px-3 py-2.5 bg-[#0c101a] border-b border-white/[0.06] flex items-center justify-between">
+      <div className="px-3 py-2 bg-[#181a20] border-b border-white/[0.06] flex items-center justify-between">
         <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">
-          Explorer
+          Files
         </span>
         <div className="flex items-center gap-1">
           <button
@@ -315,17 +323,35 @@ export function FileTreePane({
           >
             <FolderPlus className="w-3.5 h-3.5" />
           </button>
+          {onCollapse && (
+            <button
+              onClick={onCollapse}
+              className="p-1 rounded hover:bg-white/10 text-slate-500 hover:text-slate-300 transition-colors ml-1"
+              title="Collapse Explorer Pane"
+            >
+              <PanelLeftClose className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
 
       {/* Tree Content */}
-      <div className="flex-1 overflow-y-auto p-1.5 space-y-0.5 scrollbar-thin">
-        {renderNode(root, 0)}
+      <div className="flex-1 overflow-y-auto p-1 space-y-0.5 scrollbar-thin">
+        {(!root.children || root.children.length === 0) ? (
+          <div className="p-4 text-center text-slate-500 font-mono text-xs space-y-2">
+            <p>Empty workspace</p>
+            <p className="text-[11px] text-slate-600">
+              Click <span className="text-emerald-400">+ File</span> or <span className="text-cyan-400">+ Folder</span> above to create nodes.
+            </p>
+          </div>
+        ) : (
+          renderNode(root, 0)
+        )}
       </div>
 
       {/* Explorer Footer summary */}
-      <div className="px-3 py-1.5 bg-[#07090e] border-t border-white/[0.04] text-[10px] font-mono text-slate-500 flex items-center justify-between">
-        <span>Trak Virtual FS</span>
+      <div className="px-3 py-1.5 bg-[#0d0f14] border-t border-white/[0.04] text-[10px] font-mono text-slate-500 flex items-center justify-between">
+        <span>Virtual Workspace</span>
         <span>AST v1.0.0</span>
       </div>
     </div>

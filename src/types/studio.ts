@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface TemplateNode {
   id: string; // Unique internal UI ID (e.g. "path/to/node")
   name: string;
@@ -60,56 +62,79 @@ export function serializeBlueprintToJSON(blueprint: TemplateBlueprint): string {
   return JSON.stringify(cleanAST, null, 2);
 }
 
-// Get file extension icon details
-export function getFileIconDetails(filename: string): { icon: string; color: string } {
+// Authentic VS Code-style File Badge Definition
+export interface FileBadge {
+  label: string;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+}
+
+export function getFileBadge(filename: string): FileBadge {
   const ext = filename.split(".").pop()?.toLowerCase() || "";
   const name = filename.toLowerCase();
 
+  // Docker
   if (name === "dockerfile" || name.startsWith("docker-compose")) {
-    return { icon: "🐳", color: "text-blue-400" };
+    return { label: "DK", color: "text-[#38bdf8]", bgColor: "bg-[#0284c7]/20", borderColor: "border-[#0284c7]/40" };
   }
-  if (name === "makefile") {
-    return { icon: "⚙️", color: "text-slate-400" };
-  }
+  // Python
   if (name === "pyproject.toml" || ext === "py") {
-    return { icon: "🐍", color: "text-yellow-400" };
+    return { label: "PY", color: "text-[#fbbf24]", bgColor: "bg-[#3776AB]/20", borderColor: "border-[#3776AB]/40" };
   }
+  // Go
   if (ext === "go" || name === "go.mod" || name === "go.sum") {
-    return { icon: "🐹", color: "text-cyan-400" };
+    return { label: "GO", color: "text-[#00ADD8]", bgColor: "bg-[#00ADD8]/20", borderColor: "border-[#00ADD8]/40" };
   }
+  // Rust
   if (ext === "rs" || name === "cargo.toml") {
-    return { icon: "🦀", color: "text-orange-400" };
+    return { label: "RS", color: "text-[#DEA584]", bgColor: "bg-[#DEA584]/20", borderColor: "border-[#DEA584]/40" };
   }
+  // TypeScript
   if (ext === "ts" || ext === "tsx") {
-    return { icon: "🔷", color: "text-blue-400" };
+    return { label: "TS", color: "text-[#60a5fa]", bgColor: "bg-[#3178C6]/20", borderColor: "border-[#3178C6]/40" };
   }
+  // JavaScript
   if (ext === "js" || ext === "jsx" || ext === "mjs") {
-    return { icon: "🟨", color: "text-yellow-400" };
+    return { label: "JS", color: "text-[#fde047]", bgColor: "bg-[#F7DF1E]/20", borderColor: "border-[#F7DF1E]/40" };
   }
+  // JSON
   if (ext === "json") {
-    return { icon: "{} ", color: "text-amber-400 font-mono font-bold" };
+    return { label: "{}", color: "text-[#f59e0b]", bgColor: "bg-[#f59e0b]/20", borderColor: "border-[#f59e0b]/40" };
   }
+  // Markdown
   if (ext === "md" || ext === "markdown") {
-    return { icon: "📝", color: "text-emerald-400" };
+    return { label: "MD", color: "text-[#34d399]", bgColor: "bg-[#10b981]/20", borderColor: "border-[#10b981]/40" };
   }
+  // YAML / YML
   if (ext === "yml" || ext === "yaml") {
-    return { icon: "📜", color: "text-rose-400" };
+    return { label: "YM", color: "text-[#f43f5e]", bgColor: "bg-[#f43f5e]/20", borderColor: "border-[#f43f5e]/40" };
   }
+  // SQL
   if (ext === "sql") {
-    return { icon: "🗄️", color: "text-indigo-400" };
+    return { label: "SQL", color: "text-[#a78bfa]", bgColor: "bg-[#818cf8]/20", borderColor: "border-[#818cf8]/40" };
   }
+  // Shell / Scripts
   if (ext === "sh" || ext === "bash" || ext === "ps1") {
-    return { icon: "⚡", color: "text-emerald-400" };
+    return { label: "SH", color: "text-[#2dd4bf]", bgColor: "bg-[#14b8a6]/20", borderColor: "border-[#14b8a6]/40" };
   }
+  // C / H
   if (ext === "c" || ext === "h") {
-    return { icon: "🇨", color: "text-slate-300" };
+    return { label: "C", color: "text-[#93c5fd]", bgColor: "bg-[#60a5fa]/20", borderColor: "border-[#60a5fa]/40" };
   }
+  // C++ / CC
   if (ext === "cpp" || ext === "hpp" || ext === "cc") {
-    return { icon: "➕", color: "text-blue-400" };
+    return { label: "C++", color: "text-[#60a5fa]", bgColor: "bg-[#00599C]/20", borderColor: "border-[#00599C]/40" };
   }
+  // Java
   if (ext === "java") {
-    return { icon: "☕", color: "text-amber-500" };
+    return { label: "JV", color: "text-[#f97316]", bgColor: "bg-[#ED8B00]/20", borderColor: "border-[#ED8B00]/40" };
+  }
+  // TOML
+  if (ext === "toml") {
+    return { label: "TO", color: "text-[#e2e8f0]", bgColor: "bg-[#64748b]/20", borderColor: "border-[#64748b]/40" };
   }
 
-  return { icon: "📄", color: "text-slate-400" };
+  // Default file
+  return { label: "FILE", color: "text-slate-400", bgColor: "bg-white/[0.05]", borderColor: "border-white/[0.1]" };
 }

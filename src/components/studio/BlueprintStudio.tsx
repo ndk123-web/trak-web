@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Wrench,
-  Plus,
+  PanelLeft,
+  PanelRight,
   RotateCcw,
   Sparkles,
   Columns2,
   FileCode,
   FileJson,
   Layers,
-  CheckCircle2,
   FolderTree,
 } from "lucide-react";
 import {
@@ -23,8 +23,8 @@ import { FileTreePane } from "./FileTreePane";
 import { EditorPane } from "./EditorPane";
 import { JsonPreviewPane } from "./JsonPreviewPane";
 import { MetadataModal } from "./MetadataModal";
-import { TRACKS } from "@/data/tracks";
 
+// Pure Blank Template (100% Empty Workspace)
 const BLANK_TEMPLATE: TemplateBlueprint = {
   id: "lang/mytrack",
   name: "My Custom Learning Track",
@@ -34,33 +34,7 @@ const BLANK_TEMPLATE: TemplateBlueprint = {
     id: "learn-mytrack",
     name: "learn-mytrack",
     type: "directory",
-    children: [
-      {
-        id: "learn-mytrack/README.md",
-        name: "README.md",
-        type: "file",
-        content: `# My Custom Learning Track\n\nWelcome to your hands-on engineering lab!\n\n## Curriculum Roadmap\n- [ ] **00 - Setup & Toolchain**\n- [ ] **01 - Fundamentals**\n- [ ] **02 - Concurrency & Internals**\n`,
-      },
-      {
-        id: "learn-mytrack/00-setup-and-toolchain",
-        name: "00-setup-and-toolchain",
-        type: "directory",
-        children: [
-          {
-            id: "learn-mytrack/00-setup-and-toolchain/README.md",
-            name: "README.md",
-            type: "file",
-            content: `# 00 - Setup & Toolchain\n\nInstall the compiler and configure your environment.\n`,
-          },
-          {
-            id: "learn-mytrack/00-setup-and-toolchain/main.go",
-            name: "main.go",
-            type: "file",
-            content: `package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("Hello from Module 00!")\n}\n`,
-          },
-        ],
-      },
-    ],
+    children: [],
   },
 };
 
@@ -70,15 +44,25 @@ export function BlueprintStudio() {
   const [activeFilePath, setActiveFilePath] = useState<string | null>(null);
   const [activeContent, setActiveContent] = useState<string>("");
   const [isMetaModalOpen, setIsMetaModalOpen] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"split" | "editor" | "json">("split");
   const [isLoadingPreset, setIsLoadingPreset] = useState<boolean>(false);
 
-  // Load preset JSON on initial mount or preset change
+  // Resizable Panes Dimensions (in pixels)
+  const [leftWidth, setLeftWidth] = useState<number>(250); // Explorer width
+  const [rightWidth, setRightWidth] = useState<number>(360); // JSON Preview width
+  const [isLeftCollapsed, setIsLeftCollapsed] = useState<boolean>(false);
+  const [isRightCollapsed, setIsRightCollapsed] = useState<boolean>(false);
+
+  // Dragging state
+  const isDraggingLeft = useRef<boolean>(false);
+  const isDraggingRight = useRef<boolean>(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Load preset JSON
   const loadPreset = async (presetId: string) => {
     if (presetId === "blank") {
       setBlueprint(BLANK_TEMPLATE);
-      setActiveFilePath("learn-mytrack/README.md");
-      setActiveContent(BLANK_TEMPLATE.root.children?.[0]?.content || "");
+      setActiveFilePath(null);
+      setActiveContent("");
       return;
     }
 
@@ -120,6 +104,59 @@ export function BlueprintStudio() {
   useEffect(() => {
     loadPreset("lang/go");
   }, []);
+
+  // Mouse drag handlers for resizers
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+
+      if (isDraggingLeft.current) {
+        const newLeft = e.clientX - containerRect.left;
+        if (newLeft >= 160 && newLeft <= 480) {
+          setLeftWidth(newLeft);
+        }
+      }
+
+      if (isDraggingRight.current) {
+        const newRight = containerRect.right - e.clientX;
+        if (newRight >= 220 && newRight <= 650) {
+          setRightWidth(newRight);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (isDraggingLeft.current || isDraggingRight.current) {
+        isDraggingLeft.current = false;
+        isDraggingRight.current = false;
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const startDragLeft = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isDraggingLeft.current = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  const startDragRight = (e: React.MouseEvent) => {
+    e.preventDefault();
+    isDraggingRight.current = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
 
   // Helper to find first file in tree
   const findFirstFile = (node: TemplateNode): TemplateNode | null => {
@@ -282,26 +319,21 @@ export function BlueprintStudio() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-[#07090e] overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-[#11131a] overflow-hidden select-none">
       {/* Studio Header Toolbar */}
-      <header className="px-4 py-2.5 bg-[#090b10] border-b border-white/[0.08] flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <header className="px-4 py-2 bg-[#181a20] border-b border-white/[0.06] flex flex-wrap items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <Wrench className="w-4 h-4" />
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <Wrench className="w-3.5 h-3.5" />
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-serif text-sm sm:text-base font-normal text-white">
-                  Blueprint Studio
-                </h1>
-                <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-semibold">
-                  v1.0.0 AST
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 font-sans hidden sm:block">
-                Visual template designer & registry AST generator
-              </p>
+            <div className="flex items-center gap-2">
+              <h1 className="font-serif text-sm font-semibold text-white">
+                Blueprint Studio
+              </h1>
+              <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold">
+                AST v1.0.0
+              </span>
             </div>
           </div>
 
@@ -310,7 +342,7 @@ export function BlueprintStudio() {
           {/* Preset Selector Dropdown */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono text-slate-500 hidden lg:inline">
-              Load Blueprint:
+              Template:
             </span>
             <select
               value={selectedPreset}
@@ -319,9 +351,9 @@ export function BlueprintStudio() {
                 setSelectedPreset(val);
                 loadPreset(val);
               }}
-              className="px-2.5 py-1.5 bg-[#0e131f] border border-white/10 rounded-lg text-xs font-mono text-slate-200 outline-none focus:border-emerald-500 cursor-pointer"
+              className="px-2.5 py-1 bg-[#11131a] border border-white/10 rounded-lg text-xs font-mono text-slate-200 outline-none focus:border-emerald-500 cursor-pointer"
             >
-              <option value="blank">+ Blank Template (Scratch)</option>
+              <option value="blank">+ Blank Template (100% Empty)</option>
               <optgroup label="Programming Languages">
                 <option value="lang/go">lang/go (Go Mastery)</option>
                 <option value="lang/rust">lang/rust (Rust Systems)</option>
@@ -357,103 +389,102 @@ export function BlueprintStudio() {
 
         {/* Right Toolbar Controls */}
         <div className="flex items-center gap-2">
+          {/* Pane Visibility Toggles */}
+          <div className="flex items-center gap-1 bg-[#11131a] p-0.5 rounded-lg border border-white/[0.08] text-xs">
+            <button
+              onClick={() => setIsLeftCollapsed(!isLeftCollapsed)}
+              className={`p-1 rounded transition-colors ${
+                !isLeftCollapsed
+                  ? "bg-white/10 text-white"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+              title="Toggle File Explorer"
+            >
+              <PanelLeft className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => setIsRightCollapsed(!isRightCollapsed)}
+              className={`p-1 rounded transition-colors ${
+                !isRightCollapsed
+                  ? "bg-white/10 text-white"
+                  : "text-slate-500 hover:text-slate-300"
+              }`}
+              title="Toggle JSON AST Preview"
+            >
+              <PanelRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
           {/* Metadata pill */}
           <button
             onClick={() => setIsMetaModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-slate-300 border border-white/[0.08] transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-slate-300 border border-white/[0.08] transition-colors cursor-pointer"
           >
             <span className="text-slate-500">ID:</span>
             <span className="text-cyan-400 font-bold">{blueprint.id}</span>
-            <span className="text-slate-500">•</span>
+            <span className="text-slate-600">•</span>
             <span className="text-emerald-400">v{blueprint.version}</span>
           </button>
-
-          {/* View Mode Switcher (Split vs Tabs) */}
-          <div className="hidden sm:flex items-center bg-white/[0.04] p-0.5 rounded-lg border border-white/[0.06] text-xs font-mono">
-            <button
-              onClick={() => setViewMode("split")}
-              className={`p-1.5 rounded transition-colors ${
-                viewMode === "split"
-                  ? "bg-white/10 text-white font-semibold"
-                  : "text-slate-500 hover:text-slate-300"
-              }`}
-              title="Split View (Editor + JSON)"
-            >
-              <Columns2 className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setViewMode("editor")}
-              className={`p-1.5 rounded transition-colors ${
-                viewMode === "editor"
-                  ? "bg-white/10 text-white font-semibold"
-                  : "text-slate-500 hover:text-slate-300"
-              }`}
-              title="Editor Only"
-            >
-              <FileCode className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setViewMode("json")}
-              className={`p-1.5 rounded transition-colors ${
-                viewMode === "json"
-                  ? "bg-white/10 text-white font-semibold"
-                  : "text-slate-500 hover:text-slate-300"
-              }`}
-              title="JSON AST Only"
-            >
-              <FileJson className="w-3.5 h-3.5" />
-            </button>
-          </div>
         </div>
       </header>
 
-      {/* Main Studio Workspace Grid */}
-      <div className="flex-1 grid grid-cols-12 overflow-hidden">
-        {/* Left Column: VS Code File Tree Explorer (3 cols) */}
-        <div className="col-span-12 sm:col-span-4 lg:col-span-3 h-full overflow-hidden">
-          <FileTreePane
-            root={blueprint.root}
-            activeFilePath={activeFilePath}
-            onSelectFile={handleSelectFile}
-            onAddNode={handleAddNode}
-            onRenameNode={handleRenameNode}
-            onDeleteNode={handleDeleteNode}
+      {/* Main Studio Workspace with Resizable Draggable Sliders */}
+      <div ref={containerRef} className="flex-1 flex overflow-hidden relative">
+        {/* 1. Left Pane: File Tree Explorer */}
+        {!isLeftCollapsed && (
+          <div
+            style={{ width: `${leftWidth}px` }}
+            className="h-full shrink-0 overflow-hidden"
+          >
+            <FileTreePane
+              root={blueprint.root}
+              activeFilePath={activeFilePath}
+              onSelectFile={handleSelectFile}
+              onAddNode={handleAddNode}
+              onRenameNode={handleRenameNode}
+              onDeleteNode={handleDeleteNode}
+              onCollapse={() => setIsLeftCollapsed(true)}
+            />
+          </div>
+        )}
+
+        {/* Left Resizer Handle (Draggable Slider) */}
+        {!isLeftCollapsed && (
+          <div
+            onMouseDown={startDragLeft}
+            className="w-1 hover:w-1.5 active:w-1.5 bg-white/[0.06] hover:bg-cyan-500 active:bg-cyan-500 cursor-col-resize shrink-0 transition-colors z-10 select-none"
+            title="Drag to resize Explorer width"
+          />
+        )}
+
+        {/* 2. Center Pane: VS Code Editor */}
+        <div className="flex-1 h-full overflow-hidden min-w-[280px]">
+          <EditorPane
+            filePath={activeFilePath}
+            content={activeContent}
+            onChangeContent={handleChangeContent}
           />
         </div>
 
-        {/* Center & Right Column: Editor and JSON Preview */}
-        {viewMode === "split" ? (
-          <>
-            {/* Center: File Content Editor (5 cols) */}
-            <div className="hidden sm:block sm:col-span-8 lg:col-span-5 h-full overflow-hidden">
-              <EditorPane
-                filePath={activeFilePath}
-                content={activeContent}
-                onChangeContent={handleChangeContent}
-              />
-            </div>
+        {/* Right Resizer Handle (Draggable Slider) */}
+        {!isRightCollapsed && (
+          <div
+            onMouseDown={startDragRight}
+            className="w-1 hover:w-1.5 active:w-1.5 bg-white/[0.06] hover:bg-emerald-500 active:bg-emerald-500 cursor-col-resize shrink-0 transition-colors z-10 select-none"
+            title="Drag to resize JSON preview width"
+          />
+        )}
 
-            {/* Right: Live JSON AST Preview (4 cols) */}
-            <div className="hidden lg:block lg:col-span-4 h-full overflow-hidden">
-              <JsonPreviewPane
-                blueprint={blueprint}
-                onOpenMetaModal={() => setIsMetaModalOpen(true)}
-              />
-            </div>
-          </>
-        ) : viewMode === "editor" ? (
-          <div className="col-span-12 sm:col-span-8 lg:col-span-9 h-full overflow-hidden">
-            <EditorPane
-              filePath={activeFilePath}
-              content={activeContent}
-              onChangeContent={handleChangeContent}
-            />
-          </div>
-        ) : (
-          <div className="col-span-12 sm:col-span-8 lg:col-span-9 h-full overflow-hidden">
+        {/* 3. Right Pane: Live VS Code JSON AST Preview */}
+        {!isRightCollapsed && (
+          <div
+            style={{ width: `${rightWidth}px` }}
+            className="h-full shrink-0 overflow-hidden"
+          >
             <JsonPreviewPane
               blueprint={blueprint}
               onOpenMetaModal={() => setIsMetaModalOpen(true)}
+              onCollapse={() => setIsRightCollapsed(true)}
             />
           </div>
         )}
