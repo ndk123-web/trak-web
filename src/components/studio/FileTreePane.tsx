@@ -14,7 +14,8 @@ import {
   Trash2,
   PanelLeftClose,
 } from "lucide-react";
-import { TemplateNode, getFileBadge } from "@/types/studio";
+import { TemplateNode } from "@/types/studio";
+import { FileIconSvg } from "./FileIconSvg";
 
 interface FileTreePaneProps {
   root: TemplateNode;
@@ -113,8 +114,6 @@ export function FileTreePane({
     const isRenaming = renamingPath === node.id;
     const isCreatingHere = creatingIn?.parentPath === node.id;
 
-    const badge = !isDir ? getFileBadge(node.name) : null;
-
     return (
       <div key={node.id} className="select-none text-xs">
         {/* Node Row */}
@@ -150,20 +149,16 @@ export function FileTreePane({
               <span className="w-3.5 shrink-0" />
             )}
 
-            {/* Folder / File Badge Icon */}
+            {/* Folder (Muted Gray like VS Code) OR Real SVG Language Vector */}
             {isDir ? (
               isExpanded ? (
-                <FolderOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <FolderOpen className="w-3.5 h-3.5 text-[#909090] shrink-0" />
               ) : (
-                <Folder className="w-3.5 h-3.5 text-amber-500/90 shrink-0" />
+                <Folder className="w-3.5 h-3.5 text-[#808080] shrink-0" />
               )
-            ) : badge ? (
-              <span
-                className={`text-[9px] font-mono font-black px-1 py-0.2 rounded border shrink-0 leading-none ${badge.bgColor} ${badge.color} ${badge.borderColor}`}
-              >
-                {badge.label}
-              </span>
-            ) : null}
+            ) : (
+              <FileIconSvg filename={node.name} className="w-3.5 h-3.5" />
+            )}
 
             {/* Name / Rename Input */}
             {isRenaming ? (
@@ -257,7 +252,7 @@ export function FileTreePane({
             className="flex items-center gap-1.5 py-1 pr-2 my-0.5 bg-white/[0.02] rounded"
           >
             {creatingIn.type === "directory" ? (
-              <Folder className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <Folder className="w-3.5 h-3.5 text-[#909090] shrink-0" />
             ) : (
               <span className="text-[9px] font-mono font-bold px-1 bg-white/10 text-slate-300 rounded border border-white/20">
                 +
