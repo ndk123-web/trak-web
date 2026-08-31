@@ -6,8 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Search,
-  Copy,
-  Check,
   Menu,
   X,
   PanelLeft,
@@ -31,16 +29,7 @@ export function AppHeader({
   onToggleSidebarCollapse,
 }: AppHeaderProps) {
   const pathname = usePathname();
-  const [copied, setCopied] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  const handleCopyInstall = () => {
-    navigator.clipboard.writeText(
-      "irm https://raw.githubusercontent.com/ndk123-web/trak/main/scripts/install.ps1 | iex",
-    );
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   // Build clean breadcrumbs
   const pathSegments = pathname.split("/").filter(Boolean);
@@ -133,21 +122,6 @@ export function AppHeader({
             <kbd className="hidden md:inline-block px-1.5 py-0.5 rounded bg-black/50 text-[10px] font-mono text-slate-400 border border-white/10">
               ⌘K
             </kbd>
-          </button>
-
-          {/* Install Command */}
-          <button
-            onClick={handleCopyInstall}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 border border-white/[0.08] text-xs font-mono text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
-            title="Copy PowerShell 1-liner install command"
-          >
-            {copied ? (
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-            ) : (
-              <Copy className="w-3.5 h-3.5 text-slate-500" />
-            )}
-            <span className="text-emerald-400 font-bold">$</span>
-            <span>irm trak/install.ps1 | iex</span>
           </button>
 
           {/* GitHub Link */}
