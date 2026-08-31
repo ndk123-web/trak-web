@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Hero } from "@/components/Hero";
+import { AmbientVideo } from "@/components/AmbientVideo";
 import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
 import {
   Terminal,
@@ -72,14 +73,7 @@ export default function Home() {
           </div>
 
           <div className="bg-black aspect-video flex items-center justify-center">
-            <video
-              src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-contain pointer-events-none"
-            />
+            <AmbientVideo src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3" />
           </div>
         </div>
       </section>
