@@ -90,9 +90,9 @@ export function Sidebar({
       ],
     },
     {
-      title: "Registry Spec",
+      title: "Registry & GitOps",
       items: [
-        { name: "Architecture & Schema", href: "/registry", icon: BookOpen },
+        { name: "Registry Guide", href: "/registry", icon: BookOpen },
       ],
     },
     {
