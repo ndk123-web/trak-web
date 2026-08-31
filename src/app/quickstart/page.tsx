@@ -2,32 +2,32 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Terminal, Copy, Check, ArrowRight, Flame, Sparkles, CheckCircle2 } from "lucide-react";
+import { Terminal, Copy, Check, Sparkles, Flame, CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function QuickstartPage() {
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
   const [installMethod, setInstallMethod] = useState<"ps" | "cmd" | "bash" | "go">("ps");
 
-  const copyCode = (code: string, step: number) => {
-    navigator.clipboard.writeText(code);
-    setCopiedStep(step);
-    setTimeout(() => setCopiedStep(null), 2000);
-  };
-
   const installCommands = {
     ps: "irm https://raw.githubusercontent.com/ndk123-web/trak/main/scripts/install.ps1 | iex",
-    cmd: "powershell -ExecutionPolicy Bypass -Command \"iwr -useb https://raw.githubusercontent.com/ndk123-web/trak/main/scripts/install.ps1 | iex\"",
+    cmd: "powershell -Command \"irm https://raw.githubusercontent.com/ndk123-web/trak/main/scripts/install.ps1 | iex\"",
     bash: "curl -fsSL https://raw.githubusercontent.com/ndk123-web/trak/main/scripts/install.sh | bash",
     go: "go install github.com/ndk123-web/trak@latest",
+  };
+
+  const handleCopy = (text: string, index: number) => {
+    navigator.clipboard.writeText(text);
+    setCopiedStep(index);
+    setTimeout(() => setCopiedStep(null), 2000);
   };
 
   const steps = [
     {
       number: "1",
       title: "Install the Trak CLI",
-      description: "Choose your preferred installation method below to install the single standalone binary:",
+      description: "Choose your operating system and run the single automated installer one-liner:",
       isInstallStep: true,
-      tip: "💡 Tip for Developers: If 'trak' is not recognized immediately in other open terminal tabs, restart your terminal or open a new window so the updated PATH is loaded.",
+      tip: "The installer places trak into your PATH so you can call it anywhere.",
     },
     {
       number: "2",
@@ -60,28 +60,28 @@ export default function QuickstartPage() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
-          <Flame className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 text-xs font-mono font-medium mb-3">
+          <Terminal className="w-3.5 h-3.5 text-slate-400" />
           <span>Quickstart Guide</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-4xl font-serif font-normal text-white tracking-tight">
           Get Started with Trak in 2 Minutes
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg mt-3 leading-relaxed">
+        <p className="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed font-sans">
           Follow these quick steps to install the CLI and materialize your first structured engineering workspace.
         </p>
       </div>
 
       {/* Video Walkthrough Card */}
-      <div className="rounded-2xl border border-white/[0.08] bg-[#080b11] p-4 sm:p-6 space-y-3 shadow-xl">
+      <div className="rounded-xl border border-white/[0.08] bg-[#090b10] p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-          <span className="text-xs font-mono font-bold text-white">1-Minute Video Walkthrough (v1.0.0)</span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">HD Demo</span>
+          <span className="text-xs font-mono font-bold text-white">18-Seconds Video Walkthrough (v1.0.0)</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.08]">HD Demo</span>
         </div>
-        <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/[0.06]">
+        <div className="rounded-lg overflow-hidden bg-black aspect-video border border-white/[0.06]">
           <video
             src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
             controls
@@ -93,36 +93,36 @@ export default function QuickstartPage() {
       </div>
 
       {/* Steps List */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         {steps.map((s, idx) => {
           const isCopied = copiedStep === idx;
           return (
             <div
               key={idx}
-              className="glass-panel rounded-2xl p-6 sm:p-8 relative border border-white/10 space-y-4"
+              className="rounded-xl p-5 sm:p-6 bg-[#0d0f15] border border-white/[0.08] space-y-3.5"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 font-mono font-black text-sm flex items-center justify-center shadow-md shadow-emerald-500/20 shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">
                   {s.number}
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
+                <h3 className="text-base font-bold text-white">
                   {s.title}
                 </h3>
               </div>
 
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
                 {s.description}
               </p>
 
               {s.isInstallStep ? (
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   {/* Tabs */}
-                  <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-slate-950 border border-white/[0.06] text-xs font-mono w-fit">
+                  <div className="flex flex-wrap items-center gap-1 p-1 rounded-lg bg-black/40 border border-white/[0.06] text-xs font-mono w-fit">
                     <button
                       onClick={() => setInstallMethod("ps")}
-                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
                         installMethod === "ps"
-                          ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                          ? "bg-white/[0.12] text-white font-semibold"
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
@@ -130,9 +130,9 @@ export default function QuickstartPage() {
                     </button>
                     <button
                       onClick={() => setInstallMethod("cmd")}
-                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
                         installMethod === "cmd"
-                          ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                          ? "bg-white/[0.12] text-white font-semibold"
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
@@ -140,9 +140,9 @@ export default function QuickstartPage() {
                     </button>
                     <button
                       onClick={() => setInstallMethod("bash")}
-                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
                         installMethod === "bash"
-                          ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                          ? "bg-white/[0.12] text-white font-semibold"
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
@@ -150,9 +150,9 @@ export default function QuickstartPage() {
                     </button>
                     <button
                       onClick={() => setInstallMethod("go")}
-                      className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
+                      className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
                         installMethod === "go"
-                          ? "bg-white/[0.1] text-white font-semibold shadow-sm"
+                          ? "bg-white/[0.12] text-white font-semibold"
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
@@ -161,73 +161,74 @@ export default function QuickstartPage() {
                   </div>
 
                   {/* Command Box */}
-                  <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950 border border-white/10 text-xs font-mono">
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-[#080a0f] border border-white/[0.08] text-xs font-mono">
                     <div className="flex items-center gap-2 overflow-x-auto text-slate-200">
                       <span className="text-emerald-400 font-bold">$</span>
-                      <span className="select-all">{installCommands[installMethod]}</span>
+                      <span className="select-all whitespace-nowrap">
+                        {installCommands[installMethod]}
+                      </span>
                     </div>
                     <button
-                      onClick={() => copyCode(installCommands[installMethod], idx)}
-                      className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                      title="Copy command"
+                      onClick={() => handleCopy(installCommands[installMethod], idx)}
+                      className="shrink-0 p-1.5 rounded bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors cursor-pointer border border-white/[0.06]"
+                      title="Copy install command"
                     >
                       {isCopied ? (
-                        <Check className="w-4 h-4 text-emerald-400" />
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
-                        <Copy className="w-4 h-4" />
+                        <Copy className="w-3.5 h-3.5 text-slate-400" />
                       )}
                     </button>
                   </div>
                 </div>
               ) : (
-                /* Standard Step Code Box */
-                <div className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-950 border border-white/10 text-xs font-mono">
+                <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-[#080a0f] border border-white/[0.08] text-xs font-mono">
                   <div className="flex items-center gap-2 overflow-x-auto text-slate-200">
                     <span className="text-emerald-400 font-bold">$</span>
-                    <span className="select-all">{s.command}</span>
+                    <span className="select-all whitespace-nowrap">
+                      {s.command}
+                    </span>
                   </div>
                   <button
-                    onClick={() => copyCode(s.command!, idx)}
-                    className="shrink-0 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    onClick={() => handleCopy(s.command!, idx)}
+                    className="shrink-0 p-1.5 rounded bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors cursor-pointer border border-white/[0.06]"
                     title="Copy command"
                   >
                     {isCopied ? (
-                      <Check className="w-4 h-4 text-emerald-400" />
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
                     ) : (
-                      <Copy className="w-4 h-4" />
+                      <Copy className="w-3.5 h-3.5 text-slate-400" />
                     )}
                   </button>
                 </div>
               )}
 
-              {s.tip && (
-                <div className="flex items-start gap-2 text-xs text-slate-400 bg-white/5 p-3 rounded-lg border border-white/5">
-                  <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span>{s.tip}</span>
-                </div>
-              )}
+              {/* Tip text */}
+              <div className="text-[11px] font-mono text-slate-500 pt-1">
+                💡 <span className="text-slate-400">{s.tip}</span>
+              </div>
             </div>
           );
         })}
       </div>
 
-      {/* Next Steps Banner */}
-      <div className="glass-panel rounded-2xl p-8 border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-transparent flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div>
-          <h4 className="text-lg font-bold text-white">
-            Explore All 19 Blueprints
+      {/* Footer Next Steps */}
+      <div className="p-6 rounded-xl bg-[#0d0f15] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h4 className="font-bold text-sm text-white">
+            Ready to explore specific technologies?
           </h4>
-          <p className="text-xs text-slate-400 mt-1 max-w-md">
-            Check out complete track syllabi for Rust, Python, TypeScript, Linux, AWS, PostgreSQL, Redis, Kubernetes, and more.
+          <p className="text-xs text-slate-400 font-sans">
+            Browse the full curriculum index with all 19 tracks across Go, Rust, Python, Docker, and Linux.
           </p>
         </div>
 
         <Link
           href="/tracks"
-          className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 transition-all flex items-center gap-2 shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white text-zinc-950 text-xs font-mono font-bold hover:bg-slate-200 transition-colors shrink-0"
         >
-          <span>Browse Catalog</span>
-          <ArrowRight className="w-4 h-4" />
+          <span>Explore All Tracks</span>
+          <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
     </div>

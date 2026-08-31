@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Terminal, Copy, Check, BookOpen, Sparkles, Layers, ArrowUpRight } from "lucide-react";
+import { Search, Terminal, Check, BookOpen, Layers } from "lucide-react";
 import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
 import { SyllabusModal } from "./SyllabusModal";
 import { CategoryIcon } from "./CategoryIcon";
@@ -43,39 +43,36 @@ export function CatalogExplorer() {
 
   return (
     <section id="catalog" className="w-full relative pb-16">
-      {/* Background Radial Tint */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none -z-10" />
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        {/* Section Heading - Centered & Responsive */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium">
+        {/* Section Heading */}
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-slate-300 text-xs font-mono font-medium">
             <Layers className="w-3.5 h-3.5" />
-            <span>Interactive Catalog Explorer</span>
+            <span>Interactive Catalog</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-serif font-normal text-[#f5f4ef] tracking-tight">
             All 19 Engineering Blueprints
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm font-sans leading-relaxed">
-            Each track includes 17 to 24 in-depth modules with working starter code, hints, auto-verification tests, and solution guides.
+            Each track contains 17 to 24 in-depth modules with starter code, exercises, test suites, and documentation.
           </p>
         </div>
 
         {/* Filter Controls & Search Bar */}
         <div className="space-y-4">
-          {/* Category Tabs - Natural Centered Wrap (Zero Clipping on All Screens) */}
+          {/* Category Tabs - Clean High-Contrast Wrap */}
           <div className="flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer flex items-center gap-2 ${
                 selectedCategory === "all"
-                  ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
-                  : "bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5"
+                  ? "bg-white text-zinc-950 font-bold"
+                  : "bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/[0.06]"
               }`}
             >
               <Layers className="w-3.5 h-3.5" />
               <span>All Tracks</span>
-              <span className="px-1.5 py-0.2 rounded-full bg-black/20 text-[10px]">
+              <span className={`px-1.5 py-0.2 rounded text-[10px] ${selectedCategory === "all" ? "bg-zinc-200 text-zinc-900" : "bg-black/40 text-slate-400"}`}>
                 {TRACKS.length}
               </span>
             </button>
@@ -88,15 +85,15 @@ export function CatalogExplorer() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer flex items-center gap-2 ${
                     isSelected
-                      ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
-                      : "bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5"
+                      ? "bg-white text-zinc-950 font-bold"
+                      : "bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/[0.06]"
                   }`}
                 >
                   <CategoryIcon category={cat.id} className="w-3.5 h-3.5" />
                   <span>{cat.title}</span>
-                  <span className="px-1.5 py-0.2 rounded-full bg-black/20 text-[10px]">
+                  <span className={`px-1.5 py-0.2 rounded text-[10px] ${isSelected ? "bg-zinc-200 text-zinc-900" : "bg-black/40 text-slate-400"}`}>
                     {count}
                   </span>
                 </button>
@@ -112,7 +109,7 @@ export function CatalogExplorer() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, tag, or topic..."
-              className="w-full pl-9 pr-16 py-2 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition-all shadow-inner"
+              className="w-full pl-9 pr-16 py-2 rounded-lg bg-[#090b10] border border-white/10 text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-white/30 transition-colors"
             />
             {searchQuery && (
               <button
@@ -130,7 +127,7 @@ export function CatalogExplorer() {
           <span>
             Showing <strong className="text-white">{filteredTracks.length}</strong> of {TRACKS.length} blueprints
           </span>
-          <span className="hidden sm:inline text-emerald-400">
+          <span className="hidden sm:inline text-slate-400">
             $ trak init &lt;category&gt;/&lt;track&gt;
           </span>
         </div>
@@ -144,38 +141,27 @@ export function CatalogExplorer() {
               <div
                 key={track.id}
                 onClick={() => setActiveModalTrack(track)}
-                className="glass-panel glass-panel-hover rounded-2xl p-5 flex flex-col justify-between cursor-pointer group relative overflow-hidden bg-[#080b11] border border-white/[0.08] hover:border-white/[0.18] transition-all"
+                className="rounded-xl p-5 flex flex-col justify-between cursor-pointer group bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.2] transition-colors"
               >
-                {/* Top Subtle Gradient Accent */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${track.accentGradient}`}
-                />
-
-                <div className="space-y-3">
-                  {/* Top Category & Version Badge */}
+                <div className="space-y-2.5">
+                  {/* Top Category & Version */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-slate-300">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400">
                       <span>{track.categoryName}</span>
                     </span>
-                    <span className="text-[10px] font-mono text-slate-400">
+                    <span className="text-[10px] font-mono text-slate-500">
                       v{track.version}
                     </span>
                   </div>
 
                   {/* Title & Modules Count */}
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                    <h3 className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
                       {track.name}
                     </h3>
-                    <span className="shrink-0 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-medium">
+                    <span className="shrink-0 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 text-[10px] font-mono font-medium">
                       {track.modulesCount} Modules
                     </span>
-                  </div>
-
-                  {/* Highlight sentence */}
-                  <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 shrink-0" />
-                    <span className="line-clamp-1">{track.highlight}</span>
                   </div>
 
                   {/* Description */}
@@ -188,7 +174,7 @@ export function CatalogExplorer() {
                     {track.tags.slice(0, 4).map((tag, idx) => (
                       <span
                         key={idx}
-                        className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-slate-900 text-slate-400 border border-white/5"
+                        className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-black/40 text-slate-400 border border-white/[0.04]"
                       >
                         #{tag}
                       </span>
@@ -205,7 +191,7 @@ export function CatalogExplorer() {
                 <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
                   <button
                     onClick={(e) => handleCopyCommand(track, e)}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 border border-white/10 text-xs font-mono text-slate-300 hover:text-white transition-all cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#141720] hover:bg-[#1c202d] border border-white/[0.08] text-xs font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
                     title="Copy CLI command"
                   >
                     {isCopied ? (
@@ -215,7 +201,7 @@ export function CatalogExplorer() {
                       </>
                     ) : (
                       <>
-                        <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+                        <Terminal className="w-3.5 h-3.5 text-slate-400" />
                         <span className="truncate">trak init {track.id}</span>
                       </>
                     )}
@@ -226,7 +212,7 @@ export function CatalogExplorer() {
                       e.stopPropagation();
                       setActiveModalTrack(track);
                     }}
-                    className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors border border-white/5"
+                    className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors border border-white/[0.06]"
                     title="View Full Syllabus"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
@@ -239,7 +225,7 @@ export function CatalogExplorer() {
 
         {/* Empty Search State */}
         {filteredTracks.length === 0 && (
-          <div className="text-center py-16 bg-[#080b11] border border-white/5 rounded-2xl space-y-3">
+          <div className="text-center py-16 bg-[#0d0f15] border border-white/[0.06] rounded-xl space-y-3">
             <p className="text-base text-slate-300 font-medium">
               No matching tracks found for &quot;{searchQuery}&quot;
             </p>
@@ -251,7 +237,7 @@ export function CatalogExplorer() {
                 setSearchQuery("");
                 setSelectedCategory("all");
               }}
-              className="mt-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white transition-colors font-mono"
+              className="mt-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white transition-colors font-mono"
             >
               Reset Filters
             </button>
