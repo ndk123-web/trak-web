@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import {
   FileCode,
   Eye,
@@ -12,10 +13,46 @@ import {
 } from "lucide-react";
 import { FileIconSvg } from "./FileIconSvg";
 
+// Dynamic import Monaco Editor for SSR compatibility in Next.js
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full bg-[#18181b] text-slate-500 font-mono text-xs">
+      Loading VS Code engine...
+    </div>
+  ),
+});
+
 interface EditorPaneProps {
   filePath: string | null;
   content: string;
   onChangeContent: (newContent: string) => void;
+}
+
+// Map file extensions to official Monaco language identifiers
+function getMonacoLanguage(filename: string): string {
+  const ext = filename.split(".").pop()?.toLowerCase() || "";
+  const name = filename.toLowerCase();
+
+  if (name === "dockerfile" || name.startsWith("docker-compose")) return "dockerfile";
+  if (name === "pyproject.toml" || ext === "toml") return "ini";
+  if (ext === "go" || name === "go.mod") return "go";
+  if (ext === "py") return "python";
+  if (ext === "rs" || name === "cargo.toml") return "rust";
+  if (ext === "ts" || ext === "tsx") return "typescript";
+  if (ext === "js" || ext === "jsx" || ext === "mjs") return "javascript";
+  if (ext === "json") return "json";
+  if (ext === "sql") return "sql";
+  if (ext === "yml" || ext === "yaml") return "yaml";
+  if (ext === "md" || ext === "markdown") return "markdown";
+  if (ext === "sh" || ext === "bash" || ext === "ps1" || ext === "zsh") return "shell";
+  if (ext === "c" || ext === "h") return "c";
+  if (ext === "cpp" || ext === "hpp" || ext === "cc") return "cpp";
+  if (ext === "java") return "java";
+  if (ext === "html" || ext === "htm") return "html";
+  if (ext === "css") return "css";
+
+  return "plaintext";
 }
 
 // ----------------------------------------------------
@@ -219,8 +256,6 @@ export function EditorPane({
 }: EditorPaneProps) {
   const [copied, setCopied] = useState(false);
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const gutterRef = useRef<HTMLDivElement>(null);
 
   if (!filePath) {
     return (
@@ -237,42 +272,14 @@ export function EditorPane({
   }
 
   const fileName = filePath.split("/").pop() || filePath;
-  const ext = fileName.split(".").pop()?.toLowerCase() || "";
-  const isMarkdown = ext === "md" || ext === "markdown";
-
-  const lines = content.split("\n");
-  const lineCount = lines.length;
+  const isMarkdown = fileName.endsWith(".md") || fileName.endsWith(".markdown");
+  const monacoLang = getMonacoLanguage(fileName);
+  const lineCount = content.split("\n").length;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Sync scroll between textarea and line gutter
-  const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
-    if (gutterRef.current) {
-      gutterRef.current.scrollTop = e.currentTarget.scrollTop;
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const textarea = e.currentTarget;
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-
-      // Insert 2 spaces
-      const updated =
-        content.substring(0, start) + "  " + content.substring(end);
-      onChangeContent(updated);
-
-      // Restore cursor position
-      setTimeout(() => {
-        textarea.selectionStart = textarea.selectionEnd = start + 2;
-      }, 0);
-    }
   };
 
   return (
@@ -340,29 +347,36 @@ export function EditorPane({
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex overflow-hidden font-mono text-xs leading-[1.6] bg-[#18181b] relative">
-          {/* Line Numbers Gutter */}
-          <div
-            ref={gutterRef}
-            className="py-4 pl-3 pr-3 select-none text-[#71717a] text-right bg-[#141416] border-r border-white/[0.04] shrink-0 font-mono text-[11px] overflow-hidden"
-          >
-            {Array.from({ length: Math.max(lineCount, 1) }).map((_, i) => (
-              <div key={i} className="leading-[1.6]">
-                {i + 1}
-              </div>
-            ))}
-          </div>
-
-          {/* 100% Native Solid Glitch-Free Code Editor */}
-          <textarea
-            ref={textareaRef}
+        <div className="flex-1 w-full h-full overflow-hidden bg-[#1e1e1e]">
+          {/* Authentic VS Code Monaco Editor with full Syntax Highlighting */}
+          <MonacoEditor
+            height="100%"
+            language={monacoLang}
             value={content}
-            onChange={(e) => onChangeContent(e.target.value)}
-            onScroll={handleScroll}
-            onKeyDown={handleKeyDown}
-            spellCheck={false}
-            className="flex-1 p-4 bg-[#18181b] text-[#f4f4f5] caret-white outline-none resize-none overflow-auto font-mono text-xs leading-[1.6] selection:bg-[#04395e] selection:text-white whitespace-pre"
-            placeholder="// Write code or markdown content here..."
+            theme="vs-dark"
+            onChange={(val) => onChangeContent(val || "")}
+            options={{
+              fontSize: 12.5,
+              fontFamily: "'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace",
+              fontLigatures: true,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              wordWrap: "on",
+              automaticLayout: true,
+              tabSize: 2,
+              renderLineHighlight: "all",
+              lineNumbers: "on",
+              lineNumbersMinChars: 3,
+              cursorBlinking: "smooth",
+              cursorSmoothCaretAnimation: "on",
+              bracketPairColorization: { enabled: true },
+              padding: { top: 12, bottom: 12 },
+              scrollbar: {
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10,
+                useShadows: false,
+              },
+            }}
           />
         </div>
       )}
@@ -372,12 +386,12 @@ export function EditorPane({
         <div className="flex items-center gap-3">
           <span>{lineCount} lines</span>
           <span>{content.length} chars</span>
-          <span className="uppercase text-slate-400">{ext || "TXT"}</span>
+          <span className="uppercase text-emerald-400 font-bold">{monacoLang}</span>
           <span>UTF-8</span>
         </div>
         <div className="flex items-center gap-1.5 text-emerald-400">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span>AST Synchronized</span>
+          <span>Monaco Core Engine</span>
         </div>
       </div>
     </div>
