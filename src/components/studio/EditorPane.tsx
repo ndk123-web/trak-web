@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   FileCode,
   Eye,
@@ -19,148 +19,7 @@ interface EditorPaneProps {
 }
 
 // ----------------------------------------------------
-// 1. Language-Aware VS Code Syntax Highlighter
-// ----------------------------------------------------
-
-function tokenizeAndHighlightLine(line: string, ext: string): React.ReactNode[] {
-  // Comments check first
-  const trimmed = line.trimStart();
-  const leadingSpaces = line.substring(0, line.length - trimmed.length);
-
-  // Line comments
-  if (
-    trimmed.startsWith("//") ||
-    trimmed.startsWith("#") ||
-    trimmed.startsWith("--") ||
-    trimmed.startsWith("/*")
-  ) {
-    return [
-      leadingSpaces,
-      <span key="comment" className="text-[#6a9955] italic">
-        {trimmed}
-      </span>,
-    ];
-  }
-
-  // Generalized VS Code token regex matching Strings, Keywords, Types, Functions, Numbers, Operators
-  const tokenRegex =
-    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"|'(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\'])*'|`[^`]*`|\b(?:package|import|func|def|fn|function|class|interface|type|struct|enum|impl|trait|public|private|protected|extends|implements|return|if|elif|else|for|while|loop|range|match|switch|case|break|continue|defer|go|chan|select|try|except|catch|finally|throw|raise|with|as|async|await|yield|lambda|const|let|var|mut|pub|unsafe|use|mod|crate|SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|JOIN|LEFT|INNER|GROUP|ORDER|BY|HAVING|LIMIT|OFFSET|UNION|AND|OR|NOT|IN|IS|PRIMARY|KEY|FOREIGN|REFERENCES|include|define|pragma|namespace|using|echo|export)\b|\b(?:string|int|int64|int32|uint|uint64|float64|float32|bool|byte|rune|error|any|void|char|double|size_t|Vec|Option|Result|Some|None|Ok|Err|String|Self|self|str|list|dict|set|tuple|VARCHAR|INTEGER|BOOLEAN|TIMESTAMP|TEXT|NUMBER|BIGINT|UUID)\b|\b(?:true|false|nil|None|null|undefined|TRUE|FALSE|NULL)\b|\b\d+(?:\.\d*)?\b|[a-zA-Z0-9_]+(?=\()|[a-zA-Z0-9_]+(?=:)|[{}()[\],;=+\-*/%&|^!<>:]+)/g;
-
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  tokenRegex.lastIndex = 0;
-
-  while ((match = tokenRegex.exec(line)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(line.substring(lastIndex, match.index));
-    }
-
-    const token = match[0];
-    const upperToken = token.toUpperCase();
-
-    // 1. Strings (Orange)
-    if (
-      (token.startsWith('"') && token.endsWith('"')) ||
-      (token.startsWith("'") && token.endsWith("'")) ||
-      (token.startsWith("`") && token.endsWith("`"))
-    ) {
-      parts.push(
-        <span key={match.index} className="text-[#ce9178]">
-          {token}
-        </span>
-      );
-    }
-    // 2. Control Keywords (Pink / Purple)
-    else if (
-      /^(package|import|func|def|fn|function|class|interface|type|struct|enum|impl|trait|return|if|elif|else|for|while|loop|range|match|switch|case|break|continue|defer|go|chan|select|try|except|catch|finally|throw|raise|with|as|async|await|yield|lambda|const|let|var|mut|pub|unsafe|use|mod|crate|include|define|pragma|namespace|using|echo|export)$/.test(
-        token
-      )
-    ) {
-      parts.push(
-        <span key={match.index} className="text-[#c586c0] font-medium">
-          {token}
-        </span>
-      );
-    }
-    // 3. SQL Keywords (Purple / Cyan)
-    else if (
-      /^(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|INDEX|JOIN|LEFT|INNER|GROUP|ORDER|BY|HAVING|LIMIT|OFFSET|UNION|AND|OR|NOT|IN|IS|PRIMARY|KEY|FOREIGN|REFERENCES)$/.test(
-        upperToken
-      )
-    ) {
-      parts.push(
-        <span key={match.index} className="text-[#569cd6] font-semibold">
-          {token}
-        </span>
-      );
-    }
-    // 4. Data Types (Teal / Cyan)
-    else if (
-      /^(string|int|int64|int32|uint|uint64|float64|float32|bool|byte|rune|error|any|void|char|double|size_t|Vec|Option|Result|Some|None|Ok|Err|String|Self|self|str|list|dict|set|tuple|VARCHAR|INTEGER|BOOLEAN|TIMESTAMP|TEXT|NUMBER|BIGINT|UUID)$/.test(
-        token
-      )
-    ) {
-      parts.push(
-        <span key={match.index} className="text-[#4ec9b0]">
-          {token}
-        </span>
-      );
-    }
-    // 5. Booleans & Constants (Cyan / Blue)
-    else if (/^(true|false|nil|None|null|undefined|TRUE|FALSE|NULL)$/.test(token)) {
-      parts.push(
-        <span key={match.index} className="text-[#569cd6] font-medium">
-          {token}
-        </span>
-      );
-    }
-    // 6. Numbers (Mint Green)
-    else if (/^\d+(?:\.\d*)?$/.test(token)) {
-      parts.push(
-        <span key={match.index} className="text-[#b5cea8]">
-          {token}
-        </span>
-      );
-    }
-    // 7. Function Calls (Yellow)
-    else if (line.charAt(match.index + token.length) === "(") {
-      parts.push(
-        <span key={match.index} className="text-[#dcdcaa]">
-          {token}
-        </span>
-      );
-    }
-    // 8. YAML/JSON Keys before colon (Light Blue)
-    else if (line.charAt(match.index + token.length) === ":") {
-      parts.push(
-        <span key={match.index} className="text-[#9cdcfe]">
-          {token}
-        </span>
-      );
-    }
-    // 9. Default Token
-    else {
-      parts.push(
-        <span key={match.index} className="text-[#e4e4e7]">
-          {token}
-        </span>
-      );
-    }
-
-    lastIndex = tokenRegex.lastIndex;
-  }
-
-  if (lastIndex < line.length) {
-    parts.push(line.substring(lastIndex));
-  }
-
-  return parts.length > 0 ? parts : [line];
-}
-
-// ----------------------------------------------------
-// 2. Rich Markdown Document Renderer
+// Rich Markdown Document Renderer
 // ----------------------------------------------------
 
 function renderMarkdownDocument(mdText: string) {
@@ -350,7 +209,7 @@ function formatInlineMarkdown(text: string): React.ReactNode {
 }
 
 // ----------------------------------------------------
-// 3. Main EditorPane Component
+// Main EditorPane Component
 // ----------------------------------------------------
 
 export function EditorPane({
@@ -360,9 +219,8 @@ export function EditorPane({
 }: EditorPaneProps) {
   const [copied, setCopied] = useState(false);
   const [previewMode, setPreviewMode] = useState<"edit" | "preview">("edit");
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const highlightRef = useRef<HTMLDivElement>(null);
+  const gutterRef = useRef<HTMLDivElement>(null);
 
   if (!filePath) {
     return (
@@ -391,11 +249,10 @@ export function EditorPane({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Sync scroll between textarea and syntax highlight backdrop
-  const handleScroll = () => {
-    if (textareaRef.current && highlightRef.current) {
-      highlightRef.current.scrollTop = textareaRef.current.scrollTop;
-      highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+  // Sync scroll between textarea and line gutter
+  const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
+    if (gutterRef.current) {
+      gutterRef.current.scrollTop = e.currentTarget.scrollTop;
     }
   };
 
@@ -485,40 +342,28 @@ export function EditorPane({
       ) : (
         <div className="flex-1 flex overflow-hidden font-mono text-xs leading-[1.6] bg-[#18181b] relative">
           {/* Line Numbers Gutter */}
-          <div className="py-4 pl-3 pr-3 select-none text-[#71717a] text-right bg-[#141416] border-r border-white/[0.04] shrink-0 font-mono text-[11px]">
-            {Array.from({ length: lineCount }).map((_, i) => (
+          <div
+            ref={gutterRef}
+            className="py-4 pl-3 pr-3 select-none text-[#71717a] text-right bg-[#141416] border-r border-white/[0.04] shrink-0 font-mono text-[11px] overflow-hidden"
+          >
+            {Array.from({ length: Math.max(lineCount, 1) }).map((_, i) => (
               <div key={i} className="leading-[1.6]">
                 {i + 1}
               </div>
             ))}
           </div>
 
-          {/* Syntax Highlighted View & Transparent Typing Input Layer */}
-          <div className="flex-1 relative overflow-hidden">
-            {/* Syntax Highlighted Backdrop */}
-            <div
-              ref={highlightRef}
-              className="absolute inset-0 p-4 font-mono text-xs leading-[1.6] pointer-events-none overflow-hidden whitespace-pre select-none"
-            >
-              {lines.map((line, lineIdx) => (
-                <div key={lineIdx} className="leading-[1.6] whitespace-pre">
-                  {tokenizeAndHighlightLine(line, ext)}
-                </div>
-              ))}
-            </div>
-
-            {/* Interactive Typing Layer */}
-            <textarea
-              ref={textareaRef}
-              value={content}
-              onChange={(e) => onChangeContent(e.target.value)}
-              onScroll={handleScroll}
-              onKeyDown={handleKeyDown}
-              spellCheck={false}
-              className="absolute inset-0 p-4 bg-transparent text-transparent caret-white outline-none resize-none overflow-auto font-mono text-xs leading-[1.6] selection:bg-[#264f78]/60 whitespace-pre"
-              placeholder="// Write code or markdown content here..."
-            />
-          </div>
+          {/* 100% Native Solid Glitch-Free Code Editor */}
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => onChangeContent(e.target.value)}
+            onScroll={handleScroll}
+            onKeyDown={handleKeyDown}
+            spellCheck={false}
+            className="flex-1 p-4 bg-[#18181b] text-[#f4f4f5] caret-white outline-none resize-none overflow-auto font-mono text-xs leading-[1.6] selection:bg-[#04395e] selection:text-white whitespace-pre"
+            placeholder="// Write code or markdown content here..."
+          />
         </div>
       )}
 
