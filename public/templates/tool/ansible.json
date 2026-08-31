@@ -171,14 +171,38 @@
         "type": "directory",
         "children": [
           {
-            "name": "roles/webserver/tasks/main.yml",
-            "type": "file",
-            "content": "---\n- name: Install Webserver\n  ansible.builtin.package:\n    name: nginx\n    state: present\n"
-          },
-          {
-            "name": "roles/webserver/defaults/main.yml",
-            "type": "file",
-            "content": "---\nhttp_port: 8080\n"
+            "name": "roles",
+            "type": "directory",
+            "children": [
+              {
+                "name": "webserver",
+                "type": "directory",
+                "children": [
+                  {
+                    "name": "tasks",
+                    "type": "directory",
+                    "children": [
+                      {
+                        "name": "main.yml",
+                        "type": "file",
+                        "content": "---\n- name: Install Webserver\n  ansible.builtin.package:\n    name: nginx\n    state: present\n"
+                      }
+                    ]
+                  },
+                  {
+                    "name": "defaults",
+                    "type": "directory",
+                    "children": [
+                      {
+                        "name": "main.yml",
+                        "type": "file",
+                        "content": "---\nhttp_port: 8080\n"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             "name": "README.md",

@@ -212,9 +212,9 @@ export function Hero() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Clean, Minimalist Text Row */}
         <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400 mb-5 select-none">
-          <span className="text-slate-200 font-semibold">Trak v1.0.0</span>
+          <span className="text-slate-200 font-semibold">Trak v1.1.0</span>
           <span className="text-slate-600">•</span>
-          <span className="text-slate-300">19 Curated Blueprints</span>
+          <span className="text-slate-300">19 Curated Blueprints + Community GitOps</span>
           <span className="text-slate-600 hidden sm:inline">•</span>
           <span className="text-slate-400 hidden sm:inline">Offline & Filesystem Based</span>
         </div>
