@@ -1,8 +1,8 @@
 {
   "id": "lang/python",
-  "name": "Python Mastery & Backend Architecture",
-  "version": "1.0.0",
-  "description": "Comprehensive Python curriculum from CPython internals, memory management, and GIL to decorators, OOP, Pydantic, Asyncio, and FastAPI backend architecture",
+  "name": "Python Architecture & Systems Mastery Track",
+  "version": "1.2.0",
+  "description": "Complete high-depth Python curriculum covering CPython internals, GIL, descriptors, metaclasses, asyncio event loop, generators, and production concurrency",
   "root": {
     "name": "python-workspace",
     "type": "directory",
@@ -10,351 +10,618 @@
       {
         "name": "pyproject.toml",
         "type": "file",
-        "content": "[project]\nname = \"python-workspace\"\nversion = \"0.1.0\"\ndescription = \"Comprehensive Python Learning Track\"\nrequires-python = \">=3.11\"\ndependencies = []\n"
+        "content": "[project]\nname = \"python-workspace\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11\"\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🐍 Complete Python Mastery & Backend Architecture Track\n\nWelcome to your full Python learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-package-management` | **Setup & Tooling** | Python 3.12+, `uv`, `venv`, `pip`, `pyproject.toml` standards |\n| `01-cpython-internals-and-gil` | **CPython & GIL** | Execution pipeline (AST, Bytecode, PVM), Reference counting (`ob_refcnt`), Generational GC, GIL |\n| `02-variables-scopes-and-legb` | **Scopes & LEGB** | Local, Enclosing, Global, Built-in lookup, `global` vs `nonlocal` keywords |\n| `03-data-types-mutability-memory` | **Memory & Types** | `is` vs `==`, small integer caching (-5..256), shallow vs deep copy |\n| `04-strings-slicing-formatting` | **Strings & Slicing** | Slicing `[start:stop:step]`, modern f-string debugging (`f\"{var=}\"`) |\n| `05-control-flow-pattern-matching` | **Pattern Matching** | Structural pattern matching (`match`/`case` PEP 634), guards |\n| `06-functions-args-and-closures` | **Functions & Args** | `*args`, `**kwargs`, keyword-only parameters, closures & scoping |\n| `07-decorators-and-metaprogramming` | **Decorators** | `@functools.wraps`, parameterized decorators, class decorators |\n| `08-data-structures-and-collections` | **Collections** | `dict`, `set`, `defaultdict`, `Counter`, `deque`, `namedtuple` |\n| `09-comprehensions-and-iterators` | **Comprehensions** | List/Dict/Set comprehensions, `__iter__` and `__next__` protocol |\n| `10-generators-yield-pipelines` | **Generators & Yield** | Lazy evaluation, `yield`, `yield from`, memory-efficient data pipelines |\n| `11-oop-and-dunder-methods` | **OOP & Dunder** | `__new__` vs `__init__`, `__repr__`, `__slots__`, MRO & C3 linearization |\n| `12-dataclasses-and-pydantic` | **Data Modeling** | `@dataclass`, Pydantic `BaseModel`, field validation, serialization |\n| `13-error-and-exception-handling` | **Exceptions** | `try`/`except`/`else`/`finally`, custom exceptions, `ExceptionGroup` |\n| `14-context-managers-with-statement` | **Context Managers** | `__enter__`/`__exit__` protocol, `@contextmanager` generator helper |\n| `15-static-typing-and-type-hints` | **Type Hints** | PEP 484/695 type annotations, `Union`, `Optional`, `Generic`, `Protocol` |\n| `16-concurrency-threads-processes-asyncio` | **Concurrency** | Threading (I/O) vs Multiprocessing (CPU) vs Asyncio event loop & `TaskGroup` |\n| `17-modern-web-backends-fastapi` | **FastAPI Backend** | FastAPI router, dependency injection, async request handling, OpenAPI docs |\n| `18-file-io-serialization-requests` | **I/O & Networking** | `pathlib.Path`, JSON streaming, async HTTP with `httpx` |\n| `19-testing-benchmarking-profiling` | **Testing & Profiling** | `pytest`, `pytest-asyncio`, fixtures, `cProfile` performance analysis |\n| `20-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield Python interview questions & tricky mental models |\n\n---\n\n## 🛠️ How to Navigate & Run\n\nRun any module with Python:\n```bash\ncd 00-setup-and-package-management\npython main.py\n```\n"
+        "content": "# 🐍 Python Architecture & Systems Mastery Track\n\nWelcome to the **Python Architecture & Systems Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering language mechanics, CPython internals, GIL workarounds, memory management, and asynchronous I/O.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-virtual-environments` | Virtual Envs & Toolchain | `venv`, `pip`, interpreter binaries, bytecode caching (`__pycache__`) |\n| `01-basics-dynamic-typing-scope` | Dynamic Typing & LEGB | Names vs objects, reference assignment, LEGB scope rule, `global` vs `nonlocal` |\n| `02-data-structures-lists-dicts-sets` | Built-in Collections | List dynamic array growth, Dict hash table collisions, set operations |\n| `03-strings-encoding-and-regex` | Strings & Regex | Unicode strings vs `bytes`, UTF-8 encoding, `re` regex engine |\n| `04-functions-args-kwargs-scopes` | Functions & Arguments | `*args`, `**kwargs`, keyword-only parameters, first-class functions |\n| `05-decorators-and-function-wrappers` | Decorators & Closures | Parameterized decorators, `@functools.wraps`, preserving metadata |\n| `06-generators-iterators-itertools` | Generators & Streams | `__iter__` / `__next__` protocol, `yield` generator pipelines, `itertools` |\n| `07-oop-dunder-methods-operator-overloading` | OOP & Dunder Methods | `__repr__`, `__eq__`, `__hash__`, `__getitem__`, operator overloading |\n| `08-properties-descriptors-and-dataclasses` | Properties & Descriptors | `@property`, Descriptor protocol (`__get__`, `__set__`), `@dataclass` |\n| `09-metaclasses-and-type-creation` | Metaclasses & Dynamic Types | `type` as metaclass, `__new__` vs `__init__`, registry metaclass patterns |\n| `10-context-managers-with-statement` | Context Managers | `__enter__`, `__exit__`, `@contextlib.contextmanager`, exception suppression |\n| `11-error-handling-custom-exceptions` | Error Handling Architecture | Exception hierarchies, `raise ... from ...` chaining, `BaseException` |\n| `12-concurrency-threading-vs-multiprocessing` | Concurrency & The GIL | CPython Global Interpreter Lock, `threading` (I/O) vs `multiprocessing` (CPU) |\n| `13-asyncio-event-loop-coroutines` | AsyncIO & Event Loop | Coroutines, `asyncio.gather()`, task scheduling, non-blocking I/O |\n| `14-cpython-internals-and-memory` | CPython Memory & GC | Reference counting, cyclic GC generations (0, 1, 2), `sys.getrefcount` |\n| `15-testing-pytest-and-mocking` | Testing & Quality Assurance | `pytest`, fixtures, parametrization, `unittest.mock` |\n| `16-modules-packages-and-imports` | Packages & Import System | `__init__.py`, `sys.path`, relative vs absolute imports, circular imports |\n| `17-serialization-json-pickle` | Serialization Architecture | JSON streaming, `pickle` security vulnerabilities, schema validation |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Python gotchas (mutable defaults, late binding), async worker pool drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.py` — Fully runnable concept demonstration.\n- `exercise/starter.py` — Hands-on problem with `TODO` markers.\n- `exercise/solution.py` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-package-management",
+        "name": "00-setup-and-virtual-environments",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "import sys\nimport platform\n\ndef main():\n    print(\"=====================================================\")\n    print(\"🐍 Welcome to 00 - Python Setup & Environment Check!\")\n    print(\"=====================================================\")\n    print(f\"✔ Python Version     : {sys.version.split()[0]}\")\n    print(f\"✔ Python Implementation: {platform.python_implementation()}\")\n    print(f\"✔ Operating System   : {platform.system()} {platform.release()}\")\n    print(f\"✔ Executable Path    : {sys.executable}\")\n    print(\"\\n👉 Next: Head over to 01-cpython-internals-and-gil/main.py\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - Python Setup & Package Management 🛠️\n\n## 1. Modern Package Managers\n- **`uv` (Recommended)**: Ultra-fast Rust-based package installer and resolver (`uv venv`, `uv pip install <pkg>`).\n- **`poetry`**: Dependency resolution and virtual environment management.\n- **`venv + pip`**: Built-in standard toolchain.\n\n### Creating a Virtual Environment:\n```bash\npython -m venv .venv\n# On Windows:\n.venv\\Scripts\\activate\n# On macOS/Linux:\nsource .venv/bin/activate\n```\n"
+            "content": "# 00 — Python Virtual Environments & Toolchain\n\n## 🎯 Learning Objectives\n- Understand how Python resolves the interpreter binary and `sys.path`\n- Create isolated virtual environments (`python -m venv .venv`)\n- Understand `.pyc` bytecode compilation and `__pycache__` optimization\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import sys\nimport platform\n\ndef main():\n    print(\"=== 00: Python Toolchain Verification ===\")\n    print(f\"Python Version: {platform.python_version()}\")\n    print(f\"Implementation: {platform.python_implementation()} (CPython)\")\n    print(f\"Executable: {sys.executable}\")\n    print(\"✔ Toolchain verified successfully!\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Write a function that prints all directories in sys.path\nimport sys\n\ndef print_sys_paths():\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    print_sys_paths()\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import sys\n\ndef print_sys_paths():\n    for idx, path in enumerate(sys.path):\n        print(f\"{idx}: {path}\")\n\nif __name__ == '__main__':\n    print_sys_paths()\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-cpython-internals-and-gil",
+        "name": "01-basics-dynamic-typing-scope",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "import sys\nimport gc\n\ndef main():\n    print(\"=== 01: CPython Internals, Memory Management & The GIL ===\")\n\n    # 1. Reference Counting\n    a = [1, 2, 3]\n    print(f\"Initial ref count of 'a': {sys.getrefcount(a)}\") # 2 (a + arg into getrefcount)\n    b = a\n    print(f\"Ref count after b = a   : {sys.getrefcount(a)}\") # 3\n    del b\n    print(f\"Ref count after del b   : {sys.getrefcount(a)}\") # 2\n\n    # 2. Generational Garbage Collector\n    print(f\"GC Counts per generation (Gen0, Gen1, Gen2): {gc.get_count()}\")\n    print(f\"GC Thresholds: {gc.get_threshold()}\")\n\n    # 3. GIL (Global Interpreter Lock) Reality:\n    # - Protects CPython memory and ref counts from concurrent thread corruption.\n    # - Threads release GIL during I/O operations (network, disk, sleep).\n    # - CPU-bound operations require multiprocessing instead of threading.\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - CPython Internals & The GIL\n\n### Core Internals\n- **Reference Counting**: Primary deallocation mechanism when `ob_refcnt == 0`.\n- **Cyclic Generational GC**: Scans Gen 0, Gen 1, and Gen 2 to resolve cyclic references.\n- **GIL**: Single mutex allowing only 1 native thread to execute Python bytecode at any instant.\n"
+            "content": "# 01 — Dynamic Typing, References & LEGB Scope Rule\n\n## 🎯 Names are Pointers to Objects\nIn Python, variables do not hold values directly; they hold **references** (pointers) to heap objects (`PyObject`).\n\n## 🧠 LEGB Scope Resolution\n1. **L**ocal: Defined inside current function\n2. **E**nclosing: Defined in outer nested function\n3. **G**lobal: Module-level variables\n4. **B**uilt-in: Python predefined names (`len`, `range`)\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "def outer():\n    count = 10\n    def inner():\n        nonlocal count\n        count += 5\n        return count\n    return inner\n\ndef main():\n    print(\"=== 01: Dynamic References & Nonlocal Scope ===\")\n    counter = outer()\n    print(f\"Count: {counter()}\")\n    print(f\"Count: {counter()}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a counter factory using 'nonlocal' scope that returns (increment, get_count).\ndef make_counter(start=0):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "def make_counter(start=0):\n    count = start\n    def increment(by=1):\n        nonlocal count\n        count += by\n        return count\n    def get_count():\n        return count\n    return increment, get_count\n\nif __name__ == '__main__':\n    inc, get = make_counter(10)\n    inc(5)\n    inc(3)\n    assert get() == 18\n    print(\"✔ Nonlocal counter verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-variables-scopes-and-legb",
+        "name": "02-data-structures-lists-dicts-sets",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "x = \"GLOBAL\"\n\ndef outer():\n    x = \"ENCLOSING\"\n\n    def inner_modify_global():\n        global x\n        x = \"MUTATED_GLOBAL\"\n\n    def inner_modify_enclosing():\n        nonlocal x\n        x = \"MUTATED_ENCLOSING\"\n\n    inner_modify_enclosing()\n    print(f\"Outer scope x: {x}\") # MUTATED_ENCLOSING\n    inner_modify_global()\n\ndef main():\n    print(\"=== 02: Scopes & The LEGB Rule ===\")\n    print(\"LEGB Order: 1. Local -> 2. Enclosing -> 3. Global -> 4. Built-in\")\n    outer()\n    print(f\"Global x after functions: {x}\") # MUTATED_GLOBAL\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - Scopes & LEGB Rule\n\n- `global`: Binds assignment to module top-level scope.\n- `nonlocal`: Binds assignment to nearest outer enclosing function scope.\n"
+            "content": "# 02 — Data Structures: Dynamic Arrays & Hash Tables\n\n## 🎯 Internals\n- **`list`**: Dynamic array of `PyObject*` pointers with over-allocation growth strategy (`0, 4, 8, 16, 24, 32...`).\n- **`dict`**: Compact hash table (since Python 3.6/3.7) with separate indices array and contiguous entries array, preserving insertion order.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "def main():\n    print(\"=== 02: List & Dict Comprehensions ===\")\n    numbers = [1, 2, 3, 4, 5, 6]\n    even_squares = [x**2 for x in numbers if x % 2 == 0]\n    print(f\"Even squares: {even_squares}\")\n\n    # Word frequency dict comprehension\n    words = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']\n    freq = {w: words.count(w) for w in set(words)}\n    print(f\"Frequencies: {freq}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a function that merges two dictionaries. If a key exists in both,\n# sum their integer values.\ndef merge_frequency_dicts(d1, d2):\n    # FILL HERE\n    return {}\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "def merge_frequency_dicts(d1, d2):\n    result = dict(d1)\n    for k, v in d2.items():\n        result[k] = result.get(k, 0) + v\n    return result\n\nif __name__ == '__main__':\n    a = {'x': 2, 'y': 3}\n    b = {'y': 5, 'z': 1}\n    merged = merge_frequency_dicts(a, b)\n    assert merged == {'x': 2, 'y': 8, 'z': 1}\n    print(\"✔ Dict merge passed!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-data-types-mutability-memory",
+        "name": "03-strings-encoding-and-regex",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "import copy\n\ndef main():\n    print(\"=== 03: Data Types, Memory & 'is' vs '==' ===\")\n\n    # 1. Small Integer Caching (-5 to 256 pre-allocated in CPython)\n    a = 256\n    b = 256\n    print(f\"256 is 256 (Small int cache): {a is b}\") # True\n\n    # 2. Shallow vs Deep Copy\n    original = [1, [2, 3], 4]\n    shallow = original.copy()\n    deep = copy.deepcopy(original)\n\n    original[1].append(99)\n    print(f\"Original List : {original}\") # [1, [2, 3, 99], 4]\n    print(f\"Shallow Copy  : {shallow}\")  # [1, [2, 3, 99], 4] -> Mutated!\n    print(f\"Deep Copy     : {deep}\")     # [1, [2, 3], 4] -> Untouched!\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Data Types & Mutability\n\n- `==` checks value equality (`__eq__`).\n- `is` checks memory address equality (`id(a) == id(b)`).\n"
+            "content": "# 03 — Strings, Bytes & Regular Expressions\n\n## 🎯 Strings vs Bytes\n- **`str`**: Immutable sequence of Unicode code points.\n- **`bytes`**: Immutable sequence of raw 8-bit integers (`0..255`).\n- Conversion requires explicit `.encode('utf-8')` and `.decode('utf-8')`.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import re\n\ndef main():\n    print(\"=== 03: Strings, Bytes & Regex ===\")\n    raw_text = \"Contact: admin@trak.dev or support@google.com\"\n    pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}'\n    emails = re.findall(pattern, raw_text)\n    print(f\"Found Emails: {emails}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Write a function that validates if a string is a valid semantic version (X.Y.Z).\nimport re\n\ndef is_semver(s):\n    # FILL HERE\n    return False\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import re\n\ndef is_semver(s):\n    pattern = r'^\\d+\\.\\d+\\.\\d+$'\n    return bool(re.match(pattern, s))\n\nif __name__ == '__main__':\n    assert is_semver('1.2.0')\n    assert is_semver('0.1.5')\n    assert not is_semver('1.2')\n    assert not is_semver('v1.2.0')\n    print(\"✔ SemVer validator passed!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-strings-slicing-formatting",
+        "name": "04-functions-args-kwargs-scopes",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "def main():\n    print(\"=== 04: Strings, Slicing & Modern f-Strings ===\")\n\n    text = \"PythonMastery\"\n    print(f\"Slice [0:6]  : {text[0:6]}\")\n    print(f\"Reverse [::-1]: {text[::-1]}\")\n\n    user = \"Navnath\"\n    score = 98.4567\n    price = 1000000\n\n    # Modern f-string debugging (Python 3.8+)\n    print(f\"{user=}\")\n    print(f\"Formatted Price: ${price:,}\")\n    print(f\"Formatted Score: {score:.2f}%\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Strings & Slicing\n"
+            "content": "# 04 — Functions, *args, **kwargs & Keyword-Only Arguments\n\n## 🎯 Parameter Types\n- Positional-only: `def f(a, b, /, c):`\n- Variable Positional: `*args` (tuple)\n- Keyword-only: `def f(a, *, key=None):`\n- Variable Keyword: `**kwargs` (dict)\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "def execute_pipeline(name, *steps, debug=False, **config):\n    print(f\"Pipeline: {name} (Debug={debug})\")\n    for idx, step in enumerate(steps, 1):\n        print(f\"  Step {idx}: {step}\")\n    print(f\"Config: {config}\")\n\ndef main():\n    print(\"=== 04: Advanced Function Parameters ===\")\n    execute_pipeline(\"ETL_Core\", \"Extract\", \"Transform\", \"Load\", debug=True, timeout=30, retries=3)\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a function 'compose(*functions)' that returns a function\n# applying functions right-to-left: compose(f, g)(x) == f(g(x)).\ndef compose(*funcs):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "def compose(*funcs):\n    def composed(x):\n        result = x\n        for f in reversed(funcs):\n            result = f(result)\n        return result\n    return composed\n\nif __name__ == '__main__':\n    double = lambda x: x * 2\n    add_three = lambda x: x + 3\n    pipeline = compose(double, add_three)\n    assert pipeline(5) == 16\n    print(\"✔ Function compose verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-control-flow-pattern-matching",
+        "name": "05-decorators-and-function-wrappers",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "def process_command(cmd):\n    match cmd:\n        case {\"action\": \"login\", \"user\": username}:\n            return f\"Logging in user: {username}\"\n        case {\"action\": \"payment\", \"amount\": int(amt)} if amt > 0:\n            return f\"Processing payment of ${amt}\"\n        case [\"navigate\", str(path)]:\n            return f\"Navigating to {path}\"\n        case _:\n            return \"Unknown command\"\n\ndef main():\n    print(\"=== 05: Structural Pattern Matching (PEP 634) ===\")\n    print(process_command({\"action\": \"login\", \"user\": \"Alice\"}))\n    print(process_command({\"action\": \"payment\", \"amount\": 500}))\n    print(process_command([\"navigate\", \"/dashboard\"]))\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - Pattern Matching in Python 3.10+\n"
+            "content": "# 05 — Decorators, Closures & functools.wraps\n\n## 🎯 What is a Decorator?\nA decorator is a callable that takes a function as argument and returns a replacement callable.\nAlways use `@functools.wraps(fn)` to preserve function `__name__`, `__doc__`, and signature.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import functools\nimport time\n\ndef timing_decorator(fn):\n    @functools.wraps(fn)\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = fn(*args, **kwargs)\n        elapsed = time.perf_counter() - start\n        print(f\"[PERF] {fn.__name__} executed in {elapsed*1000:.3f}ms\")\n        return result\n    return wrapper\n\n@timing_decorator\ndef compute_sum(n):\n    return sum(range(n))\n\ndef main():\n    print(\"=== 05: Function Decorators ===\")\n    ans = compute_sum(1_000_000)\n    print(f\"Result: {ans}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a decorator '@retry(times=3)' that retries a failing function\n# up to 'times' times before re-raising the exception.\nimport functools\n\ndef retry(times=3):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import functools\n\ndef retry(times=3):\n    def decorator(fn):\n        @functools.wraps(fn)\n        def wrapper(*args, **kwargs):\n            last_err = None\n            for attempt in range(1, times + 1):\n                try:\n                    return fn(*args, **kwargs)\n                except Exception as e:\n                    last_err = e\n            raise last_err\n        return wrapper\n    return decorator\n\nif __name__ == '__main__':\n    attempts = 0\n    @retry(times=3)\n    def flaky():\n        nonlocal attempts\n        attempts += 1\n        if attempts < 3:\n            raise ValueError(\"Temporary failure\")\n        return \"Success\"\n\n    assert flaky() == \"Success\"\n    assert attempts == 3\n    print(\"✔ Retry decorator verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-functions-args-and-closures",
+        "name": "06-generators-iterators-itertools",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "# TRAP: Never use mutable default arguments like def bad_func(items=[])!\ndef good_func(item, items=None):\n    if items is None:\n        items = []\n    items.append(item)\n    return items\n\n# Keyword-only arguments after '*'\ndef configure_server(host, port, *, debug=False, timeout=30):\n    return f\"Server at {host}:{port} (debug={debug}, timeout={timeout}s)\"\n\ndef main():\n    print(\"=== 06: Functions, Mutable Default Trap & Closures ===\")\n    print(good_func(\"A\"))\n    print(good_func(\"B\"))\n    print(configure_server(\"127.0.0.1\", 8000, debug=True))\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Functions & Argument Binding\n"
+            "content": "# 06 — Generators, Iteration Protocol & Memory Efficiency\n\n## 🎯 Iteration Protocol\n- **`__iter__()`**: Returns the iterator object.\n- **`__next__()`**: Returns the next value or raises `StopIteration`.\n- **`yield`**: Pauses function execution, saves stack frame, and streams values on demand with O(1) memory.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "def fibonacci_stream(limit):\n    a, b = 0, 1\n    count = 0\n    while count < limit:\n        yield a\n        a, b = b, a + b\n        count += 1\n\ndef main():\n    print(\"=== 06: Generators & Memory Streams ===\")\n    fibs = list(fibonacci_stream(10))\n    print(f\"First 10 Fibonacci numbers: {fibs}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a chunk generator 'chunked(iterable, size)' that yields\n# lists of elements of max length 'size'.\ndef chunked(iterable, size):\n    # FILL HERE\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "def chunked(iterable, size):\n    chunk = []\n    for item in iterable:\n        chunk.append(item)\n        if len(chunk) == size:\n            yield chunk\n            chunk = []\n    if chunk:\n        yield chunk\n\nif __name__ == '__main__':\n    data = [1, 2, 3, 4, 5, 6, 7]\n    chunks = list(chunked(data, 3))\n    assert chunks == [[1, 2, 3], [4, 5, 6], [7]]\n    print(\"✔ Chunked generator verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-decorators-and-metaprogramming",
+        "name": "07-oop-dunder-methods-operator-overloading",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "import functools\nimport time\n\ndef timing_decorator(func):\n    @functools.wraps(func) # Preserves original function __name__ and __doc__\n    def wrapper(*args, **kwargs):\n        start = time.perf_counter()\n        result = func(*args, **kwargs)\n        duration = time.perf_counter() - start\n        print(f\"Function '{func.__name__}' executed in {duration:.6f}s\")\n        return result\n    return wrapper\n\n@timing_decorator\ndef compute_squares(n):\n    return [x**2 for x in range(n)]\n\ndef main():\n    print(\"=== 07: Decorators & Metaprogramming ===\")\n    res = compute_squares(100_000)\n    print(f\"Squares computed: {len(res)}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Decorators in Python\n\n- Always use `@functools.wraps` to preserve docstrings, names, and introspection.\n"
+            "content": "# 07 — OOP, Dunder Methods & Operator Overloading\n\n## 🎯 Essential Dunder Methods\n- `__repr__`: Unambiguous developer representation (used in debugger/repl)\n- `__str__`: Readable user-facing representation\n- `__eq__` & `__hash__`: Value equality and dict/set hashability\n- `__add__`, `__sub__`, `__mul__`: Operator overloading\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "class Vector2D:\n    def __init__(self, x: float, y: float):\n        self.x = x\n        self.y = y\n\n    def __repr__(self):\n        return f\"Vector2D(x={self.x}, y={self.y})\"\n\n    def __add__(self, other):\n        if not isinstance(other, Vector2D):\n            return NotImplemented\n        return Vector2D(self.x + other.x, self.y + other.y)\n\n    def __eq__(self, other):\n        return isinstance(other, Vector2D) and self.x == other.x and self.y == other.y\n\ndef main():\n    print(\"=== 07: Vector Dunder Methods ===\")\n    v1 = Vector2D(2, 3)\n    v2 = Vector2D(4, 5)\n    v3 = v1 + v2\n    print(f\"v1 + v2 = {v3}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a 'Money' class with 'amount' and 'currency'.\n# Implement __add__ (panics if currencies differ), __repr__, and __eq__.\nclass Money:\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "class Money:\n    def __init__(self, amount: float, currency: str):\n        self.amount = amount\n        self.currency = currency.upper()\n\n    def __add__(self, other):\n        if not isinstance(other, Money) or self.currency != other.currency:\n            raise ValueError(f\"Cannot add {self.currency} and {getattr(other, 'currency', 'Unknown')}\")\n        return Money(self.amount + other.amount, self.currency)\n\n    def __repr__(self):\n        return f\"Money({self.amount:.2f}, '{self.currency}')\"\n\n    def __eq__(self, other):\n        return isinstance(other, Money) and self.amount == other.amount and self.currency == other.currency\n\nif __name__ == '__main__':\n    m1 = Money(100.0, 'USD')\n    m2 = Money(50.0, 'USD')\n    assert (m1 + m2) == Money(150.0, 'USD')\n    print(\"✔ Money class dunders verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-data-structures-and-collections",
+        "name": "08-properties-descriptors-and-dataclasses",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "from collections import defaultdict, Counter, deque\n\ndef main():\n    print(\"=== 08: Data Structures & Collections Module ===\")\n\n    # Counter\n    words = [\"apple\", \"banana\", \"apple\", \"orange\", \"banana\", \"apple\"]\n    counts = Counter(words)\n    print(f\"Word Counts: {counts.most_common(2)}\")\n\n    # DefaultDict (no KeyError!)\n    grouped = defaultdict(list)\n    grouped[\"fruits\"].append(\"Mango\")\n    print(f\"DefaultDict: {dict(grouped)}\")\n\n    # Deque (O(1) pops and appends from both ends)\n    queue = deque([1, 2, 3])\n    queue.appendleft(0)\n    queue.pop()\n    print(f\"Deque: {queue}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Collections Module\n"
+            "content": "# 08 — Properties, Descriptors & Dataclasses\n\n## 🎯 The Descriptor Protocol\nA descriptor is an object attribute with binding behavior, defined by `__get__`, `__set__`, or `__delete__`.\n`@property` and `@classmethod` are implemented using the descriptor protocol!\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "from dataclasses import dataclass\n\nclass BoundedNumber:\n    def __init__(self, min_val, max_val):\n        self.min_val = min_val\n        self.max_val = max_val\n        self._name = None\n\n    def __set_name__(self, owner, name):\n        self._name = f\"_{name}\"\n\n    def __get__(self, instance, owner):\n        if instance is None: return self\n        return getattr(instance, self._name, self.min_val)\n\n    def __set__(self, instance, value):\n        if not (self.min_val <= value <= self.max_val):\n            raise ValueError(f\"{value} out of bounds [{self.min_val}, {self.max_val}]\")\n        setattr(instance, self._name, value)\n\nclass PortConfig:\n    port = BoundedNumber(1, 65535)\n\ndef main():\n    print(\"=== 08: Descriptors & Dataclasses ===\")\n    cfg = PortConfig()\n    cfg.port = 8080\n    print(f\"Configured port: {cfg.port}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a dataclass 'User' with fields: id (int), username (str), email (str),\n# and active (bool, default True).\nfrom dataclasses import dataclass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass User:\n    id: int\n    username: str\n    email: str\n    active: bool = True\n\nif __name__ == '__main__':\n    u = User(id=1, username='ndk', email='ndk@trak.dev')\n    assert u.active is True\n    print(\"✔ Dataclass verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-comprehensions-and-iterators",
+        "name": "09-metaclasses-and-type-creation",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "class Countdown:\n    def __init__(self, start):\n        self.current = start\n\n    def __iter__(self):\n        return self\n\n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        val = self.current\n        self.current -= 1\n        return val\n\ndef main():\n    print(\"=== 09: Comprehensions & Custom Iterator Protocol ===\")\n    even_squares = [x**2 for x in range(10) if x % 2 == 0]\n    print(f\"List Comprehension: {even_squares}\")\n\n    print(\"Custom Iterator:\")\n    for num in Countdown(3):\n        print(f\"Count: {num}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - Comprehensions & Iteration Protocol\n"
+            "content": "# 09 — Metaclasses & Dynamic Class Creation\n\n## 🎯 What is a Metaclass?\nIn Python, **classes are instances of metaclasses**. The default metaclass is `type`.\nMetaclasses allow intercepting class creation (`__new__`) to automatically register classes or enforce API contracts.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "class RegistryMeta(type):\n    registry = {}\n    def __new__(mcs, name, bases, attrs):\n        cls = super().__new__(mcs, name, bases, attrs)\n        if name != 'BasePlugin':\n            mcs.registry[name.lower()] = cls\n        return cls\n\nclass BasePlugin(metaclass=RegistryMeta):\n    pass\n\nclass AuthPlugin(BasePlugin):\n    pass\n\nclass LogPlugin(BasePlugin):\n    pass\n\ndef main():\n    print(\"=== 09: Metaclass Auto-Registration ===\")\n    print(f\"Registered Plugins: {RegistryMeta.registry}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a metaclass 'StrictAttributes' that rejects class creation\n# if any method name does not start with lowercase.\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "class StrictAttributes(type):\n    def __new__(mcs, name, bases, attrs):\n        for attr, val in attrs.items():\n            if callable(val) and not attr.startswith('__') and not attr[0].islower():\n                raise TypeError(f\"Method '{attr}' must start with lowercase!\")\n        return super().__new__(mcs, name, bases, attrs)\n\nif __name__ == '__main__':\n    class Valid(metaclass=StrictAttributes):\n        def valid_method(self): pass\n    print(\"✔ Strict metaclass passed!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-generators-yield-pipelines",
+        "name": "10-context-managers-with-statement",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "def fibonacci_generator(limit):\n    a, b = 0, 1\n    for _ in range(limit):\n        yield a\n        a, b = b, a + b\n\ndef main():\n    print(\"=== 10: Generators, Yield & Memory-Efficient Pipelines ===\")\n    fib = list(fibonacci_generator(8))\n    print(f\"First 8 Fibonacci numbers: {fib}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Generators & Yield\n\n- Generators compute values lazily on-demand with $O(1)$ memory consumption.\n"
+            "content": "# 10 — Context Managers & with Statements\n\n## 🎯 Context Manager Protocol\n- `__enter__()`: Sets up resource, returns target for `as` variable.\n- `__exit__(exc_type, exc_val, exc_tb)`: Tears down resource, handles cleanup. Returning `True` suppresses exceptions.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "from contextlib import contextmanager\nimport time\n\n@contextmanager\ndef timer_block(label):\n    start = time.perf_counter()\n    try:\n        yield\n    finally:\n        elapsed = time.perf_counter() - start\n        print(f\"[{label}] Elapsed: {elapsed*1000:.3f}ms\")\n\ndef main():\n    print(\"=== 10: Context Managers ===\")\n    with timer_block(\"List comprehension\"):\n        _ = [x**2 for x in range(100_000)]\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a context manager class 'TemporaryEnv' that temporarily sets\n# an environment variable and restores original state on exit.\nimport os\n\nclass TemporaryEnv:\n    pass\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import os\n\nclass TemporaryEnv:\n    def __init__(self, key, value):\n        self.key = key\n        self.value = value\n        self.old_val = None\n\n    def __enter__(self):\n        self.old_val = os.environ.get(self.key)\n        os.environ[self.key] = self.value\n        return self\n\n    def __exit__(self, exc_type, exc_val, exc_tb):\n        if self.old_val is None:\n            os.environ.pop(self.key, None)\n        else:\n            os.environ[self.key] = self.old_val\n\nif __name__ == '__main__':\n    with TemporaryEnv('TRAK_TEST', '123'):\n        assert os.environ['TRAK_TEST'] == '123'\n    assert 'TRAK_TEST' not in os.environ\n    print(\"✔ TemporaryEnv context manager passed!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-oop-and-dunder-methods",
+        "name": "11-error-handling-custom-exceptions",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "class Vector:\n    __slots__ = (\"x\", \"y\") # Optimizes memory by preventing per-instance __dict__\n\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __repr__(self):\n        return f\"Vector(x={self.x}, y={self.y})\"\n\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n\ndef main():\n    print(\"=== 11: OOP, Dunder Methods & __slots__ Optimization ===\")\n    v1 = Vector(2, 3)\n    v2 = Vector(5, 7)\n    v3 = v1 + v2\n    print(f\"Vector Addition: {v3}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - OOP & Dunder Methods\n\n- `__slots__` prevents creation of `__dict__`, reducing memory per object up to 40-50%.\n"
+            "content": "# 11 — Custom Exceptions & Exception Chaining\n\n## 🎯 Exception Chaining with `raise ... from ...`\nExplicitly preserves the root cause traceback when wrapping low-level exceptions inside high-level application errors.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "class DatabaseError(Exception):\n    pass\n\nclass RecordNotFoundError(DatabaseError):\n    pass\n\ndef fetch_record(record_id):\n    try:\n        raise KeyError(f\"ID {record_id} not in table\")\n    except KeyError as err:\n        raise RecordNotFoundError(f\"Record {record_id} does not exist\") from err\n\ndef main():\n    print(\"=== 11: Exception Chaining ===\")\n    try:\n        fetch_record(999)\n    except RecordNotFoundError as e:\n        print(f\"Caught: {e}\")\n        print(f\"Root cause: {e.__cause__}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement an exception hierarchy: AppError -> ValidationError -> EmailInvalidError.\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "class AppError(Exception): pass\nclass ValidationError(AppError): pass\nclass EmailInvalidError(ValidationError): pass\n\ndef validate_email(email):\n    if '@' not in email:\n        raise EmailInvalidError(f\"Invalid email address: {email}\")\n    return True\n\nif __name__ == '__main__':\n    try:\n        validate_email('invalid')\n    except AppError as e:\n        print(f\"Caught via base class: {e}\")\n    print(\"✔ Exception hierarchy verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-dataclasses-and-pydantic",
+        "name": "12-concurrency-threading-vs-multiprocessing",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\ntype UserData:\n    id: int\n    username: str\n    email: str\n\ndef main():\n    print(\"=== 12: Modern Data Modeling (Dataclasses & Pydantic) ===\")\n    user = UserData(id=1, username=\"navnath\", email=\"navnath@example.com\")\n    print(f\"Immutable Dataclass: {user}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Dataclasses & Pydantic\n"
+            "content": "# 12 — CPython GIL, Threading & Multiprocessing\n\n## 🎯 The Global Interpreter Lock (GIL)\nCPython uses a mutex (the GIL) to prevent race conditions on internal `PyObject` reference counters.\n- **Threading (`threading`)**: Perfect for **I/O-bound** workloads (HTTP calls, DB queries). GIL is released during I/O.\n- **Multiprocessing (`multiprocessing`)**: Spawns separate OS processes with separate GILs for **CPU-bound** workloads.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import threading\nimport time\n\ndef worker(task_id):\n    time.sleep(0.01)\n    print(f\"Worker {task_id} done.\")\n\ndef main():\n    print(\"=== 12: Threading I/O Concurrency ===\")\n    threads = [threading.Thread(target=worker, args=(i,)) for i in range(5)]\n    for t in threads: t.start()\n    for t in threads: t.join()\n    print(\"All threads finished.\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a ThreadPoolExecutor simulation using 'concurrent.futures'.\nfrom concurrent.futures import ThreadPoolExecutor\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "from concurrent.futures import ThreadPoolExecutor\n\ndef square(n):\n    return n * n\n\nif __name__ == '__main__':\n    with ThreadPoolExecutor(max_workers=3) as executor:\n        results = list(executor.map(square, [1, 2, 3, 4, 5]))\n    assert results == [1, 4, 9, 16, 25]\n    print(\"✔ ThreadPoolExecutor results verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-error-and-exception-handling",
+        "name": "13-asyncio-event-loop-coroutines",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "class ValidationError(Exception):\n    \"\"\"Custom business validation exception.\"\"\"\n    pass\n\ndef validate_age(age):\n    if age < 0:\n        raise ValidationError(f\"Age cannot be negative: {age}\")\n    return True\n\ndef main():\n    print(\"=== 13: Error & Exception Handling Architecture ===\")\n    try:\n        validate_age(-5)\n    except ValidationError as e:\n        print(f\"Caught Custom Error: {e}\")\n    finally:\n        print(\"Cleanup block executed.\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Exceptions in Python\n"
+            "content": "# 13 — AsyncIO, Coroutines & Non-Blocking I/O\n\n## 🎯 Cooperative Multitasking\nAsyncIO runs on a single thread using an **Event Loop**.\nWhen a coroutine hits `await`, it yields control back to the event loop, allowing other coroutines to execute.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import asyncio\n\nasync def fetch_data(source, delay):\n    await asyncio.sleep(delay)\n    return f\"Data from {source}\"\n\nasync def main():\n    print(\"=== 13: AsyncIO Concurrent Gather ===\")\n    results = await asyncio.gather(\n        fetch_data(\"API_1\", 0.02),\n        fetch_data(\"API_2\", 0.01),\n        fetch_data(\"API_3\", 0.03),\n    )\n    print(f\"Gathered Results: {results}\")\n\nif __name__ == '__main__':\n    asyncio.run(main())\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement an async producer-consumer queue with asyncio.Queue.\nimport asyncio\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import asyncio\n\nasync def producer(q):\n    for i in range(5):\n        await q.put(i)\n    await q.put(None)\n\nasync def consumer(q, out):\n    while True:\n        item = await q.get()\n        if item is None: break\n        out.append(item * 10)\n        q.task_done()\n\nasync def main():\n    q = asyncio.Queue()\n    out = []\n    await asyncio.gather(producer(q), consumer(q, out))\n    assert out == [0, 10, 20, 30, 40]\n    print(\"✔ Async Queue pipeline verified!\")\n\nif __name__ == '__main__':\n    asyncio.run(main())\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-context-managers-with-statement",
+        "name": "14-cpython-internals-and-memory",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "from contextlib import contextmanager\n\n@contextmanager\ndef managed_resource(name):\n    print(f\"Acquiring resource: {name}\")\n    try:\n        yield name.upper()\n    finally:\n        print(f\"Releasing resource: {name}\")\n\ndef main():\n    print(\"=== 14: Context Managers & the 'with' Statement ===\")\n    with managed_resource(\"db_connection\") as res:\n        print(f\"Inside with block using: {res}\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Context Managers\n"
+            "content": "# 14 — CPython Memory Management & Cyclic GC\n\n## 🎯 Memory Architecture\n1. **Reference Counting**: Primary memory management. Immediate deallocation when `ob_refcnt == 0`.\n2. **Cyclic Garbage Collector**: Detects reference cycles (`A -> B -> A`). Operates in 3 generations (Gen 0, Gen 1, Gen 2) using heuristic thresholds.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import sys\nimport gc\n\ndef main():\n    print(\"=== 14: CPython Ref Counts & GC ===\")\n    a = [1, 2, 3]\n    print(f\"Refcount of 'a': {sys.getrefcount(a) - 1}\")\n    b = a\n    print(f\"Refcount after 'b = a': {sys.getrefcount(a) - 1}\")\n    print(f\"GC Thresholds (Gen0, Gen1, Gen2): {gc.get_threshold()}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Create an explicit circular reference and verify that gc.collect() collects it.\nimport gc\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import gc\n\nclass Node:\n    def __init__(self):\n        self.cycle = None\n\nif __name__ == '__main__':\n    gc.disable()\n    n1 = Node()\n    n2 = Node()\n    n1.cycle = n2\n    n2.cycle = n1\n    del n1\n    del n2\n    collected = gc.collect()\n    assert collected >= 2\n    gc.enable()\n    print(f\"✔ Cyclic GC collected {collected} unreachable objects!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-static-typing-and-type-hints",
+        "name": "15-testing-pytest-and-mocking",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "from typing import Optional, Union, Sequence\n\ndef get_user_name(user_id: int, fallback: Optional[str] = None) -> str:\n    if user_id == 1:\n        return \"Navnath\"\n    return fallback or \"Anonymous\"\n\ndef main():\n    print(\"=== 15: Static Typing & Type Hints (PEP 484-695) ===\")\n    print(\"User 1:\", get_user_name(1))\n    print(\"User 2:\", get_user_name(2, fallback=\"Guest\"))\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Static Typing in Python\n"
+            "content": "# 15 — Unit Testing & Mocking Architecture\n\n## 🎯 Pytest Patterns\n- Standard `assert` statements without boilerplate `self.assertEqual()`\n- Fixtures with dependency injection (`@pytest.fixture`)\n- Test doubles and mocks with `unittest.mock.MagicMock`\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "from unittest.mock import MagicMock\n\ndef notify_user(notifier, user_id, message):\n    return notifier.send(user_id, message)\n\ndef main():\n    print(\"=== 15: Mocking & Verification ===\")\n    mock_notifier = MagicMock()\n    mock_notifier.send.return_value = True\n    res = notify_user(mock_notifier, 42, \"Welcome to Trak!\")\n    mock_notifier.send.assert_called_once_with(42, \"Welcome to Trak!\")\n    print(\"Mock assertion passed!\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Write unit tests for a palindrome checker function.\ndef is_palindrome(s: str) -> bool:\n    clean = ''.join(c.lower() for c in s if c.isalnum())\n    return clean == clean[::-1]\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "def is_palindrome(s: str) -> bool:\n    clean = ''.join(c.lower() for c in s if c.isalnum())\n    return clean == clean[::-1]\n\nif __name__ == '__main__':\n    assert is_palindrome('A man, a plan, a canal: Panama')\n    assert is_palindrome('racecar')\n    assert not is_palindrome('python')\n    print(\"✔ Palindrome tests passed!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-concurrency-threads-processes-asyncio",
+        "name": "16-modules-packages-and-imports",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "import asyncio\n\nasync def fetch_data(id: int, delay: float):\n    await asyncio.sleep(delay)\n    return f\"Data from source {id}\"\n\nasync def async_main():\n    print(\"=== 16: Concurrency & Asyncio Structured Concurrency ===\")\n    # Python 3.11+ TaskGroup\n    async with asyncio.TaskGroup() as tg:\n        t1 = tg.create_task(fetch_data(1, 0.1))\n        t2 = tg.create_task(fetch_data(2, 0.1))\n\n    print(f\"Task 1: {t1.result()}\")\n    print(f\"Task 2: {t2.result()}\")\n\ndef main():\n    asyncio.run(async_main())\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Concurrency: Threads vs Processes vs Asyncio\n\n- **Threading**: Great for I/O bounds in CPython (GIL releases during I/O).\n- **Multiprocessing**: Solves CPU bounds by creating separate processes with isolated PVMs.\n- **Asyncio**: Single-threaded cooperative concurrency for high-concurrency network services.\n"
+            "content": "# 16 — Modern Packages & Import Resolution\n\n## 🎯 Package Layout\n- `__init__.py`: Initializes package namespace and controls `__all__` exports.\n- `sys.modules`: In-memory cache of previously imported modules.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import sys\n\ndef main():\n    print(\"=== 16: Module System Internals ===\")\n    print(f\"Loaded modules in sys.modules: {len(sys.modules)}\")\n    print(f\"Is 'os' loaded? {'os' in sys.modules}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Demonstrate importing dynamically using importlib.import_module.\nimport importlib\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import importlib\n\nif __name__ == '__main__':\n    math_mod = importlib.import_module('math')\n    assert math_mod.sqrt(16) == 4.0\n    print(\"✔ Dynamic importlib verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-modern-web-backends-fastapi",
+        "name": "17-serialization-json-pickle",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "# Production FastAPI Pattern\n\"\"\"\nfrom fastapi import FastAPI\n\napp = FastAPI(title=\"Trak Production Backend\")\n\n@app.get(\"/health\")\nasync def health_check():\n    return {\"status\": \"healthy\", \"framework\": \"FastAPI\"}\n\"\"\"\n\ndef main():\n    print(\"=== 17: Modern Web Backends with FastAPI & Async Architecture ===\")\n    print(\"FastAPI uses Pydantic for validation and Starlette for high-performance async HTTP.\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - FastAPI Web Backend Architecture\n"
+            "content": "# 17 — Serialization: JSON vs Pickle Security\n\n## ⚠️ Pickle Security Warning\n`pickle` executes arbitrary Python code during deserialization (`__reduce__`). **Never unpickle untrusted data!**\nUse JSON or Protocol Buffers for untrusted networks.\n"
+          },
+          {
+            "name": "example.py",
+            "type": "file",
+            "content": "import json\n\ndef main():\n    print(\"=== 17: JSON Serialization ===\")\n    user_data = {'id': 101, 'username': 'ndk123-web', 'roles': ['admin', 'creator']}\n    serialized = json.dumps(user_data, indent=2)\n    print(f\"Serialized JSON:\\n{serialized}\")\n\nif __name__ == '__main__':\n    main()\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Implement a custom JSONEncoder for a custom class 'Point(x, y)'.\nimport json\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "import json\n\nclass Point:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\nclass PointEncoder(json.JSONEncoder):\n    def default(self, o):\n        if isinstance(o, Point):\n            return {'x': o.x, 'y': o.y}\n        return super().default(o)\n\nif __name__ == '__main__':\n    p = Point(10, 20)\n    out = json.dumps(p, cls=PointEncoder)\n    assert out == '{\"x\": 10, \"y\": 20}'\n    print(\"✔ Custom JSONEncoder verified!\")\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "18-file-io-serialization-requests",
+        "name": "18-interview-questions-and-drills",
         "type": "directory",
         "children": [
           {
-            "name": "main.py",
-            "type": "file",
-            "content": "from pathlib import Path\nimport json\n\ndef main():\n    print(\"=== 18: File I/O, Pathlib & JSON Serialization ===\")\n    data = {\"platform\": \"Trak\", \"modules\": 21, \"status\": \"active\"}\n    path = Path(\"sample_output.json\")\n    path.write_text(json.dumps(data, indent=2))\n\n    content = json.loads(path.read_text())\n    print(f\"Read JSON back: {content}\")\n    path.unlink() # Cleanup\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - Modern File I/O with Pathlib\n"
-          }
-        ]
-      },
-      {
-        "name": "19-testing-benchmarking-profiling",
-        "type": "directory",
-        "children": [
-          {
-            "name": "calc.py",
-            "type": "file",
-            "content": "def add(a: int, b: int) -> int:\n    return a + b\n"
+            "content": "# 18 — High-Yield Python Interview Questions & Master Drills\n\n## 🧠 Top 10 Gotchas\n1. **Mutable Default Arguments**: `def f(a=[])` shares the same list across all calls.\n2. **Late Binding in Closures**: `[lambda: i for i in range(3)]` captures the variable `i`, not value.\n3. **`is` vs `==`**: `is` checks memory identity (`id(a) == id(b)`); `==` checks value equality (`__eq__`).\n4. **GIL Bottleneck**: Multi-threading does not speed up CPU-bound tasks.\n5. **Shallow vs Deep Copy**: `copy.copy` copies container pointers; `copy.deepcopy` clones nested objects.\n6. **`__new__` vs `__init__`**: `__new__` creates and returns the instance; `__init__` initializes it.\n7. **MRO (Method Resolution Order)**: C3 Linearization algorithm for multiple inheritance.\n8. **`__slots__` Optimization**: Replaces `__dict__` with fixed tuple of descriptors to save 60%+ memory.\n9. **Exception Chaining**: `raise ... from ...` explicitly preserves the root cause.\n10. **Generator State**: Generators can only be iterated once.\n"
           },
           {
-            "name": "test_calc.py",
+            "name": "example.py",
             "type": "file",
-            "content": "from calc import add\n\ndef test_add():\n    assert add(2, 3) == 5\n    assert add(-1, 1) == 0\n"
+            "content": "def main():\n    print(\"=== 18: Master Interview Drill ===\")\n    print(\"1. Mutable defaults trap\")\n    print(\"2. LEGB scope & late binding\")\n    print(\"3. CPython GIL & multiprocessing\")\n    print(\"4. MRO & C3 Linearization\")\n    print(\"🚀 You have completed the comprehensive Python Mastery Track!\")\n\nif __name__ == '__main__':\n    main()\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 19 - Testing & Pytest\n\n```bash\npytest -v\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "20-interview-questions-and-drills",
-        "type": "directory",
-        "children": [
-          {
-            "name": "main.py",
-            "type": "file",
-            "content": "def main():\n    print(\"=====================================================\")\n    print(\"🎯 20: High-Yield Python Interview Questions & Reality Check\")\n    print(\"=====================================================\")\n    print(\"1. The GIL: Prevents multi-core CPU parallelism in threads, but I/O releases it.\")\n    print(\"2. Mutable Default Arg: Function defaults evaluate ONCE at definition time, not call time.\")\n    print(\"3. Memory: Reference counting (immediate) + Generational GC for cyclic loops.\")\n    print(\"4. 'is' vs '==': Address equality vs Value equality (__eq__).\")\n    print(\"5. LEGB Rule: Local -> Enclosing -> Global -> Built-in.\")\n    print(\"\\n🚀 You have completed the complete Python Mastery curriculum!\")\n\nif __name__ == \"__main__\":\n    main()\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 20 - Python Interview Questions 🎯\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.py",
+                "type": "file",
+                "content": "# TODO: Master Drill: Fix the late binding closure bug in the following list comprehension:\n# funcs = [lambda: i for i in range(4)]  # All return 3!\n\nif __name__ == '__main__':\n    pass\n"
+              },
+              {
+                "name": "solution.py",
+                "type": "file",
+                "content": "if __name__ == '__main__':\n    funcs = [lambda i=i: i for i in range(4)]\n    results = [f() for f in funcs]\n    assert results == [0, 1, 2, 3]\n    print(\"✔ Late binding closure drill passed!\")\n"
+              }
+            ]
           }
         ]
       }

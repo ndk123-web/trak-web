@@ -1,21 +1,21 @@
 {
   "id": "tool/jenkins",
-  "name": "Jenkins CI/CD Automation & Pipeline Mastery",
+  "name": "Jenkins CI/CD Pipelines & Automation Mastery",
   "version": "1.2.0",
-  "description": "Comprehensive Jenkins CI/CD curriculum from Declarative/Scripted Pipelines and Docker builds to Shared Libraries, Kubernetes Dynamic Agents, JCasC, and RBAC",
+  "description": "Complete high-depth Jenkins curriculum covering Controller-Agent architecture, Declarative Jenkinsfile pipelines, Docker agents, Shared Libraries, JCasC, and production CI/CD",
   "root": {
     "name": "jenkins-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "docker-compose.yml",
+        "name": "Jenkinsfile",
         "type": "file",
-        "content": "version: '3.8'\n\nservices:\n  jenkins:\n    image: jenkins/jenkins:lts-jdk17\n    privileged: true\n    user: root\n    ports:\n      - \"8080:8080\"\n      - \"50000:50000\"\n    volumes:\n      - jenkins_home:/var/jenkins_home\n      - /var/run/docker.sock:/var/run/docker.sock\n    restart: unless-stopped\n\nvolumes:\n  jenkins_home:\n"
+        "content": "pipeline {\n    agent any\n\n    options {\n        timeout(time: 30, unit: 'MINUTES')\n        buildDiscarder(logRotator(numToKeepStr: '20'))\n        ansiColor('xterm')\n    }\n\n    environment {\n        APP_NAME    = 'trak-api'\n        IMAGE_TAG   = \"${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}\"\n    }\n\n    stages {\n        stage('Lint & Static Analysis') {\n            steps {\n                echo \"Running static linters on ${env.APP_NAME}...\"\n                sh 'echo Linters passed!'\n            }\n        }\n\n        stage('Unit Tests') {\n            steps {\n                echo 'Executing test suite...'\n                sh 'echo Tests passed with 100% coverage!'\n            }\n        }\n\n        stage('Build & Push Container') {\n            steps {\n                echo \"Building container image: ${env.APP_NAME}:${env.IMAGE_TAG}\"\n                sh 'echo Container image built successfully.'\n            }\n        }\n    }\n\n    post {\n        always {\n            cleanWs()\n        }\n        success {\n            echo '🎉 Pipeline Succeeded!'\n        }\n        failure {\n            echo '❌ Pipeline Failed!'\n        }\n    }\n}\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🛠️ Complete Jenkins CI/CD & Pipeline Automation Track\n\nWelcome to your full Jenkins learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-jenkins-architecture` | **Architecture & Server** | Controller (Master) & Agent nodes, JNLP connection, Docker setup |\n| `01-declarative-pipeline-syntax` | **Declarative Pipelines** | `pipeline`, `agent`, `stages`, `steps`, `options`, `parameters`, `triggers` |\n| `02-scripted-pipeline-and-groovy` | **Scripted Pipelines** | `node {}`, Groovy scripts, `script {}` blocks, closures, loops |\n| `03-environment-variables-and-parameters` | **Environment & Params** | `environment {}`, String/Choice parameters, `currentBuild` metadata |\n| `04-credentials-and-secret-management` | **Secret Management** | `withCredentials()`, Username/Password, Secret Text, SSH keys |\n| `05-docker-pipeline-integration` | **Docker in Pipelines** | `agent { docker { image '...' } }`, `docker.build()`, container isolation |\n| `06-multibranch-pipelines-and-git` | **Multibranch & Git** | Multibranch pipelines, PR verification, Webhooks, `checkout scm` |\n| `07-parallel-execution-and-matrix` | **Parallel & Matrix** | `parallel {}` execution, build matrices, optimizing CI pipeline time |\n| `08-when-conditions-and-filters` | **Conditional Execution** | `when { branch 'main' }`, `when { tag 'v*' }`, `when { changeRequest() }` |\n| `09-post-actions-and-notifications` | **Post Actions & Alerts** | `always`, `success`, `failure`, Slack/Email notifications, JUnit reports |\n| `10-shared-libraries-groovy` | **Shared Libraries** | `@Library('...') _`, custom reusable steps in `vars/`, OOP helper classes in `src/` |\n| `11-artifact-archiving-and-stash` | **Artifacts & Stash** | `archiveArtifacts`, `stash` & `unstash` between distributed agents |\n| `12-input-approvals-and-gates` | **Manual Approvals** | `input message: '...'`, production deployment approval gates, timeouts |\n| `13-kubernetes-dynamic-agents` | **K8s Dynamic Agents** | Kubernetes Pod agents, ephemeral executor pods, auto-scaling agents |\n| `14-security-rbac-and-audit` | **Security & RBAC** | Role-Based Authorization Strategy, Project matrix security, audit logs |\n| `15-jenkins-casc-jcasc` | **Configuration as Code** | JCasC (`jenkins.yaml`), declarative server configuration & provisioning |\n| `16-blue-ocean-and-monitoring` | **Blue Ocean & Metrics** | Blue Ocean visualizer, Prometheus plugin, build performance dashboards |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield Jenkins CI/CD interview questions & debugging scenarios |\n\n---\n\n## 🛠️ Quick Start\n\nRun local Jenkins server using Docker Compose:\n```bash\ndocker compose up -d\n```\nAccess UI at: `http://localhost:8080`\n"
+        "content": "# 👷 Jenkins CI/CD Pipelines & Automation Mastery Track\n\nWelcome to the **Jenkins CI/CD Pipelines & Automation Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering Jenkins Controller-Agent distributed architecture, Declarative Pipeline-as-Code (`Jenkinsfile`), Docker container agents, Shared Libraries, Credentials masking, Multibranch indexing, and JCasC (Jenkins Configuration-as-Code).\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-jenkins-architecture` | Controller & Agent Architecture | Controller (Master), JNLP/Inbound agents, `JENKINS_HOME` directory layout |\n| `01-freestyle-vs-pipeline-jobs` | Pipeline-as-Code | UI Freestyle legacy vs version-controlled `Jenkinsfile` in Git repositories |\n| `02-declarative-pipeline-syntax` | Declarative Pipeline Syntax | Mandatory sections (`pipeline`, `agent`, `stages`, `steps`, `post`) |\n| `03-scripted-pipeline-and-groovy` | Scripted Pipelines & Groovy | Node blocks, Groovy syntax, `script {}` blocks inside Declarative stages |\n| `04-agent-directives-and-docker-nodes` | Docker Agents & Execution | `agent { docker { image '...' } }`, ephemeral isolated container builds |\n| `05-stages-steps-and-parallel-execution` | Parallel Execution | `parallel { stage('Test 1') {} stage('Test 2') {} }`, `failFast: true` |\n| `06-environment-variables-and-parameters` | Environment & Parameters | `environment {}`, `parameters { string() }`, `params.ENV_NAME` |\n| `07-credentials-and-secret-masking` | Credentials & Masking | `withCredentials([string(...)])`, Secret text, SSH keys, masking in logs |\n| `08-post-actions-and-notifications` | Post Actions & Webhooks | `post { always, success, failure, cleanup }`, Slack notifications, email |\n| `09-when-conditions-and-branch-filtering` | `when` Flow Control | `when { branch 'main' }`, `when { tag 'v*' }`, `beforeAgent true` optimization |\n| `10-shared-libraries-and-reusable-groovy` | Jenkins Shared Libraries | Reusable `@Library('my-lib') _`, `vars/myStep.groovy`, `src/` classes |\n| `11-multibranch-pipelines-and-git-branch-discovery` | Multibranch Pipelines | Automatic branch indexing, PR status checks, branch webhook discovery |\n| `12-build-triggers-and-webhooks` | Triggers & Polling | GitHub push webhooks, cron expressions (`H/15 * * * *`), upstream triggers |\n| `13-artifacts-and-test-reports` | Artifacts & Test Reports | `archiveArtifacts`, fingerprinting, JUnit XML test report publishing |\n| `14-input-steps-and-manual-approval` | Manual Approval Gates | `input { message 'Deploy?' submitter 'leads' }`, timeout cancellation |\n| `15-jenkins-configuration-as-code-jcasc` | JCasC (`jenkins.yaml`) | Headless Controller configuration, automated plugin bootstrapping |\n| `16-security-rbac-and-audit-logging` | Security & RBAC | Role Strategy Plugin, Matrix Security, CSRF crumbs, audit logs |\n| `17-performance-tuning-and-garbage-collection` | Tuning & GC Optimization | Controller JVM G1GC tuning, `buildDiscarder`, workspace cleanup (`cleanWs`) |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Jenkins CI/CD gotchas + Production Multi-Stage Deployment Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `Jenkinsfile` / `pipeline.groovy` — Fully runnable concept demonstration.\n- `exercise/starter.groovy` — Hands-on problem with `TODO` markers.\n- `exercise/solution.groovy` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-jenkins-architecture",
@@ -24,264 +24,604 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - Jenkins Architecture & Setup 🛠️\n\n- **Jenkins Controller (Master)**: Handles HTTP requests, scheduling jobs, dispatching builds to agents, and storing build records.\n- **Jenkins Agents (Executors)**: Worker nodes running actual build steps inside isolated environments.\n"
-          }
-        ]
-      },
-      {
-        "name": "01-declarative-pipeline-syntax",
-        "type": "directory",
-        "children": [
+            "content": "# 00 — Jenkins Controller & Agent Distributed Architecture\n\n## 🎯 Architecture Golden Rule\n**Never run build workloads directly on the Controller (Master) node.** The Controller should only orchestrate pipelines, schedule jobs, and dispatch builds to Worker Agents.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n\n    options {\n        timeout(time: 1, unit: 'HOURS')\n        timestamps()\n        disableConcurrentBuilds()\n    }\n\n    stages {\n        stage('Build') {\n            steps {\n                echo \"[Build] Compiling source code...\"\n            }\n        }\n        stage('Test') {\n            steps {\n                echo \"[Test] Running automated test suites...\"\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent none\n    stages {\n        stage('Check Controller Status') {\n            agent any\n            steps {\n                echo \"Jenkins Build Number: ${env.BUILD_NUMBER}\"\n                echo \"Node Name: ${env.NODE_NAME}\"\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 01 - Declarative Pipeline Syntax\n\nDeclarative pipeline is the modern standard for Jenkinsfiles, providing a structured, syntax-checked DSL.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Write a pipeline that prints the Jenkins URL using env.JENKINS_URL.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "pipeline {\n    agent any\n    stages {\n        stage('Inspect Environment') {\n            steps {\n                echo \"Jenkins URL: ${env.JENKINS_URL}\"\n            }\n        }\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-scripted-pipeline-and-groovy",
+        "name": "01-freestyle-vs-pipeline-jobs",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 — Pipeline-as-Code vs Freestyle Jobs\n\n## 🎯 Why Pipeline-as-Code?\n- Stored alongside application source code in Git.\n- Version controlled and peer reviewed in Pull Requests.\n- Automatically executed across all branches in Multibranch pipelines.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "node('linux-agent') {\n    stage('Prepare') {\n        def appVersion = \"1.0.0\"\n        println \"Building version: ${appVersion}\"\n    }\n    stage('Execute') {\n        try {\n            sh 'echo Running scripted pipeline step'\n        } catch (Exception err) {\n            println \"Caught error: ${err.message}\"\n            currentBuild.result = 'FAILURE'\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Demonstrate Pipeline-as-Code') {\n            steps {\n                echo 'This stage is version-controlled inside Git!'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 02 - Scripted Pipelines & Groovy\n\nScripted pipelines offer full programmatic Groovy power (loops, conditionals, exception handling) using the `node` block.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Add an options block to retain only the last 10 builds.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "options {\n    buildDiscarder(logRotator(numToKeepStr: '10'))\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-environment-variables-and-parameters",
+        "name": "02-declarative-pipeline-syntax",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 02 — Declarative Pipeline Syntax Standard\n\n## 🎯 Required Structure\n```groovy\npipeline {\n    agent any\n    stages {\n        stage('Example') {\n            steps {\n                echo 'Hello'\n            }\n        }\n    }\n}\n```\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n\n    parameters {\n        choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Deployment Target')\n        booleanParam(name: 'RUN_INTEGRATION_TESTS', defaultValue: true, description: 'Run extended test suite')\n    }\n\n    environment {\n        APP_NAME = 'trak-api'\n        BUILD_VERSION = \"${env.BUILD_NUMBER}\"\n    }\n\n    stages {\n        stage('Deploy') {\n            steps {\n                echo \"Deploying ${env.APP_NAME} (Build #${env.BUILD_VERSION}) to target: ${params.ENVIRONMENT}\"\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Build') {\n            steps {\n                sh 'echo Compiling application...'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 03 - Environment & Parameters\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Add a timeout of 15 minutes to the pipeline.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "options {\n    timeout(time: 15, unit: 'MINUTES')\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-credentials-and-secret-management",
+        "name": "03-scripted-pipeline-and-groovy",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 03 — Scripted Pipelines & Groovy `script {}`\n\n## 🎯 When to Use `script {}`\nUse `script {}` blocks inside Declarative pipelines when you need complex loops, try/catch exception logic, or dynamic maps.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Publish Artifacts') {\n            steps {\n                withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {\n                    sh 'echo Authenticating as user: $NEXUS_USER'\n                    // Passwords are automatically masked in build logs as ****\n                }\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Dynamic Stage Execution') {\n            steps {\n                script {\n                    def targets = ['dev', 'stage', 'prod']\n                    for (env_name in targets) {\n                        echo \"Target Environment: ${env_name}\"\n                    }\n                }\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 04 - Credential & Secret Management\n\nAlways use `withCredentials()` blocks to bind secret variables. Jenkins automatically masks secrets in console logs.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Implement a try/catch block inside a script step.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "script {\n    try {\n        sh 'echo Running step...'\n    } catch (Exception e) {\n        echo \"Caught exception: ${e.message}\"\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-docker-pipeline-integration",
+        "name": "04-agent-directives-and-docker-nodes",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 04 — Docker Container Agents\n\n## 🎯 Ephemeral Build Environments\n```groovy\nagent {\n    docker {\n        image 'golang:1.22-alpine'\n        args '-v /tmp:/tmp'\n    }\n}\n```\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent {\n        docker {\n            image 'node:20-alpine'\n            args '-v /tmp/cache:/root/.npm'\n        }\n    }\n    stages {\n        stage('Build & Test in Container') {\n            steps {\n                sh 'node --version'\n                sh 'npm --version'\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent {\n        docker {\n            image 'node:20-alpine'\n            reuseNode true\n        }\n    }\n    stages {\n        stage('Check Node Version') {\n            steps {\n                sh 'node --version'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 05 - Docker Integration in Pipelines\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Specify an agent with label 'linux-builder'.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "agent {\n    node {\n        label 'linux-builder'\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-multibranch-pipelines-and-git",
+        "name": "05-stages-steps-and-parallel-execution",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 05 — Parallel Stages & `failFast`\n\n## 🎯 `failFast: true`\nAborts all sibling parallel branches immediately if any one of the parallel stages fails, saving compute minutes.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Checkout') {\n            steps {\n                checkout scm\n                echo \"Current Git Branch: ${env.BRANCH_NAME}\"\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Parallel Quality Checks') {\n            parallel {\n                stage('Unit Tests') {\n                    steps { echo 'Running Unit Tests...' }\n                }\n                stage('Security Scan') {\n                    steps { echo 'Running SAST Security Scan...' }\n                }\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 06 - Multibranch Pipelines & Git\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Add failFast: true to the parallel block.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "parallel {\n    failFast true\n    stage('Test Branch A') { steps { echo 'Testing A' } }\n    stage('Test Branch B') { steps { echo 'Testing B' } }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-parallel-execution-and-matrix",
+        "name": "06-environment-variables-and-parameters",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 06 — Environment Variables & Build Parameters\n\n## 🎯 Parameters Definition\n```groovy\nparameters {\n    choice(name: 'DEPLOY_ENV', choices: ['staging', 'production'], description: 'Target Env')\n    booleanParam(name: 'RUN_INTEGRATION_TESTS', defaultValue: true)\n}\n```\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Parallel Test Suites') {\n            parallel {\n                stage('Unit Tests') {\n                    steps { echo 'Running unit tests in parallel...' }\n                }\n                stage('Lint & Static Analysis') {\n                    steps { echo 'Running ESLint / SonarQube...' }\n                }\n                stage('Security Scan') {\n                    steps { echo 'Running Trivy container scan...' }\n                }\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    environment {\n        DEPLOY_TIER = 'production'\n    }\n    stages {\n        stage('Read Environment') {\n            steps {\n                echo \"Target Tier: ${env.DEPLOY_TIER}\"\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 07 - Parallel & Matrix Execution\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Define a string parameter 'VERSION' with defaultValue '1.0.0'.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "parameters {\n    string(name: 'VERSION', defaultValue: '1.0.0', description: 'Release Version')\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-when-conditions-and-filters",
+        "name": "07-credentials-and-secret-masking",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Credentials Management & Secret Masking\n\n## 🎯 `withCredentials` Wrapper\n```groovy\nwithCredentials([string(credentialsId: 'github-pat', variable: 'GH_TOKEN')]) {\n    sh 'curl -H \"Authorization: token ${GH_TOKEN}\" https://api.github.com'\n}\n```\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Deploy to Production') {\n            when {\n                branch 'main'\n                tag 'v*'\n            }\n            steps {\n                echo 'Deploying release tag to production...'\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Access Secret') {\n            steps {\n                echo 'Credentials are masked in console output: ****'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 08 - When Conditions & Branch Filters\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Wrap a shell step with usernamePassword credentials binding.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "withCredentials([usernamePassword(credentialsId: 'registry-login', usernameVariable: 'USER', passwordVariable: 'PASS')]) {\n    sh 'echo Authenticating as ${USER}...'\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-post-actions-and-notifications",
+        "name": "08-post-actions-and-notifications",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Post Actions & Workspace Cleanup\n\n## 🎯 Post Conditions\n- `always`: Runs unconditionally.\n- `success`: Runs only if all stages succeeded.\n- `failure`: Runs if any stage failed.\n- `cleanup`: Runs after all other post actions (ideal for `cleanWs()`).\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Test') {\n            steps {\n                echo 'Testing...'\n            }\n        }\n    }\n    post {\n        always {\n            cleanWs() // Clean workspace\n        }\n        success {\n            echo 'Pipeline completed successfully!'\n        }\n        failure {\n            echo 'Pipeline failed! Sending alert notification.'\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Execution') {\n            steps { echo 'Job running...' }\n        }\n    }\n    post {\n        always {\n            echo 'Cleaning up workspace...'\n            cleanWs()\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - Post Actions & Notification Blocks\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Add a post failure block sending an alert.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "post {\n    failure {\n        echo '⚠️ Alert: Pipeline execution failed on stage!'\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-shared-libraries-groovy",
+        "name": "09-when-conditions-and-branch-filtering",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — `when` Conditions & `beforeAgent` Optimization\n\n## 🎯 `beforeAgent true`\nEvaluates `when` condition **before** provisioning/allocating an expensive cloud agent, saving significant compute costs.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "// @Library('my-shared-library@v1.0') _\npipeline {\n    agent any\n    stages {\n        stage('Shared Step Call') {\n            steps {\n                // standardBuildPipeline(appName: 'orders-service', notifySlack: true)\n                echo 'Executing shared library custom step'\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent none\n    stages {\n        stage('Deploy to Production') {\n            when {\n                beforeAgent true\n                branch 'main'\n            }\n            agent any\n            steps {\n                echo 'Deploying main branch to production...'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 10 - Jenkins Global Shared Libraries\n\n### Shared Library Structure:\n```\n(root)\n+- src/                     # Java-style Groovy source files (OOP)\n|   +- com/company/Util.groovy\n+- vars/                    # Global variables and custom steps (callable in Jenkinsfiles)\n|   +- standardBuild.groovy\n+- resources/               # Static non-Groovy data files\n```\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Write a when block that checks if tag matches release-* format.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "when {\n    tag pattern: 'release-*', comparator: 'GLOB'\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-artifact-archiving-and-stash",
+        "name": "10-shared-libraries-and-reusable-groovy",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Jenkins Shared Libraries\n\n## 🎯 Shared Library Directory Layout\n```text\n(root)\n├── vars/\n│   ├── standardPipeline.groovy   # Custom global DSL step\n│   └── notifySlack.groovy\n└── src/\n    └── org/trak/Utilities.groovy # Standard Groovy classes\n```\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Build') {\n            steps {\n                sh 'echo \"Compiled App binary\" > app.bin'\n                archiveArtifacts artifacts: '*.bin', fingerprint: true\n            }\n        }\n    }\n}\n"
+            "content": "// @Library('trak-shared-lib@v1.0') _\npipeline {\n    agent any\n    stages {\n        stage('Shared Library Step') {\n            steps {\n                echo 'Shared library standardizes pipelines across organization.'\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Artifact Archiving & Stashing\n\n- `archiveArtifacts`: Saves build outputs to Jenkins Master long-term storage.\n- `stash / unstash`: Temporary transfer of files between different agents within a single build run.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Write the definition of a custom step 'vars/sayHello.groovy'.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "// vars/sayHello.groovy\ndef call(String name = 'Developer') {\n    echo \"Hello, ${name}! Welcome to Trak Pipeline.\"\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-input-approvals-and-gates",
+        "name": "11-multibranch-pipelines-and-git-branch-discovery",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Multibranch Pipelines & PR Branch Indexing\n\n## 🎯 Automatic Branch Lifecycle\nMultibranch automatically creates jobs for new Git branches/PRs and deletes completed jobs when branches are merged.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent any\n    stages {\n        stage('Production Approval Gate') {\n            steps {\n                timeout(time: 1, unit: 'DAYS') {\n                    input message: 'Do you approve deploying to Production?', submitter: 'admin,lead-dev'\n                }\n            }\n        }\n        stage('Deploy') {\n            steps {\n                echo 'Deploying to Production cluster...'\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Multibranch Info') {\n            steps {\n                echo \"Current Branch: ${env.BRANCH_NAME}\"\n                echo \"Is Pull Request: ${env.CHANGE_ID != null}\"\n            }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 12 - Manual Approval Gates (Input Step)\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Check if current build is from a pull request with CHANGE_ID.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "when {\n    changeRequest()\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-kubernetes-dynamic-agents",
+        "name": "12-build-triggers-and-webhooks",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Build Triggers: Webhooks & Cron\n\n## 🎯 Hash-Distributed Cron (`H`)\n`H 2 * * *` distributes scheduled jobs evenly across the 2:00 AM hour to avoid spike load on Controller.\n"
+          },
           {
             "name": "Jenkinsfile",
             "type": "file",
-            "content": "pipeline {\n    agent {\n        kubernetes {\n            yaml '''\napiVersion: v1\nkind: Pod\nspec:\n  containers:\n  - name: maven\n    image: maven:3.9-eclipse-temurin-17\n    command: ['sleep']\n    args: ['99d']\n'''\n        }\n    }\n    stages {\n        stage('Build in Kubernetes Pod') {\n            steps {\n                container('maven') {\n                    sh 'mvn --version'\n                }\n            }\n        }\n    }\n}\n"
+            "content": "pipeline {\n    agent any\n    triggers {\n        cron('H 2 * * *')\n    }\n    stages {\n        stage('Nightly Maintenance') {\n            steps { echo 'Executing nightly backup...' }\n        }\n    }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 13 - Kubernetes Dynamic Agents (Project Loom / Ephemeral Pods)\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Configure an upstream trigger on job 'upstream-build'.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "triggers {\n    upstream(upstreamProjects: 'upstream-build', threshold: hudson.model.Result.SUCCESS)\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-security-rbac-and-audit",
+        "name": "13-artifacts-and-test-reports",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Security, RBAC & Matrix Authorization\n\n- **Role-Based Authorization Strategy Plugin**: Define global and project-specific roles (Read, Build, Configure, Delete).\n- **Audit Trail Plugin**: Logs all configuration and build trigger events.\n"
-          }
-        ]
-      },
-      {
-        "name": "15-jenkins-casc-jcasc",
-        "type": "directory",
-        "children": [
-          {
-            "name": "jenkins.yaml",
-            "type": "file",
-            "content": "jenkins:\n  systemMessage: \"Welcome to Trak Production Jenkins Server\"\n  numExecutors: 4\n  mode: NORMAL\n  scmCheckoutRetryCount: 3\nunclassified:\n  location:\n    url: \"http://jenkins.company.internal:8080/\"\n"
+            "content": "# 13 — Archiving Artifacts & JUnit Reports\n\n## 🎯 `archiveArtifacts` & `junit`\n```groovy\narchiveArtifacts artifacts: 'dist/*.tar.gz', fingerprint: true\njunit 'reports/**/*.xml'\n```\n"
           },
           {
-            "name": "README.md",
+            "name": "Jenkinsfile",
             "type": "file",
-            "content": "# 15 - Jenkins Configuration as Code (JCasC)\n"
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Archive Output') {\n            steps {\n                sh 'mkdir -p dist && echo \"Build 1.0\" > dist/version.txt'\n                archiveArtifacts artifacts: 'dist/**', allowEmptyArchive: true\n            }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Write step to publish JUnit XML test results.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "junit testResults: 'target/surefire-reports/*.xml', allowEmptyResults: true\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-blue-ocean-and-monitoring",
+        "name": "14-input-steps-and-manual-approval",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Blue Ocean UI & Prometheus Monitoring\n"
+            "content": "# 14 — Manual Approval Gates (`input`)\n\n## 🎯 Approval Gate with Timeout\n```groovy\ntimeout(time: 2, unit: 'HOURS') {\n    input message: 'Promote build to production?', submitter: 'release-managers'\n}\n```\n"
+          },
+          {
+            "name": "Jenkinsfile",
+            "type": "file",
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Manual Approval') {\n            steps {\n                echo 'Requesting deployment approval...'\n            }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Write an input step prompting for approval with submitter 'devops-lead'.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "input message: 'Approve production deployment?', submitter: 'devops-lead'\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "15-jenkins-configuration-as-code-jcasc",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield Jenkins CI/CD Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Declarative vs Scripted**: Declarative provides structured, syntax-checked DSL; Scripted offers full Groovy programming flexibility.\n2. **withCredentials vs ENV**: `withCredentials` prevents secret leakage by automatically masking tokens in console output.\n3. **Multibranch Pipelines**: Automatically detects branches containing `Jenkinsfile` and triggers builds on PR creation.\n4. **Shared Libraries**: Centralizes reusable CI/CD logic across multiple repository pipelines.\n5. **Dynamic Kubernetes Agents**: Scales executor pods on demand and terminates them post-build to save cloud infrastructure costs.\n\n🚀 You have completed the complete Jenkins CI/CD Automation track!\n"
+            "content": "# 15 — Jenkins Configuration-as-Code (JCasC)\n\n## 🎯 `jenkins.yaml`\nConfigures system settings, credentials, clouds, and security realms via declarative YAML.\n"
+          },
+          {
+            "name": "Jenkinsfile",
+            "type": "file",
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('JCasC Status') {\n            steps { echo 'JCasC enables 100% reproducible Jenkins Controllers.' }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "# TODO: Define system message in a JCasC jenkins.yaml snippet.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "jenkins:\n  systemMessage: \"Managed 100% by Jenkins Configuration-as-Code (JCasC)\"\n  numExecutors: 0\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-security-rbac-and-audit-logging",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Role-Based Access Control & Security\n\n## 🎯 Security Hardening\n- Disable anonymous read access.\n- Enable Crumb Issuer (CSRF protection).\n- Enforce Agent-to-Controller Access Control subsystem.\n"
+          },
+          {
+            "name": "Jenkinsfile",
+            "type": "file",
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Security Check') {\n            steps { echo 'Verifying role permissions...' }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Print current executing user in pipeline step.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "echo \"Build triggered by: ${currentBuild.getBuildCauses()}\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-performance-tuning-and-garbage-collection",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — JVM Performance Tuning & G1GC\n\n## 🎯 Recommended Controller JVM Flags\n```text\nJAVA_OPTS=\"-Xms4g -Xmx4g -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent\"\n```\n"
+          },
+          {
+            "name": "Jenkinsfile",
+            "type": "file",
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Clean Workspace') {\n            steps {\n                cleanWs()\n            }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Configure cleanWs() in post cleanup section.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "post {\n    cleanup {\n        cleanWs()\n    }\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield Jenkins CI/CD Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Builds on Controller Node**: Running heavy builds on Controller risks JVM heap exhaustion and whole-cluster crashes.\n2. **Declarative vs Scripted**: Declarative provides strict validation and visual Blue Ocean pipelines; Scripted offers raw Groovy power.\n3. **`withCredentials` Scope**: Secrets are only available within the block and are masked in console output.\n4. **`beforeAgent true` Efficiency**: Evaluates branch filters without waiting for worker agent provisioning.\n5. **Shared Library Security**: Changes to shared libraries apply immediately to all pipelines referencing `@Library('main')`.\n6. **Zombie Workspace Disk Bloat**: Without `cleanWs()`, stale node_modules and Docker layers fill worker agent disks.\n7. **Non-CPS Methods in Groovy**: Groovy methods containing closures or non-serializable objects require `@NonCPS`.\n8. **Pipeline Serialization**: Jenkins persists pipeline execution state to disk after every step (CPS - Continuation Passing Style).\n9. **Agent Disconnects**: Inbound agents require resilient heartbeat and automatic restart systemd service.\n10. **Webhook Replay Attacks**: Always configure shared secret HMAC signatures in GitHub webhook configurations.\n"
+          },
+          {
+            "name": "Jenkinsfile",
+            "type": "file",
+            "content": "pipeline {\n    agent any\n    stages {\n        stage('Master Jenkins Drill') {\n            steps {\n                echo '1. Controller vs Inbound Agent Architecture'\n                echo '2. Declarative Pipeline-as-Code standards'\n                echo '3. Docker ephemeral container agents'\n                echo '4. Shared Libraries and JCasC automation'\n                echo '🚀 You have completed the comprehensive Jenkins Mastery Track!'\n            }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.groovy",
+                "type": "file",
+                "content": "// TODO: Master Drill: Write a complete declarative pipeline skeleton with buildDiscarder, parameters, 2 stages, and cleanWs post.\n// FILL HERE\n"
+              },
+              {
+                "name": "solution.groovy",
+                "type": "file",
+                "content": "pipeline {\n    agent any\n    options {\n        buildDiscarder(logRotator(numToKeepStr: '15'))\n        timeout(time: 20, unit: 'MINUTES')\n    }\n    parameters {\n        string(name: 'ENVIRONMENT', defaultValue: 'staging')\n    }\n    stages {\n        stage('Build') {\n            steps { echo \"Building for ${params.ENVIRONMENT}\" }\n        }\n        stage('Deploy') {\n            steps { echo 'Deploying...' }\n        }\n    }\n    post {\n        always { cleanWs() }\n    }\n}\n"
+              }
+            ]
           }
         ]
       }

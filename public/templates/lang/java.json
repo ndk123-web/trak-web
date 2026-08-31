@@ -1,8 +1,8 @@
 {
   "id": "lang/java",
-  "name": "Java & JVM Enterprise Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive Java (Java 17-21+) curriculum from JVM internals, ClassLoader, memory layout, and Garbage Collection to Records, Sealed Classes, Virtual Threads (Project Loom), Streams, and Spring Boot 3",
+  "name": "Modern Java & JVM Systems Mastery Track",
+  "version": "1.2.0",
+  "description": "Complete high-depth Java (Java 21 LTS) curriculum covering Virtual Threads (Project Loom), JVM memory model, G1GC/ZGC, pattern matching, records, and high-concurrency architecture",
   "root": {
     "name": "java-workspace",
     "type": "directory",
@@ -10,298 +10,586 @@
       {
         "name": "pom.xml",
         "type": "file",
-        "content": "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n    <groupId>com.trak</groupId>\n    <artifactId>java-workspace</artifactId>\n    <version>1.0.0</version>\n\n    <properties>\n        <maven.compiler.source>21</maven.compiler.source>\n        <maven.compiler.target>21</maven.compiler.target>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n    </properties>\n</project>\n"
+        "content": "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n    <groupId>dev.trak</groupId>\n    <artifactId>java-workspace</artifactId>\n    <version>0.1.0</version>\n    <properties>\n        <maven.compiler.source>21</maven.compiler.source>\n        <maven.compiler.target>21</maven.compiler.target>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n    </properties>\n</project>\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# ☕ Complete Java & JVM Enterprise Architecture Track\n\nWelcome to your full Java 21+ learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-maven-toolchain` | **Setup & Toolchains** | JDK 21 installation, Maven `pom.xml`, javac, java execution |\n| `01-jvm-architecture-and-memory-layout` | **JVM Internals & GC** | ClassLoader, Heap (Eden, S0, S1, Tenured), Metaspace, Stack frames, G1/ZGC |\n| `02-primitives-and-integer-cache` | **Primitives & Cache** | 8 Primitives, Integer Cache (-128..127), Autoboxing, `var` type inference |\n| `03-strings-and-string-constant-pool` | **Strings & Pool** | `String` vs `StringBuilder`, String Constant Pool, `.intern()`, Text Blocks |\n| `04-control-flow-and-pattern-matching` | **Pattern Matching** | Modern `switch` with `yield`, `instanceof` pattern matching, record patterns |\n| `05-oop-and-access-modifiers` | **OOP Principles** | Encapsulation, inheritance, polymorphism, `public`/`protected`/`private`/package-private |\n| `06-interfaces-sealed-classes-records` | **Modern Types** | Default/static interface methods, `sealed` classes with `permits`, `record` classes |\n| `07-generics-and-type-erasure` | **Generics & PECS** | Type erasure, bounded wildcards `? extends T` vs `? super T` (PECS rule) |\n| `08-java-collections-framework` | **Collections (JCF)** | `ArrayList`, `HashSet`, `TreeSet`, `HashMap` bucket treeification, `ConcurrentHashMap` |\n| `09-lambdas-and-streams-api` | **Lambdas & Streams** | `@FunctionalInterface`, Method references `::`, Streams (filter, map, flatMap, collect) |\n| `10-optional-and-null-safety` | **Optional & Null Safety** | `Optional<T>`, `map`, `flatMap`, `orElse`, `orElseThrow` |\n| `11-exception-handling-architecture` | **Exception Architecture** | Checked vs Unchecked exceptions, try-with-resources `AutoCloseable` |\n| `12-concurrency-and-jmm` | **Concurrency & JMM** | Java Memory Model, `volatile`, `synchronized`, `ReentrantLock`, `CompletableFuture` |\n| `13-virtual-threads-project-loom` | **Virtual Threads** | Project Loom (Java 21), `Executors.newVirtualThreadPerTaskExecutor()` |\n| `14-annotations-and-reflection` | **Annotations & Reflection** | Custom annotations `@Retention`/`@Target`, Reflection API, dynamic inspection |\n| `15-spring-boot-architecture` | **Spring Boot 3.x** | `@RestController`, `@Service`, Dependency Injection, Spring Data JPA |\n| `16-file-io-nio-and-http-client` | **NIO & HTTP Client** | `java.nio.file.Path`, `Files.readString`, modern `java.net.http.HttpClient` |\n| `17-testing-junit-and-mockito` | **Testing & Mocking** | JUnit 5 `@Test`, `@ParameterizedTest`, Mockito mocking |\n| `18-interview-questions-and-drills` | **Interview Master Drill** | Top 10 enterprise Java interview questions & JVM memory tuning flags |\n\n---\n\n## 🛠️ How to Compile & Run\n\nRun any module with Java 21+:\n```bash\ncd 00-setup-and-maven-toolchain\njava Main.java\n```\n"
+        "content": "# ☕ Modern Java & JVM Systems Mastery Track\n\nWelcome to the **Modern Java & JVM Systems Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering Modern Java (Java 21 LTS), Project Loom Virtual Threads, JVM memory architecture (Heap, Metaspace, GC algorithms), pattern matching, sealed classes, and low-latency concurrency.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-jvm-toolchain` | JDK 21 LTS & Toolchain | JDK vs JRE, JVM bytecode, JIT compilation (C1/C2 tiers), Maven `pom.xml` |\n| `01-basics-primitive-types-and-boxing` | Primitives & Autoboxing | Primitives vs Reference wrappers, Integer Cache (`-128..127`), identity traps |\n| `02-oop-polymorphism-and-interfaces` | Sealed Classes & Interfaces | `sealed` / `permits`, default & private interface methods, `instanceof` patterns |\n| `03-records-and-pattern-matching` | Records & Exhaustive Switch | Immutability, compact record constructors, pattern matching for `switch` |\n| `04-strings-and-text-blocks` | Strings & Text Blocks | String pool, byte array compact strings, String Deduplication, Text Blocks (`\"\"\"`) |\n| `05-collections-framework-internals` | Collections Internals | `ArrayList` capacity, `HashMap` treeification (threshold 8), `ConcurrentHashMap` |\n| `06-generics-and-type-erasure` | Generics & PECS | Bytecode type erasure, bridge methods, wildcards (`? extends T` vs `? super T`) |\n| `07-functional-interfaces-and-lambdas` | Functional Interfaces | `@FunctionalInterface`, method references (`Class::method`), `java.util.function` |\n| `08-streams-api-and-lazy-evaluation` | Streams API & Pipelines | Intermediate vs terminal operations, lazy pipelines, `Collectors`, parallel streams |\n| `09-optional-and-null-safety` | Optional Monad Pattern | `Optional<T>`, monadic chaining (`map`, `flatMap`), avoiding `NullPointerException` |\n| `10-error-handling-and-exceptions` | Exception Architecture | Checked vs Unchecked exceptions, try-with-resources (`AutoCloseable`), multi-catch |\n| `11-concurrency-threads-and-virtual-threads` | Project Loom Virtual Threads | `Thread.ofVirtual()`, carrier threads, high-throughput non-blocking I/O |\n| `12-synchronization-and-locks` | Locks & Memory Visibility | `synchronized`, `ReentrantLock`, `volatile` memory visibility (happens-before) |\n| `13-jvm-memory-model-and-gc` | JVM Memory & GC Algorithms | Young/Old Gen Heap, Metaspace, G1GC, ZGC low-latency collector |\n| `14-reflection-and-annotations` | Reflection & Annotations | `Class<T>`, Method reflection, custom `@interface` annotations, retention policies |\n| `15-io-nio-and-channels` | Modern NIO.2 & Channels | `java.nio.file.Path`, `ByteBuffer`, non-blocking channels, `Files.readString` |\n| `16-unit-testing-with-junit5` | JUnit 5 & Mockito | `@Test`, `@ParameterizedTest`, assertions, test lifecycle |\n| `17-serialization-and-json` | Serialization Architecture | Native serialization vulnerabilities, Jackson JSON databinding |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Java gotchas (String pool, `equals`/`hashCode`, virtual threads) |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `Example.java` — Fully runnable concept demonstration.\n- `exercise/Starter.java` — Hands-on problem with `TODO` markers.\n- `exercise/Solution.java` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-maven-toolchain",
+        "name": "00-setup-and-jvm-toolchain",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=====================================================\");\n        System.out.println(\"☕ Welcome to 00 - Java & JVM Environment Check!\");\n        System.out.println(\"=====================================================\");\n        System.out.println(\"✔ Java Version : \" + System.getProperty(\"java.version\"));\n        System.out.println(\"✔ JVM Vendor   : \" + System.getProperty(\"java.vendor\"));\n        System.out.println(\"✔ JVM Runtime  : \" + System.getProperty(\"java.runtime.name\"));\n        System.out.println(\"👉 Next: Head over to 01-jvm-architecture-and-memory-layout/Main.java\");\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - Java Toolchain & Build System 🛠️\n"
+            "content": "# 00 — Modern Java 21 LTS & JVM Toolchain\n\n## 🎯 Learning Objectives\n- Understand JVM HotSpot JIT compiler tiers: **C1 (Client Compiler)** and **C2 (Server Optimizing Compiler)**\n- Verify Java 21 LTS installation and toolchain\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 00: Java 21 LTS Toolchain Verification ===\");\n        System.out.println(\"Java Version: \" + System.getProperty(\"java.version\"));\n        System.out.println(\"JVM Name: \" + System.getProperty(\"java.vm.name\"));\n        System.out.println(\"Available Processors: \" + Runtime.getRuntime().availableProcessors());\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write a program that prints maximum available heap memory in MB.\npublic class Starter {\n    public static void main(String[] args) {\n        // FILL HERE\n    }\n}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static void main(String[] args) {\n        long maxMemoryMB = Runtime.getRuntime().maxMemory() / (1024 * 1024);\n        System.out.println(\"Max JVM Heap Memory: \" + maxMemoryMB + \" MB\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-jvm-architecture-and-memory-layout",
+        "name": "01-basics-primitive-types-and-boxing",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 01: JVM Architecture & Memory Regions ===\");\n        Runtime rt = Runtime.getRuntime();\n        long maxMemoryMB = rt.maxMemory() / (1024 * 1024);\n        long totalMemoryMB = rt.totalMemory() / (1024 * 1024);\n        long freeMemoryMB = rt.freeMemory() / (1024 * 1024);\n\n        System.out.printf(\"Max Heap (-Xmx)   : %d MB%n\", maxMemoryMB);\n        System.out.printf(\"Total Allocated   : %d MB%n\", totalMemoryMB);\n        System.out.printf(\"Free Memory in JVM: %d MB%n\", freeMemoryMB);\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - JVM Architecture & Memory Regions\n\n- **Heap**: Shared object allocations (Young Gen [Eden, S0, S1] + Old Gen).\n- **Stack**: Per-thread local variables and method call frames.\n- **Metaspace**: Native memory holding class definitions and bytecode metadata.\n"
+            "content": "# 01 — Primitives, Autoboxing & Integer Cache\n\n## 🎯 The Integer Cache Trap\n`Integer.valueOf(int)` caches values in range `[-128, 127]`. Values outside this range allocate new objects on the heap, causing `==` reference inequality!\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 01: Integer Cache Trap ===\");\n        Integer a = 100;\n        Integer b = 100;\n        System.out.println(\"100 == 100: \" + (a == b)); // true (Cached)\n\n        Integer c = 500;\n        Integer d = 500;\n        System.out.println(\"500 == 500: \" + (c == d)); // false (Separate heap objects!)\n        System.out.println(\"500 equals 500: \" + c.equals(d)); // true\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Fix the comparison logic to safely check value equality for boxed numbers.\npublic class Starter {\n    public static void main(String[] args) {}\n}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.Objects;\n\npublic class Solution {\n    public static boolean safeEquals(Integer a, Integer b) {\n        return Objects.equals(a, b);\n    }\n    public static void main(String[] args) {\n        assert safeEquals(500, 500);\n        System.out.println(\"✔ Safe boxed equals passed!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-primitives-and-integer-cache",
+        "name": "02-oop-polymorphism-and-interfaces",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 02: Primitives & Integer Cache (-128 to 127) ===\");\n\n        // Integer Cache Trap\n        Integer a = 127;\n        Integer b = 127;\n        System.out.println(\"127 == 127 (Cached pool)  : \" + (a == b)); // true\n\n        Integer x = 128;\n        Integer y = 128;\n        System.out.println(\"128 == 128 (Fresh objects) : \" + (x == y)); // false!\n        System.out.println(\"128.equals(128) (Value)   : \" + x.equals(y)); // true\n\n        // Local variable type inference (var)\n        var greeting = \"Hello, Modern Java\";\n        System.out.println(\"Inferred var: \" + greeting);\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - Primitives & Autoboxing\n"
+            "content": "# 02 — Sealed Classes & Modern Interfaces\n\n## 🎯 Sealed Classes (`sealed` / `permits`)\nRestrict which subclasses are permitted to extend a class, enabling exhaustive compile-time checking.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public sealed interface PaymentMethod permits CreditCard, PayPal {}\n    public static final class CreditCard implements PaymentMethod {}\n    public static final class PayPal implements PaymentMethod {}\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 02: Sealed Interfaces ===\");\n        PaymentMethod method = new CreditCard();\n        System.out.println(\"Active payment method: \" + method.getClass().getSimpleName());\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Implement a sealed hierarchy for Shape with Circle and Rectangle.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public sealed interface Shape permits Circle, Rectangle {\n        double area();\n    }\n    public static final record Circle(double radius) implements Shape {\n        public double area() { return Math.PI * radius * radius; }\n    }\n    public static final record Rectangle(double w, double h) implements Shape {\n        public double area() { return w * h; }\n    }\n    public static void main(String[] args) {\n        Shape c = new Circle(3.0);\n        System.out.println(\"Circle area: \" + c.area());\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-strings-and-string-constant-pool",
+        "name": "03-records-and-pattern-matching",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 03: Strings & String Constant Pool ===\");\n\n        String s1 = \"Java\";\n        String s2 = \"Java\";\n        String s3 = new String(\"Java\");\n\n        System.out.println(\"s1 == s2 (Constant Pool): \" + (s1 == s2)); // true\n        System.out.println(\"s1 == s3 (Heap Object)  : \" + (s1 == s3)); // false\n        System.out.println(\"s1 == s3.intern()       : \" + (s1 == s3.intern())); // true\n\n        // Text Block (Java 15+)\n        String json = \"\"\"\n            {\n                \"language\": \"Java\",\n                \"track\": \"Trak\"\n            }\n            \"\"\";\n        System.out.println(\"Text Block:\\n\" + json);\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Strings & Constant Pool\n"
+            "content": "# 03 — Records & Pattern Matching for Switch\n\n## 🎯 `record` Features\nGenerates immutable data carriers with `equals()`, `hashCode()`, `toString()`, and getters automatically.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public record User(long id, String username, String email) {}\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 03: Java Records ===\");\n        User user = new User(101, \"ndk123-web\", \"admin@trak.dev\");\n        System.out.println(\"Record: \" + user);\n        System.out.println(\"Username: \" + user.username());\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write a compact constructor for User record validating that email contains '@'.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public record User(long id, String email) {\n        public User {\n            if (email == null || !email.contains(\"@\")) {\n                throw new IllegalArgumentException(\"Invalid email format: \" + email);\n            }\n        }\n    }\n    public static void main(String[] args) {\n        User u = new User(1, \"ndk@trak.dev\");\n        System.out.println(\"Validated user: \" + u);\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-control-flow-and-pattern-matching",
+        "name": "04-strings-and-text-blocks",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static String evaluateScore(int score) {\n        return switch (score / 10) {\n            case 10, 9 -> \"A (Outstanding)\";\n            case 8 -> \"B (Good)\";\n            case 7 -> \"C (Average)\";\n            default -> {\n                System.out.println(\"Need improvement\");\n                yield \"F (Fail)\";\n            }\n        };\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 04: Modern Switch Expressions & Pattern Matching ===\");\n        System.out.println(\"Score 95: \" + evaluateScore(95));\n\n        // Pattern matching for instanceof (Java 16+)\n        Object obj = \"Java 21 LTS\";\n        if (obj instanceof String s && s.length() > 5) {\n            System.out.println(\"Matched String: \" + s.toUpperCase());\n        }\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Pattern Matching & Switch Expressions\n"
+            "content": "# 04 — String Pool, Compact Strings & Text Blocks\n\n## 🎯 Compact Strings (JEP 254)\nSince Java 9, `String` uses `byte[]` with LATIN1 encoding (1 byte per char) when ASCII-only, halving memory usage.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 04: Modern Text Blocks ===\");\n        String json = \"\"\"\n            {\n                \"project\": \"trak\",\n                \"language\": \"java\",\n                \"version\": \"1.2.0\"\n            }\n            \"\"\";\n        System.out.println(json);\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Demonstrate interned string pool comparison.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static void main(String[] args) {\n        String s1 = new String(\"trak\");\n        String s2 = s1.intern();\n        String s3 = \"trak\";\n        assert s2 == s3; // Both point to string pool constant\n        System.out.println(\"✔ String pool intern assertion verified!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-oop-and-access-modifiers",
+        "name": "05-collections-framework-internals",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "abstract class Animal {\n    private final String name;\n    public Animal(String name) { this.name = name; }\n    public String getName() { return name; }\n    public abstract void makeSound();\n}\n\nclass Dog extends Animal {\n    public Dog(String name) { super(name); }\n    @Override\n    public void makeSound() {\n        System.out.println(getName() + \" says: Woof!\");\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 05: OOP & Polymorphism ===\");\n        Animal pet = new Dog(\"Buddy\");\n        pet.makeSound();\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - OOP & Access Modifiers\n"
+            "content": "# 05 — Collections Framework & HashMap Treeification\n\n## 🎯 HashMap Treeification\nWhen a bucket linked list exceeds 8 entries (`TREEIFY_THRESHOLD`), it transforms into a Red-Black Tree (`TreeNode`), improving lookup complexity from O(N) to O(log N).\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 05: HashMap Frequency Count ===\");\n        String[] items = {\"go\", \"rust\", \"java\", \"go\", \"rust\", \"java\", \"java\"};\n        Map<String, Integer> freq = new HashMap<>();\n        for (String item : items) {\n            freq.merge(item, 1, Integer::sum);\n        }\n        System.out.println(\"Frequencies: \" + freq);\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Implement group by length using Map<Integer, List<String>>.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        List<String> words = List.of(\"go\", \"c\", \"rust\", \"java\", \"python\");\n        Map<Integer, List<String>> grouped = new HashMap<>();\n        for (String w : words) {\n            grouped.computeIfAbsent(w.length(), k -> new ArrayList<>()).add(w);\n        }\n        System.out.println(\"Grouped words: \" + grouped);\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-interfaces-sealed-classes-records",
+        "name": "06-generics-and-type-erasure",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "// 1. Modern Record (Immutable data carrier with automatic constructor, getters, equals, hashCode, toString)\nrecord UserRecord(long id, String username, String email) {}\n\n// 2. Sealed Hierarchy (Java 17+)\nsealed interface PaymentResult permits Success, Failure {}\n\nrecord Success(String transactionId) implements PaymentResult {}\nrecord Failure(String errorMessage) implements PaymentResult {}\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 06: Records & Sealed Classes (Java 17-21) ===\");\n        UserRecord user = new UserRecord(101L, \"navnath\", \"navnath@example.com\");\n        System.out.println(\"Record: \" + user);\n\n        PaymentResult result = new Success(\"tx_998877\");\n        if (result instanceof Success(String txId)) {\n            System.out.println(\"Payment Succeeded with Transaction ID: \" + txId);\n        }\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Records & Sealed Classes\n"
+            "content": "# 06 — Generics, Type Erasure & PECS\n\n## 🎯 PECS Rule\n- **Producer Extends**: `? extends T` when reading data.\n- **Consumer Super**: `? super T` when writing data.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.List;\n\npublic class Example {\n    public static double sumOfList(List<? extends Number> list) {\n        double s = 0.0;\n        for (Number n : list) s += n.doubleValue();\n        return s;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 06: Generics PECS ===\");\n        List<Integer> ints = List.of(1, 2, 3, 4);\n        System.out.println(\"Sum of ints: \" + sumOfList(ints));\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Implement a generic pair class Pair<A, B>.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public record Pair<A, B>(A first, B second) {}\n    public static void main(String[] args) {\n        Pair<String, Integer> pair = new Pair<>(\"Score\", 100);\n        System.out.println(\"Pair: \" + pair.first() + \" = \" + pair.second());\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-generics-and-type-erasure",
+        "name": "07-functional-interfaces-and-lambdas",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.List;\n\npublic class Main {\n    // PECS: Producer Extends, Consumer Super\n    public static double sumOfNumbers(List<? extends Number> numbers) {\n        double sum = 0.0;\n        for (Number n : numbers) {\n            sum += n.doubleValue();\n        }\n        return sum;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 07: Generics, Type Erasure & PECS Rule ===\");\n        List<Integer> ints = List.of(1, 2, 3, 4);\n        System.out.println(\"Sum of integers: \" + sumOfNumbers(ints));\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Generics & Type Erasure\n\n- **PECS**: Use `? extends T` when reading from a collection (Producer), and `? super T` when writing to a collection (Consumer).\n"
+            "content": "# 07 — Functional Interfaces & Method References\n\n## 🎯 Core Functional Interfaces\n- `Predicate<T>`: `T -> boolean`\n- `Function<T, R>`: `T -> R`\n- `Consumer<T>`: `T -> void`\n- `Supplier<T>`: `() -> T`\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.function.Function;\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 07: Lambdas & Functions ===\");\n        Function<String, Integer> stringLength = String::length;\n        System.out.println(\"Length of 'Trak': \" + stringLength.apply(\"Trak\"));\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write a Predicate that checks if an integer is even.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.function.Predicate;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Predicate<Integer> isEven = n -> n % 2 == 0;\n        assert isEven.test(4);\n        assert !isEven.test(7);\n        System.out.println(\"✔ Even predicate verified!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-java-collections-framework",
+        "name": "08-streams-api-and-lazy-evaluation",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.*;\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 08: Java Collections Framework (JCF) ===\");\n\n        // HashMap (Buckets treeify to Red-Black tree when bucket count >= 8 and table capacity >= 64)\n        Map<String, Integer> scores = new HashMap<>();\n        scores.put(\"Alice\", 95);\n        scores.put(\"Bob\", 80);\n\n        scores.forEach((k, v) -> System.out.printf(\"User: %s -> Score: %d%n\", k, v));\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Collections Framework\n"
+            "content": "# 08 — Streams API & Lazy Pipelines\n\n## 🎯 Stream Pipeline Architecture\nStreams do no work until a terminal operation (`collect`, `count`, `reduce`) is invoked.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 08: Stream Pipeline ===\");\n        List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);\n        int sumOfEvenSquares = numbers.stream()\n                .filter(n -> n % 2 == 0)\n                .mapToInt(n -> n * n)\n                .sum();\n        System.out.println(\"Sum of even squares: \" + sumOfEvenSquares);\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Convert a list of strings to uppercase and join with comma.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.List;\nimport java.util.stream.Collectors;\n\npublic class Solution {\n    public static void main(String[] args) {\n        List<String> tracks = List.of(\"go\", \"rust\", \"python\");\n        String joined = tracks.stream()\n                .map(String::toUpperCase)\n                .collect(Collectors.joining(\", \"));\n        System.out.println(\"Joined tracks: \" + joined);\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-lambdas-and-streams-api",
+        "name": "09-optional-and-null-safety",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.List;\nimport java.util.stream.Collectors;\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 09: Lambdas & Functional Streams Pipeline ===\");\n\n        List<String> names = List.of(\"anna\", \"bob\", \"alexander\", \"alice\", \"benjamin\");\n\n        List<String> filteredNames = names.stream()\n                .filter(s -> s.startsWith(\"a\"))\n                .map(String::toUpperCase)\n                .sorted()\n                .collect(Collectors.toList());\n\n        System.out.println(\"Processed Stream: \" + filteredNames);\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - Streams API & Functional Programming\n"
+            "content": "# 09 — `Optional<T>` & Monadic Error Handling\n\n## 🎯 Best Practices\nNever call `optional.get()` without checking; use `.orElse()`, `.orElseGet()`, or `.map()`.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.Optional;\n\npublic class Example {\n    public static Optional<String> findConfig(String key) {\n        return key.equals(\"port\") ? Optional.of(\"8080\") : Optional.empty();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 09: Optional Monad ===\");\n        String port = findConfig(\"port\").orElse(\"3000\");\n        System.out.println(\"Configured Port: \" + port);\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Chain Optional methods to parse an integer string safely.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.Optional;\n\npublic class Solution {\n    public static Optional<Integer> safeParseInt(String s) {\n        try {\n            return Optional.of(Integer.parseInt(s));\n        } catch (Exception e) {\n            return Optional.empty();\n        }\n    }\n    public static void main(String[] args) {\n        assert safeParseInt(\"42\").orElse(0) == 42;\n        assert safeParseInt(\"invalid\").orElse(0) == 0;\n        System.out.println(\"✔ Safe parseInt optional passed!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-optional-and-null-safety",
+        "name": "10-error-handling-and-exceptions",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.Optional;\n\npublic class Main {\n    public static Optional<String> findUser(long id) {\n        if (id == 1L) return Optional.of(\"Navnath\");\n        return Optional.empty();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 10: Optional & Null Safety ===\");\n        String user = findUser(1L).orElse(\"Guest\");\n        System.out.println(\"Found user: \" + user);\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Optional & Null Safety\n"
+            "content": "# 10 — Exception Architecture & Try-With-Resources\n\n## 🎯 `AutoCloseable`\nAny resource implementing `AutoCloseable` inside `try (Resource r = ...)` is automatically closed even if exceptions occur.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static class SafeResource implements AutoCloseable {\n        public void doWork() { System.out.println(\"Working safely...\"); }\n        @Override\n        public void close() { System.out.println(\"Resource auto-closed!\"); }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 10: Try-with-resources ===\");\n        try (SafeResource r = new SafeResource()) {\n            r.doWork();\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Implement custom unchecked ApplicationException.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static class ApplicationException extends RuntimeException {\n        public ApplicationException(String msg, Throwable cause) {\n            super(msg, cause);\n        }\n    }\n    public static void main(String[] args) {\n        System.out.println(\"ApplicationException defined successfully.\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-exception-handling-architecture",
+        "name": "11-concurrency-threads-and-virtual-threads",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    static class Resource implements AutoCloseable {\n        public void doWork() { System.out.println(\"Resource in use.\"); }\n        @Override\n        public void close() { System.out.println(\"Resource closed automatically via try-with-resources!\"); }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"=== 11: Exception Handling & Try-with-Resources ===\");\n        try (Resource res = new Resource()) {\n            res.doWork();\n        }\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - Exception Handling Architecture\n"
+            "content": "# 11 — Project Loom: Virtual Threads (Java 21 LTS)\n\n## 🎯 Virtual Threads (`Thread.ofVirtual()`)\nLightweight threads managed by the JVM (1 million virtual threads can run concurrently on standard RAM).\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.concurrent.Executors;\n\npublic class Example {\n    public static void main(String[] args) throws Exception {\n        System.out.println(\"=== 11: Java 21 Virtual Threads ===\");\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            for (int i = 0; i < 5; i++) {\n                final int id = i;\n                executor.submit(() -> {\n                    System.out.println(\"Virtual Task \" + id + \" running on \" + Thread.currentThread());\n                });\n            }\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Spawn 100 virtual threads and verify completion.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.concurrent.Executors;\nimport java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n    public static void main(String[] args) {\n        AtomicInteger counter = new AtomicInteger(0);\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            for (int i = 0; i < 100; i++) {\n                executor.submit(counter::incrementAndGet);\n            }\n        }\n        assert counter.get() == 100;\n        System.out.println(\"✔ 100 Virtual threads executed successfully!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-concurrency-and-jmm",
+        "name": "12-synchronization-and-locks",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Main {\n    private static final AtomicInteger counter = new AtomicInteger(0);\n\n    public static void main(String[] args) throws InterruptedException {\n        System.out.println(\"=== 12: Concurrency & The Java Memory Model (JMM) ===\");\n\n        Thread t1 = new Thread(() -> {\n            for (int i = 0; i < 1000; i++) counter.incrementAndGet();\n        });\n        Thread t2 = new Thread(() -> {\n            for (int i = 0; i < 1000; i++) counter.incrementAndGet();\n        });\n\n        t1.start(); t2.start();\n        t1.join(); t2.join();\n\n        System.out.println(\"Atomic Counter final value: \" + counter.get());\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Concurrency & JMM\n"
+            "content": "# 12 — Synchronization, Locks & Memory Visibility\n\n## 🎯 `volatile` Keyword\nGuarantees that reads and writes are made directly to main memory rather than CPU register caches.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.util.concurrent.locks.ReentrantLock;\n\npublic class Example {\n    private static final ReentrantLock lock = new ReentrantLock();\n    private static int counter = 0;\n\n    public static void main(String[] args) {\n        lock.lock();\n        try {\n            counter++;\n            System.out.println(\"=== 12: ReentrantLock (Counter = \" + counter + \") ===\");\n        } finally {\n            lock.unlock();\n        }\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write a thread-safe atomic counter test.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.util.concurrent.atomic.AtomicLong;\n\npublic class Solution {\n    public static void main(String[] args) {\n        AtomicLong count = new AtomicLong(0);\n        count.incrementAndGet();\n        assert count.get() == 1;\n        System.out.println(\"✔ AtomicLong verified!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-virtual-threads-project-loom",
+        "name": "13-jvm-memory-model-and-gc",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.util.concurrent.Executors;\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 13: Virtual Threads (Project Loom - Java 21) ===\");\n\n        // Spin up 10,000 lightweight virtual threads concurrently with minimal RAM\n        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {\n            for (int i = 1; i <= 5; i++) {\n                final int taskId = i;\n                executor.submit(() -> {\n                    System.out.println(\"Running task \" + taskId + \" on virtual thread: \" + Thread.currentThread());\n                });\n            }\n        }\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Virtual Threads (Java 21+)\n\nVirtual threads are managed directly by the JVM runtime and mounted on carrier OS threads, allowing millions of concurrent tasks with near-zero memory footprint.\n"
+            "content": "# 13 — JVM Memory Architecture & Garbage Collectors\n\n## 🎯 Heap Generations\n- **Eden Space**: Initial allocation.\n- **Survivor Spaces (S0/S1)**: Surviving objects after minor GC.\n- **Tenured (Old Gen)**: Long-lived objects.\n- **Metaspace**: Class metadata (native memory).\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 13: JVM Heap Breakdown ===\");\n        Runtime r = Runtime.getRuntime();\n        System.out.println(\"Total Memory: \" + (r.totalMemory() / 1024 / 1024) + \" MB\");\n        System.out.println(\"Free Memory: \" + (r.freeMemory() / 1024 / 1024) + \" MB\");\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write program inspecting GCMXBean.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.lang.management.GarbageCollectorMXBean;\nimport java.lang.management.ManagementFactory;\n\npublic class Solution {\n    public static void main(String[] args) {\n        for (GarbageCollectorMXBean gc : ManagementFactory.getGarbageCollectorMXBeans()) {\n            System.out.println(\"GC Collector: \" + gc.getName());\n        }\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-annotations-and-reflection",
+        "name": "14-reflection-and-annotations",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.lang.annotation.*;\n\n@Retention(RetentionPolicy.RUNTIME)\n@Target(ElementType.METHOD)\n@interface AuditLog {\n    String action();\n}\n\npublic class Main {\n    @AuditLog(action = \"USER_LOGIN\")\n    public void login() {\n        System.out.println(\"Executing login...\");\n    }\n\n    public static void main(String[] args) throws Exception {\n        System.out.println(\"=== 14: Annotations & Reflection API ===\");\n        var method = Main.class.getMethod(\"login\");\n        if (method.isAnnotationPresent(AuditLog.class)) {\n            AuditLog log = method.getAnnotation(AuditLog.class);\n            System.out.println(\"Found Annotation Action: \" + log.action());\n        }\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Annotations & Reflection\n"
+            "content": "# 14 — Reflection & Custom Annotations\n\n## 🎯 Retention Policies\n- `SOURCE`: Discarded during compilation.\n- `CLASS`: Kept in `.class` bytecode, omitted at runtime.\n- `RUNTIME`: Retained in VM at runtime (readable via reflection).\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.lang.annotation.Retention;\nimport java.lang.annotation.RetentionPolicy;\n\npublic class Example {\n    @Retention(RetentionPolicy.RUNTIME)\n    public @interface TrackModule {\n        String name();\n    }\n\n    @TrackModule(name = \"Java Systems\")\n    public static class Demo {}\n\n    public static void main(String[] args) {\n        TrackModule ann = Demo.class.getAnnotation(TrackModule.class);\n        System.out.println(\"Annotation name: \" + ann.name());\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Reflectively list all method names in String class.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.lang.reflect.Method;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Method[] methods = String.class.getDeclaredMethods();\n        System.out.println(\"String method count: \" + methods.length);\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-spring-boot-architecture",
+        "name": "15-io-nio-and-channels",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 15: Spring Boot 3.x Enterprise Architecture ===\");\n        System.out.println(\"Layered Architecture: Controller -> Service -> Repository (Spring Data JPA)\");\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Spring Boot 3.x Architecture\n"
+            "content": "# 15 — Modern NIO.2 (`java.nio.file.Files`)\n\n## 🎯 NIO.2 Simplification\nModern Java provides fast utility methods on `Files`: `Files.readString(path)`, `Files.writeString(path, content)`.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "import java.nio.file.Path;\nimport java.nio.file.Paths;\n\npublic class Example {\n    public static void main(String[] args) {\n        Path p = Paths.get(\"config\", \"app.json\");\n        System.out.println(\"Path: \" + p.toAbsolutePath());\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Demonstrate Path normalization.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "import java.nio.file.Path;\nimport java.nio.file.Paths;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Path p = Paths.get(\"a/b/../c\").normalize();\n        assert p.toString().equals(\"a/c\") || p.toString().equals(\"a\\\\c\");\n        System.out.println(\"Normalized: \" + p);\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-file-io-nio-and-http-client",
+        "name": "16-unit-testing-with-junit5",
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "import java.nio.file.Path;\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=== 16: Modern Java NIO.2 & java.net.http.HttpClient ===\");\n        Path path = Path.of(\"trak-workspace.json\");\n        System.out.println(\"NIO Path: \" + path.toAbsolutePath());\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - NIO & HTTP Client\n"
+            "content": "# 16 — Unit Testing with JUnit 5\n\n## 🎯 JUnit 5 Annotations\n- `@Test`\n- `@ParameterizedTest` & `@ValueSource`\n- `assertThrows(ExpectedException.class, () -> ...)`\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static int multiply(int a, int b) { return a * b; }\n\n    public static void main(String[] args) {\n        assert multiply(3, 4) == 12;\n        System.out.println(\"✔ Assertion verified!\");\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write a palindrome tester method and test assertions.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static boolean isPalindrome(String s) {\n        String clean = s.replaceAll(\"[^a-zA-Z0-9]\", \"\").toLowerCase();\n        return clean.equals(new StringBuilder(clean).reverse().toString());\n    }\n    public static void main(String[] args) {\n        assert isPalindrome(\"racecar\");\n        assert !isPalindrome(\"java\");\n        System.out.println(\"✔ Palindrome test assertions passed!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-testing-junit-and-mockito",
+        "name": "17-serialization-and-json",
         "type": "directory",
         "children": [
           {
-            "name": "Calculator.java",
-            "type": "file",
-            "content": "public class Calculator {\n    public int add(int a, int b) { return a + b; }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - JUnit 5 & Mockito Testing\n\n```bash\nmvn test\n```\n"
+            "content": "# 17 — Serialization & JSON Databinding\n\n## ⚠️ Native Serialization Vulnerabilities\nNative Java `Serializable` allows arbitrary deserialization gadget attacks. Always prefer JSON (Jackson/Gson) for untrusted network payloads.\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 17: JSON Serialization Standard ===\");\n        String userJson = \"{\\\"id\\\": 101, \\\"username\\\": \\\"ndk123-web\\\"}\";\n        System.out.println(\"Serialized payload: \" + userJson);\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Write JSON serializer helper.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static String formatUserJson(long id, String name) {\n        return String.format(\"{\\\"id\\\":%d,\\\"name\\\":\\\"%s\\\"}\", id, name);\n    }\n    public static void main(String[] args) {\n        System.out.println(formatUserJson(1, \"ndk\"));\n    }\n}\n"
+              }
+            ]
           }
         ]
       },
@@ -310,14 +598,30 @@
         "type": "directory",
         "children": [
           {
-            "name": "Main.java",
-            "type": "file",
-            "content": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"=====================================================\");\n        System.out.println(\"🎯 18: High-Yield Java Enterprise Interview Questions\");\n        System.out.println(\"=====================================================\");\n        System.out.println(\"1. JVM Memory: Heap (objects), Stack (frames), Metaspace (metadata).\");\n        System.out.println(\"2. HashMap Treeification: Buckets convert to Red-Black trees under high collisions.\");\n        System.out.println(\"3. equals/hashCode Contract: Equal objects must produce identical hashCodes.\");\n        System.out.println(\"4. Virtual Threads: Lightweight user-mode threads mounted on carrier OS threads.\");\n        System.out.println(\"5. PECS: Producer Extends, Consumer Super in generic wildcard collections.\");\n        System.out.println(\"\\n🚀 You have completed the complete Java & JVM Enterprise curriculum!\");\n    }\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - High-Yield Java Interview Questions 🎯\n"
+            "content": "# 18 — High-Yield Java Interview Questions & Master Drills\n\n## 🧠 Top 10 Gotchas\n1. **`equals()` and `hashCode()` Contract**: If `a.equals(b)` is true, `a.hashCode()` MUST equal `b.hashCode()`.\n2. **Virtual Threads vs OS Threads**: Never pool Virtual Threads; creating them is as cheap as creating an Object.\n3. **String Pool Caching**: `\"abc\" == \"abc\"` is true; `new String(\"abc\") == \"abc\"` is false.\n4. **Integer Cache Trap**: `Integer` caching between `-128` and `127`.\n5. **`finally` Execution**: Always executes unless `System.exit()` is called.\n6. **`volatile` Does Not Imply Atomicity**: `volatile int count; count++` is still not thread-safe.\n7. **Type Erasure**: `List<String>` and `List<Integer>` have the same class at runtime (`List.class`).\n8. **ConcurrentModificationException**: Modifying collection during iteration without using `Iterator.remove()`.\n9. **PermGen vs Metaspace**: Metaspace uses native memory, avoiding old `java.lang.OutOfMemoryError: PermGen space`.\n10. **Record Immutability**: Shallow immutability (if a record has a `List`, the list itself can still be mutated unless made unmodifiable).\n"
+          },
+          {
+            "name": "Example.java",
+            "type": "file",
+            "content": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(\"=== 18: Master Java Interview Drill ===\");\n        System.out.println(\"1. Virtual Threads (Project Loom)\");\n        System.out.println(\"2. equals & hashCode contract\");\n        System.out.println(\"3. JVM GC algorithms (G1GC / ZGC)\");\n        System.out.println(\"4. Sealed classes & exhaustive pattern matching\");\n        System.out.println(\"🚀 You have completed the comprehensive Java Mastery Track!\");\n    }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "Starter.java",
+                "type": "file",
+                "content": "// TODO: Master Drill: Implement a thread-safe Singleton using double-checked locking.\npublic class Starter {}\n"
+              },
+              {
+                "name": "Solution.java",
+                "type": "file",
+                "content": "public class Solution {\n    public static class Singleton {\n        private static volatile Singleton instance;\n        private Singleton() {}\n        public static Singleton getInstance() {\n            if (instance == null) {\n                synchronized (Singleton.class) {\n                    if (instance == null) {\n                        instance = new Singleton();\n                    }\n                }\n            }\n            return instance;\n        }\n    }\n    public static void main(String[] args) {\n        Singleton s1 = Singleton.getInstance();\n        Singleton s2 = Singleton.getInstance();\n        assert s1 == s2;\n        System.out.println(\"✔ Double-checked locking singleton verified!\");\n    }\n}\n"
+              }
+            ]
           }
         ]
       }

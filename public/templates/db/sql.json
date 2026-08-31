@@ -1,307 +1,632 @@
 {
   "id": "db/sql",
-  "name": "SQL & Relational Database Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive SQL curriculum from relational schema design, CRUD, and advanced joins to CTEs, Window Functions, B-Tree indexes, EXPLAIN ANALYZE, and ACID transactions",
+  "name": "SQL Architecture, Window Functions & Query Tuning",
+  "version": "1.2.0",
+  "description": "Complete high-depth SQL mastery curriculum covering logical query processing order, window functions (LEAD/LAG/DENSE_RANK), recursive CTEs, indexing, and cost-based query optimization",
   "root": {
     "name": "sql-workspace",
     "type": "directory",
     "children": [
       {
-        "name": "init_schema.sql",
+        "name": "schema.sql",
         "type": "file",
-        "content": "-- Master Schema Initialization for Trak SQL Track\nCREATE TABLE departments (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE\n);\n\nCREATE TABLE employees (\n    id INTEGER PRIMARY KEY,\n    department_id INTEGER,\n    name TEXT NOT NULL,\n    email TEXT UNIQUE NOT NULL,\n    salary REAL NOT NULL,\n    hired_at DATE NOT NULL,\n    FOREIGN KEY (department_id) REFERENCES departments(id)\n);\n\nINSERT INTO departments (id, name) VALUES (1, 'Engineering'), (2, 'Product'), (3, 'Marketing');\nINSERT INTO employees (id, department_id, name, email, salary, hired_at) VALUES\n(101, 1, 'Alice Smith', 'alice@company.com', 120000.0, '2022-03-15'),\n(102, 1, 'Bob Jones', 'bob@company.com', 110000.0, '2023-01-10'),\n(103, 2, 'Charlie Brown', 'charlie@company.com', 95000.0, '2021-08-01'),\n(104, 1, 'David Miller', 'david@company.com', 135000.0, '2020-05-20'),\n(105, 3, 'Eva Green', 'eva@company.com', 88000.0, '2023-09-01');\n"
+        "content": "CREATE TABLE employees (\n    emp_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    dept VARCHAR(50) NOT NULL,\n    salary NUMERIC(10, 2) NOT NULL,\n    manager_id INT REFERENCES employees(emp_id),\n    hired_at DATE NOT NULL\n);\n\nCREATE TABLE sales (\n    sale_id SERIAL PRIMARY KEY,\n    emp_id INT REFERENCES employees(emp_id),\n    amount NUMERIC(10, 2) NOT NULL,\n    sale_date DATE NOT NULL\n);\n"
+      },
+      {
+        "name": "seed.sql",
+        "type": "file",
+        "content": "INSERT INTO employees (emp_id, name, dept, salary, manager_id, hired_at) VALUES\n(1, 'Alice', 'Engineering', 120000.00, NULL, '2021-01-15'),\n(2, 'Bob', 'Engineering', 95000.00, 1, '2021-06-01'),\n(3, 'Charlie', 'Engineering', 85000.00, 1, '2022-03-10'),\n(4, 'Diana', 'Sales', 90000.00, NULL, '2020-11-20'),\n(5, 'Evan', 'Sales', 75000.00, 4, '2022-07-01');\n\nINSERT INTO sales (emp_id, amount, sale_date) VALUES\n(4, 15000.00, '2026-08-01'),\n(4, 22000.00, '2026-08-15'),\n(5, 8000.00,  '2026-08-10'),\n(5, 12000.00, '2026-08-20');\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🗄️ Complete SQL & Relational Database Mastery Track\n\nWelcome to your full SQL learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-environment` | **Setup & Sandbox** | SQLite / PostgreSQL CLI setup, loading sample databases |\n| `01-relational-model-and-ddl` | **Relational Schema & DDL** | `CREATE TABLE`, `ALTER`, `DROP`, Primary Key, Foreign Key, `CHECK`, `UNIQUE` |\n| `02-dml-crud-operations` | **DML & CRUD** | `INSERT`, `SELECT`, `UPDATE`, `DELETE`, `RETURNING` clause |\n| `03-filtering-and-sorting` | **Filtering & Ordering** | `WHERE`, `LIKE`, `ILIKE`, `IN`, `BETWEEN`, `ORDER BY`, `LIMIT`, `OFFSET` |\n| `04-aggregations-and-grouping` | **Aggregations & Grouping** | `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`, `GROUP BY`, `HAVING` filter |\n| `05-joins-and-relational-algebra` | **Joins Deep-Dive** | `INNER`, `LEFT`, `RIGHT`, `FULL OUTER`, `CROSS`, `SELF JOIN` |\n| `06-subqueries-and-exists` | **Subqueries** | Scalar subqueries, `IN` vs `EXISTS`, correlated subqueries |\n| `07-common-table-expressions-ctes` | **CTEs & Recursion** | `WITH` clause, Recursive CTEs for hierarchical tree traversal |\n| `08-window-functions` | **Window Functions** | `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `LEAD()`, `LAG()`, `OVER (PARTITION BY ...)` |\n| `09-indexes-and-b-tree-internals` | **B-Tree Indexes** | Single vs Composite indexes, Leftmost prefix rule, Index-Only Scans |\n| `10-query-planning-explain-analyze` | **Query Execution Plans** | `EXPLAIN ANALYZE`, Sequential Scan vs Index Scan vs Bitmap Heap Scan |\n| `11-acid-transactions-and-isolation` | **ACID Transactions** | `BEGIN`, `COMMIT`, `ROLLBACK`, Isolation Levels (Dirty Read, Non-repeatable, Phantom) |\n| `12-locking-and-concurrency` | **Locking & Deadlocks** | Shared vs Exclusive locks, `SELECT FOR UPDATE`, deadlock resolution |\n| `13-database-normalization-1nf-to-bcnf` | **Normalization** | 1NF, 2NF, 3NF, BCNF rules, denormalization performance trade-offs |\n| `14-views-and-materialized-views` | **Views & Materialization** | `CREATE VIEW`, `MATERIALIZED VIEW`, caching query computations |\n| `15-stored-procedures-and-triggers` | **Procedures & Triggers** | Stored procedures, user-defined functions (UDF), `BEFORE`/`AFTER` triggers |\n| `16-schema-migrations` | **Migrations** | Zero-downtime migrations, column add/drop safely, backfilling data |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield SQL interview queries & performance puzzles |\n\n---\n\n## 🛠️ How to Run Queries\n\nRun queries with SQLite (built into Python / available as `sqlite3` CLI):\n```bash\nsqlite3 practice.db < init_schema.sql\nsqlite3 practice.db < 05-joins-and-relational-algebra/query.sql\n```\n"
+        "content": "# 📊 SQL Architecture, Window Functions & Query Tuning Track\n\nWelcome to the **SQL Architecture, Window Functions & Query Tuning Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering logical query processing order, window functions (`ROW_NUMBER`, `DENSE_RANK`, `LEAD`, `LAG`), recursive CTEs for hierarchical tree traversal, indexing strategies, and query plan optimization.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-relational-model` | Relational Algebra & ACID | Relational model, Codd's rules, ACID guarantees, DDL/DML/DCL/TCL boundaries |\n| `01-basic-queries-select-where-group` | Logical Query Processing | Logical execution order: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY |\n| `02-joins-deep-dive-inner-left-cross` | Joins Deep Dive | INNER, LEFT, RIGHT, FULL OUTER, CROSS, Anti-Joins, Non-Equi Joins |\n| `03-aggregate-functions-and-grouping-sets` | Aggregates & Grouping Sets | `SUM`, `AVG`, `COUNT(*)`, `GROUPING SETS`, `ROLLUP`, `CUBE` multidimensional grouping |\n| `04-subqueries-correlated-vs-uncorrelated` | Subqueries & Correlated Subqueries | Scalar subqueries, correlated subqueries, `EXISTS` vs `IN`, `ALL` vs `ANY` |\n| `05-common-table-expressions-ctes` | CTEs & Recursive Hierarchies | `WITH ... AS`, Recursive CTEs (`WITH RECURSIVE`) for organizational tree traversal |\n| `06-window-functions-ranking-and-numbering` | Window Functions (Ranking) | `ROW_NUMBER()`, `RANK()`, `DENSE_RANK()`, `NTILE()`, `PARTITION BY`, `ORDER BY` |\n| `07-window-functions-lead-lag-and-frames` | Window Offsets & Framing | `LEAD()`, `LAG()`, `FIRST_VALUE()`, `ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING` |\n| `08-set-operations-union-intersect-except` | Set Operations | `UNION` (deduplicating sort) vs `UNION ALL` (zero overhead), `INTERSECT`, `EXCEPT` |\n| `09-conditional-expressions-case-coalesce` | Logic & Three-Valued Logic | `CASE WHEN`, `COALESCE()`, `NULLIF()`, Three-Valued Logic (`TRUE`, `FALSE`, `UNKNOWN`) |\n| `10-data-manipulation-upsert-and-merge` | Upserts & Returning | `INSERT ... ON CONFLICT DO UPDATE` (Upsert), `MERGE INTO`, `RETURNING` clauses |\n| `11-database-views-and-materialized-views` | Views & Materialized Views | Standard Views vs Materialized Views, `REFRESH MATERIALIZED VIEW CONCURRENTLY` |\n| `12-indexes-and-b-tree-query-acceleration` | Index Mechanics | Composite index leading column rule, covering indexes (`INCLUDE`), cardinality |\n| `13-query-planning-and-cost-optimization` | Query Cost & Optimization | Cost-based optimizer (CBO), predicate pushdown, join order selection |\n| `14-schema-design-and-normalization` | Schema Normalization | 1NF, 2NF, 3NF, BCNF, Surrogate vs Natural Keys (UUID v7, BIGINT), Foreign Keys |\n| `15-transactions-and-isolation-levels` | Transaction Isolation Levels | Read Uncommitted, Read Committed, Repeatable Read, Serializable, Phantom reads |\n| `16-temporal-and-time-series-queries` | Time-Series & Moving Averages | `generate_series`, date truncation (`date_trunc`), 7-day rolling moving averages |\n| `17-analytics-and-pivoting` | Pivoting & Analytical Reports | `FILTER (WHERE ...)`, crosstab matrix pivoting, conditional aggregations |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 SQL gotchas (NULL comparisons, COUNT(col) vs COUNT(*), Cartesian products) |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sql` — Fully runnable concept demonstration.\n- `exercise/starter.sql` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sql` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-environment",
+        "name": "00-setup-and-relational-model",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 00: Environment Verification Query\nSELECT \n    'SQLite / PostgreSQL Connected!' AS status,\n    CURRENT_TIMESTAMP AS executed_at;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - SQL Environment Setup 🛠️\n\n### Running SQLite in terminal:\n```bash\nsqlite3 mydb.db\n.read init_schema.sql\nSELECT * FROM employees;\n```\n"
+            "content": "# 00 — Relational Algebra & ACID Model\n\n## 🎯 ACID Properties\n- **Atomicity**: All operations in a transaction succeed or all roll back.\n- **Consistency**: Data adheres to all constraints and foreign keys.\n- **Isolation**: Concurrent transactions do not interfere with each other.\n- **Durability**: Committed data persists across power failures.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 00: Verify Schema Tables\nSELECT table_name FROM information_schema.tables WHERE table_schema = 'public';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query that returns total count of employees and total sales.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT \n    (SELECT count(*) FROM employees) AS employee_count,\n    (SELECT count(*) FROM sales) AS sales_count;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-relational-model-and-ddl",
+        "name": "01-basic-queries-select-where-group",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 01: DDL Schema Definition\nCREATE TABLE products (\n    id INTEGER PRIMARY KEY,\n    name TEXT NOT NULL,\n    sku TEXT UNIQUE NOT NULL,\n    price REAL NOT NULL CHECK (price >= 0.0),\n    stock_quantity INTEGER NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),\n    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\n-- Alter table constraint\nALTER TABLE products ADD COLUMN description TEXT;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - Relational Model & DDL\n\n- `PRIMARY KEY`: Unique non-null identifier.\n- `FOREIGN KEY`: Referential integrity link.\n- `CHECK`: Declarative business validation constraint.\n"
+            "content": "# 01 — Logical Query Processing Order\n\n## 🧠 SQL Execution Order\n1. `FROM` (Identify tables & perform JOINs)\n2. `WHERE` (Filter base rows)\n3. `GROUP BY` (Aggregate rows)\n4. `HAVING` (Filter aggregated groups)\n5. `SELECT` (Compute expressions & aliases)\n6. `ORDER BY` (Sort final results)\n7. `LIMIT` / `OFFSET` (Slice result window)\n\n*Notice why aliases defined in `SELECT` cannot be used in `WHERE`!* \n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 01: Group by with Having\nSELECT dept, count(*) AS emp_count, avg(salary) AS avg_salary\nFROM employees\nGROUP BY dept\nHAVING avg(salary) > 80000\nORDER BY avg_salary DESC;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Find all departments with more than 1 employee.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT dept, count(*) AS total_employees \nFROM employees \nGROUP BY dept \nHAVING count(*) > 1;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-dml-crud-operations",
+        "name": "02-joins-deep-dive-inner-left-cross",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 02: DML CRUD Operations\n\n-- Create (Insert)\nINSERT INTO departments (id, name) VALUES (4, 'Human Resources');\n\n-- Read (Select)\nSELECT name, salary FROM employees WHERE salary > 100000;\n\n-- Update\nUPDATE employees SET salary = salary * 1.10 WHERE department_id = 1;\n\n-- Delete\nDELETE FROM employees WHERE id = 999;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - DML CRUD Operations\n"
+            "content": "# 02 — Joins Deep Dive & Anti-Joins\n\n## 🎯 Anti-Join Pattern\nFind rows in table A that have no matching rows in table B:\n```sql\nSELECT a.* FROM table_a a\nLEFT JOIN table_b b ON a.id = b.a_id\nWHERE b.a_id IS NULL;\n```\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 02: Anti-Join (Employees with zero sales)\nSELECT e.emp_id, e.name, e.dept\nFROM employees e\nLEFT JOIN sales s ON e.emp_id = s.emp_id\nWHERE s.sale_id IS NULL;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Self-join employees table to display employee name along with their manager's name.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT e.name AS employee, COALESCE(m.name, 'Top Level Executive') AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.emp_id;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-filtering-and-sorting",
+        "name": "03-aggregate-functions-and-grouping-sets",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 03: Filtering & Ordering\nSELECT id, name, salary, hired_at\nFROM employees\nWHERE salary BETWEEN 90000 AND 130000\n  AND email LIKE '%@company.com'\nORDER BY salary DESC, hired_at ASC\nLIMIT 3 OFFSET 0;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Filtering, Search & Sorting\n"
+            "content": "# 03 — Advanced Multidimensional Grouping (`ROLLUP`, `CUBE`)\n\n## 🎯 `GROUPING SETS`\nComputes multiple group aggregations in a single query pass without requiring multiple `UNION ALL` queries.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 03: ROLLUP for Subtotals and Grand Total\nSELECT dept, count(*) AS headcount, sum(salary) AS total_payroll\nFROM employees\nGROUP BY ROLLUP (dept);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query with GROUPING SETS for (dept) and ().\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT dept, sum(salary) AS total_payroll \nFROM employees \nGROUP BY GROUPING SETS ((dept), ());\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-aggregations-and-grouping",
+        "name": "04-subqueries-correlated-vs-uncorrelated",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 04: Aggregations & Grouping\nSELECT \n    d.name AS department_name,\n    COUNT(e.id) AS total_employees,\n    AVG(e.salary) AS average_salary,\n    MAX(e.salary) AS top_salary\nFROM departments d\nLEFT JOIN employees e ON d.id = e.department_id\nGROUP BY d.id, d.name\nHAVING COUNT(e.id) >= 1\nORDER BY average_salary DESC;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Aggregations & Grouping\n\n- `WHERE` filters rows **before** aggregation.\n- `HAVING` filters aggregated group metrics **after** `GROUP BY`.\n"
+            "content": "# 04 — Subqueries & `EXISTS` vs `IN`\n\n## 🎯 `EXISTS` vs `IN`\n`EXISTS` short-circuits as soon as a single match is found and handles `NULL` safely, whereas `NOT IN` with `NULL` returns no rows due to Three-Valued Logic.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 04: Correlated Subquery (Employees earning above their department average)\nSELECT e.name, e.dept, e.salary\nFROM employees e\nWHERE e.salary > (\n    SELECT avg(sub.salary) FROM employees sub WHERE sub.dept = e.dept\n);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Use EXISTS to find all employees who have made at least one sale.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT e.emp_id, e.name \nFROM employees e \nWHERE EXISTS (\n    SELECT 1 FROM sales s WHERE s.emp_id = e.emp_id\n);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-joins-and-relational-algebra",
+        "name": "05-common-table-expressions-ctes",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 05: Joins Comparison\n\n-- 1. INNER JOIN (Matching records in both tables)\nSELECT e.name, d.name AS department\nFROM employees e\nINNER JOIN departments d ON e.department_id = d.id;\n\n-- 2. LEFT JOIN (All rows from left, matching from right)\nSELECT d.name AS department, e.name AS employee\nFROM departments d\nLEFT JOIN employees e ON d.id = e.department_id;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - Joins & Relational Algebra\n"
+            "content": "# 05 — Recursive CTEs & Hierarchy Traversal\n\n## 🎯 Recursive CTE Structure\n```sql\nWITH RECURSIVE hierarchy_tree AS (\n    -- Anchor Member\n    SELECT id, name, manager_id, 1 AS level FROM employees WHERE manager_id IS NULL\n    UNION ALL\n    -- Recursive Member\n    SELECT e.id, e.name, e.manager_id, h.level + 1 \n    FROM employees e \n    JOIN hierarchy_tree h ON e.manager_id = h.id\n)\nSELECT * FROM hierarchy_tree;\n```\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 05: Organizational Tree Traversal with Recursive CTE\nWITH RECURSIVE OrgChart AS (\n    SELECT emp_id, name, manager_id, 1 AS depth\n    FROM employees\n    WHERE manager_id IS NULL\n    UNION ALL\n    SELECT e.emp_id, e.name, e.manager_id, o.depth + 1\n    FROM employees e\n    JOIN OrgChart o ON e.manager_id = o.emp_id\n)\nSELECT * FROM OrgChart ORDER BY depth, emp_id;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a recursive CTE to generate numbers 1 through 10.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "WITH RECURSIVE numbers AS (\n    SELECT 1 AS n\n    UNION ALL\n    SELECT n + 1 FROM numbers WHERE n < 10\n)\nSELECT n FROM numbers;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-subqueries-and-exists",
+        "name": "06-window-functions-ranking-and-numbering",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 06: Subqueries vs Correlated Queries\n\n-- 1. Scalar Subquery: Find employees earning more than the company average\nSELECT name, salary\nFROM employees\nWHERE salary > (SELECT AVG(salary) FROM employees);\n\n-- 2. Correlated Subquery with EXISTS\nSELECT d.name\nFROM departments d\nWHERE EXISTS (\n    SELECT 1 FROM employees e \n    WHERE e.department_id = d.id AND e.salary > 120000\n);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Subqueries & EXISTS\n"
+            "content": "# 06 — Window Functions: Ranking & Partitioning\n\n## 🎯 Difference Between Ranking Functions\n- `ROW_NUMBER()`: Always sequential integers (`1, 2, 3, 4`).\n- `RANK()`: Ties share rank; next rank skips numbers (`1, 2, 2, 4`).\n- `DENSE_RANK()`: Ties share rank; next rank does NOT skip (`1, 2, 2, 3`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 06: Department Salary Rankings\nSELECT \n    emp_id, name, dept, salary,\n    ROW_NUMBER() OVER (PARTITION BY dept ORDER BY salary DESC) AS row_num,\n    DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS dense_rank_num\nFROM employees;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Find the highest paid employee in each department using a window function in a CTE.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "WITH RankedEmployees AS (\n    SELECT emp_id, name, dept, salary,\n           DENSE_RANK() OVER (PARTITION BY dept ORDER BY salary DESC) AS rnk\n    FROM employees\n)\nSELECT emp_id, name, dept, salary \nFROM RankedEmployees \nWHERE rnk = 1;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-common-table-expressions-ctes",
+        "name": "07-window-functions-lead-lag-and-frames",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 07: Common Table Expressions (CTEs)\n\n-- Non-recursive CTE\nWITH DeptSalaryStats AS (\n    SELECT \n        department_id,\n        AVG(salary) AS avg_dept_salary\n    FROM employees\n    GROUP BY department_id\n)\nSELECT \n    e.name,\n    e.salary,\n    s.avg_dept_salary,\n    (e.salary - s.avg_dept_salary) AS salary_diff_from_avg\nFROM employees e\nJOIN DeptSalaryStats s ON e.department_id = s.department_id;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Common Table Expressions (CTEs)\n"
+            "content": "# 07 — Window Offsets (`LEAD`/`LAG`) & Framing\n\n## 🎯 Offset & Moving Windows\n- `LAG(col, 1)`: Accesses previous row in partition.\n- `LEAD(col, 1)`: Accesses next row in partition.\n- `ROWS BETWEEN 2 PRECEDING AND CURRENT ROW`: 3-row moving calculation.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 07: Month-Over-Month Sales Growth with LAG\nSELECT \n    sale_id, emp_id, amount, sale_date,\n    LAG(amount, 1) OVER (PARTITION BY emp_id ORDER BY sale_date) AS prev_sale_amount,\n    amount - LAG(amount, 1) OVER (PARTITION BY emp_id ORDER BY sale_date) AS growth\nFROM sales;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Compute running total of sales ordered by sale_date using SUM() OVER ().\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT sale_id, emp_id, amount, sale_date,\n       SUM(amount) OVER (ORDER BY sale_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM sales;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-window-functions",
+        "name": "08-set-operations-union-intersect-except",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 08: Window Functions (Row Number, Rank, Lead/Lag)\nSELECT \n    id,\n    department_id,\n    name,\n    salary,\n    -- Ranks employees by salary within their respective departments\n    DENSE_RANK() OVER (\n        PARTITION BY department_id \n        ORDER BY salary DESC\n    ) AS salary_rank_in_dept,\n    -- Previous employee's salary in same dept\n    LAG(salary, 1) OVER (\n        PARTITION BY department_id \n        ORDER BY salary DESC\n    ) AS prev_higher_salary\nFROM employees;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Window Functions\n\nWindow functions compute calculations across a set of table rows without collapsing individual rows like `GROUP BY` does.\n"
+            "content": "# 08 — Set Operations (`UNION`, `INTERSECT`, `EXCEPT`)\n\n## 🎯 Performance Warning\n- `UNION`: Runs deduplication sorting pass on entire result set.\n- `UNION ALL`: Concatenates result sets with zero sorting overhead. Use `UNION ALL` unless duplicate removal is strictly required.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 08: UNION ALL Performance\nSELECT name, 'High Earner' AS category FROM employees WHERE salary >= 100000\nUNION ALL\nSELECT name, 'Standard' AS category FROM employees WHERE salary < 100000;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Find all employee IDs in employees table that do NOT exist in sales table using EXCEPT.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT emp_id FROM employees\nEXCEPT\nSELECT emp_id FROM sales;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-indexes-and-b-tree-internals",
+        "name": "09-conditional-expressions-case-coalesce",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 09: B-Tree Index Creation\n\n-- Single column index\nCREATE INDEX idx_employees_email ON employees(email);\n\n-- Composite index (Order matters! Leftmost prefix rule)\nCREATE INDEX idx_emp_dept_salary ON employees(department_id, salary DESC);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - B-Tree Indexes\n\n- **B-Tree Structure**: Balanced tree providing $O(\\log N)$ lookups, range scans, and sorting.\n- **Leftmost Prefix Rule**: A composite index on `(A, B)` speeds up queries on `(A)` and `(A, B)`, but NOT `(B)` alone.\n"
+            "content": "# 09 — Three-Valued Logic & `COALESCE`\n\n## 🎯 Three-Valued Logic\nIn SQL, comparisons with `NULL` return `UNKNOWN` (not `TRUE`, not `FALSE`).\n- `x = NULL` is `UNKNOWN`.\n- `x IS NULL` is `TRUE` or `FALSE`.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 09: CASE Expressions & Categorization\nSELECT name, salary,\n    CASE \n        WHEN salary >= 110000 THEN 'Executive'\n        WHEN salary >= 90000  THEN 'Senior'\n        ELSE 'Standard'\n    END AS salary_tier\nFROM employees;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query using NULLIF to prevent division by zero.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT name, salary / NULLIF(manager_id, 0) AS ratio FROM employees;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-query-planning-explain-analyze",
+        "name": "10-data-manipulation-upsert-and-merge",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 10: Query Execution Plan Inspection\n-- SQLite syntax: EXPLAIN QUERY PLAN\nEXPLAIN QUERY PLAN\nSELECT name, salary \nFROM employees \nWHERE department_id = 1 AND salary > 100000;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Query Execution Plans (EXPLAIN)\n\n- **Sequential Scan (Seq Scan)**: Reads every page from disk ($O(N)$).\n- **Index Scan**: Walks B-Tree to find row pointers, then fetches table rows ($O(\\log N)$).\n- **Index Only Scan**: Resolves entire query directly from index pages without touching heap table.\n"
+            "content": "# 10 — Upsert (`ON CONFLICT`) & `RETURNING`\n\n## 🎯 Upsert Pattern\n```sql\nINSERT INTO counters (key, val) VALUES ('hits', 1)\nON CONFLICT (key) DO UPDATE\nSET val = counters.val + 1\nRETURNING val;\n```\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 10: Upsert with RETURNING\nINSERT INTO employees (emp_id, name, dept, salary, hired_at)\nVALUES (6, 'Fiona', 'Marketing', 70000.00, '2026-08-01')\nON CONFLICT (emp_id) DO UPDATE \nSET salary = EXCLUDED.salary\nRETURNING emp_id, name, salary;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write an INSERT with ON CONFLICT DO NOTHING.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "INSERT INTO employees (emp_id, name, dept, salary, hired_at)\nVALUES (1, 'Alice', 'Engineering', 130000.00, '2021-01-15')\nON CONFLICT (emp_id) DO NOTHING;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-acid-transactions-and-isolation",
+        "name": "11-database-views-and-materialized-views",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 11: ACID Transaction Block\nBEGIN TRANSACTION;\n\nUPDATE employees SET salary = salary - 5000 WHERE id = 101;\nUPDATE employees SET salary = salary + 5000 WHERE id = 102;\n\n-- Commit if all succeed, or ROLLBACK on failure\nCOMMIT;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - ACID Transactions & Isolation Levels\n\n- **Atomicity**: All or nothing.\n- **Consistency**: Invariants preserved.\n- **Isolation**: Concurrent transactions do not interfere.\n- **Durability**: Committed data persists across power loss.\n"
+            "content": "# 11 — Views vs Materialized Views\n\n## 🎯 Key Differences\n- **Standard View**: Virtual query macro expanded at execution time (zero storage, always real-time).\n- **Materialized View**: Physical table snapshot stored on disk; requires explicit `REFRESH`.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 11: Materialized View Creation\nCREATE MATERIALIZED VIEW department_payroll_summary AS\nSELECT dept, count(*) AS headcount, sum(salary) AS total_spend\nFROM employees\nGROUP BY dept;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Refresh the materialized view concurrently.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "REFRESH MATERIALIZED VIEW department_payroll_summary;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-locking-and-concurrency",
+        "name": "12-indexes-and-b-tree-query-acceleration",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 12: Pessimistic Locking with SELECT FOR UPDATE (Postgres/MySQL syntax)\n-- BEGIN;\n-- SELECT * FROM employees WHERE id = 101 FOR UPDATE;\n-- UPDATE employees SET salary = salary + 1000 WHERE id = 101;\n-- COMMIT;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Locking & Concurrency\n"
+            "content": "# 12 — Composite Indexes & The Leading Column Rule\n\n## 🎯 Leading Column Rule\nAn index on `(dept, salary)` accelerates:\n- `WHERE dept = 'Engineering'` (Uses leading column)\n- `WHERE dept = 'Engineering' AND salary > 90000` (Uses both)\n- **DOES NOT accelerate** `WHERE salary > 90000` (Leading column omitted!).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 12: Composite Index Definition\nCREATE INDEX idx_emp_dept_salary ON employees (dept, salary);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Create a covering index on sales including amount in index payload.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "CREATE INDEX idx_sales_emp_date_inc ON sales (emp_id, sale_date) INCLUDE (amount);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-database-normalization-1nf-to-bcnf",
+        "name": "13-query-planning-and-cost-optimization",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 13: Normalization Guide\n-- 1NF: Atomic columns (no repeating comma-separated values)\n-- 2NF: 1NF + No partial dependencies on composite primary key\n-- 3NF: 2NF + No transitive dependencies (non-key attributes depend only on primary key)\n-- BCNF: Strict 3NF where every determinant is a candidate key\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Database Normalization (1NF to BCNF)\n"
+            "content": "# 13 — Cost-Based Query Optimization\n\n## 🎯 Join Algorithms\n- **Nested Loop**: Fast for tiny datasets with indexed lookups on inner table.\n- **Hash Join**: Builds in-memory hash table of smaller table; scans larger table.\n- **Merge Join**: Both inputs pre-sorted on join key; sequential linear merge.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 13: Query Execution Plan\nEXPLAIN SELECT e.name, s.amount \nFROM employees e \nJOIN sales s ON e.emp_id = s.emp_id \nWHERE e.dept = 'Sales';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Run EXPLAIN ANALYZE on employee table count.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "EXPLAIN ANALYZE SELECT count(*) FROM employees;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-views-and-materialized-views",
+        "name": "14-schema-design-and-normalization",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 14: Virtual Views\nCREATE VIEW v_high_earners AS\nSELECT e.name, e.salary, d.name AS department\nFROM employees e\nJOIN departments d ON e.department_id = d.id\nWHERE e.salary > 100000;\n\nSELECT * FROM v_high_earners;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Views & Materialized Views\n"
+            "content": "# 14 — Normal Forms (1NF, 2NF, 3NF, BCNF)\n\n## 🎯 Normalization Rules\n- **1NF**: Atomic values, unique column names, primary key.\n- **2NF**: 1NF + No partial dependencies on composite primary key.\n- **3NF**: 2NF + No transitive dependencies (`A -> B -> C`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 14: Normalized Schema Constraint Verification\nSELECT conname, contype, conrelid::regclass \nFROM pg_constraint \nWHERE conrelid::regclass::text IN ('employees', 'sales');\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Add a check constraint to employees ensuring salary > 0.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "ALTER TABLE employees ADD CONSTRAINT chk_positive_salary CHECK (salary > 0);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-stored-procedures-and-triggers",
+        "name": "15-transactions-and-isolation-levels",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 15: Trigger Audit Pattern\nCREATE TABLE audit_log (\n    id INTEGER PRIMARY KEY,\n    action TEXT NOT NULL,\n    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TRIGGER after_employee_insert\nAFTER INSERT ON employees\nBEGIN\n    INSERT INTO audit_log (action) VALUES ('New employee created');\nEND;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Procedures & Triggers\n"
+            "content": "# 15 — Transaction Isolation Levels & Anomalies\n\n## 🎯 Anomaly Matrix\n- **Dirty Read**: Reading uncommitted changes.\n- **Non-Repeatable Read**: Re-reading same row produces different values.\n- **Phantom Read**: Re-running range query returns new/deleted rows.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 15: Setting Transaction Isolation Level\nBEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;\nSELECT sum(salary) FROM employees;\nCOMMIT;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Start a read-only serializable transaction.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE READ ONLY;\nSELECT count(*) FROM sales;\nCOMMIT;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-schema-migrations",
+        "name": "16-temporal-and-time-series-queries",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
-            "type": "file",
-            "content": "-- 16: Zero-Downtime Migration Pattern\n-- Step 1: Add new nullable column\nALTER TABLE employees ADD COLUMN phone_number TEXT;\n\n-- Step 2: Backfill data in small batches\n-- Step 3: Add NOT NULL constraint or default\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Schema Migrations\n"
+            "content": "# 16 — Time-Series Queries & `generate_series` Gap Filling\n\n## 🎯 Gap-Filling Pattern\nCombine `generate_series()` with `LEFT JOIN` to ensure days with zero sales still show in charts.\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 16: Calendar Series Gap Filling\nSELECT \n    day::date,\n    COALESCE(sum(s.amount), 0) AS daily_sales\nFROM generate_series('2026-08-01'::date, '2026-08-05'::date, '1 day'::interval) day\nLEFT JOIN sales s ON s.sale_date = day::date\nGROUP BY day::date\nORDER BY day::date;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Compute 7-day rolling moving average of sales.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT sale_date, amount,\n       AVG(amount) OVER (ORDER BY sale_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS rolling_7day_avg\nFROM sales;\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "17-analytics-and-pivoting",
         "type": "directory",
         "children": [
           {
-            "name": "query.sql",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 17: Classic Interview Query: Find 2nd Highest Salary in Company\nSELECT MAX(salary) AS second_highest_salary\nFROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);\n\n-- Alternatively with DENSE_RANK():\nWITH RankedSalaries AS (\n    SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) as rank\n    FROM employees\n)\nSELECT salary FROM RankedSalaries WHERE rank = 2 LIMIT 1;\n"
+            "content": "# 17 — Pivoting & Conditional Aggregations\n\n## 🎯 Conditional Aggregation (`FILTER (WHERE ...)`)\nClean modern SQL standard alternative to `CASE` inside `SUM`:\n```sql\nSUM(amount) FILTER (WHERE region = 'US') AS us_sales\n```\n"
           },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 17: Department Payroll Pivot Matrix\nSELECT \n    SUM(salary) FILTER (WHERE dept = 'Engineering') AS eng_payroll,\n    SUM(salary) FILTER (WHERE dept = 'Sales') AS sales_payroll,\n    SUM(salary) AS total_payroll\nFROM employees;\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Write a query that pivots headcount by department.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT \n    COUNT(*) FILTER (WHERE dept = 'Engineering') AS eng_count,\n    COUNT(*) FILTER (WHERE dept = 'Sales') AS sales_count,\n    COUNT(*) AS total_count\nFROM employees;\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield SQL Interview Questions 🎯\n\n### Top 5 Interview Concepts:\n1. **Find N-th highest salary**: Subquery vs `DENSE_RANK()` window function.\n2. **`WHERE` vs `HAVING`**: Row filter before aggregation vs group metric filter after aggregation.\n3. **`UNION` vs `UNION ALL`**: Deduplication overhead vs fast concatenation.\n4. **Leftmost prefix index rule**: Why `(A, B)` index doesn't speed up `WHERE B = 10`.\n5. **Deadlocks**: Prevention via consistent lock acquisition ordering.\n"
+            "content": "# 18 — High-Yield SQL & Database Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **`COUNT(*)` vs `COUNT(column)`**: `COUNT(*)` counts all rows; `COUNT(col)` excludes rows where `col IS NULL`.\n2. **`NOT IN` with NULL**: If subquery contains even a single `NULL`, `NOT IN` evaluates to `UNKNOWN` and returns zero rows (always use `NOT EXISTS`).\n3. **`WHERE` vs `HAVING`**: `WHERE` filters rows before aggregation; `HAVING` filters aggregated groups.\n4. **Leading Column Rule**: Composite indexes cannot be used if leading column is absent from `WHERE`.\n5. **Cartesian Explosion**: Joining across multiple 1-to-many relationships creates duplicate multiplied rows in `SUM()`.\n6. **`UNION` vs `UNION ALL`**: `UNION` performs costly sorting; `UNION ALL` is instantaneous.\n7. **`BETWEEN` Inclusivity**: `BETWEEN a AND b` is inclusive (`>= a AND <= b`).\n8. **Correlated Subquery Overhead**: Executes once per candidate outer row (O(N*M)); rewrite as `JOIN` or CTE.\n9. **Implicit Type Casting**: Comparing `VARCHAR` column with integer disables index scans.\n10. **`OFFSET` Inefficiency**: `OFFSET 100000` scans and discards 100,000 rows (use Keyset Pagination `WHERE id > last_seen_id`).\n"
+          },
+          {
+            "name": "example.sql",
+            "type": "file",
+            "content": "-- 18: Master SQL Drill Summary\nSELECT '1. Logical query execution order' AS concept\nUNION ALL SELECT '2. Window functions vs Group By'\nUNION ALL SELECT '3. NOT EXISTS vs NOT IN with NULLs'\nUNION ALL SELECT '4. Keyset pagination vs OFFSET';\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sql",
+                "type": "file",
+                "content": "-- TODO: Master Drill: Write a query to find the 2nd highest salary in employees without using LIMIT/OFFSET.\n-- FILL HERE\n"
+              },
+              {
+                "name": "solution.sql",
+                "type": "file",
+                "content": "SELECT max(salary) AS second_highest_salary \nFROM employees \nWHERE salary < (SELECT max(salary) FROM employees);\n"
+              }
+            ]
           }
         ]
       }

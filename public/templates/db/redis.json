@@ -1,8 +1,8 @@
 {
   "id": "db/redis",
-  "name": "Redis In-Memory Architecture & Caching Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive Redis curriculum from event-loop internals, data structures (Strings, Hashes, Sorted Sets), and Streams to RDB/AOF persistence, Sentinel HA, Cluster sharding, and caching design patterns",
+  "name": "Redis In-Memory Architecture & Distributed Systems",
+  "version": "1.2.0",
+  "description": "Complete high-depth Redis curriculum covering in-memory data structures, Skip Lists, Streams, Lua scripting, Sentinel HA, Cluster 16384 hash slots, and caching architectures",
   "root": {
     "name": "redis-workspace",
     "type": "directory",
@@ -10,278 +10,586 @@
       {
         "name": "docker-compose.yml",
         "type": "file",
-        "content": "version: '3.8'\n\nservices:\n  redis:\n    image: redis:7-alpine\n    command: [\"redis-server\", \"--appendonly\", \"yes\", \"--maxmemory\", \"256mb\", \"--maxmemory-policy\", \"allkeys-lru\"]\n    ports:\n      - \"6379:6379\"\n    volumes:\n      - redis_data:/data\n    restart: unless-stopped\n\nvolumes:\n  redis_data:\n"
+        "content": "version: '3.8'\n\nservices:\n  redis:\n    image: redis:7-alpine\n    command: redis-server --appendonly yes --requirepass secretpassword\n    ports:\n      - \"6379:6379\"\n    volumes:\n      - redisdata:/data\n    restart: unless-stopped\n\nvolumes:\n  redisdata:\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# ⚡ Complete Redis In-Memory Architecture & Caching Track\n\nWelcome to your full Redis learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-server-architecture` | **Setup & Event Loop** | Single-threaded reactor event loop (epoll/kqueue), in-memory speed, `redis-cli` |\n| `01-strings-and-binary-safety` | **Strings & Integers** | `SET`, `GET`, `INCR`, `DECR`, `MGET`/`MSET`, binary safety, atomic counters |\n| `02-key-expiration-and-ttl` | **Expiration & Eviction** | `EXPIRE`, `TTL`, eviction policies (`allkeys-lru`, `volatile-lru`, `allkeys-lfu`) |\n| `03-lists-and-message-queues` | **Lists & Queues** | `LPUSH`, `RPUSH`, `LPOP`, `RPOP`, `BLPOP` blocking queues, reliable queues |\n| `04-sets-and-mathematical-operations` | **Sets & Tagging** | `SADD`, `SMEMBERS`, `SISMEMBER`, `SINTER` intersections, tag indexing |\n| `05-hashes-and-object-storage` | **Hashes & Objects** | `HSET`, `HGET`, `HGETALL`, `HINCRBY`, memory-efficient listpack encoding |\n| `06-sorted-sets-and-skiplists` | **Sorted Sets & SkipLists** | `ZADD`, `ZRANGE`, `ZRANK`, SkipList internals, leaderboards, rate limiters |\n| `07-bitmaps-and-hyperloglogs` | **Bitmaps & HyperLogLog** | Bitmaps (`SETBIT`/`BITCOUNT` for DAU), HyperLogLog (`PFADD`/`PFCOUNT` cardinality) |\n| `08-geospatial-indexes` | **Geospatial Indexes** | `GEOADD`, `GEODIST`, `GEOSEARCH`, proximity queries via Geohash |\n| `09-streams-and-consumer-groups` | **Streams & Consumer Groups** | `XADD`, `XREAD`, Consumer Groups (`XGROUP`, `XREADGROUP`), `XACK`, pending entries |\n| `10-pubsub-and-event-streaming` | **Pub/Sub Messaging** | `PUBLISH`, `SUBSCRIBE`, `PSUBSCRIBE` pattern matching vs Streams |\n| `11-transactions-and-optimistic-locking` | **Transactions & WATCH** | `MULTI`, `EXEC`, `DISCARD`, optimistic concurrency control with `WATCH` |\n| `12-lua-scripting-and-functions` | **Lua Scripting** | Atomic server-side `EVAL`, Redis Functions (`FUNCTION LOAD`), atomic rate limiters |\n| `13-persistence-rdb-vs-aof` | **RDB & AOF Persistence** | RDB snapshotting (`fork()` CoW) vs AOF logging (`fsync: everysec`), hybrid persistence |\n| `14-replication-and-sentinel-ha` | **Replication & Sentinel** | Primary-Replica async replication, Redis Sentinel auto-failover and quorum |\n| `15-redis-cluster-and-sharding` | **Cluster & Hash Slots** | 16,384 hash slots, CRC16 hashing, hash tags (`{user:123}`), `MOVED`/`ASK` redirects |\n| `16-caching-patterns-and-anti-patterns` | **Caching Architecture** | Cache-Aside, Write-Through, Cache Stampede, Cache Penetration, Bloom Filters |\n| `17-security-acl-and-tls` | **Security & ACL** | Redis ACL (`ACL SETUSER`), command whitelisting, password auth, TLS |\n| `18-interview-questions-and-drills` | **Interview Master Drill** | Top 10 Redis interview questions, distributed locking (Redlock), memory traps |\n\n---\n\n## 🛠️ Quick Commands\n\nStart local Redis server:\n```bash\ndocker compose up -d\n```\nConnect using `redis-cli`:\n```bash\nredis-cli\n```\n"
+        "content": "# 🔴 Redis In-Memory Architecture & Distributed Systems Track\n\nWelcome to the **Redis In-Memory Architecture & Distributed Systems Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering single-threaded event loop mechanics (epoll/kqueue), internal data structures (SkipLists, SDS, QuickLists), Streams with Consumer Groups, Lua script atomicity, Sentinel automated failover, and Cluster sharding.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-server-architecture` | Event Loop & RESP | Single-threaded reactor pattern, I/O multiplexing (epoll), RESP3 protocol |\n| `01-strings-and-atomic-counters` | SDS Strings & Atomic Counters | Simple Dynamic Strings (SDS), `SET`, `INCRBY`, `MGET`, atomic rate limiting |\n| `02-hashes-and-memory-encoding` | Hashes & Memory Layout | `HSET`, `HGETALL`, `ziplist` (listpack) vs `hashtable` memory encoding |\n| `03-lists-and-blocking-queues` | Lists & QuickLists | `LPUSH`, `RPOP`, `BRPOP` blocking queues, `quicklist` bidirectional nodes |\n| `04-sets-and-set-operations` | Sets & IntSets | `SADD`, `SMEMBERS`, `SINTER`, `SUNION`, `intset` compact memory representation |\n| `05-sorted-sets-zset-and-skiplists` | Sorted Sets & SkipLists | `ZSET`, Skip List probabilistic O(log N) indexing, real-time leaderboards |\n| `06-bitmaps-and-hyperloglog` | Bitmaps & HyperLogLog | `SETBIT`, `BITCOUNT`, HyperLogLog (`PFADD`, `PFCOUNT`) 12KB cardinality estimation |\n| `07-geospatial-and-h3-indexing` | Geospatial Data | `GEOADD`, `GEODIST`, `GEOSEARCH`, Geohash 52-bit integer encoding |\n| `08-streams-and-consumer-groups` | Redis Streams | `XADD`, `XREAD`, `XGROUP`, Consumer Groups, Pending Entries List (PEL), `XACK` |\n| `09-pub-sub-messaging-engine` | Pub/Sub Engine | `PUBLISH`, `SUBSCRIBE`, `PSUBSCRIBE`, transient event broadcasting |\n| `10-transactions-multi-exec-watch` | Transactions & Optimistic Locking | `MULTI`, `EXEC`, `WATCH`, optimistic concurrency control (OCC) |\n| `11-lua-scripting-and-functions` | Lua Scripts & Functions | `EVALSHA`, atomic multi-key logic, Redis 7 engine functions (`FUNCTION LOAD`) |\n| `12-persistence-rdb-vs-aof` | Persistence (RDB & AOF) | `bgsave` fork Copy-on-Write, AOF rewrite (`bgrewriteaof`), `appendfsync` |\n| `13-memory-eviction-and-maxmemory` | Eviction & Memory Policies | `maxmemory`, `allkeys-lru`, `volatile-lfu`, active/passive expiration cycles |\n| `14-replication-and-sentinel` | Sentinel & Replication | Replication backlog (`PSYNC2`), Sentinel quorum, automated master failover |\n| `15-redis-cluster-and-hash-slots` | Cluster & 16384 Hash Slots | `CRC16(key) % 16384`, Hash Tags `{user:101}`, `MOVED` / `ASK` redirections |\n| `16-caching-patterns-and-stampede` | Caching & Thundering Herd | Cache-Aside, Write-Behind, Cache Avalanche, XFetch probabilistic early refresh |\n| `17-monitoring-latency-and-profiling` | Profiling & Diagnostics | `redis-cli --latency`, `SLOWLOG GET`, `MEMORY USAGE`, `BIGKEYS`, `MONITOR` |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Redis Systems gotchas + Atomic Token Bucket Rate Limiter Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.sh` — Hands-on problem with `TODO` markers.\n- `exercise/solution.sh` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-server-architecture",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 00: Server Information & Diagnostics\nINFO server\nINFO memory\nPING\n"
+            "content": "# 00 — Redis Single-Threaded Reactor & RESP Protocol\n\n## 🎯 Architecture Insights\n- **Single-Threaded Execution**: Execution of commands is strictly single-threaded, eliminating mutex contention.\n- **I/O Multiplexing**: Uses OS primitives (`epoll` on Linux, `kqueue` on macOS) to handle 100k+ concurrent connections.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 00 - Redis Architecture & Event Loop 🛠️\n\n### Why Redis is Ultra Fast:\n1. **In-Memory Storage**: All primary data structures reside in RAM (sub-millisecond latency).\n2. **Non-Blocking I/O Multiplexing**: Single-threaded event loop (`epoll` on Linux, `kqueue` on macOS) handles 100,000+ operations/sec without context-switching or lock contention overhead.\n3. **C-Optimized Data Structures**: Custom SDS (Simple Dynamic Strings), SkipLists, and Dicts.\n"
-          }
-        ]
-      },
-      {
-        "name": "01-strings-and-binary-safety",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 01: Strings & Atomic Operations\nSET user:101:name \"Navnath\"\nGET user:101:name\n\n-- Atomic Counter\nSET page:views:home 0\nINCR page:views:home\nINCRBY page:views:home 10\nGET page:views:home\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 00: Redis Server Information ===\"\nredis-cli INFO server 2>/dev/null || echo \"Simulated Redis server check\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 01 - Strings & Atomic Counters\n\nStrings are binary-safe (can store text, JSON, serialized bytes, or raw images up to 512MB).\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Ping Redis server and query connected clients count from INFO clients.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli PING\nredis-cli INFO clients | grep connected_clients\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-key-expiration-and-ttl",
+        "name": "01-strings-and-atomic-counters",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 02: Expiration and TTL\nSET session:token:xyz \"user_logged_in\" EX 60\nTTL session:token:xyz\n"
+            "content": "# 01 — Simple Dynamic Strings (SDS) & Atomic Counters\n\n## 🎯 SDS (Simple Dynamic String) Layout\nUnlike C null-terminated strings, SDS stores string length explicitly, allowing O(1) `strlen` and binary safety.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 02 - Key Expiration & Eviction Policies\n\n### Memory Eviction Policies (`maxmemory-policy`):\n- `allkeys-lru`: Evicts least recently used keys out of all keys.\n- `volatile-lru`: Evicts LRU keys among those with an expiration set.\n- `allkeys-lfu`: Evicts least frequently used keys.\n- `noeviction`: Returns out-of-memory error when RAM is full (Default).\n"
-          }
-        ]
-      },
-      {
-        "name": "03-lists-and-message-queues",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 03: FIFO Queue\nRPUSH task_queue \"job_1\" \"job_2\" \"job_3\"\nLPOP task_queue\n\n-- Blocking Pop (Waits up to 5 seconds for a job)\nBLPOP task_queue 5\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 01: Atomic String Operations ===\"\nredis-cli SET page_views 100\nredis-cli INCRBY page_views 25\necho \"Current Page Views: $(redis-cli GET page_views)\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 03 - Lists & Message Queues\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Set a key 'session:token' with value 'abc123' that expires in 60 seconds (SET EX).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli SET session:token \"abc123\" EX 60\necho \"TTL: $(redis-cli TTL session:token) seconds\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-sets-and-mathematical-operations",
+        "name": "02-hashes-and-memory-encoding",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 04: Sets & Tagging\nSADD user:1:skills \"go\" \"rust\" \"docker\"\nSADD user:2:skills \"rust\" \"python\" \"k8s\"\n\n-- Intersection: Common skills\nSINTER user:1:skills user:2:skills\n\n-- Union: All unique skills\nSUNION user:1:skills user:2:skills\n"
+            "content": "# 02 — Hashes: `listpack` vs `hashtable`\n\n## 🎯 Memory Encoding Optimization\nSmall hashes are stored in contiguous memory using `listpack` (saving pointer overhead) until exceeding `hash-max-listpack-entries` (default 512).\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 04 - Sets & Relational Intersections\n"
-          }
-        ]
-      },
-      {
-        "name": "05-hashes-and-object-storage",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 05: Hashes for Storing Objects\nHSET user:profile:100 name \"Alice\" email \"alice@example.com\" age 28\nHGETALL user:profile:100\nHINCRBY user:profile:100 age 1\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 02: Redis Hash Operations ===\"\nredis-cli HSET user:101 name \"Navnath\" role \"admin\" score 95\nredis-cli HGETALL user:101\nredis-cli OBJECT ENCODING user:101\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 05 - Hashes & Object Fields\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Increment the 'score' field of user:101 by 5 using HINCRBY.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli HINCRBY user:101 score 5\necho \"Updated score: $(redis-cli HGET user:101 score)\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-sorted-sets-and-skiplists",
+        "name": "03-lists-and-blocking-queues",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 06: Sorted Sets (Leaderboards & Priority Queues)\nZADD leaderboard 1500 \"player_alpha\"\nZADD leaderboard 2300 \"player_beta\"\nZADD leaderboard 1800 \"player_gamma\"\n\n-- Top players ordered by highest score\nZREVRANGE leaderboard 0 -1 WITHSCORES\n\n-- Check player rank\nZREVRANK leaderboard \"player_beta\"\n"
+            "content": "# 03 — Lists, QuickLists & Blocking Consumer Queues\n\n## 🎯 `BRPOP` Blocking Queue Pattern\n`BRPOP queue_name 0` blocks the client connection without CPU polling until an item is pushed with `LPUSH`.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 06 - Sorted Sets & SkipLists\n\nSorted Sets maintain elements ordered by a floating-point `score` backed by a **SkipList + HashTable** ($O(\\log N)$ insertion, deletion, and range queries).\n"
-          }
-        ]
-      },
-      {
-        "name": "07-bitmaps-and-hyperloglogs",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 1. Bitmaps: Daily Active Users (DAU)\nSETBIT dau:2026-08-30 101 1\nSETBIT dau:2026-08-30 105 1\nBITCOUNT dau:2026-08-30\n\n-- 2. HyperLogLog: Unique Visitor Cardinality\nPFADD unique_visitors \"ip_1.2.3.4\" \"ip_5.6.7.8\" \"ip_1.2.3.4\"\nPFCOUNT unique_visitors\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 03: FIFO Queue Operations ===\"\nredis-cli LPUSH task_queue \"Task_1\" \"Task_2\" \"Task_3\"\necho \"Popped from queue: $(redis-cli RPOP task_queue)\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 07 - Bitmaps & HyperLogLog\n\n- **Bitmaps**: Extreme memory efficiency (1 million daily active users takes only ~122 KB of RAM!).\n- **HyperLogLog**: Probabilistic cardinality estimation using a fixed 12 KB memory footprint with standard error of 0.81%.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Push 3 items and trim the list to maintain a max size of 2 using LTRIM.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli LPUSH capped_log \"Log1\" \"Log2\" \"Log3\"\nredis-cli LTRIM capped_log 0 1\necho \"Capped log length: $(redis-cli LLEN capped_log)\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-geospatial-indexes",
+        "name": "04-sets-and-set-operations",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 08: Geospatial Queries\nGEOADD locations 73.8567 18.5204 \"Pune\" 72.8777 19.0760 \"Mumbai\"\nGEODIST locations \"Pune\" \"Mumbai\" km\n"
+            "content": "# 04 — Sets & Mathematical Set Operations\n\n## 🎯 Set Operations\n- `SINTER`: Intersection (e.g. mutual friends).\n- `SUNION`: Union.\n- `SDIFF`: Set difference.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 08 - Geospatial Indexes\n"
-          }
-        ]
-      },
-      {
-        "name": "09-streams-and-consumer-groups",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 09: Redis Streams (Kafka-like Append-Only Log)\nXADD orders_stream * order_id \"ord_99\" amount 250.00\n\n-- Create Consumer Group\nXGROUP CREATE orders_stream billing_group $ MKSTREAM\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 04: Set Intersection ===\"\nredis-cli SADD tags:book \"tech\" \"go\" \"systems\"\nredis-cli SADD tags:course \"systems\" \"distributed\" \"go\"\necho \"Common Tags: $(redis-cli SINTER tags:book tags:course)\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - Redis Streams & Consumer Groups\n\nProvides durable log persistence, consumer groups, message acknowledgments (`XACK`), and Pending Entries List (`PEL`) for reliable stream processing.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check if member 'systems' exists in tags:book using SISMEMBER.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nIS_MEMBER=$(redis-cli SISMEMBER tags:book \"systems\")\necho \"Is 'systems' a member? $IS_MEMBER (1=Yes, 0=No)\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-pubsub-and-event-streaming",
+        "name": "05-sorted-sets-zset-and-skiplists",
         "type": "directory",
         "children": [
           {
-            "name": "commands.redis",
+            "name": "README.md",
             "type": "file",
-            "content": "-- 10: Pub/Sub Messaging\nPUBLISH notifications \"New system alert!\"\n"
+            "content": "# 05 — Sorted Sets (`ZSET`) & Skip List Architecture\n\n## 🎯 How Skip Lists Work\nSkip Lists maintain multiple levels of linked lists with forward pointers, allowing O(log N) search and insertion without complex tree rotations.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 10 - Pub/Sub vs Streams\n\n- **Pub/Sub**: Fire-and-forget message distribution (No message buffering or persistence).\n- **Streams**: Durable, pull-based append-only log with history.\n"
-          }
-        ]
-      },
-      {
-        "name": "11-transactions-and-optimistic-locking",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 11: Atomic Transaction Block\nWATCH balance:user:1\nMULTI\nDECRBY balance:user:1 50\nINCRBY balance:user:2 50\nEXEC\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 05: Real-Time Leaderboard ===\"\nredis-cli ZADD leaderboard 2500 \"player_alice\"\nredis-cli ZADD leaderboard 3200 \"player_bob\"\nredis-cli ZADD leaderboard 1800 \"player_charlie\"\n\necho \"Top 2 Players:\"\nredis-cli ZREVRANGE leaderboard 0 1 WITHSCORES\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Transactions & Optimistic Locking\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Get the rank of 'player_alice' in the leaderboard.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nRANK=$(redis-cli ZREVRANK leaderboard \"player_alice\")\necho \"Rank of player_alice (0-indexed): $RANK\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-lua-scripting-and-functions",
+        "name": "06-bitmaps-and-hyperloglog",
         "type": "directory",
         "children": [
           {
-            "name": "rate_limiter.lua",
+            "name": "README.md",
             "type": "file",
-            "content": "-- Atomic Sliding Window Rate Limiter in Lua\nlocal key = KEYS[1]\nlocal limit = tonumber(ARGV[1])\nlocal current = redis.call('INCR', key)\n\nif current == 1 then\n    redis.call('EXPIRE', key, 60)\nend\n\nif current > limit then\n    return 0 -- Rejected\nelse\n    return 1 -- Allowed\nend\n"
+            "content": "# 06 — Bitmaps & HyperLogLog Cardinality\n\n## 🎯 HyperLogLog (HLL)\nEstimates unique cardinality of millions of items with standard error < 0.81% using only **12KB of fixed memory**!\n"
           },
           {
-            "name": "README.md",
+            "name": "example.sh",
             "type": "file",
-            "content": "# 12 - Lua Scripting & Redis Functions\n\nLua scripts run **atomically** inside the Redis engine, guaranteeing no other commands execute in between.\n"
-          }
-        ]
-      },
-      {
-        "name": "13-persistence-rdb-vs-aof",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 13 - Persistence: RDB vs AOF\n\n| Feature | RDB (Snapshot) | AOF (Append-Only File) |\n| :--- | :--- | :--- |\n| **Mechanism** | Point-in-time binary snapshot (`fork()`) | Logs every write operation (`appendonly.aof`) |\n| **Data Safety** | Potential data loss between snapshot intervals | Near zero data loss (`fsync: everysec`) |\n| **Recovery Speed** | **Extremely Fast** (Direct binary load) | Slower (Replays command history) |\n| **File Size** | Compact binary | Larger (requires periodic background rewrite `BGREWRITEAOF`) |\n"
-          }
-        ]
-      },
-      {
-        "name": "14-replication-and-sentinel-ha",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 14 - Primary-Replica & Redis Sentinel\n\n- **Replication**: Asynchronous streaming replication from Primary to Read-Replicas.\n- **Sentinel**: Monitoring daemon quorum providing automated master failure detection, promotion, and client reconfiguration.\n"
-          }
-        ]
-      },
-      {
-        "name": "15-redis-cluster-and-sharding",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 15 - Redis Cluster & 16,384 Hash Slots\n\n- Redis Cluster distributes keys across **16,384 logical hash slots** calculated via `CRC16(key) % 16384`.\n- **Hash Tags**: Use `{user:101}.profile` and `{user:101}.orders` to force multiple keys to hash to the exact same cluster node.\n"
-          }
-        ]
-      },
-      {
-        "name": "16-caching-patterns-and-anti-patterns",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 16 - Caching Patterns & Failure Modes\n\n1. **Cache-Aside (Lazy Loading)**: App checks cache -> on miss queries DB -> writes back to cache.\n2. **Cache Stampede (Thundering Herd)**: Key expires under heavy load -> thousands of concurrent requests hammer DB. Fix: Distributed lock (`Redlock`) or probabilistic early expiration (XFetch).\n3. **Cache Penetration**: Querying keys that exist neither in cache nor in DB. Fix: Cache null values or use **Bloom Filters**.\n"
-          }
-        ]
-      },
-      {
-        "name": "17-security-acl-and-tls",
-        "type": "directory",
-        "children": [
-          {
-            "name": "commands.redis",
-            "type": "file",
-            "content": "-- 17: Redis ACL Management\nACL SETUSER appuser on >StrongPassword123 ~app:* +@read +@write -@dangerous\nACL LIST\n"
+            "content": "#!/usr/bin/env bash\necho \"=== 06: HyperLogLog Unique Visitors ===\"\nredis-cli PFADD visitors:2026-08 \"user_1\" \"user_2\" \"user_3\" \"user_1\"\necho \"Estimated Unique Visitors: $(redis-cli PFCOUNT visitors:2026-08)\"\n"
           },
           {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Set bit 10 to 1 in bitmap 'user:active:today' and count total set bits using BITCOUNT.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli SETBIT user:active:today 10 1\necho \"Active users count: $(redis-cli BITCOUNT user:active:today)\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-geospatial-and-h3-indexing",
+        "type": "directory",
+        "children": [
+          {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - Security & Access Control Lists (ACL)\n"
+            "content": "# 07 — Geospatial Indexing & GEO Commands\n\n## 🎯 Geohash Under the Hood\nGeographic coordinates (latitude, longitude) are converted into 52-bit integers and stored inside a Sorted Set (`ZSET`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 07: Geospatial Distance ===\"\nredis-cli GEOADD cities 73.8567 18.5204 \"Pune\" 72.8777 19.0760 \"Mumbai\"\necho \"Distance Pune -> Mumbai: $(redis-cli GEODIST cities \"Pune\" \"Mumbai\" km) km\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Search for cities within 200km radius of Pune (73.8567, 18.5204) using GEOSEARCH.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli GEOSEARCH cities FROMLONLAT 73.8567 18.5204 BYRADIUS 200 km WITHDIST\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-streams-and-consumer-groups",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Redis Streams & Consumer Groups\n\n## 🎯 Streams vs Pub/Sub\nStreams provide an append-only, durable log with message acknowledgments (`XACK`) and persistent offsets, similar to Apache Kafka.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 08: Redis Streams Produce & Read ===\"\nMSG_ID=$(redis-cli XADD orders * user_id 101 amount 49.99)\necho \"Produced Stream Message ID: $MSG_ID\"\nredis-cli XREAD COUNT 1 STREAMS orders 0-0\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Create a consumer group 'order_processors' on stream 'orders' using XGROUP CREATE.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli XGROUP CREATE orders order_processors 0-0 MKSTREAM 2>/dev/null || true\necho \"✔ Consumer group 'order_processors' verified!\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-pub-sub-messaging-engine",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Publish/Subscribe Messaging Engine\n\n## 🎯 Fire-and-Forget Architecture\nPub/Sub messages are not buffered or stored. If a subscriber is offline when a message is published, the message is lost.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: Publish Message ===\"\nredis-cli PUBLISH \"notifications:general\" \"System maintenance at midnight\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: List all active Pub/Sub channels using PUBSUB CHANNELS.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli PUBSUB CHANNELS\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-transactions-multi-exec-watch",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Transactions & Optimistic Locking (`WATCH`)\n\n## 🎯 `WATCH` Primitive\nMonitors keys for modifications. If another client modifies a watched key before `EXEC`, the transaction automatically aborts.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 10: Multi/Exec Atomic Batch ===\"\nredis-cli << 'EOF'\nMULTI\nSET account:A 500\nSET account:B 1000\nEXEC\nEOF\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Demonstrate WATCH abort mechanism.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli WATCH balance\nredis-cli MULTI\nredis-cli SET balance 200\nredis-cli EXEC\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-lua-scripting-and-functions",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Server-Side Lua Scripting & Functions\n\n## 🎯 Atomic Script Execution\nLua scripts execute atomically within Redis, ensuring no other command runs until the script finishes.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 11: Lua Script Execution ===\"\nredis-cli EVAL \"return redis.call('SET', KEYS[1], ARGV[1])\" 1 my_key \"AtomicValue\"\necho \"Value set by Lua: $(redis-cli GET my_key)\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a Lua script that increments a counter only if it already exists (EXISTS).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nSCRIPT=\"if redis.call('EXISTS', KEYS[1]) == 1 then return redis.call('INCR', KEYS[1]) else return nil end\"\nredis-cli SET counter 10\nRESULT=$(redis-cli EVAL \"$SCRIPT\" 1 counter)\necho \"Incremented counter: $RESULT\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-persistence-rdb-vs-aof",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Persistence Mechanics (RDB vs AOF)\n\n## 🎯 Comparison\n- **RDB (Redis Database Snapshot)**: Point-in-time binary snapshot created via `bgsave` fork (Copy-on-Write).\n- **AOF (Append-Only File)**: Logs every write operation (`appendfsync everysec` balances durability and performance).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: Persistence Settings ===\"\nredis-cli INFO persistence | grep -E \"aof_enabled|rdb_last_bgsave_status\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Trigger an asynchronous RDB snapshot using BGSAVE.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli BGSAVE\necho \"Background RDB save initiated.\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-memory-eviction-and-maxmemory",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — Memory Eviction Policies\n\n## 🎯 Eviction Policies\n- `noeviction`: Returns errors on writes when memory is full.\n- `allkeys-lru`: Evicts least recently used keys across all keys.\n- `volatile-lru`: Evicts least recently used keys with an expiry (`EXPIRE`).\n- `allkeys-lfu`: Evicts least frequently used keys.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 13: Memory Configuration ===\"\nredis-cli CONFIG GET maxmemory\nredis-cli CONFIG GET maxmemory-policy\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Set maxmemory-policy to 'allkeys-lru' using CONFIG SET.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli CONFIG SET maxmemory-policy allkeys-lru\necho \"✔ Maxmemory policy set to allkeys-lru\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-replication-and-sentinel",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Master-Replica Replication & Sentinel HA\n\n## 🎯 Redis Sentinel\nProvides high availability: monitors master health, handles quorum voting, and automatically promotes a replica to master during outages.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: Replication Info ===\"\nredis-cli INFO replication | grep -E \"role|connected_slaves\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write a script querying replication offset.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli INFO replication | grep master_repl_offset\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-redis-cluster-and-hash-slots",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Redis Cluster & 16,384 Hash Slots\n\n## 🎯 Hash Tag Routing\nKeys with `{...}` hash tags guarantee co-location on the same node:\n- `{user:101}.profile` and `{user:101}.orders` hash using only `user:101`, enabling multi-key operations.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Hash Tag Demonstration ===\"\necho \"Keys {user:101}.a and {user:101}.b map to identical hash slot!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Check cluster status with CLUSTER INFO.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli CLUSTER INFO 2>/dev/null || echo \"Standalone Redis instance (not in cluster mode)\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-caching-patterns-and-stampede",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Caching Architectures & Cache Stampede Mitigation\n\n## 🎯 Cache Stampede (Thundering Herd)\nWhen a popular cache key expires, thousands of concurrent requests simultaneously hit the database.\n- **Mitigation (XFetch)**: Recompute and refresh cache probabilistically before actual expiration.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 16: Cache-Aside Pattern ===\"\nredis-cli SETEX cached:product:42 300 '{\"id\": 42, \"name\": \"Laptop\"}'\necho \"Cached product: $(redis-cli GET cached:product:42)\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Demonstrate cache invalidation on update using DEL.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli DEL cached:product:42\necho \"Cache key invalidated.\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-monitoring-latency-and-profiling",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Latency Monitoring & Memory Profiling\n\n## 🎯 Dangerous Commands in Production\n- **NEVER RUN `KEYS *`**: Blocks the single-threaded event loop for seconds/minutes!\n- Always use `SCAN` with cursor.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Slowlog & Memory Usage ===\"\nredis-cli SLOWLOG GET 3\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Inspect memory used by key 'visitors:2026-08' using MEMORY USAGE.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nredis-cli MEMORY USAGE visitors:2026-08 2>/dev/null || echo \"Memory usage query simulated.\"\n"
+              }
+            ]
           }
         ]
       },
@@ -292,7 +600,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - High-Yield Redis Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Single-Threaded Speed**: Memory access, non-blocking I/O multiplexing, zero locking overhead.\n2. **RDB vs AOF**: Snapshotting speed vs write-log durability.\n3. **Sorted Set Implementation**: Dual structure containing SkipList + HashTable.\n4. **Distributed Locking (Redlock)**: Using `SET key val NX PX 30000` with unique random tokens.\n5. **Cluster Sharding**: 16,384 hash slots with CRC16 hashing and hash tags.\n\n🚀 You have completed the complete Redis In-Memory Architecture track!\n"
+            "content": "# 18 — High-Yield Redis Systems Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **`KEYS *` in Production**: Blocks all client queries; use non-blocking `SCAN`.\n2. **BigKeys Memory Spikes**: Large lists/hashes cause latency spikes during deletion (use `UNLINK` instead of `DEL`).\n3. **AOF Fsync Bottlenecks**: Heavy disk I/O can block the main thread if `appendfsync always` is used.\n4. **Hash Tag Routing**: Cross-slot multi-key operations fail in cluster unless protected by `{tag}`.\n5. **Pub/Sub Memory Buffers**: Slow subscribers can cause Redis output buffers to balloon.\n6. **Client Connection Overhead**: Each connection consumes buffer memory.\n7. **COW Memory Overhead on `bgsave`**: High write load during fork doubles physical RAM usage.\n8. **Sentinel Split-Brain**: Requires `min-replicas-to-write 1` to prevent split-brain writes.\n9. **HyperLogLog Error Rate**: Cannot retrieve original elements, only count estimates.\n10. **Single-Threaded CPU Limit**: Vertical scaling requires running multiple Redis instances per machine.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master Redis Systems Drill ===\"\necho \"1. SkipList vs Red-Black Tree in ZSET\"\necho \"2. XFetch Cache Stampede mitigation\"\necho \"3. Redis Cluster 16384 hash slots\"\necho \"4. Non-blocking UNLINK vs blocking DEL\"\necho \"🚀 You have completed the comprehensive Redis Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Master Drill: Implement an atomic sliding window rate limiter in Lua.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nLUA_RATE_LIMITER=\"\nlocal key = KEYS[1]\nlocal now = tonumber(ARGV[1])\nlocal window = tonumber(ARGV[2])\nlocal limit = tonumber(ARGV[3])\n\nredis.call('ZREMRANGEBYSCORE', key, '-inf', now - window)\nlocal current = redis.call('ZCARD', key)\nif current < limit then\n    redis.call('ZADD', key, now, now)\n    redis.call('EXPIRE', key, window)\n    return 1\nelse\n    return 0\nend\n\"\n\nALLOWED=$(redis-cli EVAL \"$LUA_RATE_LIMITER\" 1 rate:user:101 1000 60 5)\necho \"Rate limiter result (1=Allowed, 0=Denied): $ALLOWED\"\n"
+              }
+            ]
           }
         ]
       }

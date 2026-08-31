@@ -1,8 +1,8 @@
 {
   "id": "tool/terraform",
-  "name": "Terraform & Infrastructure as Code (IaC) Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive Terraform & OpenTofu curriculum from HCL syntax, resource graph, and remote state locking (S3/DynamoDB) to reusable modules, dynamic blocks, import blocks, and native testing",
+  "name": "Terraform Infrastructure as Code & State Mastery",
+  "version": "1.2.0",
+  "description": "Complete high-depth Terraform curriculum covering HCL2, remote S3 backends with DynamoDB locking, count vs for_each, dynamic blocks, modules, import blocks, and native testing",
   "root": {
     "name": "terraform-workspace",
     "type": "directory",
@@ -10,203 +10,436 @@
       {
         "name": "main.tf",
         "type": "file",
-        "content": "terraform {\n  required_version = \">= 1.6.0\"\n  required_providers {\n    local = {\n      source  = \"hashicorp/local\"\n      version = \"~> 2.4.0\"\n    }\n  }\n}\n\nprovider \"local\" {}\n\nresource \"local_file\" \"welcome\" {\n  filename = \"${path.module}/trak_infra.txt\"\n  content  = \"Welcome to Trak Terraform Workspace! Infrastructure provisioned successfully.\\n\"\n}\n\noutput \"file_path\" {\n  value       = local_file.welcome.filename\n  description = \"Path to the provisioned file\"\n}\n"
+        "content": "terraform {\n  required_version = \">= 1.6.0\"\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 5.0\"\n    }\n  }\n}\n\nprovider \"aws\" {\n  region = var.aws_region\n}\n\nlocals {\n  common_tags = {\n    Project     = \"Trak\"\n    Environment = var.environment\n    ManagedBy   = \"Terraform\"\n  }\n}\n\nresource \"aws_s3_bucket\" \"app_storage\" {\n  bucket_prefix = \"trak-app-storage-\"\n  tags          = local.common_tags\n}\n"
+      },
+      {
+        "name": "variables.tf",
+        "type": "file",
+        "content": "variable \"aws_region\" {\n  type        = string\n  default     = \"us-east-1\"\n  description = \"Target AWS Region\"\n}\n\nvariable \"environment\" {\n  type        = string\n  default     = \"production\"\n  description = \"Deployment environment\"\n  validation {\n    condition     = contains([\"development\", \"staging\", \"production\"], var.environment)\n    error_message = \"Environment must be development, staging, or production.\"\n  }\n}\n"
+      },
+      {
+        "name": "outputs.tf",
+        "type": "file",
+        "content": "output \"bucket_arn\" {\n  value       = aws_s3_bucket.app_storage.arn\n  description = \"ARN of the provisioned S3 bucket\"\n}\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🌍 Complete Terraform & Infrastructure as Code (IaC) Track\n\nWelcome to your full Terraform learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-iac-foundations` | **IaC & Toolchain** | Declarative vs Imperative, HCL2 syntax, Terraform / OpenTofu CLI |\n| `01-hcl-syntax-blocks-and-types` | **HCL Syntax & Types** | Block types (`terraform`, `provider`, `resource`, `data`), data types (`map`, `object`) |\n| `02-providers-and-registry` | **Providers & Aliases** | `required_providers`, multi-region provider aliases, Terraform Registry |\n| `03-resources-and-dependencies` | **Resources & Graph** | Implicit vs explicit (`depends_on`), `lifecycle` (`create_before_destroy`, `ignore_changes`) |\n| `04-variables-outputs-and-locals` | **Variables & Outputs** | `variables.tf`, `terraform.tfvars`, type constraints, custom validations, `sensitive` |\n| `05-state-management-and-backends` | **State & S3/DynamoDB** | `terraform.tfstate`, remote backend state locking, `state mv`, `state rm` |\n| `06-execution-workflow-and-plan` | **Workflow & Plan** | `init`, `validate`, `fmt`, `plan -out=tfplan`, `apply`, `destroy`, `-target` |\n| `07-data-sources-and-remote-state` | **Data Sources** | Reading live cloud infrastructure, `data \"terraform_remote_state\"` |\n| `08-expressions-functions-and-loops` | **Loops & Functions** | `for_each` vs `count`, `for` expressions, `splat` (`*`), `lookup`, `merge`, `try` |\n| `09-dynamic-blocks-and-meta-arguments` | **Dynamic Blocks** | `dynamic \"ingress\" { for_each = ... }`, nested attribute generation |\n| `10-modules-reusability-and-composition` | **Modules Architecture**| Root vs Child modules, module inputs/outputs, version pinning |\n| `11-workspaces-and-environments` | **Workspaces** | CLI workspaces (`terraform workspace new prod`), directory separation patterns |\n| `12-importing-existing-infrastructure` | **Import Blocks** | Terraform 1.5+ declarative `import {}` blocks, reverse engineering code |\n| `13-security-and-secret-management` | **Secret Safety** | Vault integration, KMS, AWS Secrets Manager, Checkov/tfsec static scanning |\n| `14-policy-as-code-sentinel-opa` | **Policy as Code** | Open Policy Agent (OPA) / Conftest, Sentinel guardrails |\n| `15-testing-and-validation-frameworks`| **Native Testing** | Terraform 1.6+ native testing (`.tftest.hcl`), mock providers, assertions |\n| `16-production-gitops-and-atlantis` | **GitOps Automation** | Atlantis PR automation, GitHub Actions CI/CD pipeline for Terraform |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 Terraform interview questions, drift detection, state corruption recovery |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Initialize working directory\nterraform init\n\n# Review execution plan\nterraform plan\n\n# Apply configuration\nterraform apply -auto-approve\n```\n"
+        "content": "# 🌍 Terraform Infrastructure as Code & State Mastery Track\n\nWelcome to the **Terraform Infrastructure as Code & State Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering HCL2 syntax, remote backends (S3 + DynamoDB state locking), `count` vs `for_each` edge cases, dynamic blocks, custom reusable modules, declarative `import` blocks, and native testing.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-iac-architecture` | Declarative IaC & Core | Declarative model, Core vs Provider plugins, HCL2 parser, `terraform version` |\n| `01-providers-and-versions` | Provider Configuration | `required_providers`, version pinning (`~> 5.0`), multi-region provider aliases |\n| `02-resources-and-data-sources` | Resources & Lifecycle | `resource` vs `data`, `depends_on`, `create_before_destroy`, `ignore_changes` |\n| `03-variables-outputs-and-locals` | Variables, Locals & Types | Input validations, sensitive variables, `locals` DRY patterns, outputs |\n| `04-state-management-and-backends` | Remote State & Locking | `terraform.tfstate`, S3 backend, DynamoDB distributed locking, state migration |\n| `05-state-manipulation-cli` | State CLI Operations | `state list`, `state show`, `state mv`, `state rm`, repairing corrupted state |\n| `06-expressions-functions-and-loops` | HCL Expressions & Loops | `count` vs `for_each`, splat `[*]`, `for` loops, `can()`, `try()`, `cidrsubnet()` |\n| `07-dynamic-blocks` | Dynamic Blocks | `dynamic \"tag\" { for_each = ... }`, nested conditional block generation |\n| `08-reusable-modules` | Module Engineering | Standard structure, root vs child modules, publishing, version constraints |\n| `09-workspaces-and-environments` | CLI Workspaces | `terraform workspace new`, workspace state isolation, multi-env patterns |\n| `10-plan-apply-destroy-lifecycle` | Plan & Apply Lifecycle | `init -upgrade`, `validate`, `plan -out=tfplan`, `apply tfplan`, targeted destroy |\n| `11-resource-import-and-state-recovery` | Declarative Import Blocks | TF 1.5+ `import { to = ... id = ... }`, generating HCL from live cloud |\n| `12-provisioners-and-null-resources` | Provisioners & terraform_data | `null_resource`, `terraform_data` triggers_replace, `local-exec` caveats |\n| `13-security-and-secret-management` | Security & Secrets | Sensitive attributes, Vault integration, KMS state encryption at rest |\n| `14-policy-as-code-sentinel-and-opa` | Policy-as-Code & Scanning | OPA Rego policies, tfsec, Checkov, Trivy static IaC vulnerability checks |\n| `15-testing-and-validation` | Native Terraform Tests | Terraform 1.6+ `.tftest.hcl`, mock providers, unit testing assertions |\n| `16-ci-cd-automation-atlantis-and-actions` | CI/CD & Atlantis | Atlantis pull-request plans, GitHub Actions automation, plan approvals |\n| `17-drift-detection-and-remediation` | Drift Detection | Out-of-band drift discovery, scheduled reconciliation in Terraform Cloud |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Terraform SRE gotchas + Production Reusable Module Design Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `main.tf` — Fully runnable concept demonstration.\n- `exercise/starter.tf` — Hands-on problem with `TODO` markers.\n- `exercise/solution.tf` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-iac-foundations",
+        "name": "00-setup-and-iac-architecture",
         "type": "directory",
         "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 00 — Terraform Architecture & Declarative IaC\n\n## 🎯 Declarative vs Imperative\n- **Imperative**: You write the step-by-step instructions to create resources.\n- **Declarative (Terraform)**: You declare the target end state; Terraform computes the dependency graph and makes the minimal necessary API calls to reach that state.\n"
+          },
           {
             "name": "main.tf",
             "type": "file",
-            "content": "terraform {\n  required_version = \">= 1.6.0\"\n}\n"
+            "content": "terraform {\n  required_version = \">= 1.6.0\"\n}\n\noutput \"terraform_status\" {\n  value = \"Terraform Core Engine Initialized Successfully\"\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 00 - Terraform Setup & Foundations 🛠️\n\n- **Declarative IaC**: You define the desired end state (`What`), and Terraform computes the graph of dependency actions to reach that state (`How`).\n- **Idempotency**: Running `terraform apply` multiple times produces the exact same infrastructure without unwanted side effects.\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Define a terraform configuration block requiring Terraform version >= 1.5.0.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "terraform {\n  required_version = \">= 1.5.0\"\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-hcl-syntax-blocks-and-types",
+        "name": "01-providers-and-versions",
         "type": "directory",
         "children": [
           {
-            "name": "variables.tf",
+            "name": "README.md",
             "type": "file",
-            "content": "variable \"server_config\" {\n  type = object({\n    instance_type = string\n    port          = number\n    tags          = map(string)\n    is_production = bool\n  })\n  default = {\n    instance_type = \"t3.micro\"\n    port          = 8080\n    tags          = { Environment = \"Dev\", ManagedBy = \"Terraform\" }\n    is_production = false\n  }\n}\n"
+            "content": "# 01 — Provider Architecture & Aliases\n\n## 🎯 Multi-Region Aliases\n```hcl\nprovider \"aws\" {\n  alias  = \"west\"\n  region = \"us-west-2\"\n}\n\nresource \"aws_s3_bucket\" \"replica\" {\n  provider = aws.west\n  bucket   = \"my-west-bucket\"\n}\n```\n"
           },
           {
-            "name": "README.md",
+            "name": "main.tf",
             "type": "file",
-            "content": "# 01 - HCL Syntax & Structural Types\n"
-          }
-        ]
-      },
-      {
-        "name": "02-providers-and-registry",
-        "type": "directory",
-        "children": [
-          {
-            "name": "providers.tf",
-            "type": "file",
-            "content": "terraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"~> 5.0\"\n    }\n  }\n}\n\n# Primary Provider\nprovider \"aws\" {\n  region = \"us-east-1\"\n}\n\n# Multi-region Alias Provider\nprovider \"aws\" {\n  alias  = \"eu_west\"\n  region = \"eu-west-1\"\n}\n"
+            "content": "terraform {\n  required_providers {\n    random = {\n      source  = \"hashicorp/random\"\n      version = \"~> 3.5\"\n    }\n  }\n}\n\nresource \"random_pet\" \"server_name\" {\n  length = 2\n}\n\noutput \"generated_name\" {\n  value = random_pet.server_name.id\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 02 - Providers & Multi-Region Aliases\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Configure an AWS provider with an alias 'eu_central' pointing to eu-central-1.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "provider \"aws\" {\n  alias  = \"eu_central\"\n  region = \"eu-central-1\"\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-resources-and-dependencies",
+        "name": "02-resources-and-data-sources",
         "type": "directory",
         "children": [
           {
-            "name": "lifecycle.tf",
+            "name": "README.md",
             "type": "file",
-            "content": "resource \"local_file\" \"example\" {\n  filename = \"${path.module}/sample.txt\"\n  content  = \"Immutable infrastructure content\"\n\n  lifecycle {\n    create_before_destroy = true\n    prevent_destroy       = false\n    ignore_changes        = []\n  }\n}\n"
+            "content": "# 02 — Resources, Data Sources & Lifecycle Hooks\n\n## 🎯 Lifecycle Hooks\n- `create_before_destroy`: Prevents zero-downtime gaps by creating new resource before deleting old.\n- `prevent_destroy`: Safety net preventing accidental deletion of stateful databases.\n- `ignore_changes`: Prevents Terraform from reverting attributes modified outside IaC.\n"
           },
           {
-            "name": "README.md",
+            "name": "main.tf",
             "type": "file",
-            "content": "# 03 - Resource Graph & Lifecycle Meta-Arguments\n"
-          }
-        ]
-      },
-      {
-        "name": "04-variables-outputs-and-locals",
-        "type": "directory",
-        "children": [
-          {
-            "name": "variables.tf",
-            "type": "file",
-            "content": "variable \"db_password\" {\n  type        = string\n  description = \"Database master password\"\n  sensitive   = true\n\n  validation {\n    condition     = length(var.db_password) >= 8\n    error_message = \"The db_password must be at least 8 characters in length.\"\n  }\n}\n\nlocals {\n  common_tags = {\n    Project   = \"Trak\"\n    ManagedBy = \"Terraform\"\n  }\n}\n"
+            "content": "resource \"random_id\" \"db_suffix\" {\n  byte_length = 4\n  lifecycle {\n    prevent_destroy = false\n  }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 04 - Variables, Validations & Sensitive Values\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Add a lifecycle block to ignore changes on tags.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "lifecycle {\n  ignore_changes = [\n    tags,\n  ]\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-state-management-and-backends",
+        "name": "03-variables-outputs-and-locals",
         "type": "directory",
         "children": [
           {
-            "name": "backend.tf",
+            "name": "README.md",
             "type": "file",
-            "content": "terraform {\n  # Production Remote Backend with State Locking\n  # backend \"s3\" {\n  #   bucket         = \"my-org-tfstate\"\n  #   key            = \"prod/network/terraform.tfstate\"\n  #   region         = \"us-east-1\"\n  #   dynamodb_table = \"terraform-state-lock\"\n  #   encrypt        = true\n  # }\n}\n"
+            "content": "# 03 — Variables, Validations & Sensitive Outputs\n\n## 🎯 Custom Validation Rule\n```hcl\nvariable \"port\" {\n  type = number\n  validation {\n    condition     = var.port >= 1024 && var.port <= 65535\n    error_message = \"Port must be an unprivileged user port between 1024 and 65535.\"\n  }\n}\n```\n"
           },
           {
-            "name": "README.md",
+            "name": "main.tf",
             "type": "file",
-            "content": "# 05 - State Management & Remote State Locking\n\n- `terraform.tfstate`: Source of truth mapping declared resources to real-world cloud IDs.\n- **DynamoDB State Locking**: Prevents concurrent `terraform apply` executions from corrupting the state file.\n"
-          }
-        ]
-      },
-      {
-        "name": "06-execution-workflow-and-plan",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 06 - Standard Execution Workflow\n\n```bash\n# 1. Format code to canonical style\nterraform fmt -recursive\n\n# 2. Validate syntax and internal consistency\nterraform validate\n\n# 3. Generate and save deterministic execution plan\nterraform plan -out=tfplan\n\n# 4. Apply exact plan file\nterraform apply tfplan\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "07-data-sources-and-remote-state",
-        "type": "directory",
-        "children": [
-          {
-            "name": "data.tf",
-            "type": "file",
-            "content": "# Query existing VPC without managing its lifecycle\n# data \"aws_vpc\" \"default\" {\n#   default = true\n# }\n"
+            "content": "variable \"db_password\" {\n  type      = string\n  sensitive = true\n  default   = \"SuperSecretPassword123!\"\n}\n\noutput \"safe_status\" {\n  value = \"Database credentials configured securely.\"\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 07 - Data Sources\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Define a local value 'tier' that evaluates to 'premium' if var.environment == 'production', else 'standard'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "locals {\n  tier = var.environment == \"production\" ? \"premium\" : \"standard\"\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-expressions-functions-and-loops",
+        "name": "04-state-management-and-backends",
         "type": "directory",
         "children": [
           {
-            "name": "loops.tf",
+            "name": "README.md",
             "type": "file",
-            "content": "locals {\n  users = [\"alice\", \"bob\", \"charlie\"]\n\n  # Transform list to map using for expression\n  user_map = { for idx, u in local.users : u => idx }\n}\n"
+            "content": "# 04 — Remote State & Distributed State Locking\n\n## 🎯 S3 + DynamoDB Backend Architecture\n- **S3**: Stores encrypted state snapshots and history.\n- **DynamoDB**: Implements distributed mutex locking (LockID attribute) preventing concurrent apply collisions.\n"
           },
           {
-            "name": "README.md",
+            "name": "main.tf",
             "type": "file",
-            "content": "# 08 - Loops (for_each vs count)\n\nPrefer `for_each` (keyed on distinct string identifiers) over `count` (keyed on numeric array indices) because deleting an item in the middle of a `count` list causes Terraform to destroy and recreate all subsequent resources.\n"
-          }
-        ]
-      },
-      {
-        "name": "09-dynamic-blocks-and-meta-arguments",
-        "type": "directory",
-        "children": [
-          {
-            "name": "dynamic_example.tf",
-            "type": "file",
-            "content": "locals {\n  ingress_rules = [\n    { port = 80,  description = \"HTTP\" },\n    { port = 443, description = \"HTTPS\" }\n  ]\n}\n\n# Example Dynamic Block Structure\n# resource \"aws_security_group\" \"web\" {\n#   name = \"web-sg\"\n#   dynamic \"ingress\" {\n#     for_each = local.ingress_rules\n#     content {\n#       from_port   = ingress.value.port\n#       to_port     = ingress.value.port\n#       protocol    = \"tcp\"\n#       cidr_blocks = [\"0.0.0.0/0\"]\n#     }\n#   }\n# }\n"
+            "content": "terraform {\n  # Example Remote S3 Backend Configuration\n  # backend \"s3\" {\n  #   bucket         = \"my-terraform-state-prod\"\n  #   key            = \"global/s3/terraform.tfstate\"\n  #   region         = \"us-east-1\"\n  #   dynamodb_table = \"terraform-locks\"\n  #   encrypt        = true\n  # }\n}\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - Dynamic Blocks\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Configure an S3 backend block with encryption enabled.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "terraform {\n  backend \"s3\" {\n    bucket  = \"trak-state-bucket\"\n    key     = \"prod/state.tfstate\"\n    region  = \"us-east-1\"\n    encrypt = true\n  }\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-modules-reusability-and-composition",
+        "name": "05-state-manipulation-cli",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Reusable Modules Architecture\n\n```\nmodules/\n  vpc/\n    main.tf\n    variables.tf\n    outputs.tf\n```\n\n```hcl\nmodule \"vpc\" {\n  source     = \"./modules/vpc\"\n  cidr_block = \"10.0.0.0/16\"\n}\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "11-workspaces-and-environments",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Workspaces & Environment Separation\n\n```bash\nterraform workspace new dev\nterraform workspace select dev\nterraform workspace list\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "12-importing-existing-infrastructure",
-        "type": "directory",
-        "children": [
-          {
-            "name": "import.tf",
-            "type": "file",
-            "content": "# Terraform 1.5+ Declarative Import Block\n# import {\n#   to = aws_s3_bucket.legacy_data\n#   id = \"my-existing-bucket-name\"\n# }\n"
+            "content": "# 05 — State Management CLI Operations\n\n## 🎯 Crucial State Commands\n- `terraform state list`: List all resources tracked in state.\n- `terraform state show <addr>`: Inspect attributes of single resource.\n- `terraform state mv <old> <new>`: Refactor resource names without recreating them!\n- `terraform state rm <addr>`: Remove resource from state without destroying real cloud resource.\n"
           },
           {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 05: State CLI Commands ===\"\necho \"terraform state list\"\necho \"terraform state mv aws_instance.web aws_instance.frontend\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to remove a resource from state management.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: terraform state rm aws_s3_bucket.legacy_data\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "06-expressions-functions-and-loops",
+        "type": "directory",
+        "children": [
+          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Declarative Import Blocks\n"
+            "content": "# 06 — Loops: `count` vs `for_each`\n\n## 🎯 Why `for_each` is Safer Than `count`\n- With `count`, removing an item from the middle of a list re-indexes all subsequent items, triggering unintended destroys and recreations.\n- With `for_each`, each resource is keyed by unique map/set key (`aws_instance.server[\"node-1\"]`).\n"
+          },
+          {
+            "name": "main.tf",
+            "type": "file",
+            "content": "locals {\n  subnets = toset([\"subnet-a\", \"subnet-b\", \"subnet-c\"])\n}\n\nresource \"random_id\" \"subnet_ids\" {\n  for_each    = local.subnets\n  byte_length = 2\n}\n\noutput \"all_subnet_hashes\" {\n  value = { for k, v in random_id.subnet_ids : k => v.hex }\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Write a for expression that filters numbers greater than 10 from list [4, 12, 8, 19].\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "locals {\n  filtered = [for n in [4, 12, 8, 19] : n if n > 10]\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-dynamic-blocks",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Dynamic Blocks (`dynamic`)\n\n## 🎯 Generating Nested Blocks Dynamically\n```hcl\nresource \"aws_security_group\" \"web\" {\n  name = \"web-sg\"\n  dynamic \"ingress\" {\n    for_each = var.service_ports\n    content {\n      from_port   = ingress.value\n      to_port     = ingress.value\n      protocol    = \"tcp\"\n      cidr_blocks = [\"0.0.0.0/0\"]\n    }\n  }\n}\n```\n"
+          },
+          {
+            "name": "main.tf",
+            "type": "file",
+            "content": "variable \"ingress_ports\" {\n  type    = list(number)\n  default = [80, 443, 8080]\n}\n\noutput \"configured_ports\" {\n  value = var.ingress_ports\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Write dynamic block structure for a hypothetical security group resource.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "dynamic \"ingress\" {\n  for_each = var.ingress_ports\n  content {\n    from_port = ingress.value\n    to_port   = ingress.value\n    protocol  = \"tcp\"\n  }\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-reusable-modules",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Custom Reusable Module Engineering\n\n## 🎯 Standard Module File Structure\n- `main.tf`: Resources.\n- `variables.tf`: Input parameter contracts.\n- `outputs.tf`: Return values for parent consumers.\n- `README.md`: Documentation.\n"
+          },
+          {
+            "name": "main.tf",
+            "type": "file",
+            "content": "# Example Module Invocation\nmodule \"storage\" {\n  source      = \"./modules/s3_storage\"\n  bucket_name = \"trak-reusable-module-bucket\"\n  environment = \"production\"\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Call a remote git module pinned to release tag v1.2.0.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "module \"vpc\" {\n  source  = \"git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=v5.1.0\"\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-workspaces-and-environments",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Terraform Workspaces\n\n## 🎯 Workspace Expressions\n`${terraform.workspace}` provides the active workspace name (e.g. `dev`, `staging`, `prod`).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 09: Workspaces Commands ===\"\necho \"terraform workspace list\"\necho \"terraform workspace new staging\"\necho \"terraform workspace select staging\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to create and switch to workspace 'production'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: terraform workspace new production || terraform workspace select production\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-plan-apply-destroy-lifecycle",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Plan & Apply Execution Lifecycle\n\n## 🎯 Production Best Practice\nAlways save the plan artifact to a file and execute that exact plan:\n```bash\nterraform plan -out=tfplan\nterraform apply tfplan\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 10: Lifecycle Commands ===\"\necho \"terraform init -upgrade\"\necho \"terraform validate\"\necho \"terraform plan -out=tfplan\"\necho \"terraform apply tfplan\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Run syntax validation on the current directory.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nterraform validate 2>/dev/null || echo \"terraform validate\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-resource-import-and-state-recovery",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Declarative Import Blocks (Terraform 1.5+)\n\n## 🎯 Declarative Import Syntax\n```hcl\nimport {\n  to = aws_s3_bucket.legacy\n  id = \"legacy-production-bucket-name\"\n}\n```\n"
+          },
+          {
+            "name": "main.tf",
+            "type": "file",
+            "content": "# Terraform 1.5+ Import Block Demo\n# import {\n#   to = aws_security_group.main\n#   id = \"sg-0123456789abcdef0\"\n# }\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Write an import block to import existing AWS VPC 'vpc-12345' into resource aws_vpc.main.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "import {\n  to = aws_vpc.main\n  id = \"vpc-12345\"\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-provisioners-and-null-resources",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Provisioners & `terraform_data`\n\n## 🎯 `terraform_data` (Replaces `null_resource`)\nUsed to trigger arbitrary actions or lifecycle updates when input values change.\n"
+          },
+          {
+            "name": "main.tf",
+            "type": "file",
+            "content": "resource \"terraform_data\" \"cluster_trigger\" {\n  input = var.environment\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Configure triggers_replace on terraform_data.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "resource \"terraform_data\" \"redeploy\" {\n  triggers_replace = [\n    var.environment\n  ]\n}\n"
+              }
+            ]
           }
         ]
       },
@@ -217,56 +450,188 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Security & Static Scanning\n\n```bash\n# Scan Terraform code for security misconfigurations\ncheckov -d .\ntfsec .\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "14-policy-as-code-sentinel-opa",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 14 - Policy as Code (OPA & Sentinel)\n"
-          }
-        ]
-      },
-      {
-        "name": "15-testing-and-validation-frameworks",
-        "type": "directory",
-        "children": [
-          {
-            "name": "tests.tftest.hcl",
-            "type": "file",
-            "content": "# Terraform 1.6+ Native Test File\nrun \"verify_welcome_file_created\" {\n  command = plan\n\n  assert {\n    condition     = output.file_path != \"\"\n    error_message = \"File path output must not be empty\"\n  }\n}\n"
+            "content": "# 13 — Security & Secret Management\n\n## 🎯 State File Security\nTerraform state files store plain-text values of all resource attributes (including sensitive variables!).\n- Always encrypt backend buckets with KMS.\n- Restrict S3 bucket IAM access.\n"
           },
           {
-            "name": "README.md",
+            "name": "main.tf",
             "type": "file",
-            "content": "# 15 - Native Terraform Testing (`terraform test`)\n\n```bash\nterraform test\n```\n"
+            "content": "output \"security_advisory\" {\n  value = \"Ensure S3 backend buckets have aws:kms encryption and public access blocked.\"\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Mark variable 'api_secret' as sensitive.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "variable \"api_secret\" {\n  type      = string\n  sensitive = true\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-production-gitops-and-atlantis",
+        "name": "14-policy-as-code-sentinel-and-opa",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Production GitOps with Atlantis & CI/CD\n"
+            "content": "# 14 — Policy-as-Code & Static Analysis\n\n## 🎯 Tooling Matrix\n- **Checkov / tfsec / Trivy**: Scans `.tf` files for security misconfigurations before deployment.\n- **Open Policy Agent (OPA) / Sentinel**: Enforces organizational governance rules on `tfplan.json`.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: IaC Security Scanning ===\"\necho \"trivy config .\"\necho \"checkov -d .\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to convert terraform plan binary to JSON for policy checking.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: terraform show -json tfplan > tfplan.json\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "15-testing-and-validation",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield Terraform Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **count vs for_each**: `count` relies on integer indices (causing cascading recreations on deletion); `for_each` binds resources to immutable string map keys.\n2. **State Locking**: Prevents concurrent runs by acquiring an exclusive lock in DynamoDB before modifying state.\n3. **Drift Detection**: `terraform plan` refreshes state against real-world cloud APIs to identify changes made outside Terraform.\n4. **Terraform 1.5+ import block**: Allows declarative, version-controlled resource imports and automatic HCL code generation.\n5. **Sensitive outputs and state**: `sensitive = true` masks values in CLI logs, but values remain unencrypted in raw `terraform.tfstate` JSON (requiring KMS-encrypted remote backends).\n\n🚀 You have completed the complete Terraform & IaC Mastery track!\n"
+            "content": "# 15 — Native Terraform Testing (Terraform 1.6+)\n\n## 🎯 `.tftest.hcl` Files\n```hcl\nrun \"verify_bucket_prefix\" {\n  command = plan\n  assert {\n    condition     = startswith(aws_s3_bucket.app_storage.bucket_prefix, \"trak-\")\n    error_message = \"Bucket prefix must start with trak-\"\n  }\n}\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Running Terraform Native Tests ===\"\necho \"terraform test\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Write a test assertion verifying var.aws_region is 'us-east-1'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "run \"check_region\" {\n  command = plan\n  assert {\n    condition     = var.aws_region == \"us-east-1\"\n    error_message = \"Target region must default to us-east-1\"\n  }\n}\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-ci-cd-automation-atlantis-and-actions",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Atlantis & GitHub Actions Automation\n\n## 🎯 Atlantis PR Workflow\n1. Developer opens Pull Request.\n2. Atlantis runs `terraform plan` and posts formatted diff directly as a PR comment.\n3. Reviewer comments `atlantis apply` to trigger deployment.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 16: Automated PR Plan Workflow ===\"\necho \"Atlantis Command: atlantis plan -d live/prod\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Generate a minimal GitHub Actions step running terraform plan.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"- name: Terraform Plan\"\necho \"  run: terraform plan -no-color -out=tfplan\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-drift-detection-and-remediation",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Infrastructure Drift Detection\n\n## 🎯 Detecting Out-of-Band Changes\n```bash\nterraform plan -detailed-exitcode -refresh-only\n```\n- Exit code `0`: No changes.\n- Exit code `2`: Drift detected!\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Drift Detection Check ===\"\necho \"terraform plan -detailed-exitcode\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to update state file with real cloud state without modifying cloud resources (refresh-only).\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: terraform apply -refresh-only -auto-approve\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield Terraform & IaC Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **State Locking Deadlocks**: If CI crashed mid-run holding DynamoDB lock, unlock manually with `terraform force-unlock <LOCK-ID>`.\n2. **`count` vs `for_each` Refactor**: Changing `count` to `for_each` in existing state requires `terraform state mv` to prevent recreation.\n3. **Sensitive Data in State**: Outputting or referencing secrets writes them unencrypted into `.tfstate` JSON.\n4. **Provider Alias in Modules**: Modules declaring multi-region providers must declare `configuration_aliases = [ aws.west ]` in `terraform` block.\n5. **Implicit vs Explicit `depends_on`**: Prefer implicit attribute references (`vpc_id = aws_vpc.main.id`) over hardcoded `depends_on`.\n6. **`prevent_destroy` Limitation**: Does not protect resources if the enclosing module or state is removed.\n7. **Null Resource Deprecation**: Replaced by first-class `terraform_data` in TF 1.4+.\n8. **Targeted Apply Dangers**: `terraform apply -target=...` creates state drift and breaks DAG dependency resolution.\n9. **Tainted Resources**: `terraform taint` is deprecated; use `terraform apply -replace=aws_instance.web`.\n10. **Dynamic Blocks Readability**: Overusing `dynamic` blocks makes HCL unreadable; use custom child modules instead.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master Terraform SRE Drill ===\"\necho \"1. S3 + DynamoDB state locking architecture\"\necho \"2. Declarative import blocks (TF 1.5+)\"\necho \"3. Native .tftest.hcl test suites (TF 1.6+)\"\necho \"4. count vs for_each state lifecycle\"\necho \"🚀 You have completed the comprehensive Terraform Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.tf",
+                "type": "file",
+                "content": "# TODO: Master Drill: Define a complete reusable VPC module skeleton with CIDR variable validation.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.tf",
+                "type": "file",
+                "content": "variable \"vpc_cidr\" {\n  type        = string\n  default     = \"10.0.0.0/16\"\n  description = \"VPC IP CIDR Block\"\n  validation {\n    condition     = can(cidrnetmask(var.vpc_cidr))\n    error_message = \"Must be a valid IPv4 CIDR block.\"\n  }\n}\n\nresource \"aws_vpc\" \"main\" {\n  cidr_block           = var.vpc_cidr\n  enable_dns_hostnames = true\n  enable_dns_support   = true\n  tags = {\n    Name = \"trak-production-vpc\"\n  }\n}\n"
+              }
+            ]
           }
         ]
       }

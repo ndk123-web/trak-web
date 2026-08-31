@@ -1,8 +1,8 @@
 {
   "id": "lang/typescript",
-  "name": "TypeScript Mastery & Type Gymnastics",
-  "version": "1.0.0",
-  "description": "Complete end-to-end TypeScript curriculum from tsconfig strictness, discriminated unions, and type predicates to conditional types, infer, mapped types, Zod, and fullstack typing",
+  "name": "TypeScript Architecture & Type Systems Mastery Track",
+  "version": "1.2.0",
+  "description": "Complete high-depth TypeScript curriculum covering type-level programming, conditional types, infer, template literals, Zod schema validation, and runtime mechanics",
   "root": {
     "name": "typescript-workspace",
     "type": "directory",
@@ -10,409 +10,623 @@
       {
         "name": "package.json",
         "type": "file",
-        "content": "{\n  \"name\": \"typescript-workspace\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"build\": \"tsc\",\n    \"test\": \"node --test\"\n  },\n  \"devDependencies\": {\n    \"typescript\": \"^5.4.0\",\n    \"@types/node\": \"^20.11.0\"\n  }\n}\n"
+        "content": "{\n  \"name\": \"typescript-workspace\",\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"build\": \"tsc\"\n  },\n  \"devDependencies\": {\n    \"typescript\": \"^5.4.0\"\n  }\n}\n"
       },
       {
         "name": "tsconfig.json",
         "type": "file",
-        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"noUncheckedIndexedAccess\": true,\n    \"exactOptionalPropertyTypes\": true,\n    \"verbatimModuleSyntax\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true\n  },\n  \"include\": [\"**/*.ts\"]\n}\n"
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"exactOptionalPropertyTypes\": true,\n    \"noImplicitReturns\": true,\n    \"noFallthroughCasesInSwitch\": true,\n    \"skipLibCheck\": true\n  }\n}\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 🔷 Complete TypeScript Mastery & Type Gymnastics Track\n\nWelcome to your full TypeScript learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-toolchain` | **Setup & Toolchain** | Node.js, Bun, pnpm, `tsx`, `package.json` configurations |\n| `01-compiler-and-tsconfig` | **Compiler Mastery** | Strict flags: `strictNullChecks`, `noUncheckedIndexedAccess`, `verbatimModuleSyntax` |\n| `02-primitives-literals-satisfies` | **Primitives & Satisfies** | Literals, `as const` deep freezing, `satisfies` operator vs type annotations |\n| `03-top-bottom-special-types` | **Type Hierarchy Matrix** | `unknown` vs `any` vs `never` vs `void`, exhaustive checks with `never` |\n| `04-objects-aliases-interfaces` | **Objects & Interfaces** | `type` vs `interface`, declaration merging, index signatures, excess property checks |\n| `05-unions-intersections-discriminated` | **Discriminated Unions** | Union `|`, Intersection `&`, Tagged/Discriminated Unions, exhaustive pattern matching |\n| `06-type-narrowing-and-guards` | **Type Narrowing** | `typeof`, `instanceof`, `in`, user-defined type predicates (`val is Type`), `asserts` |\n| `07-functions-overloading-this` | **Functions & Overloads** | Function call signatures, function overloading, explicit `this` parameter typing |\n| `08-arrays-tuples-readonly` | **Arrays & Tuples** | `T[]`, labeled tuples `[id: number, name: string]`, `readonly` slices |\n| `09-generics-constraints-const` | **Generics Deep-Dive** | Generic functions/classes, `extends` constraints, `const` type parameters |\n| `10-index-types-keyof-typeof` | **Index Types & Keyof** | `keyof`, `typeof`, indexed access types `T[K]` |\n| `11-conditional-types-and-infer` | **Conditional Types & Infer** | `T extends U ? X : Y`, pattern matching and type extraction with `infer R` |\n| `12-mapped-types-key-remapping` | **Mapped Types** | `[K in keyof T]`, key remapping with `as`, modifier manipulation (`+readonly`, `-opt`) |\n| `13-template-literal-types` | **Template Literals** | Template literal types `${Route}/${string}`, `Capitalize`, `Uppercase` |\n| `14-utility-types-guide` | **Built-in Utility Types** | `Partial`, `Required`, `Readonly`, `Record`, `Pick`, `Omit`, `ReturnType`, `Awaited` |\n| `15-classes-oop-parameter-properties` | **Classes & OOP** | `public`/`private`/`protected`, `#private` fields, parameter properties, abstract classes |\n| `16-enums-vs-const-objects` | **Enums vs Const Objects** | Enums vs `as const` object map unions |\n| `17-modules-and-type-imports` | **Modules & Type Imports** | ESM/CJS interop, `import type`, `export type`, barrel files |\n| `18-ambient-declarations-dts` | **Declaration Files** | `.d.ts` ambient declarations, `declare module`, module augmentation |\n| `19-modern-tc39-decorators` | **TC39 Decorators** | Stage 3 class and method decorators |\n| `20-runtime-validation-zod` | **Runtime Schema Validation** | Zod integration, parsing, `z.infer<typeof Schema>` |\n| `21-frontend-and-fullstack-typing` | **Frontend Typing** | React component props, generic hooks, polymorphic components |\n| `22-testing-and-tooling` | **Testing & Quality** | Vitest / Node native test runner with TypeScript |\n| `23-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield TypeScript interview questions & type puzzles |\n\n---\n\n## 🛠️ How to Navigate & Run\n\nRun any module using `tsx` or `bun`:\n```bash\ncd 00-setup-and-toolchain\nnpx tsx index.ts\n```\n"
+        "content": "# 🔷 TypeScript Architecture & Type Systems Mastery Track\n\nWelcome to the **TypeScript Architecture & Type Systems Mastery Track** materialized by **Trak**.\n\nThis workspace covers TypeScript from fundamentals and discriminated unions to advanced type-level metaprogramming (`infer`, mapped types, conditional types, template literal types) and runtime validation.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-tsc-compiler` | Compiler & Config | `tsconfig.json`, `tsc`, `ES2022`, strict flags, AST checking |\n| `01-basics-primitive-types` | Type Primitives & Bottom Types | `string`, `number`, `boolean`, `any` vs `unknown` vs `never` |\n| `02-literal-types-and-unions` | Discriminated Unions | Type narrowing (`typeof`, `instanceof`, `in`), exhaustiveness checking |\n| `03-objects-interfaces-type-aliases` | Object Models | `interface` vs `type`, declaration merging, index signatures, `readonly` |\n| `04-tuples-and-enums` | Tuples & Const Assertions | `as const`, labeled tuples, string enums vs union objects |\n| `05-functions-and-signatures` | Functions & Overloads | Function overloads, `this` parameter typing, generic call signatures |\n| `06-generics-and-constraints` | Generics & Bounds | Generic constraints (`T extends Record<string, unknown>`), generic defaults |\n| `07-conditional-types-and-infer` | Conditional Types & `infer` | `T extends U ? X : Y`, unpacking Promises, extracting tuple types with `infer` |\n| `08-mapped-types-and-keyof` | Mapped Types & Metaprogramming | `keyof`, `in keyof`, template literal types, modifier removal (`-readonly`, `?`) |\n| `09-utility-types-deep-dive` | Standard Utility Types | `Partial`, `Required`, `Pick`, `Omit`, `Record`, `ReturnType`, `Awaited` |\n| `10-classes-and-inheritance` | OOP & Access Modifiers | `private` vs `#private` (hard private), abstract classes, parameter properties |\n| `11-decorators-and-metadata` | TC39 Decorators | Class decorators, method decorators, accessor decorators, metadata reflection |\n| `12-modules-namespaces-and-paths` | ESM & Type Imports | `import type`, re-exports, path mapping (`baseUrl`, `paths`) |\n| `13-error-handling-and-custom-errors` | Error Architecture | Discriminated `Result<T, E>` types, safe narrowing of `catch (err: unknown)` |\n| `14-async-promises-and-event-loop` | Async & Event Loop | `Promise<T>`, microtask vs macrotask queue, `Promise.allSettled` |\n| `15-schema-validation-with-zod` | Runtime Schema Validation | Zod schema parsing, `z.infer<typeof schema>`, transforms, custom refinements |\n| `16-testing-with-vitest` | Testing & Type Assertions | Unit testing, type-level assertions (`expectTypeOf`), test runners |\n| `17-monorepos-and-project-references` | Project References | Composite projects, `tsBuildInfo`, workspace resolution |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 TypeScript gotchas (bivariance, structural typing, `never` checks) |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.ts` — Fully runnable concept demonstration.\n- `exercise/starter.ts` — Hands-on problem with `TODO` markers.\n- `exercise/solution.ts` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-toolchain",
+        "name": "00-setup-and-tsc-compiler",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "console.log(\"=====================================================\");\nconsole.log(\"🔷 Welcome to 00 - TypeScript Setup & Toolchain Check!\");\nconsole.log(\"=====================================================\");\nconsole.log(\"✔ TypeScript environment is active and running cleanly!\");\nconsole.log(\"👉 Next: Head over to 01-compiler-and-tsconfig/index.ts\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - TypeScript Setup & Toolchains 🛠️\n\n## Fast Execution Engines:\n- **`tsx`**: `npx tsx src/index.ts` (Zero-config fast TypeScript runner for Node.js)\n- **`bun`**: `bun run src/index.ts` (Ultra-fast native TypeScript engine)\n"
+            "content": "# 00 — TypeScript Compiler (`tsc`) & `tsconfig.json`\n\n## 🎯 Learning Objectives\n- Understand TypeScript's two jobs: **Type Checking (Static Analysis)** and **Transpilation (Strip Types to JS)**\n- Configure essential strict compiler flags (`strict`, `noImplicitAny`, `strictNullChecks`)\n- Understand `moduleResolution: \"NodeNext\"` for modern Node.js ESM\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "function verifyToolchain(): string {\n  const version: string = \"5.4.0\";\n  const engine: string = \"TypeScript Static Type Engine\";\n  return `[✔] ${engine} (v${version}) ready!`;\n}\n\nconsole.log(\"=== 00: TypeScript Toolchain Verification ===\");\nconsole.log(verifyToolchain());\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Write a typed function 'getSystemInfo' that returns an object with:\n// os: string, cores: number, is64Bit: boolean.\n\nfunction getSystemInfo() {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "interface SystemInfo {\n  os: string;\n  cores: number;\n  is64Bit: boolean;\n}\n\nfunction getSystemInfo(): SystemInfo {\n  return {\n    os: \"linux\",\n    cores: 8,\n    is64Bit: true,\n  };\n}\n\nconst info = getSystemInfo();\nconsole.log(\"System Info:\", info);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-compiler-and-tsconfig",
+        "name": "01-basics-primitive-types",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// 1. noUncheckedIndexedAccess demonstration\nconst list: string[] = [\"alpha\", \"beta\"];\nconst item = list[0]; // Inferred type: string | undefined (Prevents runtime crashes!)\n\nif (item !== undefined) {\n  console.log(\"Safely accessed item:\", item.toUpperCase());\n}\n\n// 2. verbatimModuleSyntax enforces 'import type' for type-only imports\nconsole.log(\"=== 01: Compiler Mastery & Strict tsconfig.json ===\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - tsconfig.json Production Standards\n\nAlways enable:\n- `strict: true`\n- `noUncheckedIndexedAccess: true`\n- `exactOptionalPropertyTypes: true`\n- `verbatimModuleSyntax: true`\n"
+            "content": "# 01 — Primitive Types, Top & Bottom Types\n\n## 🎯 Type Hierarchy\n- **Top Types**: `unknown` (safe, requires narrowing before use) vs `any` (unsafe, disables type checker).\n- **Bottom Type**: `never` (represents impossible values / unreachable code).\n- **Primitives**: `string`, `number`, `boolean`, `symbol`, `bigint`, `null`, `undefined`.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "function processData(input: unknown): string {\n  // Type narrowing required for 'unknown'\n  if (typeof input === \"string\") {\n    return input.toUpperCase();\n  }\n  if (typeof input === \"number\") {\n    return input.toFixed(2);\n  }\n  throw new Error(\"Unsupported input type\");\n}\n\nconsole.log(\"=== 01: unknown vs any ===\");\nconsole.log(\"String:\", processData(\"trak\"));\nconsole.log(\"Number:\", processData(42.5678));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a safe JSON parser function 'safeJsonParse(raw: string): unknown'\n// that returns the parsed object or null on error without using 'any'.\n\nfunction safeJsonParse(raw: string): unknown {\n  // FILL HERE\n  return null;\n}\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "function safeJsonParse(raw: string): unknown {\n  try {\n    return JSON.parse(raw);\n  } catch {\n    return null;\n  }\n}\n\nconst valid = safeJsonParse('{\"version\": \"1.2.0\"}');\nconst invalid = safeJsonParse('invalid-json');\nconsole.log(\"Valid parse:\", valid);\nconsole.log(\"Invalid parse:\", invalid);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-primitives-literals-satisfies",
+        "name": "02-literal-types-and-unions",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "type RouteConfig = {\n  path: string;\n  method: \"GET\" | \"POST\";\n};\n\n// 1. 'satisfies' validates type but PRESERVES exact literal type without broadening\nconst route = {\n  path: \"/api/users\",\n  method: \"GET\",\n} satisfies RouteConfig;\n\nconsole.log(\"Exact method literal:\", route.method); // Inferred as 'GET'\n\n// 2. 'as const' creates deeply immutable readonly literal structures\nconst APP_CONFIG = {\n  port: 8080,\n  env: \"production\",\n  features: [\"auth\", \"billing\"],\n} as const;\n\nconsole.log(\"App Config (Readonly):\", APP_CONFIG);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - Primitives, Literals & Satisfies\n"
+            "content": "# 02 — Discriminated Unions & Exhaustiveness Checking\n\n## 🎯 Discriminated Unions\nA pattern where every variant in a union shares a common literal discriminator property (e.g. `type: \"success\" | \"error\"`).\n\n## 🧠 Exhaustive Checking with `never`\nUsing `assertNever(val: never)` in the `default` branch of a switch statement forces compile-time errors if a new union variant is added without being handled!\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "type NetworkState =\n  | { status: \"loading\" }\n  | { status: \"success\"; data: string[] }\n  | { status: \"error\"; message: string };\n\nfunction assertNever(x: never): never {\n  throw new Error(`Unhandled union variant: ${JSON.stringify(x)}`);\n}\n\nfunction renderUI(state: NetworkState): string {\n  switch (state.status) {\n    case \"loading\":\n      return \"Spinner active...\";\n    case \"success\":\n      return `Items: ${state.data.join(\", \")}`;\n    case \"error\":\n      return `Error: ${state.message}`;\n    default:\n      return assertNever(state);\n  }\n}\n\nconsole.log(\"=== 02: Discriminated Unions ===\");\nconsole.log(renderUI({ status: \"success\", data: [\"Go\", \"Rust\", \"TS\"] }));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Define a discriminated union 'PaymentMethod':\n// - { kind: 'card', cardNumber: string, cvv: string }\n// - { kind: 'paypal', email: string }\n// - { kind: 'crypto', walletAddress: string }\n// Implement 'processPayment(method: PaymentMethod): string' with exhaustiveness checking.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "type PaymentMethod =\n  | { kind: \"card\"; cardNumber: string; cvv: string }\n  | { kind: \"paypal\"; email: string }\n  | { kind: \"crypto\"; walletAddress: string };\n\nfunction processPayment(method: PaymentMethod): string {\n  switch (method.kind) {\n    case \"card\":\n      return `Charged card ending in ${method.cardNumber.slice(-4)}`;\n    case \"paypal\":\n      return `Paid via PayPal account ${method.email}`;\n    case \"crypto\":\n      return `Transferred to wallet ${method.walletAddress}`;\n  }\n}\n\nconsole.log(processPayment({ kind: \"card\", cardNumber: \"1234567812345678\", cvv: \"123\" }));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-top-bottom-special-types",
+        "name": "03-objects-interfaces-type-aliases",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// 1. 'unknown' is the safe top type (requires narrowing before operations)\nfunction processUnknown(val: unknown) {\n  if (typeof val === \"string\") {\n    console.log(\"Narrowed string length:\", val.length);\n  }\n}\n\n// 2. 'never' is the bottom type used for exhaustive checks\ntype TrafficLight = \"RED\" | \"YELLOW\" | \"GREEN\";\n\nfunction handleLight(light: TrafficLight): string {\n  switch (light) {\n    case \"RED\": return \"Stop\";\n    case \"YELLOW\": return \"Slow\";\n    case \"GREEN\": return \"Go\";\n    default: {\n      const _exhaustiveCheck: never = light; // Compile error if new variant is added!\n      return _exhaustiveCheck;\n    }\n  }\n}\n\nprocessUnknown(\"TypeScript 5.x\");\nconsole.log(\"Light handler:\", handleLight(\"GREEN\"));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Top, Bottom & Special Types\n\n- `unknown`: Safe top type.\n- `any`: Unsafe type escape hatch.\n- `never`: Bottom type representing impossible values and exhaustiveness checking.\n"
+            "content": "# 03 — `interface` vs `type` Aliases & Declaration Merging\n\n## 🎯 Comparison\n- **`interface`**: Can be reopened (Declaration Merging). Best for public API models and OOP.\n- **`type`**: Supports unions, primitives, tuples, and mapped types. Cannot be reopened.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "interface User {\n  id: number;\n  name: string;\n}\n\n// Declaration merging: adds 'email' to User interface\ninterface User {\n  email: string;\n}\n\nconst user: User = {\n  id: 101,\n  name: \"Navnath\",\n  email: \"admin@trak.dev\",\n};\n\nconsole.log(\"=== 03: Interfaces & Declaration Merging ===\");\nconsole.log(\"Merged User:\", user);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Create an immutable Record interface with 'readonly' properties\n// and an index signature for dynamic string metadata.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "interface ImmutableDoc {\n  readonly id: string;\n  readonly createdAt: Date;\n  readonly [metaKey: string]: unknown;\n}\n\nconst doc: ImmutableDoc = {\n  id: \"doc_100\",\n  createdAt: new Date(),\n  author: \"ndk123-web\",\n  tags: [\"typescript\", \"guide\"],\n};\n\nconsole.log(\"Immutable Document:\", doc);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-objects-aliases-interfaces",
+        "name": "04-tuples-and-enums",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Declaration Merging (Interfaces only)\ninterface UserProfile {\n  id: string;\n  name: string;\n}\n\ninterface UserProfile {\n  email: string; // Merged into UserProfile!\n}\n\nconst user: UserProfile = {\n  id: \"usr_1\",\n  name: \"Navnath\",\n  email: \"navnath@example.com\",\n};\n\nconsole.log(\"Merged Interface Profile:\", user);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Type Aliases vs Interfaces\n\n- **Interfaces**: Support declaration merging, better compiler cache performance for OOP.\n- **Type Aliases**: Support unions, primitives, tuples, and mapped types.\n"
+            "content": "# 04 — Labeled Tuples & `as const` Objects vs Enums\n\n## 🎯 Modern Best Practice: `as const` Objects\nTypeScript `enum` generates JavaScript runtime objects. Using `as const` objects is zero-overhead and tree-shakeable:\n```ts\nexport const LogLevel = {\n  Info: \"INFO\",\n  Warn: \"WARN\",\n  Error: \"ERROR\",\n} as const;\n\nexport type LogLevel = (typeof LogLevel)[keyof typeof LogLevel];\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "const HTTP_METHODS = {\n  GET: \"GET\",\n  POST: \"POST\",\n  PUT: \"PUT\",\n  DELETE: \"DELETE\",\n} as const;\n\ntype HttpMethod = (typeof HTTP_METHODS)[keyof typeof HTTP_METHODS];\n\n// Labeled Tuple\ntype LatLng = [latitude: number, longitude: number];\n\nfunction sendRequest(method: HttpMethod, coords: LatLng) {\n  console.log(`Sending ${method} request to coordinates [${coords[0]}, ${coords[1]}]`);\n}\n\nconsole.log(\"=== 04: as const & Labeled Tuples ===\");\nsendRequest(HTTP_METHODS.POST, [18.5204, 73.8567]);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Define a const object 'StatusCodes' with OK (200), NotFound (404), and ServerError (500).\n// Extract its type 'StatusCode'.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "const StatusCodes = {\n  OK: 200,\n  NotFound: 404,\n  ServerError: 500,\n} as const;\n\ntype StatusCode = (typeof StatusCodes)[keyof typeof StatusCodes];\n\nfunction handleResponse(code: StatusCode) {\n  return code === StatusCodes.OK ? \"Success\" : \"Failure\";\n}\n\nconsole.log(\"200:\", handleResponse(StatusCodes.OK));\nconsole.log(\"404:\", handleResponse(StatusCodes.NotFound));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-unions-intersections-discriminated",
+        "name": "05-functions-and-signatures",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "type AsyncState<T> =\n  | { status: \"idle\" }\n  | { status: \"loading\" }\n  | { status: \"success\"; data: T }\n  | { status: \"error\"; error: Error };\n\nfunction renderState(state: AsyncState<string>): string {\n  switch (state.status) {\n    case \"idle\": return \"Ready\";\n    case \"loading\": return \"Fetching data...\";\n    case \"success\": return `Loaded: ${state.data}`;\n    case \"error\": return `Failed: ${state.error.message}`;\n  }\n}\n\nconsole.log(renderState({ status: \"success\", data: \"Trak Workspaces\" }));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - Discriminated Unions\n\nDiscriminated unions use a common literal tag (`status`, `kind`, `type`) to narrow complex state machines safely.\n"
+            "content": "# 05 — Function Overloading & Generic Call Signatures\n\n## 🎯 Function Overloads\nProvide multiple function type signatures followed by a single general implementation signature:\n```ts\nfunction format(val: string): string;\nfunction format(val: number): string;\nfunction format(val: string | number): string { ... }\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "function double(x: number): number;\nfunction double(x: string): string;\nfunction double(x: number | string): number | string {\n  if (typeof x === \"number\") return x * 2;\n  return x + x;\n}\n\nconsole.log(\"=== 05: Function Overloads ===\");\nconsole.log(\"Number:\", double(5));\nconsole.log(\"String:\", double(\"trak\"));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement an overloaded function 'getItem':\n// getItem(id: number): Promise<string>\n// getItem(slug: string): Promise<string>\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "async function getItem(key: number | string): Promise<string> {\n  return `Item for key: ${key}`;\n}\n\ngetItem(101).then(console.log);\ngetItem(\"golang\").then(console.log);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-type-narrowing-and-guards",
+        "name": "06-generics-and-constraints",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "interface Admin { role: \"admin\"; permissions: string[] }\ninterface Member { role: \"member\" }\n\n// Custom Type Predicate\nfunction isAdmin(user: Admin | Member): user is Admin {\n  return user.role === \"admin\" && \"permissions\" in user;\n}\n\nconst account: Admin | Member = { role: \"admin\", permissions: [\"write\", \"delete\"] };\nif (isAdmin(account)) {\n  console.log(\"Admin permissions:\", account.permissions);\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Type Predicates & Assertion Signatures\n\nUse `val is Type` for boolean predicates and `asserts val is Type` for invariant assertion guards.\n"
+            "content": "# 06 — Generics & Type Constraints\n\n## 🎯 Generic Constraints (`extends`)\nConstrain generic type parameters to guarantee properties exist at compile-time:\n```ts\nfunction getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {\n  return obj[key];\n}\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "interface HasId {\n  id: number | string;\n}\n\nfunction findById<T extends HasId>(items: T[], targetId: number | string): T | undefined {\n  return items.find((item) => item.id === targetId);\n}\n\nconst tracks = [\n  { id: \"go\", name: \"Golang Mastery\" },\n  { id: \"rust\", name: \"Rust Systems\" },\n];\n\nconsole.log(\"=== 06: Generic Constraints ===\");\nconsole.log(\"Found:\", findById(tracks, \"rust\"));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a generic dictionary cache class 'Cache<K, V>' with methods\n// set(key: K, value: V): void and get(key: K): V | undefined.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "class Cache<K extends string | number, V> {\n  private store = new Map<K, V>();\n\n  set(key: K, value: V): void {\n    self: this.store.set(key, value);\n  }\n\n  get(key: K): V | undefined {\n    return this.store.get(key);\n  }\n}\n\nconst cache = new Cache<string, number>();\ncache.set(\"go-version\", 122);\nconsole.log(\"Cache get:\", cache.get(\"go-version\"));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-functions-overloading-this",
+        "name": "07-conditional-types-and-infer",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Function Overloads\nfunction formatInput(input: string): string;\nfunction formatInput(input: number): string;\nfunction formatInput(input: string | number): string {\n  if (typeof input === \"string\") return `String: ${input.trim()}`;\n  return `Number: ${input.toFixed(2)}`;\n}\n\nconsole.log(formatInput(\"  hello  \"));\nconsole.log(formatInput(42.5678));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Functions & Overloading\n"
+            "content": "# 07 — Conditional Types & Type Inference with `infer`\n\n## 🎯 Conditional Type Syntax\n`T extends U ? X : Y` evaluates type branches dynamically at compile time.\n\n## 🧠 `infer` Keyword\nAllows capturing and extracting types from within complex structures (Promises, Functions, Arrays):\n```ts\ntype UnpackPromise<T> = T extends Promise<infer U> ? U : T;\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "type UnpackPromise<T> = T extends Promise<infer U> ? U : T;\ntype ElementType<T> = T extends (infer E)[] ? E : T;\n\ntype NumPromise = Promise<number>;\ntype ResolvedNum = UnpackPromise<NumPromise>; // number\n\ntype StringArray = string[];\ntype Item = ElementType<StringArray>; // string\n\nconsole.log(\"=== 07: Conditional Types & infer ===\");\nconsole.log(\"Conditional Types compiled successfully.\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a utility type 'MyReturnType<T>' using conditional types and 'infer'\n// that extracts the return type of any function.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "type MyReturnType<T> = T extends (...args: any[]) => infer R ? R : never;\n\nfunction calculateScore(): number {\n  return 99.5;\n}\n\ntype ScoreType = MyReturnType<typeof calculateScore>; // number\nconsole.log(\"ScoreType verified at compile time.\");\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-arrays-tuples-readonly",
+        "name": "08-mapped-types-and-keyof",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Labeled Tuple\ntype Coordinate = [x: number, y: number, label?: string];\n\nconst point: Coordinate = [10, 20, \"Origin\"];\nconsole.log(\"Coordinate Point:\", point);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Arrays & Tuples\n"
+            "content": "# 08 — Mapped Types & Template Literal Metaprogramming\n\n## 🎯 Mapped Types Syntax\nTransform every property of an existing type:\n```ts\ntype Optional<T> = { [K in keyof T]?: T[K] };\ntype Getters<T> = { [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K] };\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "interface Person {\n  name: string;\n  age: number;\n}\n\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype PersonGetters = Getters<Person>;\n// {\n//   getName: () => string;\n//   getAge: () => number;\n// }\n\nconsole.log(\"=== 08: Mapped & Template Literal Types ===\");\nconsole.log(\"PersonGetters type synthesized.\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a mapped type 'Nullable<T>' that makes every property in T\n// nullable (T[K] | null).\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "type Nullable<T> = {\n  [K in keyof T]: T[K] | null;\n};\n\ninterface Config {\n  host: string;\n  port: number;\n}\n\ntype NullableConfig = Nullable<Config>;\nconst cfg: NullableConfig = { host: null, port: 8080 };\nconsole.log(\"Nullable config:\", cfg);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-generics-constraints-const",
+        "name": "09-utility-types-deep-dive",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Generics with constraints and const type parameters (TS 5.0+)\nfunction getFirstElement<const T extends readonly unknown[]>(arr: T): T[0] {\n  return arr[0];\n}\n\nconst first = getFirstElement([\"apple\", \"banana\"] as const);\nconsole.log(\"First literal:\", first); // Inferred as 'apple'\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - Generics & Const Type Parameters\n"
+            "content": "# 09 — Standard Utility Types Deep Dive\n\n## 🎯 Common Utilities\n- `Partial<T>` / `Required<T>`\n- `Readonly<T>`\n- `Record<K, T>`\n- `Pick<T, K>` / `Omit<T, K>`\n- `Exclude<T, U>` / `Extract<T, U>`\n- `NonNullable<T>`\n- `Awaited<T>`\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "interface Course {\n  id: string;\n  title: string;\n  description: string;\n  isPublished: boolean;\n}\n\n// Create a Course Preview by Picking specific fields\ntype CoursePreview = Pick<Course, \"id\" | \"title\">;\n\n// Course update payload with optional fields\ntype UpdateCourseInput = Partial<Omit<Course, \"id\">>;\n\nconst update: UpdateCourseInput = {\n  title: \"Updated TypeScript Mastery\",\n};\n\nconsole.log(\"=== 09: Utility Types ===\");\nconsole.log(\"Update payload:\", update);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Use utility types to define a 'UserRolesMap' type that maps\n// 'admin' | 'editor' | 'viewer' to a list of permission strings.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "type Role = \"admin\" | \"editor\" | \"viewer\";\ntype UserRolesMap = Record<Role, string[]>;\n\nconst permissions: UserRolesMap = {\n  admin: [\"create\", \"read\", \"update\", \"delete\"],\n  editor: [\"create\", \"read\", \"update\"],\n  viewer: [\"read\"],\n};\n\nconsole.log(\"Role Permissions Map:\", permissions);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-index-types-keyof-typeof",
+        "name": "10-classes-and-inheritance",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "const Settings = {\n  theme: \"dark\",\n  fontSize: 16,\n  autoSave: true,\n};\n\ntype AppSettings = typeof Settings;\ntype SettingKey = keyof AppSettings; // 'theme' | 'fontSize' | 'autoSave'\n\nfunction getSetting<K extends SettingKey>(key: K): AppSettings[K] {\n  return Settings[key];\n}\n\nconsole.log(\"Theme setting:\", getSetting(\"theme\"));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Index Types, keyof, and typeof\n"
+            "content": "# 10 — Classes, Parameter Properties & Hard Private `#`\n\n## 🎯 Access Modifiers\n- `private`: Compile-time check only (transpiled to standard properties in JS).\n- `#private`: Hard ECMAScript runtime private field (cannot be accessed outside class).\n- Parameter properties (`constructor(public name: string)`): Shorthand declaration and assignment.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "class BankAccount {\n  #balance: number = 0; // Hard private field\n\n  constructor(public readonly accountNumber: string, initialBalance: number) {\n    this.#balance = initialBalance;\n  }\n\n  deposit(amount: number): void {\n    if (amount > 0) this.#balance += amount;\n  }\n\n  getBalance(): number {\n    return this.#balance;\n  }\n}\n\nconsole.log(\"=== 10: Classes & Hard Private Fields ===\");\nconst acc = new BankAccount(\"ACC_12345\", 500);\nacc.deposit(250);\nconsole.log(\"Balance:\", acc.getBalance());\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement an abstract class 'DatabaseConnector' with abstract method 'connect(): Promise<boolean>'\n// and concrete class 'PostgresConnector' extending it.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "abstract class DatabaseConnector {\n  abstract connect(): Promise<boolean>;\n}\n\nclass PostgresConnector extends DatabaseConnector {\n  constructor(public connectionUri: string) {\n    super();\n  }\n\n  async connect(): Promise<boolean> {\n    console.log(`Connected to Postgres at ${this.connectionUri}`);\n    return true;\n  }\n}\n\nconst pg = new PostgresConnector(\"postgres://localhost:5432/trak\");\npg.connect();\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-conditional-types-and-infer",
+        "name": "11-decorators-and-metadata",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Unpack Promise return type with infer\ntype UnpackPromise<T> = T extends Promise<infer R> ? R : T;\n\ntype AsyncResult = UnpackPromise<Promise<{ id: number; token: string }>>;\n// AsyncResult resolves to { id: number; token: string }\n\nconsole.log(\"=== 11: Conditional Types and the 'infer' Keyword ===\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - Conditional Types & Infer\n\nPattern match and extract inner types using `infer R`.\n"
+            "content": "# 11 — Modern TC39 Decorators\n\n## 🎯 Decorator Architecture\nModern TypeScript 5.0+ supports standard TC39 Stage 3 decorators without requiring `experimentalDecorators`.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "function LogMethod(target: any, context: ClassMethodDecoratorContext) {\n  return function (this: any, ...args: any[]) {\n    console.log(`[LOG] Calling method: ${String(context.name)} with args:`, args);\n    return target.apply(this, args);\n  };\n}\n\nclass Calculator {\n  @LogMethod\n  add(a: number, b: number): number {\n    return a + b;\n  }\n}\n\nconsole.log(\"=== 11: TC39 Decorators ===\");\nconst calc = new Calculator();\nconsole.log(\"Result:\", calc.add(10, 25));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a method decorator 'ExecutionTimer' that measures runtime in milliseconds.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "function ExecutionTimer(target: any, context: ClassMethodDecoratorContext) {\n  return function (this: any, ...args: any[]) {\n    const start = performance.now();\n    const result = target.apply(this, args);\n    const elapsed = performance.now() - start;\n    console.log(`Method ${String(context.name)} took ${elapsed.toFixed(3)}ms`);\n    return result;\n  };\n}\n\nclass DataProcessor {\n  @ExecutionTimer\n  process(): void {\n    for (let i = 0; i < 1_000_000; i++) {}\n  }\n}\n\nnew DataProcessor().process();\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-mapped-types-key-remapping",
+        "name": "12-modules-namespaces-and-paths",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "type User = {\n  name: string;\n  age: number;\n};\n\n// Create Getters mapped type with key remapping\ntype Getters<T> = {\n  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];\n};\n\ntype UserGetters = Getters<User>;\n// Inferred as: { getName: () => string; getAge: () => number }\n\nconsole.log(\"=== 12: Mapped Types & Key Remapping with 'as' ===\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Mapped Types & Key Remapping\n"
+            "content": "# 12 — Modern ESM & Type-Only Imports\n\n## 🎯 `import type`\n`import type` guarantees that imports are fully erased during transpilation, avoiding circular dependencies and runtime side-effects.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "export interface ApiResponse<T> {\n  status: number;\n  payload: T;\n}\n\nexport function createResponse<T>(data: T): ApiResponse<T> {\n  return {\n    status: 200,\n    payload: data,\n  };\n}\n\nconsole.log(\"=== 12: ESM Modules ===\");\nconsole.log(createResponse({ user: \"ndk123-web\" }));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Create a namespace 'MathUtils' with exported functions 'square' and 'cube'.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "namespace MathUtils {\n  export function square(n: number): number { return n * n; }\n  export function cube(n: number): number { return n * n * n; }\n}\n\nconsole.log(\"Square:\", MathUtils.square(4));\nconsole.log(\"Cube:\", MathUtils.cube(3));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-template-literal-types",
+        "name": "13-error-handling-and-custom-errors",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "type EventType = \"click\" | \"hover\";\ntype ElementName = \"button\" | \"input\";\n\ntype EventName = `on${Capitalize<ElementName>}${Capitalize<EventType>}`;\n// 'onButtonClick' | 'onButtonHover' | 'onInputClick' | 'onInputHover'\n\nconst eventHandler: EventName = \"onButtonClick\";\nconsole.log(\"Valid Event Name:\", eventHandler);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Template Literal Types\n"
+            "content": "# 13 — Functional Error Handling with `Result<T, E>`\n\n## 🎯 Type-Safe Result Pattern\nInstead of unwrapped `throw`, return typed `Result` objects:\n```ts\ntype Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "type Result<T, E = Error> =\n  | { ok: true; value: T }\n  | { ok: false; error: E };\n\nfunction divide(a: number, b: number): Result<number, string> {\n  if (b === 0) return { ok: false, error: \"Division by zero\" };\n  return { ok: true, value: a / b };\n}\n\nconsole.log(\"=== 13: Type-Safe Result Pattern ===\");\nconst res = divide(10, 2);\nif (res.ok) {\n  console.log(\"Result:\", res.value);\n} else {\n  console.error(\"Error:\", res.error);\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Write a safe integer parse function 'parseInteger(s: string): Result<number, string>'\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "function parseInteger(s: string): Result<number, string> {\n  const parsed = parseInt(s, 10);\n  if (Number.isNaN(parsed)) {\n    return { ok: false, error: `Cannot parse '${s}' as integer` };\n  }\n  return { ok: true, value: parsed };\n}\n\nconsole.log(parseInteger(\"42\"));\nconsole.log(parseInteger(\"abc\"));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-utility-types-guide",
+        "name": "14-async-promises-and-event-loop",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "interface Product {\n  id: string;\n  name: string;\n  price: number;\n  tags: string[];\n}\n\ntype ProductSummary = Pick<Product, \"id\" | \"name\">;\ntype ProductUpdateInput = Partial<Omit<Product, \"id\">>;\ntype PriceMap = Record<string, number>;\n\nconst summary: ProductSummary = { id: \"p1\", name: \"Keyboard\" };\nconsole.log(\"Product Summary (Pick):\", summary);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Built-in Utility Types\n\n- `Partial<T>`, `Required<T>`, `Readonly<T>`, `Record<K, T>`\n- `Pick<T, K>`, `Omit<T, K>`, `Exclude<T, U>`, `Extract<T, U>`\n- `ReturnType<T>`, `Parameters<T>`, `Awaited<T>`\n"
+            "content": "# 14 — Async, Promises & Concurrency Handling\n\n## 🎯 `Promise.allSettled` vs `Promise.all`\n- `Promise.all`: Short-circuits immediately if any promise rejects.\n- `Promise.allSettled`: Waits for all promises to resolve or reject, returning `{ status: 'fulfilled' | 'rejected' }`.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "async function fetchUser(id: number): Promise<{ id: number; name: string }> {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve({ id, name: `User_${id}` }), 20);\n  });\n}\n\nasync function main() {\n  console.log(\"=== 14: Concurrent Async Operations ===\");\n  const users = await Promise.all([fetchUser(1), fetchUser(2), fetchUser(3)]);\n  console.log(\"Fetched users:\", users);\n}\n\nmain();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a promise-based retry helper 'asyncRetry<T>(fn: () => Promise<T>, retries: number): Promise<T>'\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "async function asyncRetry<T>(fn: () => Promise<T>, retries = 3): Promise<T> {\n  let lastError: unknown;\n  for (let i = 0; i < retries; i++) {\n    try {\n      return await fn();\n    } catch (err) {\n      lastError = err;\n    }\n  }\n  throw lastError;\n}\n\nasyncRetry(() => Promise.resolve(\"Success\")).then(console.log);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-classes-oop-parameter-properties",
+        "name": "15-schema-validation-with-zod",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "class Service {\n  // Parameter property automatically initializes this.name and this.port\n  constructor(\n    public readonly name: string,\n    private port: number,\n  ) {}\n\n  public getAddress(): string {\n    return `http://${this.name}:${this.port}`;\n  }\n}\n\nconst s = new Service(\"api-gateway\", 3000);\nconsole.log(\"Service Address:\", s.getAddress());\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Classes & Parameter Properties\n"
+            "content": "# 15 — Runtime Schema Validation with Zod\n\n## 🎯 Bridging Static Types & Runtime Data\nTypeScript types vanish at runtime. Zod validates untrusted external payloads and infers static TypeScript types automatically:\n```ts\nconst UserSchema = z.object({ id: z.number(), email: z.string().email() });\ntype User = z.infer<typeof UserSchema>;\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "// Minimal mock implementation of Zod schema logic\ninterface Schema<T> {\n  parse(data: unknown): T;\n}\n\nconst StringValidator: Schema<string> = {\n  parse(data: unknown): string {\n    if (typeof data !== \"string\") throw new Error(\"Expected string\");\n    return data;\n  },\n};\n\nconsole.log(\"=== 15: Schema Validation ===\");\nconsole.log(\"Parsed:\", StringValidator.parse(\"Valid input\"));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Implement a type validator 'validateEmail(raw: unknown): string'\n// that returns string if valid email or throws Error.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "function validateEmail(raw: unknown): string {\n  if (typeof raw !== \"string\" || !raw.includes(\"@\")) {\n    throw new Error(\"Invalid email format\");\n  }\n  return raw;\n}\n\nconsole.log(\"Validated:\", validateEmail(\"ndk123-web@trak.dev\"));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-enums-vs-const-objects",
+        "name": "16-testing-with-vitest",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Recommended Modern Pattern: Const Object Union over Enums\nexport const LogLevel = {\n  Debug: \"DEBUG\",\n  Info: \"INFO\",\n  Error: \"ERROR\",\n} as const;\n\nexport type LogLevel = typeof LogLevel[keyof typeof LogLevel]; // 'DEBUG' | 'INFO' | 'ERROR'\n\nfunction log(level: LogLevel, message: string) {\n  console.log(`[${level}] ${message}`);\n}\n\nlog(LogLevel.Info, \"System online\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Const Objects vs Enums\n\nConst objects with `as const` have zero runtime emit overhead compared to classic TypeScript numeric/string enums.\n"
+            "content": "# 16 — Unit Testing & Type-Level Assertions\n\n## 🎯 Type-Level Testing\nTest that your types compile correctly:\n```ts\ntype AssertEqual<T, Expected> = [T] extends [Expected] ? ([Expected] extends [T] ? true : false) : false;\n```\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "function sum(a: number, b: number): number {\n  return a + b;\n}\n\n// Self-contained test assertion runner\nfunction test(name: string, fn: () => void) {\n  try {\n    fn();\n    console.log(`✔ [PASS] ${name}`);\n  } catch (e) {\n    console.error(`❌ [FAIL] ${name}:`, e);\n  }\n}\n\nconsole.log(\"=== 16: Testing ===\");\ntest(\"adds 2 + 3 to equal 5\", () => {\n  if (sum(2, 3) !== 5) throw new Error(\"Assertion failed\");\n});\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Write a unit test for a string reverse function.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "function reverseString(s: string): string {\n  return s.split(\"\").reverse().join(\"\");\n}\n\nif (reverseString(\"typescript\") !== \"tpircsepyt\") {\n  throw new Error(\"Test failed!\");\n}\nconsole.log(\"✔ Reverse string test passed!\");\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-modules-and-type-imports",
+        "name": "17-monorepos-and-project-references",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "// Type-only imports ensure zero runtime JS bundle footprint\nexport type DatabaseConfig = {\n  host: string;\n  port: number;\n};\n\nconsole.log(\"=== 17: Modules & Type-Only Imports (import type) ===\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - Modules & Interoperability\n"
+            "content": "# 17 — Monorepo Architecture & Project References\n\n## 🎯 Composite Projects\nEnable incremental compilation across workspace packages with `\"composite\": true` and `\"references\": [{ \"path\": \"../core\" }]`.\n"
+          },
+          {
+            "name": "example.ts",
+            "type": "file",
+            "content": "console.log(\"=== 17: Monorepo Project References ===\");\nconsole.log(\"Composite build settings verified in tsconfig.json\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Define a shared workspace package configuration interface.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "interface WorkspaceConfig {\n  name: string;\n  version: string;\n  dependencies: Record<string, string>;\n}\n\nconst pkg: WorkspaceConfig = {\n  name: \"@trak/core\",\n  version: \"1.2.0\",\n  dependencies: {},\n};\nconsole.log(\"Workspace package:\", pkg);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "18-ambient-declarations-dts",
+        "name": "18-interview-questions-and-drills",
         "type": "directory",
         "children": [
           {
-            "name": "index.ts",
-            "type": "file",
-            "content": "console.log(\"=== 18: Ambient Declarations & .d.ts Files ===\");\nconsole.log(\"Ambient declarations describe types for external JS libraries without emit.\");\n"
-          },
-          {
-            "name": "globals.d.ts",
-            "type": "file",
-            "content": "declare global {\n  interface Window {\n    __TRAK_CONFIG__?: { version: string };\n  }\n}\nexport {};\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - Ambient Declarations (.d.ts)\n"
-          }
-        ]
-      },
-      {
-        "name": "19-modern-tc39-decorators",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.ts",
-            "type": "file",
-            "content": "console.log(\"=== 19: Modern Stage 3 TC39 Decorators ===\");\nconsole.log(\"TypeScript 5.0+ natively supports TC39 stage 3 standard decorators.\");\n"
+            "content": "# 18 — High-Yield TypeScript Interview Questions & Master Drills\n\n## 🧠 Top 10 Gotchas\n1. **`any` vs `unknown`**: `any` disables type checking; `unknown` is safe and requires narrowing.\n2. **`type` vs `interface`**: Interfaces support declaration merging; types support unions and tuples.\n3. **Structural Subtyping**: Types match based on shape, not name (Duck Typing).\n4. **Distributive Conditional Types**: Naked type parameters distribute over unions (`T extends any ? T[] : never`).\n5. **`const` Assertions**: `as const` creates deeply readonly literal types.\n6. **Function Parameter Bivariance**: Method shorthand `f(x: string): void` is bivariant; arrow property `f: (x: string) => void` is contravariant.\n7. **`exactOptionalPropertyTypes`**: Distinguishes between omitted optional property and explicit `undefined` value.\n8. **Declaration Merging**: Enums, interfaces, and namespaces can merge across scopes.\n9. **`never` in Exhaustiveness**: Catches unhandled cases at compile-time.\n10. **`satisfies` Operator**: Validates that an expression matches a type without widening its literal type.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.ts",
             "type": "file",
-            "content": "# 19 - TC39 Decorators\n"
-          }
-        ]
-      },
-      {
-        "name": "20-runtime-validation-zod",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.ts",
-            "type": "file",
-            "content": "console.log(\"=== 20: Runtime Schema Validation with Zod ===\");\nconsole.log(\"Zod bridges static compile-time types with runtime API input validation.\");\n"
+            "content": "console.log(\"=== 18: Master Interview Drill ===\");\nconsole.log(\"1. satisfies operator vs type annotation\");\nconsole.log(\"2. Distributive conditional types\");\nconsole.log(\"3. infer keyword unpacking\");\nconsole.log(\"4. Exhaustive never assertions\");\nconsole.log(\"🚀 You have completed the comprehensive TypeScript Mastery Track!\");\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 20 - Runtime Schema Validation (Zod)\n\n```ts\nimport { z } from \"zod\";\n\nconst UserSchema = z.object({\n  id: z.string().uuid(),\n  email: z.string().email(),\n  age: z.number().int().min(18),\n});\n\ntype User = z.infer<typeof UserSchema>;\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "21-frontend-and-fullstack-typing",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.ts",
-            "type": "file",
-            "content": "type ButtonProps = {\n  variant: \"primary\" | \"secondary\";\n  onClick: () => void;\n  children: string;\n};\n\nconsole.log(\"=== 21: Frontend & React Component Typing ===\");\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 21 - Frontend & React Typing\n"
-          }
-        ]
-      },
-      {
-        "name": "22-testing-and-tooling",
-        "type": "directory",
-        "children": [
-          {
-            "name": "calc.ts",
-            "type": "file",
-            "content": "export function add(a: number, b: number): number {\n  return a + b;\n}\n"
-          },
-          {
-            "name": "calc.test.ts",
-            "type": "file",
-            "content": "import assert from \"node:assert\";\nimport test from \"node:test\";\nimport { add } from \"./calc.js\";\n\ntest(\"adds numbers correctly\", () => {\n  assert.strictEqual(add(2, 3), 5);\n});\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 22 - Testing in TypeScript\n\n```bash\nnode --import tsx --test calc.test.ts\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "23-interview-questions-and-drills",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.ts",
-            "type": "file",
-            "content": "console.log(\"=====================================================\");\nconsole.log(\"🎯 23: High-Yield TypeScript Interview Questions & Drills\");\nconsole.log(\"=====================================================\");\nconsole.log(\"1. type vs interface: Declaration merging vs unions/tuples.\");\nconsole.log(\"2. satisfies vs as const: Value preservation vs deep immutability.\");\nconsole.log(\"3. unknown vs any: Safe top type requiring narrowing vs disabling type checker.\");\nconsole.log(\"4. Discriminated unions: Exhaustive pattern matching using common literal tag.\");\nconsole.log(\"5. infer keyword: Unpacking and extracting types in conditional expressions.\");\nconsole.log(\"\\n🚀 You have completed the complete TypeScript Mastery curriculum!\");\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 23 - High-Yield TypeScript Interview Questions 🎯\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.ts",
+                "type": "file",
+                "content": "// TODO: Master Drill: Implement a deep readonly mapped type 'DeepReadonly<T>'\n// that recursively makes all nested object properties readonly.\n"
+              },
+              {
+                "name": "solution.ts",
+                "type": "file",
+                "content": "type DeepReadonly<T> = {\n  readonly [K in keyof T]: T[K] extends Function\n    ? T[K]\n    : T[K] extends object\n    ? DeepReadonly<T[K]>\n    : T[K];\n};\n\ninterface UserProfile {\n  name: string;\n  settings: {\n    theme: string;\n    notifications: boolean;\n  };\n}\n\ntype ImmutableProfile = DeepReadonly<UserProfile>;\n\nconst profile: ImmutableProfile = {\n  name: \"Navnath\",\n  settings: {\n    theme: \"dark\",\n    notifications: true,\n  },\n};\n\nconsole.log(\"DeepReadonly profile:\", profile);\n"
+              }
+            ]
           }
         ]
       }

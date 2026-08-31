@@ -1,8 +1,8 @@
 {
   "id": "tool/ansible",
-  "name": "Ansible Automation & Configuration Management Mastery",
-  "version": "1.0.0",
-  "description": "Comprehensive Ansible curriculum from agentless architecture, Playbooks, and dynamic inventories to Jinja2 templating, Ansible Vault, custom Roles, Collections, and Molecule testing",
+  "name": "Ansible Automation, Roles & Configuration Mastery",
+  "version": "1.2.0",
+  "description": "Complete high-depth Ansible curriculum covering agentless SSH architecture, inventory management, Playbooks, Jinja2 templating, Roles, Ansible Vault, and Molecule testing",
   "root": {
     "name": "ansible-workspace",
     "type": "directory",
@@ -10,302 +10,628 @@
       {
         "name": "ansible.cfg",
         "type": "file",
-        "content": "[defaults]\ninventory = inventory.ini\nremote_user = devops\nhost_key_checking = False\nretry_files_enabled = False\nforks = 10\nstdout_callback = yaml\ncallbacks_enabled = timer, profile_tasks\n\n[privilege_escalation]\nbecome = True\nbecome_method = sudo\nbecome_user = root\nbecome_ask_pass = False\n"
+        "content": "[defaults]\ninventory = ./hosts.ini\nremote_user = devops\nhost_key_checking = False\nretry_files_enabled = False\nforks = 20\n\n[privilege_escalation]\nbecome = True\nbecome_method = sudo\nbecome_user = root\nbecome_ask_pass = False\n\n[ssh_connection]\npipelining = True\ncontrol_path = %(directory)s/ansible-ssh-%%h-%%p-%%r\n"
       },
       {
-        "name": "inventory.ini",
+        "name": "hosts.ini",
         "type": "file",
-        "content": "[webservers]\nweb01.example.com ansible_host=192.168.1.10\nweb02.example.com ansible_host=192.168.1.11\n\n[databases]\ndb01.example.com ansible_host=192.168.1.20\n\n[production:children]\nwebservers\ndatabases\n\n[production:vars]\nansible_python_interpreter=/usr/bin/python3\napp_env=production\n"
+        "content": "[webservers]\nweb1.trak.internal ansible_host=192.168.1.10\nweb2.trak.internal ansible_host=192.168.1.11\n\n[databases]\ndb1.trak.internal ansible_host=192.168.1.20\n\n[production:children]\nwebservers\ndatabases\n\n[production:vars]\nansible_python_interpreter=/usr/bin/python3\nenvironment_name=production\n"
       },
       {
-        "name": "site.yml",
+        "name": "playbook.yml",
         "type": "file",
-        "content": "---\n- name: Configure Production Web Servers\n  hosts: webservers\n  become: true\n  vars:\n    http_port: 80\n    max_clients: 200\n  roles:\n    - role: 09-roles-reusability-and-galaxy/roles/webserver\n"
+        "content": "---\n- name: Configure Production Web Servers\n  hosts: webservers\n  become: true\n  vars:\n    http_port: 80\n    app_name: trak-api\n\n  tasks:\n    - name: Ensure Nginx is installed\n      ansible.builtin.package:\n        name: nginx\n        state: present\n\n    - name: Deploy application landing template\n      ansible.builtin.template:\n        src: index.html.j2\n        dest: /var/www/html/index.html\n        owner: www-data\n        group: www-data\n        mode: '0644'\n      notify: Restart Nginx\n\n  handlers:\n    - name: Restart Nginx\n      ansible.builtin.systemd:\n        name: nginx\n        state: restarted\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 📜 Complete Ansible Automation & Configuration Management Track\n\nWelcome to your full Ansible learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-architecture` | **Agentless Architecture** | Control node vs Managed nodes, SSH transport, `ansible.cfg`, `ansible -m ping` |\n| `01-inventory-management-static-dynamic` | **Inventories & Groups** | INI vs YAML inventories, `group_vars/`, `host_vars/`, dynamic cloud plugins |\n| `02-ad-hoc-commands-and-modules` | **Ad-Hoc Commands** | `ansible all -m command -a '...'`, `copy`, `file`, `package`, `service`, `user` |\n| `03-playbook-structure-and-yaml` | **Playbook Fundamentals** | Playbook anatomy, idempotency, dry-run mode (`--check --diff`), `--syntax-check` |\n| `04-variables-precedence-and-facts` | **Variables & Facts** | 22 levels of variable precedence, Ansible Facts (`ansible_facts`), `vars_files` |\n| `05-task-control-conditionals-loops` | **Conditionals & Loops** | `when` expressions, `loop` (`with_items`), `until`, `retries`, `failed_when` |\n| `06-handlers-and-notifiers` | **Handlers & Notifiers** | `notify` & `handlers`, `listen` multi-triggers, `meta: flush_handlers` |\n| `07-templates-and-jinja2-filters` | **Jinja2 Templating** | `.j2` templates, filters (`default`, `to_json`, `map`, `select`), template loops |\n| `08-error-handling-and-rescue-blocks` | **Error Recovery** | `ignore_errors`, `block` / `rescue` / `always` exception handling |\n| `09-roles-reusability-and-galaxy` | **Roles Architecture** | Standard role directory structure (`tasks`, `handlers`, `vars`, `defaults`), Galaxy |\n| `10-collections-and-modern-namespaces`| **Collections (FQCN)** | Fully Qualified Collection Names (`ansible.builtin.*`), community collections |\n| `11-vault-and-secret-encryption` | **Ansible Vault** | Encrypting playbooks/variables, multi-vault IDs, `encrypt_string` |\n| `12-tags-and-task-filtering` | **Tags & Selective Run** | `--tags`, `--skip-tags`, special tags `always` and `never` |\n| `13-delegation-and-rolling-updates` | **Delegation & Rolling** | `delegate_to: localhost`, rolling updates (`serial: 2`), `run_once` |\n| `14-windows-automation-with-winrm` | **Windows Automation** | WinRM connection, `win_service`, `win_package`, `win_reboot` |\n| `15-testing-linting-and-molecule` | **Molecule Testing** | `ansible-lint`, testing roles inside Docker with Molecule and Testinfra |\n| `16-awx-and-automation-platform` | **AWX & AAP** | AWX Web UI, Job Templates, RBAC, Credentials, Webhooks |\n| `17-interview-questions-and-drills` | **Interview Master Drill** | Top 10 Ansible interview questions, Idempotency guarantees, and precedence |\n\n---\n\n## 🛠️ Quick Commands\n\n```bash\n# Test connectivity across all managed nodes\nansible all -m ping\n\n# Run playbook in dry-run mode with diffs\nansible-playbook site.yml --check --diff\n```\n"
+        "content": "# 🔴 Ansible Automation, Roles & Configuration Mastery Track\n\nWelcome to the **Ansible Automation, Roles & Configuration Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering agentless SSH architecture, dynamic inventory management, Playbooks, Jinja2 templating, reusable Roles, Vault secret encryption, error handling with blocks/rescue, and Molecule testing.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-agentless-architecture` | Agentless Architecture | Push-based SSH execution, Python interpreter, `ansible.cfg` tuning |\n| `01-inventory-management-and-groups` | Inventories & Groups | INI/YAML formats, dynamic inventory plugins (AWS/GCP), `[all:children]` |\n| `02-ad-hoc-commands` | Ad-Hoc Commands | `ansible -m ping`, `ansible -m command`, `ansible -m setup`, parallel forks |\n| `03-playbooks-structure-and-yaml` | Playbook Structure | `hosts`, `become`, `vars`, `tasks`, task naming conventions, idempotency |\n| `04-core-modules-file-copy-systemd` | Core Modules | `copy`, `template`, `file`, `systemd`, `package`, `user`, `lineinfile` |\n| `05-variables-precedence-and-facts` | Variables & Facts | 22-level precedence hierarchy, `ansible_facts`, `group_vars`, `host_vars` |\n| `06-handlers-and-notify` | Event-Driven Handlers | `notify: Handler Name`, handler execution timing, `meta: flush_handlers` |\n| `07-conditionals-and-when-clauses` | Conditionals & Logic | `when:` conditions, `failed_when`, `changed_when`, register output checks |\n| `08-loops-and-iterators` | Loops & Iterations | `loop:` over lists and maps, `loop_control` with `label` and `index_var` |\n| `09-jinja2-templating-and-filters` | Jinja2 Templates & Filters | `{{ variable }}`, filters (`default`, `to_json`, `ipaddr`), loop structures |\n| `10-roles-and-reusable-structure` | Role Architecture | `tasks/`, `handlers/`, `templates/`, `defaults/`, `meta/main.yml`, dependencies |\n| `11-ansible-galaxy-and-collections` | Galaxy & Collections | `ansible-galaxy`, `requirements.yml`, FQCN (Fully Qualified Collection Names) |\n| `12-ansible-vault-and-encryption` | Ansible Vault Secrets | `ansible-vault encrypt`, `--vault-password-file`, encrypted string variables |\n| `13-error-handling-blocks-and-rescue` | Exception Handling | `block:`, `rescue:` exception recovery, `always:` cleanup tasks |\n| `14-delegation-and-rolling-updates` | Delegation & Rolling Updates | `delegate_to: localhost`, `run_once: true`, `serial: \"20%\"` zero-downtime rolling |\n| `15-testing-with-molecule-and-ansible-lint` | Molecule & Linting | Molecule test suites with Docker driver, Testinfra, `ansible-lint` rules |\n| `16-ansible-automation-platform-awx` | AWX & AAP Orchestration | AWX web UI, Execution Environments (EE), RBAC, Webhooks, Job Templates |\n| `17-performance-tuning-and-ssh-pipelining` | Performance Tuning | `pipelining = True`, `forks = 50`, ControlMaster persistent connections |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Ansible SRE gotchas + Production Multi-Tier Server Provisioning Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `playbook.yml` — Fully runnable concept demonstration.\n- `exercise/starter.yml` — Hands-on problem with `TODO` markers.\n- `exercise/solution.yml` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-architecture",
+        "name": "00-setup-and-agentless-architecture",
         "type": "directory",
         "children": [
           {
-            "name": "ping_all.sh",
+            "name": "README.md",
             "type": "file",
-            "content": "#!/usr/bin/env bash\necho \"=====================================================\"\necho \"📜 00 - Ansible Architecture & Connectivity Check\"\necho \"=====================================================\"\nansible --version\necho \"\"\nansible localhost -m ping\n"
+            "content": "# 00 — Agentless Architecture & SSH Execution\n\n## 🎯 How Ansible Works\nAnsible requires **zero agents** on target nodes. It generates standalone Python scripts, transfers them over OpenSSH/SFTP, executes them in remote Python runtime, and reads JSON results.\n"
           },
           {
-            "name": "README.md",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "# 00 - Ansible Agentless Architecture 🛠️\n\n### Core Design Principles:\n1. **Agentless**: No daemons or agents to install or update on managed nodes (communicates over standard OpenSSH or WinRM).\n2. **Idempotent**: Executing the same playbook multiple times results in the exact same state without unintended side-effects.\n3. **Declarative State**: You declare *what* the configuration should be, and Ansible determines the required actions.\n"
-          }
-        ]
-      },
-      {
-        "name": "01-inventory-management-static-dynamic",
-        "type": "directory",
-        "children": [
-          {
-            "name": "inventory.yaml",
-            "type": "file",
-            "content": "all:\n  children:\n    webservers:\n      hosts:\n        web01.example.com:\n          ansible_host: 192.168.1.10\n        web02.example.com:\n          ansible_host: 192.168.1.11\n    databases:\n      hosts:\n        db01.example.com:\n          ansible_host: 192.168.1.20\n"
+            "content": "---\n- name: Verify Control Node Environment\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    - name: Print Ansible Engine Version\n      ansible.builtin.debug:\n        msg: \"Ansible Control Node Active - Python: {{ ansible_playbook_python }}\"\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 01 - Inventory Management & Group Variables\n"
-          }
-        ]
-      },
-      {
-        "name": "02-ad-hoc-commands-and-modules",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 02 - Ad-Hoc Commands & Core Modules\n\n```bash\n# Check disk space on all webservers\nansible webservers -m command -a \"df -h\"\n\n# Restart Nginx on all nodes\nansible webservers -b -m service -a \"name=nginx state=restarted\"\n\n# Copy file to managed nodes\nansible webservers -m copy -a \"src=/etc/hosts dest=/tmp/hosts mode=0644\"\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "03-playbook-structure-and-yaml",
-        "type": "directory",
-        "children": [
-          {
-            "name": "webserver.yml",
-            "type": "file",
-            "content": "---\n- name: Install and Start Nginx\n  hosts: webservers\n  become: true\n  tasks:\n    - name: Ensure Nginx package is installed\n      ansible.builtin.package:\n        name: nginx\n        state: present\n\n    - name: Ensure Nginx service is running and enabled\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 03 - Playbook Structure & Idempotency\n"
-          }
-        ]
-      },
-      {
-        "name": "04-variables-precedence-and-facts",
-        "type": "directory",
-        "children": [
-          {
-            "name": "facts_demo.yml",
-            "type": "file",
-            "content": "---\n- name: Display Target System Facts\n  hosts: all\n  gather_facts: true\n  tasks:\n    - name: Print OS distribution and memory\n      ansible.builtin.debug:\n        msg: \"Host {{ inventory_hostname }} is running {{ ansible_facts['distribution'] }} with {{ ansible_facts['memtotal_mb'] }} MB RAM.\"\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 04 - Variables Precedence & System Facts\n"
-          }
-        ]
-      },
-      {
-        "name": "05-task-control-conditionals-loops",
-        "type": "directory",
-        "children": [
-          {
-            "name": "loops_and_when.yml",
-            "type": "file",
-            "content": "---\n- name: Install Common Packages with Loops and Conditionals\n  hosts: all\n  become: true\n  tasks:\n    - name: Install utilities on Debian-based systems\n      ansible.builtin.apt:\n        name: \"{{ item }}\"\n        state: present\n      loop:\n        - curl\n        - git\n        - htop\n      when: ansible_facts['os_family'] == 'Debian'\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 05 - Conditionals (`when`) & Loops (`loop`)\n"
-          }
-        ]
-      },
-      {
-        "name": "06-handlers-and-notifiers",
-        "type": "directory",
-        "children": [
-          {
-            "name": "handlers_demo.yml",
-            "type": "file",
-            "content": "---\n- name: Update Configuration and Trigger Handler\n  hosts: webservers\n  become: true\n  tasks:\n    - name: Deploy custom Nginx config\n      ansible.builtin.copy:\n        src: nginx.conf\n        dest: /etc/nginx/nginx.conf\n        mode: '0644'\n      notify: Restart Nginx Service\n\n  handlers:\n    - name: Restart Nginx Service\n      ansible.builtin.service:\n        name: nginx\n        state: restarted\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 06 - Handlers & Notifiers\n\nHandlers run **only once** at the very end of the play, and only if at least one notifying task made an actual change (`changed: true`).\n"
-          }
-        ]
-      },
-      {
-        "name": "07-templates-and-jinja2-filters",
-        "type": "directory",
-        "children": [
-          {
-            "name": "nginx.conf.j2",
-            "type": "file",
-            "content": "# Generated dynamically by Ansible on {{ ansible_date_time.iso8601 }}\nevents {\n    worker_connections {{ max_clients | default(1024) }};\n}\n\nhttp {\n    server {\n        listen {{ http_port | default(80) }};\n        server_name {{ inventory_hostname }};\n        root /var/www/html;\n    }\n}\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 07 - Jinja2 Templates & Filters\n"
-          }
-        ]
-      },
-      {
-        "name": "08-error-handling-and-rescue-blocks",
-        "type": "directory",
-        "children": [
-          {
-            "name": "block_rescue.yml",
-            "type": "file",
-            "content": "---\n- name: Robust Error Recovery with Block/Rescue\n  hosts: all\n  tasks:\n    - name: Attempt primary task\n      block:\n        - name: Run task that might fail\n          ansible.builtin.command: /bin/false\n      rescue:\n        - name: Fallback action when block fails\n          ansible.builtin.debug:\n            msg: \"Caught error in primary block, running recovery logic!\"\n      always:\n        - name: Always execute cleanup\n          ansible.builtin.debug:\n            msg: \"Cleanup executed unconditionally.\"\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 08 - Error Handling (Block / Rescue / Always)\n"
-          }
-        ]
-      },
-      {
-        "name": "09-roles-reusability-and-galaxy",
-        "type": "directory",
-        "children": [
-          {
-            "name": "roles",
+            "name": "exercise",
             "type": "directory",
             "children": [
               {
-                "name": "webserver",
-                "type": "directory",
-                "children": [
-                  {
-                    "name": "tasks",
-                    "type": "directory",
-                    "children": [
-                      {
-                        "name": "main.yml",
-                        "type": "file",
-                        "content": "---\n- name: Install Webserver\n  ansible.builtin.package:\n    name: nginx\n    state: present\n"
-                      }
-                    ]
-                  },
-                  {
-                    "name": "defaults",
-                    "type": "directory",
-                    "children": [
-                      {
-                        "name": "main.yml",
-                        "type": "file",
-                        "content": "---\nhttp_port: 8080\n"
-                      }
-                    ]
-                  }
-                ]
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Write a task that prints 'Hello from Trak' using ansible.builtin.debug.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Print greeting\n  ansible.builtin.debug:\n    msg: \"Hello from Trak\"\n"
               }
             ]
+          }
+        ]
+      },
+      {
+        "name": "01-inventory-management-and-groups",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 01 — Inventory Management & Groups\n\n## 🎯 Group Inheritance\nUse `:children` to create hierarchical meta-groups combining multiple individual tiers.\n"
           },
           {
-            "name": "README.md",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "# 09 - Ansible Roles Architecture\n\n```\nroles/webserver/\n├── defaults/main.yml    # Default lowest-precedence variables\n├── vars/main.yml        # Role-specific high-precedence variables\n├── tasks/main.yml       # List of tasks to execute\n├── handlers/main.yml    # Handlers triggered by tasks\n├── templates/           # Jinja2 template files\n├── files/               # Static files\n└── meta/main.yml        # Role metadata and dependencies\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "10-collections-and-modern-namespaces",
-        "type": "directory",
-        "children": [
-          {
-            "name": "requirements.yml",
-            "type": "file",
-            "content": "---\ncollections:\n  - name: community.general\n    version: \">=8.0.0\"\n  - name: amazon.aws\n    version: \">=6.0.0\"\n"
+            "content": "---\n- name: Inspect Inventory Groups\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Display all groups in inventory\n      ansible.builtin.debug:\n        var: groups\n"
           },
           {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 10 - Ansible Collections & FQCN\n\n```bash\nansible-galaxy collection install -r requirements.yml\n```\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Define a YAML inventory with a group 'cache' containing 2 hosts.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "all:\n  children:\n    cache:\n      hosts:\n        redis1.local:\n          ansible_host: 10.0.1.50\n        redis2.local:\n          ansible_host: 10.0.1.51\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-vault-and-secret-encryption",
+        "name": "02-ad-hoc-commands",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - Ansible Vault Encryption\n\n```bash\n# Encrypt variable file with password\nansible-vault encrypt secrets.yml\n\n# Run playbook with vault password prompt\nansible-playbook site.yml --ask-vault-pass\n\n# Encrypt single inline string for yaml\nansible-vault encrypt_string 'MySuperSecretPassword' --name 'db_password'\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "12-tags-and-task-filtering",
-        "type": "directory",
-        "children": [
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 12 - Tags & Selective Execution\n\n```bash\n# Run only tasks tagged with 'security'\nansible-playbook site.yml --tags \"security\"\n\n# Skip slow backup tasks\nansible-playbook site.yml --skip-tags \"backup\"\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "13-delegation-and-rolling-updates",
-        "type": "directory",
-        "children": [
-          {
-            "name": "rolling_update.yml",
-            "type": "file",
-            "content": "---\n- name: Zero-Downtime Rolling Update\n  hosts: webservers\n  serial: 1  # Update 1 node at a time\n  tasks:\n    - name: Remove host from load balancer pool\n      ansible.builtin.command: /usr/local/bin/deregister_lb.sh {{ inventory_hostname }}\n      delegate_to: localhost\n\n    - name: Upgrade web application package\n      ansible.builtin.package:\n        name: app-service\n        state: latest\n"
+            "content": "# 02 — Ad-Hoc Execution\n\n## 🎯 Common Ad-Hoc Commands\n- `ansible all -m ping`\n- `ansible webservers -m command -a \"uptime\"`\n- `ansible all -m setup -a \"filter=ansible_distribution*\"`\n"
           },
           {
-            "name": "README.md",
+            "name": "playbook.yml",
             "type": "file",
-            "content": "# 13 - Delegation & Rolling Updates (`serial`)\n"
+            "content": "---\n- name: Ad-Hoc Demonstration Playbook\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Execute command\n      ansible.builtin.command: uname -a\n      register: uname_output\n    - name: Show output\n      ansible.builtin.debug:\n        var: uname_output.stdout\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Write an ad-hoc command syntax to restart nginx service on all webservers.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "# Ad-Hoc Command:\n# ansible webservers -b -m ansible.builtin.systemd -a \"name=nginx state=restarted\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-windows-automation-with-winrm",
+        "name": "03-playbooks-structure-and-yaml",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Windows Automation with WinRM\n\n```yaml\n- name: Install IIS Web Server on Windows\n  hosts: win_servers\n  tasks:\n    - name: Install IIS Web-Server Feature\n      ansible.windows.win_feature:\n        name: Web-Server\n        state: present\n```\n"
+            "content": "# 03 — Playbook Structure & Idempotency\n\n## 🎯 Idempotency\nRunning an Ansible playbook multiple times on a target system should leave the system in the exact same state without producing unwanted side effects.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Basic Playbook Structure\n  hosts: localhost\n  connection: local\n  gather_facts: false\n  tasks:\n    - name: Create temporary workspace directory\n      ansible.builtin.file:\n        path: /tmp/trak_test\n        state: directory\n        mode: '0755'\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Add a task to ensure /tmp/trak_test directory is removed.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Remove temporary directory\n  ansible.builtin.file:\n    path: /tmp/trak_test\n    state: absent\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-testing-linting-and-molecule",
+        "name": "04-core-modules-file-copy-systemd",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Molecule Testing & ansible-lint\n\n```bash\n# Lint Ansible playbooks and roles\nansible-lint site.yml\n\n# Run automated role tests inside ephemeral Docker containers\nmolecule test\n```\n"
+            "content": "# 04 — Core Ansible Modules\n\n## 🎯 `copy` vs `template`\n- `ansible.builtin.copy`: Transfers static files as-is.\n- `ansible.builtin.template`: Renders Jinja2 variables and expressions before copying.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Core Modules Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Write configuration file\n      ansible.builtin.copy:\n        dest: /tmp/sample.conf\n        content: | \n          port=8080\n          environment=production\n        mode: '0640'\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Write task ensuring service 'docker' is enabled and running.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Ensure Docker service is running\n  ansible.builtin.systemd:\n    name: docker\n    state: started\n    enabled: true\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-awx-and-automation-platform",
+        "name": "05-variables-precedence-and-facts",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - AWX & Red Hat Automation Platform (AAP)\n"
+            "content": "# 05 — Variable Precedence & Facts\n\n## 🎯 Precedence Hierarchy (Highest to Lowest)\n1. Extra vars (`-e \"var=val\"`) — **Highest**\n2. Task vars\n3. Playbook vars\n4. `host_vars`\n5. `group_vars`\n6. Role `defaults/main.yml` — **Lowest**\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Inspect Facts\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Display Operating System Family\n      ansible.builtin.debug:\n        msg: \"Target OS Family: {{ ansible_facts['os_family'] | default('Unknown') }}\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Access ansible_facts total memory in MB.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Print total memory\n  ansible.builtin.debug:\n    msg: \"Total RAM: {{ ansible_facts['memtotal_mb'] }} MB\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-interview-questions-and-drills",
+        "name": "06-handlers-and-notify",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - High-Yield Ansible DevOps Interview Questions 🎯\n\n### Top 5 Interview Questions:\n1. **Idempotency**: An operation is idempotent if executing it multiple times produces the exact same end-state without duplicate modifications.\n2. **Variable Precedence**: Extra vars (`-e`) > Task vars > Block vars > Role vars > Play vars > Host facts > Role defaults (lowest).\n3. **Handlers vs Tasks**: Tasks run sequentially; handlers run once at play conclusion only if notified by a changed task.\n4. **serial Directive**: Controls rolling updates across clusters (e.g. `serial: 2` or `serial: \"25%\"`) to achieve zero downtime.\n5. **Ansible Vault**: Encrypts sensitive YAML files, inventory variables, and inline strings using AES-256 encryption.\n\n🚀 You have completed the complete Ansible Automation & Configuration Management track!\n"
+            "content": "# 06 — Event-Driven Handlers\n\n## 🎯 Handler Execution Semantics\nHandlers are triggered only if the notifying task reports `changed: true`, and all handlers execute once at the end of the play.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Handler Demonstration\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Modify config\n      ansible.builtin.copy:\n        dest: /tmp/config.json\n        content: '{\"active\": true}'\n      notify: Log Config Reload\n  handlers:\n    - name: Log Config Reload\n      ansible.builtin.debug:\n        msg: \"Handler invoked! Configuration reloaded successfully.\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Add a task to immediately flush handlers using meta: flush_handlers.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Flush all pending handlers immediately\n  ansible.builtin.meta: flush_handlers\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "07-conditionals-and-when-clauses",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 07 — Conditionals (`when:`) & Failure Control\n\n## 🎯 `failed_when` & `changed_when`\nOverride Ansible's default status determination for custom command executions.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Conditional Execution\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Run only on Debian family\n      ansible.builtin.debug:\n        msg: \"Running on Debian-based system\"\n      when: ansible_facts['os_family'] == 'Debian'\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Register output of a command and execute a task only if stdout contains 'active'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Check status\n  ansible.builtin.command: echo \"service is active\"\n  register: status_res\n\n- name: Print match\n  ansible.builtin.debug:\n    msg: \"Verified active status\"\n  when: \"'active' in status_res.stdout\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "08-loops-and-iterators",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 08 — Loops & `loop_control`\n\n## 🎯 Iterating Dictionaries with Clean Labels\n```yaml\n- name: Create directories\n  ansible.builtin.file:\n    path: \"{{ item.path }}\"\n    mode: \"{{ item.mode }}\"\n    state: directory\n  loop:\n    - { path: '/opt/app', mode: '0755' }\n    - { path: '/var/log/app', mode: '0750' }\n  loop_control:\n    label: \"{{ item.path }}\"\n```\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Loops Demonstration\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Iterate over packages\n      ansible.builtin.debug:\n        msg: \"Processing package: {{ item }}\"\n      loop:\n        - curl\n        - git\n        - htop\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Loop over a list of users [alice, bob, charlie] with index_var.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Loop with index\n  ansible.builtin.debug:\n    msg: \"User #{{ idx }}: {{ item }}\"\n  loop:\n    - alice\n    - bob\n    - charlie\n  loop_control:\n    index_var: idx\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "09-jinja2-templating-and-filters",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 09 — Jinja2 Templating & Powerful Filters\n\n## 🎯 Common Filters\n- `{{ val | default('default_value') }}`\n- `{{ list_var | unique | sort }}`\n- `{{ dict_a | combine(dict_b) }}`\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Jinja2 Filters Demo\n  hosts: localhost\n  connection: local\n  vars:\n    raw_tags: [\"web\", \"prod\", \"web\", \"api\"]\n  tasks:\n    - name: Filter Unique Sorted Tags\n      ansible.builtin.debug:\n        var: raw_tags | unique | sort\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Format a complex dictionary as pretty JSON using to_nice_json.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Print JSON\n  ansible.builtin.debug:\n    msg: \"{{ {'name': 'trak', 'version': '1.0'} | to_nice_json }}\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-roles-and-reusable-structure",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Ansible Role Architecture\n\n## 🎯 Standard Directory Layout\n```text\nroles/my_role/\n├── defaults/main.yml  # Lowest priority fallback vars\n├── files/             # Static files\n├── handlers/main.yml  # Notification handlers\n├── meta/main.yml      # Author & role dependencies\n├── tasks/main.yml     # Entry point tasks\n├── templates/         # Jinja2 template files\n└── vars/main.yml      # High priority role vars\n```\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Invoke Custom Role\n  hosts: localhost\n  connection: local\n  roles:\n    - role: common_setup\n      when: false\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Define a role dependency on 'geerlingguy.docker' inside meta/main.yml.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "dependencies:\n  - role: geerlingguy.docker\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-ansible-galaxy-and-collections",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Ansible Galaxy & Collections (FQCN)\n\n## 🎯 Fully Qualified Collection Names (FQCN)\nAlways use full namespaces like `ansible.builtin.copy` or `community.general.slack` rather than short module names.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 11: Ansible Galaxy CLI ===\"\necho \"ansible-galaxy install -r requirements.yml\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Create a requirements.yml installing community.general collection version >= 8.0.0.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "collections:\n  - name: community.general\n    version: \">=8.0.0\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-ansible-vault-and-encryption",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Ansible Vault & Sensitive Secrets\n\n## 🎯 Encrypting Single Strings\n```bash\nansible-vault encrypt_string 'my_super_secret_token' --name 'api_key'\n```\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 12: Ansible Vault Commands ===\"\necho \"ansible-vault create secret_vars.yml\"\necho \"ansible-playbook playbook.yml --vault-password-file .vault_pass\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to view an encrypted vault file without modifying it.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: ansible-vault view secret_vars.yml\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-error-handling-blocks-and-rescue",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — Exception Handling with `block` & `rescue`\n\n## 🎯 Try / Catch / Finally in Ansible\n```yaml\n- name: Critical Operation with Rollback\n  block:\n    - name: Apply DB Migration\n      ansible.builtin.command: /opt/migrate.sh\n  rescue:\n    - name: Rollback DB Migration on failure\n      ansible.builtin.command: /opt/rollback.sh\n  always:\n    - name: Send Notification\n      ansible.builtin.debug:\n        msg: \"Migration run completed.\"\n```\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Exception Handling Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Protected Block\n      block:\n        - name: Simulate success\n          ansible.builtin.debug:\n            msg: \"Operation succeeded!\"\n      rescue:\n        - name: Handle error\n          ansible.builtin.debug:\n            msg: \"Rescue handler invoked!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Add an 'always' section inside the block structure.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "always:\n  - name: Cleanup temporary lock files\n    ansible.builtin.file:\n      path: /tmp/operation.lock\n      state: absent\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-delegation-and-rolling-updates",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Task Delegation & Rolling Zero-Downtime Updates\n\n## 🎯 Rolling Updates (`serial`)\n`serial: [1, 20%]` executes play in batches, allowing zero-downtime rolling upgrades across load-balanced fleets.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Task Delegation Demo\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Announce deployment to Slack\n      ansible.builtin.debug:\n        msg: \"Delegated Slack deployment notification\"\n      delegate_to: localhost\n      run_once: true\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Add serial: 2 to a playbook header.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Rolling update fleet\n  hosts: webservers\n  serial: 2\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-testing-with-molecule-and-ansible-lint",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Molecule Testing & `ansible-lint`\n\n## 🎯 Molecule Test Matrix\nSpawns ephemeral Docker or Vagrant test instances, converges roles, and runs verification assertions.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 15: Molecule Testing CLI ===\"\necho \"ansible-lint playbook.yml\"\necho \"molecule test\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to run static linting on all playbooks.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: ansible-lint *.yml\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-ansible-automation-platform-awx",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — AWX / AAP Enterprise Orchestration\n\n## 🎯 Key Components\n- **Job Templates**: Connect Playbook git repos with target inventories and credentials.\n- **Execution Environments (EE)**: Container images bundling Python libraries and Ansible collections.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: AWX Job Metadata\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Print AWX Job ID\n      ansible.builtin.debug:\n        msg: \"Running in AWX Job ID: {{ awx_job_id | default('Local-CLI') }}\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Access AWX user launch variable awx_user_name.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Show launcher\n  ansible.builtin.debug:\n    msg: \"Launched by: {{ awx_user_name | default('admin') }}\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-performance-tuning-and-ssh-pipelining",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Performance Tuning & SSH Pipelining\n\n## 🎯 `pipelining = True`\nExecutes Python modules directly in the SSH session without transferring separate files via SFTP, speeding up execution by 200-400%!\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Performance Inspection\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Check forks setting\n      ansible.builtin.debug:\n        msg: \"Default forks configured in ansible.cfg\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Configure SSH ControlMaster persistence in ansible.cfg.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "[ssh_connection]\nssh_args = -C -o ControlMaster=auto -o ControlPersist=60s\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "18-interview-questions-and-drills",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 18 — High-Yield Ansible SRE Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **Breaking Idempotency with `shell`**: Using `command` or `shell` without `creates:` or `changed_when:` causes tasks to always report changed.\n2. **Variable Precedence Conflicts**: Extra vars (`-e`) override everything, making playbooks non-reproducible if misused.\n3. **Handler Execution Order**: Handlers run in the order they are defined in `handlers/main.yml`, NOT in the order notified.\n4. **`ignore_errors: true` vs `failed_when`**: Prefer `failed_when` to explicitly define criteria for success and failure.\n5. **Pipelining with `requiretty`**: SSH pipelining fails if `/etc/sudoers` on target node has `Defaults requiretty` enabled.\n6. **`copy` vs `synchronize`**: Use `ansible.posix.synchronize` (rsync) for large directories (100x faster than `copy`).\n7. **Role Defaults vs Vars**: Use `defaults/main.yml` for user-overridable variables; use `vars/main.yml` for immutable internal role constants.\n8. **Gathering Facts Overhead**: Disable facts (`gather_facts: false`) on playbooks that don't need system facts to save seconds per host.\n9. **Delegation Fact Scope**: Delegating a task updates facts for the original host, not the delegated host unless explicitly specified.\n10. **Vault Secret in Logs**: Tasks echoing variables containing secrets will print plain text to stdout unless protected with `no_log: true`.\n"
+          },
+          {
+            "name": "playbook.yml",
+            "type": "file",
+            "content": "---\n- name: Master SRE Drill Summary\n  hosts: localhost\n  connection: local\n  tasks:\n    - name: Print Drill Topics\n      ansible.builtin.debug:\n        msg:\n          - \"1. Agentless Push Architecture & Pipelining\"\n          - \"2. 22-Level Variable Precedence Hierarchy\"\n          - \"3. Handlers and flush_handlers mechanics\"\n          - \"4. Idempotency guarantees & changed_when\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yml",
+                "type": "file",
+                "content": "# TODO: Master Drill: Write a hardened task copying a sensitive SSL cert with no_log: true and mode: '0600'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yml",
+                "type": "file",
+                "content": "- name: Deploy sensitive SSL private key\n  ansible.builtin.copy:\n    dest: /etc/ssl/private/app.key\n    content: \"{{ ssl_private_key }}\"\n    owner: root\n    group: root\n    mode: '0600'\n  no_log: true\n"
+              }
+            ]
           }
         ]
       }

@@ -1,89 +1,184 @@
 {
   "id": "tool/k8s",
-  "name": "Kubernetes & Cloud-Native Architecture",
-  "version": "1.0.0",
-  "description": "Comprehensive Kubernetes (CKA/CKAD) curriculum from control plane internals, Pods, and Deployments to Services, Ingress, StatefulSets, Storage, RBAC, NetworkPolicies, Helm, and Operators",
+  "name": "Kubernetes Architecture, Controllers & SRE Mastery",
+  "version": "1.2.0",
+  "description": "Complete high-depth Kubernetes curriculum covering Control Plane internals, etcd, Pod lifecycles, StatefulSets, Ingress, NetworkPolicies, Helm, Operators, and production SRE troubleshooting",
   "root": {
     "name": "k8s-workspace",
     "type": "directory",
     "children": [
       {
+        "name": "deployment.yaml",
+        "type": "file",
+        "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: trak-api\n  labels:\n    app: trak-api\nspec:\n  replicas: 3\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  selector:\n    matchLabels:\n      app: trak-api\n  template:\n    metadata:\n      labels:\n        app: trak-api\n    spec:\n      containers:\n      - name: api\n        image: ghcr.io/ndk123-web/trak-api:v1.0.0\n        ports:\n        - containerPort: 8080\n        resources:\n          requests:\n            cpu: \"100m\"\n            memory: \"128Mi\"\n          limits:\n            cpu: \"500m\"\n            memory: \"512Mi\"\n        livenessProbe:\n          httpGet:\n            path: /healthz\n            port: 8080\n          initialDelaySeconds: 5\n          periodSeconds: 10\n        readinessProbe:\n          httpGet:\n            path: /ready\n            port: 8080\n          initialDelaySeconds: 2\n          periodSeconds: 5\n"
+      },
+      {
+        "name": "service.yaml",
+        "type": "file",
+        "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: trak-api-service\nspec:\n  type: ClusterIP\n  selector:\n    app: trak-api\n  ports:\n  - port: 80\n    targetPort: 8080\n"
+      },
+      {
         "name": "README.md",
         "type": "file",
-        "content": "# ☸️ Complete Kubernetes (K8s) & Cloud-Native Architecture Track\n\nWelcome to your full Kubernetes learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-cluster-architecture` | **Cluster Architecture** | Control Plane (API server, etcd, scheduler, controller-mgr), Worker Nodes (kubelet, kube-proxy, CRI), `kubectl` |\n| `01-pods-and-lifecycle` | **Pods & Sidecars** | Pod manifests, init containers, sidecars, lifecycle phases (Pending, Running, CrashLoopBackOff) |\n| `02-replica-sets-and-deployments` | **Deployments & Rollouts** | RollingUpdate vs Recreate, maxSurge, maxUnavailable, rollbacks (`kubectl rollout undo`) |\n| `03-services-and-networking` | **Services & Discovery** | ClusterIP, NodePort, LoadBalancer, ExternalName, kube-proxy iptables/IPVS, CoreDNS discovery |\n| `04-ingress-and-gateway-api` | **Ingress & Gateway** | Ingress Controllers (NGINX/Traefik), TLS termination, Cert-Manager, Gateway API |\n| `05-configmaps-and-secrets` | **Configuration & Secrets** | ConfigMaps, Opaque/TLS Secrets, base64 vs encryption-at-rest, external secret stores |\n| `06-storage-pv-pvc-storageclasses` | **Persistent Storage** | StorageClasses, Dynamic Volume Provisioning, PVs, PVCs, access modes (RWO, RWX) |\n| `07-statefulsets-and-headless-services` | **Stateful Workloads** | StatefulSets (Postgres/Kafka), deterministic hostnames (`pod-0`), headless services (`clusterIP: None`) |\n| `08-daemonsets-and-jobs` | **DaemonSets & CronJobs** | DaemonSets (node agents), run-to-completion Jobs, scheduled CronJobs |\n| `09-health-probes-and-lifecycle-hooks` | **Health Probes** | LivenessProbe, ReadinessProbe, StartupProbe, preStop graceful shutdown hooks |\n| `10-resource-management-and-qos` | **Resource Requests & Limits**| CPU/Memory requests & limits, QoS classes (Guaranteed, Burstable, BestEffort), OOMKilled |\n| `11-autoscaling-hpa-vpa-keda` | **Autoscaling** | Horizontal Pod Autoscaler (HPA), Metrics Server, Vertical Pod Autoscaler (VPA), KEDA |\n| `12-scheduling-taints-tolerations-affinity` | **Advanced Scheduling** | NodeSelector, NodeAffinity, PodAntiAffinity (topologyKey), Taints & Tolerations |\n| `13-security-rbac-serviceaccounts` | **RBAC & Authorization** | ServiceAccounts, Roles, RoleBindings, ClusterRoles, ClusterRoleBindings, least privilege |\n| `14-network-policies-and-cni` | **NetworkPolicies & CNI** | Ingress/Egress firewall rules, default-deny all, CNI plugins (Calico, Cilium eBPF) |\n| `15-helm-package-management` | **Helm Chart Mastery** | Chart anatomy, `values.yaml`, Go template functions, `helm install/upgrade/rollback` |\n| `16-crds-and-operator-pattern` | **CRDs & Operators** | Custom Resource Definitions, reconciliation control loop, Kubebuilder / Operator SDK |\n| `17-monitoring-logging-observability` | **Observability** | Prometheus, Grafana, OpenTelemetry, Fluentbit/Loki, `kubectl top` |\n| `18-interview-questions-and-drills` | **CKA/CKAD Master Drill** | Top 10 high-yield Kubernetes interview scenarios & troubleshooting commands |\n\n---\n\n## 🛠️ Quick Commands\n\nApply manifests using `kubectl`:\n```bash\nkubectl apply -f 02-replica-sets-and-deployments/deployment.yaml\nkubectl get pods -w\n```\n"
+        "content": "# ☸️ Kubernetes Architecture, Controllers & SRE Mastery Track\n\nWelcome to the **Kubernetes Architecture, Controllers & SRE Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering Kubernetes Control Plane internals (etcd, kube-apiserver, scheduler), Pod lifecycles, zero-downtime rolling updates, StatefulSets, NetworkPolicies, Helm charts, Operator reconciliation loops, and production troubleshooting.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-control-plane-architecture` | Control Plane & Worker Internals | `kube-apiserver`, `etcd` Raft consensus, `kubelet`, `kube-proxy`, `kubectl` |\n| `01-pods-and-multi-container-patterns` | Pod Lifecycle & Sidecars | Pod states, initContainers, sidecar pattern, ephemeral debugging containers |\n| `02-deployments-and-replicasets` | Deployments & Rollouts | RollingUpdate (`maxSurge`/`maxUnavailable`), zero-downtime deployments, rollback |\n| `03-services-and-kube-proxy-networking` | Services & Service Discovery | ClusterIP, NodePort, LoadBalancer, `kube-proxy` (iptables vs IPVS), CoreDNS |\n| `04-ingress-controllers-and-gateway-api` | Ingress & Gateway API | Ingress-Nginx, TLS termination (`cert-manager`), Gateway API (`HTTPRoute`) |\n| `05-configmaps-and-secrets` | ConfigMaps & Secrets | ConfigMaps, Secrets, Projected Volumes, External Secrets Operator |\n| `06-storage-pv-pvc-and-storageclasses` | Storage (PV, PVC, CSI) | PersistentVolumes, PVCs, StorageClasses, dynamic provisioning, CSI drivers |\n| `07-statefulsets-and-headless-services` | StatefulSets & Headless Services | Stable network identities (`pod-0`), VolumeClaimTemplates, ordered startup |\n| `08-daemonsets-and-jobs-cronjobs` | DaemonSets, Jobs & CronJobs | Node-level DaemonSets (Fluentbit), batch Jobs, CronJob scheduling |\n| `09-resource-management-and-hpa` | Resources & Autoscaling (HPA) | Requests & limits (millicores, MiB), QoS classes, HPA v2 custom metrics |\n| `10-probes-liveness-readiness-startup` | Health Probes Architecture | StartupProbe, LivenessProbe (restart), ReadinessProbe (endpoint isolation) |\n| `11-node-scheduling-affinity-and-taints` | Advanced Scheduling | NodeSelector, NodeAffinity, PodAntiAffinity, Taints and Tolerations |\n| `12-security-rbac-serviceaccounts` | RBAC & Security | Roles, ClusterRoles, RoleBindings, ServiceAccounts, Projected Tokens |\n| `13-network-policies-and-cni` | NetworkPolicies & CNI | Default Deny, ingress/egress rules, Calico / Cilium eBPF packet routing |\n| `14-helm-package-manager` | Helm Charts & Packaging | Chart templates, `values.yaml`, `helm upgrade --install --atomic`, subcharts |\n| `15-crds-and-operator-pattern` | CRDs & Operator Pattern | Custom Resource Definitions, reconciliation loop (`Reconcile`), Kubebuilder |\n| `16-cluster-monitoring-prometheus-grafana` | Monitoring & Metrics | Prometheus Operator, ServiceMonitors, Grafana, kube-state-metrics |\n| `17-troubleshooting-and-debugging` | SRE Troubleshooting | `kubectl describe`, previous logs (`-p`), CrashLoopBackOff, ImagePullBackOff |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 Kubernetes SRE gotchas + Zero-Downtime Rolling Deployment Drill |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `manifest.yaml` / `example.sh` — Fully runnable concept demonstration.\n- `exercise/starter.yaml` — Hands-on problem with `TODO` markers.\n- `exercise/solution.yaml` — Complete reference solution.\n"
       },
       {
-        "name": "00-setup-and-cluster-architecture",
+        "name": "00-setup-and-control-plane-architecture",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - Kubernetes Cluster Architecture 🛠️\n\n### 1. Control Plane Components:\n- **kube-apiserver**: Front door of the cluster; exposes the Kubernetes REST API.\n- **etcd**: Consistent, highly-available distributed key-value store for all cluster state.\n- **kube-scheduler**: Watches for unscheduled Pods and selects nodes based on resources and affinity.\n- **kube-controller-manager**: Runs core controllers (NodeController, DeploymentController, ReplicaSetController).\n- **cloud-controller-manager**: Integrates with cloud provider APIs (LoadBalancers, routing, storage).\n\n### 2. Worker Node Components:\n- **kubelet**: Agent running on each node ensuring containers are running in Pods as described by PodSpecs.\n- **kube-proxy**: Maintains network routing rules on nodes (iptables/IPVS) for Service traffic.\n- **Container Runtime (CRI)**: `containerd` / `CRI-O` executing container images.\n"
+            "content": "# 00 — Control Plane & Worker Node Internals\n\n## 🎯 Control Plane Components\n- **kube-apiserver**: Stateless REST API gateway validating and persisting state to `etcd`.\n- **etcd**: Consistent, highly-available key-value database utilizing Raft consensus.\n- **kube-scheduler**: Assigns unscheduled Pods to optimal Nodes based on resource constraints.\n- **kube-controller-manager**: Runs core control loops (Deployment, Node, EndpointSlice controllers).\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 00: Kubernetes Cluster Status ===\"\nif command -v kubectl &>/dev/null; then\n  kubectl cluster-info 2>/dev/null || echo \"kubectl CLI installed; connecting to cluster...\"\nelse\n  echo \"kubectl CLI not in PATH.\"\nfi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Query cluster nodes with kubectl get nodes -o wide.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nkubectl get nodes -o wide 2>/dev/null || echo \"kubectl get nodes -o wide\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-pods-and-lifecycle",
+        "name": "01-pods-and-multi-container-patterns",
         "type": "directory",
         "children": [
           {
-            "name": "pod.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: app-pod\n  labels:\n    app: web\nspec:\n  initContainers:\n    - name: wait-for-db\n      image: busybox:1.36\n      command: ['sh', '-c', 'echo Waiting for DB... && sleep 2']\n  containers:\n    - name: web-app\n      image: nginx:alpine\n      ports:\n        - containerPort: 80\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - Pods & Lifecycle\n\n- **Pod**: Smallest deployable unit in Kubernetes representing one or more co-located containers sharing network namespace (`localhost`) and storage volumes.\n- **Phases**: `Pending` -> `Running` -> `Succeeded` / `Failed`.\n"
+            "content": "# 01 — Pod Lifecycle & Sidecar Architecture\n\n## 🎯 Multi-Container Patterns\n- **Sidecar**: Extends main container (e.g. Envoy proxy, log shipper).\n- **Init Container**: Runs sequentially to completion before main container starts.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: multi-container-demo\nspec:\n  initContainers:\n  - name: init-myservice\n    image: busybox:1.36\n    command: ['sh', '-c', 'echo Init finished!']\n  containers:\n  - name: app\n    image: nginx:alpine\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a pod with an initContainer that creates an index.html file in a shared emptyDir volume.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: shared-volume-pod\nspec:\n  volumes:\n  - name: shared-data\n    emptyDir: {}\n  initContainers:\n  - name: page-generator\n    image: busybox:1.36\n    command: ['sh', '-c', 'echo \"<h1>Rendered by Trak</h1>\" > /data/index.html']\n    volumeMounts:\n    - name: shared-data\n      mountPath: /data\n  containers:\n  - name: web\n    image: nginx:alpine\n    volumeMounts:\n    - name: shared-data\n      mountPath: /usr/share/nginx/html\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-replica-sets-and-deployments",
+        "name": "02-deployments-and-replicasets",
         "type": "directory",
         "children": [
           {
-            "name": "deployment.yaml",
-            "type": "file",
-            "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web-deployment\n  labels:\n    app: web\nspec:\n  replicas: 3\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  selector:\n    matchLabels:\n      app: web\n  template:\n    metadata:\n      labels:\n        app: web\n    spec:\n      containers:\n        - name: nginx\n          image: nginx:1.25-alpine\n          ports:\n            - containerPort: 80\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - Deployments & Rolling Updates\n\n```bash\n# Check rollout status\nkubectl rollout status deployment/web-deployment\n\n# Undo last rollout\nkubectl rollout undo deployment/web-deployment\n```\n"
+            "content": "# 02 — Zero-Downtime Rolling Updates\n\n## 🎯 RollingUpdate Parameters\n- `maxSurge: 1`: Allows 1 additional temporary Pod during update (`desired + 1`).\n- `maxUnavailable: 0`: Guarantees 100% capacity remains online throughout rollout.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 02: Rollout Status & History ===\"\necho \"kubectl rollout status deployment/trak-api\"\necho \"kubectl rollout history deployment/trak-api\"\necho \"kubectl rollout undo deployment/trak-api\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Configure RollingUpdate strategy with maxSurge: 25% and maxUnavailable: 0.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "strategy:\n  type: RollingUpdate\n  rollingUpdate:\n    maxSurge: 25%\n    maxUnavailable: 0\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-services-and-networking",
+        "name": "03-services-and-kube-proxy-networking",
         "type": "directory",
         "children": [
           {
-            "name": "service.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: web-service\nspec:\n  type: ClusterIP\n  selector:\n    app: web\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 80\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Services & Networking\n\n- **ClusterIP (Default)**: Exposes service on internal cluster IP.\n- **NodePort**: Exposes service on each node's static port (`30000-32767`).\n- **LoadBalancer**: Provisions cloud provider load balancer.\n- **CoreDNS**: In-cluster DNS format `<service-name>.<namespace>.svc.cluster.local`.\n"
+            "content": "# 03 — Services & kube-proxy (iptables vs IPVS)\n\n## 🎯 Service Types\n- **ClusterIP**: Internal stable virtual IP inside cluster.\n- **NodePort**: Exposes static port on every Node (30000-32767).\n- **LoadBalancer**: Provisions cloud provider external load balancer.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: backend-service\nspec:\n  type: ClusterIP\n  selector:\n    app: backend\n  ports:\n  - port: 80\n    targetPort: 8080\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Create a Headless Service (ClusterIP: None) for database clustering.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: db-headless\nspec:\n  clusterIP: None\n  selector:\n    app: postgres-cluster\n  ports:\n  - port: 5432\n    name: postgres\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-ingress-and-gateway-api",
+        "name": "04-ingress-controllers-and-gateway-api",
         "type": "directory",
         "children": [
           {
-            "name": "ingress.yaml",
-            "type": "file",
-            "content": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: web-ingress\n  annotations:\n    nginx.ingress.kubernetes.io/rewrite-target: /\nspec:\n  ingressClassName: nginx\n  rules:\n    - host: app.example.com\n      http:\n        paths:\n          - path: /\n            pathType: Prefix\n            backend:\n              service:\n                name: web-service\n                port:\n                  number: 80\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Ingress & Gateway API\n"
+            "content": "# 04 — Ingress Controllers & Gateway API\n\n## 🎯 Layer 7 Routing\nRoutes HTTP hostnames and URI paths to internal ClusterIP Services.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: app-ingress\n  annotations:\n    cert-manager.io/cluster-issuer: letsencrypt-prod\nspec:\n  ingressClassName: nginx\n  rules:\n  - host: api.trak.dev\n    http:\n      paths:\n      - path: /\n        pathType: Prefix\n        backend:\n          service:\n            name: trak-api-service\n            port:\n              number: 80\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Add TLS configuration to the Ingress resource for host api.trak.dev with secret trak-tls-cert.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "spec:\n  tls:\n  - hosts:\n    - api.trak.dev\n    secretName: trak-tls-cert\n"
+              }
+            ]
           }
         ]
       },
@@ -92,35 +187,62 @@
         "type": "directory",
         "children": [
           {
-            "name": "configmap.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  APP_ENV: \"production\"\n  LOG_LEVEL: \"info\"\n"
-          },
-          {
-            "name": "secret.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Secret\nmetadata:\n  name: app-secret\ntype: Opaque\nstringData:\n  DB_PASSWORD: \"supersecretpass123\"\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - ConfigMaps & Secrets\n"
+            "content": "# 05 — ConfigMaps & Secrets Management\n\n## 🎯 Ingestion Modes\n- Environment Variables (`valueFrom: configMapKeyRef`)\n- Volume Mounts (re-evaluated automatically without restarting Pod)\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  LOG_LEVEL: \"info\"\n  ENABLE_METRICS: \"true\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a Secret of type Opaque with base64 encoded API key.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: v1\nkind: Secret\nmetadata:\n  name: api-secrets\ntype: Opaque\nstringData:\n  API_KEY: \"secret-production-token-123\"\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-storage-pv-pvc-storageclasses",
+        "name": "06-storage-pv-pvc-and-storageclasses",
         "type": "directory",
         "children": [
           {
-            "name": "pvc.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: data-pvc\nspec:\n  accessModes:\n    - ReadWriteOnce\n  resources:\n    requests:\n      storage: 10Gi\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Persistent Volumes & Claims\n\n- **Access Modes**:\n  - `ReadWriteOnce (RWO)`: Mounted by single node.\n  - `ReadOnlyMany (ROX)`: Mounted read-only by multiple nodes.\n  - `ReadWriteMany (RWX)`: Mounted read-write by multiple nodes (NFS, Ceph).\n"
+            "content": "# 06 — Storage: PV, PVC & CSI Dynamic Provisioning\n\n## 🎯 Access Modes\n- `ReadWriteOnce` (RWO): Mountable read-write by a single Node.\n- `ReadOnlyMany` (ROX): Mountable read-only by multiple Nodes.\n- `ReadWriteMany` (RWX): Mountable read-write by multiple Nodes simultaneously (NFS, EFS).\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: v1\nkind: PersistentVolumeClaim\nmetadata:\n  name: data-pvc\nspec:\n  accessModes:\n    - ReadWriteOnce\n  resources:\n    requests:\n      storage: 20Gi\n  storageClassName: gp3\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Mount PVC 'data-pvc' to container path '/var/lib/data'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "spec:\n  volumes:\n  - name: storage-vol\n    persistentVolumeClaim:\n      claimName: data-pvc\n  containers:\n  - name: app\n    image: redis:7-alpine\n    volumeMounts:\n    - name: storage-vol\n      mountPath: /var/lib/data\n"
+              }
+            ]
           }
         ]
       },
@@ -129,169 +251,350 @@
         "type": "directory",
         "children": [
           {
-            "name": "statefulset.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Service\nmetadata:\n  name: postgres-headless\nspec:\n  clusterIP: None\n  selector:\n    app: postgres\n  ports:\n    - port: 5432\n---\napiVersion: apps/v1\nkind: StatefulSet\nmetadata:\n  name: postgres\nspec:\n  serviceName: postgres-headless\n  replicas: 2\n  selector:\n    matchLabels:\n      app: postgres\n  template:\n    metadata:\n      labels:\n        app: postgres\n    spec:\n      containers:\n        - name: postgres\n          image: postgres:16-alpine\n          ports:\n            - containerPort: 5432\n          env:\n            - name: POSTGRES_PASSWORD\n              value: example\n  volumeClaimTemplates:\n    - metadata:\n        name: pgdata\n      spec:\n        accessModes: [ \"ReadWriteOnce\" ]\n        resources:\n          requests:\n            storage: 5Gi\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - StatefulSets & Headless Services\n"
+            "content": "# 07 — StatefulSets & Stable Network Identifiers\n\n## 🎯 StatefulSet Guarantees\n- Deterministic names: `kafka-0`, `kafka-1`, `kafka-2`.\n- Dedicated persistent storage attached per replica via `volumeClaimTemplates`.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: apps/v1\nkind: StatefulSet\nmetadata:\n  name: redis-cluster\nspec:\n  serviceName: \"redis-service\"\n  replicas: 3\n  selector:\n    matchLabels:\n      app: redis-cluster\n  template:\n    metadata:\n      labels:\n        app: redis-cluster\n    spec:\n      containers:\n      - name: redis\n        image: redis:7-alpine\n  volumeClaimTemplates:\n  - metadata:\n      name: redis-data\n    spec:\n      accessModes: [ \"ReadWriteOnce\" ]\n      resources:\n        requests:\n          storage: 5Gi\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Write the DNS name to access pod 0 of StatefulSet 'redis-cluster' in namespace 'db'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "# DNS FQDN:\n# redis-cluster-0.redis-service.db.svc.cluster.local\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-daemonsets-and-jobs",
-        "type": "directory",
-        "children": [
-          {
-            "name": "cronjob.yaml",
-            "type": "file",
-            "content": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: db-backup\nspec:\n  schedule: \"0 2 * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          containers:\n            - name: backup\n              image: busybox:1.36\n              command: [\"sh\", \"-c\", \"echo Database backup complete!\"]\n          restartPolicy: OnFailure\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 08 - DaemonSets & Jobs\n"
-          }
-        ]
-      },
-      {
-        "name": "09-health-probes-and-lifecycle-hooks",
-        "type": "directory",
-        "children": [
-          {
-            "name": "probes.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: probe-pod\nspec:\n  containers:\n    - name: web\n      image: nginx:alpine\n      livenessProbe:\n        httpGet:\n          path: /\n          port: 80\n        initialDelaySeconds: 10\n        periodSeconds: 10\n      readinessProbe:\n        httpGet:\n          path: /\n          port: 80\n        initialDelaySeconds: 5\n        periodSeconds: 5\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 09 - Health Probes (Liveness vs Readiness vs Startup)\n\n- **Startup Probe**: Determines if application has initialized.\n- **Liveness Probe**: Detects deadlocks; kubelet restarts container on failure.\n- **Readiness Probe**: Checks if container is ready to accept traffic; removes from Service endpoints on failure.\n"
-          }
-        ]
-      },
-      {
-        "name": "10-resource-management-and-qos",
-        "type": "directory",
-        "children": [
-          {
-            "name": "resources.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: Pod\nmetadata:\n  name: qos-guaranteed-pod\nspec:\n  containers:\n    - name: app\n      image: nginx:alpine\n      resources:\n        requests:\n          cpu: \"250m\"\n          memory: \"256Mi\"\n        limits:\n          cpu: \"250m\"\n          memory: \"256Mi\"\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 10 - Resource Requests, Limits & QoS Classes\n\n1. **Guaranteed**: Requests == Limits for all CPU & Memory.\n2. **Burstable**: Requests < Limits.\n3. **BestEffort**: No requests or limits set (First to be evicted when node runs low on RAM).\n"
-          }
-        ]
-      },
-      {
-        "name": "11-autoscaling-hpa-vpa-keda",
-        "type": "directory",
-        "children": [
-          {
-            "name": "hpa.yaml",
-            "type": "file",
-            "content": "apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: web-hpa\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: web-deployment\n  minReplicas: 2\n  maxReplicas: 10\n  metrics:\n    - type: Resource\n      resource:\n        name: cpu\n        target:\n          type: Utilization\n          averageUtilization: 75\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 11 - Horizontal Pod Autoscaler (HPA)\n"
-          }
-        ]
-      },
-      {
-        "name": "12-scheduling-taints-tolerations-affinity",
-        "type": "directory",
-        "children": [
-          {
-            "name": "affinity.yaml",
-            "type": "file",
-            "content": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: anti-affinity-app\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: api\n  template:\n    metadata:\n      labels:\n        app: api\n    spec:\n      affinity:\n        podAntiAffinity:\n          requiredDuringSchedulingIgnoredDuringExecution:\n            - labelSelector:\n                matchExpressions:\n                  - key: app\n                    operator: In\n                    values:\n                      - api\n              topologyKey: \"kubernetes.io/hostname\"\n      containers:\n        - name: api\n          image: nginx:alpine\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 12 - Scheduling & Pod Anti-Affinity\n"
-          }
-        ]
-      },
-      {
-        "name": "13-security-rbac-serviceaccounts",
-        "type": "directory",
-        "children": [
-          {
-            "name": "rbac.yaml",
-            "type": "file",
-            "content": "apiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: app-reader-sa\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: pod-reader\nrules:\n  - apiGroups: [\"\"]\n    resources: [\"pods\"]\n    verbs: [\"get\", \"list\", \"watch\"]\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: read-pods-binding\nsubjects:\n  - kind: ServiceAccount\n    name: app-reader-sa\nroleRef:\n    kind: Role\n    name: pod-reader\n    apiGroup: rbac.authorization.k8s.io\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 13 - Role-Based Access Control (RBAC)\n"
-          }
-        ]
-      },
-      {
-        "name": "14-network-policies-and-cni",
-        "type": "directory",
-        "children": [
-          {
-            "name": "network-policy.yaml",
-            "type": "file",
-            "content": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: deny-all-ingress\nspec:\n  podSelector: {}\n  policyTypes:\n    - Ingress\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 14 - Network Policies & CNI Security\n"
-          }
-        ]
-      },
-      {
-        "name": "15-helm-package-management",
-        "type": "directory",
-        "children": [
-          {
-            "name": "Chart.yaml",
-            "type": "file",
-            "content": "apiVersion: v2\nname: my-app\ndescription: A Helm chart for Trak Kubernetes App\nversion: 0.1.0\nappVersion: \"1.0.0\"\n"
-          },
-          {
-            "name": "values.yaml",
-            "type": "file",
-            "content": "replicaCount: 3\nimage:\n  repository: nginx\n  tag: alpine\nservice:\n  type: ClusterIP\n  port: 80\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 15 - Helm Chart Package Management\n"
-          }
-        ]
-      },
-      {
-        "name": "16-crds-and-operator-pattern",
+        "name": "08-daemonsets-and-jobs-cronjobs",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - CRDs & The Operator Pattern\n\nAn Operator combines Custom Resource Definitions (CRDs) with custom controllers that continuously reconcile desired state with actual cluster state.\n"
+            "content": "# 08 — DaemonSets & Batch CronJobs\n\n## 🎯 DaemonSets\nEnsures a copy of the Pod runs on every single worker node (ideal for FluentBit, Prometheus node-exporter, Datadog).\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: database-backup\nspec:\n  schedule: \"0 2 * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          containers:\n          - name: backup\n            image: postgres:16-alpine\n            command: [\"/bin/sh\", \"-c\", \"echo Backup complete\"]\n          restartPolicy: OnFailure\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Configure successfulJobsHistoryLimit: 3 on the CronJob.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "spec:\n  successfulJobsHistoryLimit: 3\n  failedJobsHistoryLimit: 1\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-monitoring-logging-observability",
+        "name": "09-resource-management-and-hpa",
         "type": "directory",
         "children": [
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - Observability in Kubernetes\n\n```bash\n# Pod resource usage\nkubectl top pods\n\n# Node resource usage\nkubectl top nodes\n```\n"
+            "content": "# 09 — Quality of Service (QoS) & Horizontal Pod Autoscaler\n\n## 🎯 QoS Classes\n- **Guaranteed**: Requests == Limits for both CPU and Memory (lowest eviction priority).\n- **Burstable**: Requests < Limits.\n- **BestEffort**: No requests or limits specified (first to be OOM killed under node pressure!).\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata:\n  name: trak-api-hpa\nspec:\n  scaleTargetRef:\n    apiVersion: apps/v1\n    kind: Deployment\n    name: trak-api\n  minReplicas: 2\n  maxReplicas: 10\n  metrics:\n  - type: Resource\n    resource:\n      name: cpu\n      target:\n        type: Utilization\n        averageUtilization: 75\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Add memory utilization metric (target 80%) to the HPA resource.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "  - type: Resource\n    resource:\n      name: memory\n      target:\n        type: Utilization\n        averageUtilization: 80\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "10-probes-liveness-readiness-startup",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 10 — Health Probes: Startup, Liveness & Readiness\n\n## 🎯 Probe Responsibilities\n- **StartupProbe**: Disables liveness checks until slow startup finishes.\n- **LivenessProbe**: Kills and restarts hung/deadlocked containers.\n- **ReadinessProbe**: Removes unready Pods from Service load balancing endpoints.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "readinessProbe:\n  httpGet:\n    path: /ready\n    port: 8080\n  initialDelaySeconds: 3\n  periodSeconds: 5\nlivenessProbe:\n  httpGet:\n    path: /healthz\n    port: 8080\n  initialDelaySeconds: 10\n  periodSeconds: 10\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Define a startupProbe allowing up to 30 failures with 5-second period for slow booting apps.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "startupProbe:\n  httpGet:\n    path: /healthz\n    port: 8080\n  failureThreshold: 30\n  periodSeconds: 5\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "11-node-scheduling-affinity-and-taints",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 11 — Advanced Scheduling: Affinity & Taints\n\n## 🎯 Concepts\n- **Affinity**: Attracts Pods to specific Nodes or co-locates with specific Pods.\n- **Taints & Tolerations**: Repels Pods from Nodes unless the Pod explicitly tolerates the taint (e.g. GPU nodes).\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "spec:\n  affinity:\n    nodeAffinity:\n      requiredDuringSchedulingIgnoredDuringExecution:\n        nodeSelectorTerms:\n        - matchExpressions:\n          - key: topology.kubernetes.io/zone\n            operator: In\n            values:\n            - us-east-1a\n            - us-east-1b\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Add podAntiAffinity to spread pods across different nodes.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "  podAntiAffinity:\n    preferredDuringSchedulingIgnoredDuringExecution:\n    - weight: 100\n      podAffinityTerm:\n        labelSelector:\n          matchExpressions:\n          - key: app\n            operator: In\n            values: [\"trak-api\"]\n        topologyKey: \"kubernetes.io/hostname\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "12-security-rbac-serviceaccounts",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 12 — Role-Based Access Control (RBAC)\n\n## 🎯 RBAC Structure\n```text\n[ ServiceAccount ] ──(RoleBinding)──▶ [ Role ] ──▶ [ API Verbs on Resources ]\n```\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  namespace: default\n  name: pod-reader\nrules:\n- apiGroups: [\"\"]\n  resources: [\"pods\", \"services\"]\n  verbs: [\"get\", \"watch\", \"list\"]\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Bind the 'pod-reader' Role to ServiceAccount 'app-sa'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  name: read-pods-binding\n  namespace: default\nsubjects:\n- kind: ServiceAccount\n  name: app-sa\n  namespace: default\nroleRef:\n  kind: Role\n  name: pod-reader\n  apiGroup: rbac.authorization.k8s.io\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "13-network-policies-and-cni",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 13 — NetworkPolicies & Default Deny\n\n## 🎯 Zero-Trust Network Isolation\nBy default, all Pods can communicate with all other Pods. Apply Default Deny NetworkPolicy to enforce explicit traffic whitelisting.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: default-deny-all\n  namespace: default\nspec:\n  podSelector: {}\n  policyTypes:\n  - Ingress\n  - Egress\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Write a NetworkPolicy allowing ingress to 'database' pods only from pods labeled 'app: backend'.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: allow-backend-to-db\nspec:\n  podSelector:\n    matchLabels:\n      app: database\n  ingress:\n  - from:\n    - podSelector:\n        matchLabels:\n          app: backend\n    ports:\n    - protocol: TCP\n      port: 5432\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "14-helm-package-manager",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 14 — Helm 3 Package Management\n\n## 🎯 Helm Architecture\nHelm 3 is client-only (Tiller removed), rendering Go templates with `values.yaml` and applying via Kubernetes API.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 14: Helm Commands ===\"\necho \"helm repo add bitnami https://charts.bitnami.com/bitnami\"\necho \"helm upgrade --install my-release bitnami/redis --set auth.enabled=false --atomic\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: Write command to dry-run template rendering with helm template.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\necho \"Command: helm template my-release ./chart-dir -f custom-values.yaml\"\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "15-crds-and-operator-pattern",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 15 — Custom Resource Definitions (CRDs) & Operators\n\n## 🎯 The Reconciliation Loop\n```go\nfunc (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {\n    // 1. Fetch current world state\n    // 2. Compare with desired spec\n    // 3. Take mutating actions to converge state\n}\n```\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: traks.dev.trak\nspec:\n  group: dev.trak\n  versions:\n    - name: v1alpha1\n      served: true\n      storage: true\n      schema:\n        openAPIV3Schema:\n          type: object\n          properties:\n            spec:\n              type: object\n              properties:\n                replicas:\n                  type: integer\n  scope: Namespaced\n  names:\n    plural: traks\n    singular: trak\n    kind: TrakApp\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Instantiate a TrakApp custom resource.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: dev.trak/v1alpha1\nkind: TrakApp\nmetadata:\n  name: production-trak\nspec:\n  replicas: 5\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "16-cluster-monitoring-prometheus-grafana",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 16 — Prometheus Operator & ServiceMonitors\n\n## 🎯 Metrics Scraping\n`ServiceMonitor` declarative CRDs allow Prometheus to discover target endpoints dynamically via label selectors.\n"
+          },
+          {
+            "name": "manifest.yaml",
+            "type": "file",
+            "content": "apiVersion: monitoring.coreos.com/v1\nkind: ServiceMonitor\nmetadata:\n  name: trak-api-monitor\n  labels:\n    release: prometheus\nspec:\n  selector:\n    matchLabels:\n      app: trak-api\n  endpoints:\n  - port: metrics\n    interval: 15s\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Write PromQL query to calculate 5-minute rate of HTTP 500 errors.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "# PromQL Query:\n# sum(rate(http_requests_total{status=~\"5..\"}[5m])) by (service)\n"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "17-troubleshooting-and-debugging",
+        "type": "directory",
+        "children": [
+          {
+            "name": "README.md",
+            "type": "file",
+            "content": "# 17 — Production SRE Troubleshooting\n\n## 🎯 Common Failure States\n- `CrashLoopBackOff`: Application crashing on startup (check `kubectl logs -p`).\n- `ImagePullBackOff`: Bad image name, tag, or missing imagePullSecret.\n- `OOMKilled`: Container exceeded memory limit (exit code 137).\n- `Pending`: No node with sufficient CPU/RAM or node taint un-tolerated.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 17: Production Debugging Flow ===\"\necho \"1. kubectl describe pod <pod_name>\"\necho \"2. kubectl logs <pod_name> --previous\"\necho \"3. kubectl get events --sort-by='.metadata.creationTimestamp'\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\n# TODO: List all failed or crashing pods in all namespaces.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.sh",
+                "type": "file",
+                "content": "#!/usr/bin/env bash\nkubectl get pods -A --field-selector=status.phase!=Running,status.phase!=Succeeded 2>/dev/null || echo \"Command executed.\"\n"
+              }
+            ]
           }
         ]
       },
@@ -302,7 +605,28 @@
           {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - CKA / CKAD High-Yield Interview Scenarios 🎯\n\n### Top 5 Troubleshooting Scenarios:\n1. **CrashLoopBackOff**: Container starts and immediately exits (check `kubectl logs --previous` and `kubectl describe pod`).\n2. **OOMKilled**: Container memory limit exceeded; increase memory limits or investigate memory leaks.\n3. **ImagePullBackOff**: Typo in image name/tag, private registry credentials missing (`imagePullSecrets`).\n4. **Pending Pod**: No node with enough CPU/memory requests, or node taints not tolerated.\n5. **Service Endpoint Empty**: Selector labels on Service do not match labels in Pod template.\n\n🚀 You have completed the complete Kubernetes & Cloud-Native Architecture track!\n"
+            "content": "# 18 — High-Yield Kubernetes SRE Interview Drills\n\n## 🧠 Top 10 Gotchas\n1. **etcd Quorum Loss**: In a 3-node etcd cluster, loss of 2 nodes loses quorum and makes apiserver read-only.\n2. **CPU Throttling vs Memory OOM**: CPU exceeding limit is throttled (CFS quota); memory exceeding limit is instantly killed (OOM 137).\n3. **Readiness Probe Failure**: Fails to receive traffic but continues running; Liveness probe failure restarts the container.\n4. **Service IP Non-Pingable**: ClusterIPs are virtual iptables/IPVS rules and do not respond to ICMP ping.\n5. **DNS CoreDNS Bottleneck**: Excessive lookups of single-label hosts cause 5-second DNS delays with ndots:5.\n6. **StatefulSet Split-Brain**: Never force delete (`--force --grace-period=0`) a StatefulSet pod on a partitioned node.\n7. **`emptyDir` Lifecycle**: Deleted permanently when the Pod is deleted from the node.\n8. **Node Drain Eviction**: Respects PodDisruptionBudgets (PDB); unevictable pods stall maintenance.\n9. **CNI IP Exhaustion**: Subnet CIDR per node limits max pods per node.\n10. **Secret Base64 Encoding**: Base64 is encoding, not encryption; requires KMS envelope encryption at rest.\n"
+          },
+          {
+            "name": "example.sh",
+            "type": "file",
+            "content": "#!/usr/bin/env bash\necho \"=== 18: Master Kubernetes SRE Drill ===\"\necho \"1. Control Plane & etcd Raft consensus\"\necho \"2. Zero-Downtime RollingUpdate & PDBs\"\necho \"3. NetworkPolicies Zero-Trust isolation\"\necho \"4. Operator pattern reconciliation loop\"\necho \"🚀 You have completed the comprehensive Kubernetes Mastery Track!\"\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.yaml",
+                "type": "file",
+                "content": "# TODO: Master Drill: Define a PodDisruptionBudget ensuring at least 2 replicas of trak-api remain available during node drains.\n# FILL HERE\n"
+              },
+              {
+                "name": "solution.yaml",
+                "type": "file",
+                "content": "apiVersion: policy/v1\nkind: PodDisruptionBudget\nmetadata:\n  name: trak-api-pdb\nspec:\n  minAvailable: 2\n  selector:\n    matchLabels:\n      app: trak-api\n"
+              }
+            ]
           }
         ]
       }
