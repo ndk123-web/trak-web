@@ -1,8 +1,8 @@
 {
   "id": "lang/javascript",
-  "name": "JavaScript Deep-Dive & V8 Internals",
-  "version": "1.0.0",
-  "description": "Comprehensive JavaScript curriculum from V8 internals, execution contexts, and event loop to closures, prototypes, async streaming, Proxy/Reflect, and modern ES2024+",
+  "name": "JavaScript Runtime & Systems Mastery Track",
+  "version": "1.2.0",
+  "description": "Complete high-depth JavaScript curriculum covering V8 engine internals, Event Loop microtasks/macrotasks, prototypal inheritance, closures, and async streams",
   "root": {
     "name": "javascript-workspace",
     "type": "directory",
@@ -10,367 +10,623 @@
       {
         "name": "package.json",
         "type": "file",
-        "content": "{\n  \"name\": \"javascript-workspace\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test\"\n  }\n}\n"
+        "content": "{\n  \"name\": \"javascript-workspace\",\n  \"version\": \"0.1.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"start\": \"node index.js\",\n    \"test\": \"node --test\"\n  }\n}\n"
+      },
+      {
+        "name": "index.js",
+        "type": "file",
+        "content": "console.log(\"=== 🚀 JavaScript Mastery Workspace ===\");\nconsole.log(\"Node.js Version:\", process.version);\nconsole.log(\"V8 Engine Version:\", process.versions.v8);\nconsole.log(\"Platform:\", process.platform, process.arch);\n"
       },
       {
         "name": "README.md",
         "type": "file",
-        "content": "# 💛 Complete JavaScript Deep-Dive & V8 Internals Track\n\nWelcome to your full JavaScript learning workspace materialized with **Trak**.\n\n## 📚 Comprehensive Module Index\n\n| Module | Title | Key Topics Covered |\n| :--- | :--- | :--- |\n| `00-setup-and-node-runtime` | **Setup & Runtime** | Node.js, Bun, pnpm, `package.json`, ESM vs CJS |\n| `01-v8-engine-and-memory-layout` | **V8 & Memory Layout** | AST, Ignition bytecode, TurboFan JIT, Call stack vs Heap, Mark-and-Sweep GC, memory leaks |\n| `02-execution-context-and-hoisting` | **Execution Context** | Creation vs execution phase, Variable Environment, TDZ with `let`/`const` |\n| `03-scopes-lexical-env-closures` | **Scopes & Closures** | Scope chain, lexical environment, closures, private state, memoization |\n| `04-data-types-coercion-equality` | **Types & Coercion** | 7 Primitives, 1 Object, `==` vs `===` vs `Object.is()`, implicit coercion rules |\n| `05-this-keyword-and-binding-rules` | **The this Keyword** | Default, Implicit, Explicit (`call`/`apply`/`bind`), `new` binding, Lexical arrow functions |\n| `06-prototypes-and-inheritance` | **Prototypes & OOP** | Prototype chain, `[[Prototype]]`, `Object.create()`, Prototypal inheritance |\n| `07-objects-immutability-cloning` | **Objects & Immutability** | Shallow vs Deep copy (`structuredClone`), `Object.freeze()`, `Object.seal()` |\n| `08-arrays-and-functional-methods` | **Arrays & Methods** | `map`, `filter`, `reduce`, `flatMap`, `Array.from()`, `slice` vs `splice` |\n| `09-promises-and-async-await` | **Async & Promises** | Promise state machine, `Promise.all`, `allSettled`, `race`, `any`, `async`/`await` |\n| `10-event-loop-microtasks-macrotasks` | **Event Loop** | Call Stack, Microtasks (`queueMicrotask`, Promises) vs Macrotasks (`setTimeout`, I/O) |\n| `11-generators-and-async-iterators` | **Generators** | `function*`, `yield`, `for...of`, `Symbol.asyncIterator`, `for await...of` |\n| `12-symbols-and-well-known-symbols` | **Symbols & Metaprogramming** | `Symbol()`, `Symbol.iterator`, `Symbol.toPrimitive`, `Symbol.hasInstance` |\n| `13-map-set-weakmap-weakset` | **Collections** | `Map` vs `Object`, `Set` vs `Array`, `WeakMap` garbage collection & DOM caching |\n| `14-proxy-and-reflect-api` | **Proxy & Reflect** | Metaprogramming, Proxy traps (`get`, `set`, `deleteProperty`), `Reflect` API |\n| `15-streams-buffers-data-processing` | **Streams & Buffers** | `ArrayBuffer`, `TypedArray`, `DataView`, `ReadableStream`, Node `Buffer` |\n| `16-modern-es-features-es2020-2024` | **Modern ECMAScript** | Optional chaining `?.`, nullish coalescing `??`, logical assignment, `Object.groupBy` |\n| `17-dom-and-event-delegation` | **DOM & Events** | Event flow (Capturing, Target, Bubbling), event delegation, debounce vs throttle |\n| `18-modules-esm-vs-cjs` | **Modules System** | ESM (`import`/`export`) vs CJS (`require`/`module.exports`), dynamic `import()` |\n| `19-concurrency-and-worker-threads` | **Concurrency** | Web Workers / Node `worker_threads`, message passing, `SharedArrayBuffer`, `Atomics` |\n| `20-testing-and-profiling` | **Testing & Profiling** | Native Node test runner, `performance.now()`, memory leak profiling |\n| `21-interview-questions-and-drills` | **Interview Master Drill** | Top 10 high-yield JavaScript interview questions & tricky output puzzles |\n\n---\n\n## 🛠️ How to Navigate & Run\n\nRun any module with Node.js:\n```bash\ncd 00-setup-and-node-runtime\nnode index.js\n```\n"
+        "content": "# 💛 JavaScript Runtime & Systems Mastery Track\n\nWelcome to the **JavaScript Runtime & Systems Mastery Track** materialized by **Trak**.\n\nThis workspace is an in-depth curriculum covering V8 engine execution, the Event Loop (microtasks vs macrotasks), prototypal inheritance, closures, memory leaks, and modern Node.js streams.\n\n## 📚 Syllabus & Module Map\n\n| Module | Title | Key Topics & Internals |\n| :--- | :--- | :--- |\n| `00-setup-and-node-runtime` | Node.js & V8 Runtime | V8 engine, Ignition byte-code interpreter, TurboFan JIT compiler |\n| `01-basics-variables-and-hoisting` | Hoisting & Scope | `var`, `let`, `const`, Temporal Dead Zone (TDZ), execution context |\n| `02-primitive-types-and-coercion` | Type Coercion & Symbols | Implicit coercion (`==` vs `===`), `Symbol.for`, `BigInt`, IEEE 754 float traps |\n| `03-objects-prototypes-and-proto` | Prototypal Inheritance | `[[Prototype]]`, `Object.prototype`, `Object.create()`, property descriptors |\n| `04-arrays-and-functional-methods` | Arrays & V8 Packed Elements | `map`, `filter`, `reduce`, `flatMap`, V8 SMI / Double / Packed arrays |\n| `05-functions-closures-and-scope` | Lexical Closures | Scope chains, closure memory footprint, IIFE, currying |\n| `06-this-keyword-and-binding` | The `this` Keyword | Default, implicit, explicit binding (`call`, `apply`, `bind`), lexical `this` |\n| `07-classes-and-inheritance` | ES6+ Classes & Private Fields | Prototypes under the hood, `#private` properties, `super()`, static blocks |\n| `08-destructuring-rest-and-spread` | Destructuring & Cloning | Nested destructuring, rest/spread, shallow vs structured clone (`structuredClone`) |\n| `09-iterators-and-generators` | Iteration Protocol & Generators | `Symbol.iterator`, `yield*`, generator state machines, custom iterables |\n| `10-async-callbacks-promises-async-await` | Promises & Async/Await | `Promise` states, `.then()` chaining, `Promise.allSettled`, top-level await |\n| `11-event-loop-and-microtasks` | Event Loop Mechanics | Call stack, Microtasks (`process.nextTick`, Promises) vs Macrotasks (`setTimeout`, `setImmediate`) |\n| `12-error-handling-custom-errors` | Error Architecture | `try/catch/finally`, custom `Error` classes, `Error.captureStackTrace` |\n| `13-modules-commonjs-vs-esm` | Module Formats | CommonJS (`require`) vs ESM (`import`), live bindings, dynamic `import()` |\n| `14-memory-management-and-gc` | V8 Memory & Garbage Collection | Scavenge (New Space), Mark-Sweep-Compact (Old Space), memory leak debugging |\n| `15-dom-and-browser-apis` | Web APIs & Event Delegation | Event bubbling & capturing, passive listeners, `AbortController`, `fetch` API |\n| `16-testing-with-node-test-runner` | Native Node Test Runner | `node:test`, `node:assert/strict`, test suites, mocks |\n| `17-node-streams-and-buffers` | Streams & Binary Buffers | `Buffer` allocations, Readable/Writable/Transform streams, `stream.pipeline` |\n| `18-interview-questions-and-drills` | Interview Mastery Drills | Top 10 JS gotchas (Event loop execution order, hoisting, `this` traps) |\n\n---\n\n## 🛠️ How to Practice\nEach module contains:\n- `README.md` — Deep theoretical explanation and architecture notes.\n- `example.js` — Fully runnable concept demonstration.\n- `exercise/starter.js` — Hands-on problem with `TODO` markers.\n- `exercise/solution.js` — Complete reference solution.\n"
       },
       {
         "name": "00-setup-and-node-runtime",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=====================================================\");\nconsole.log(\"💛 Welcome to 00 - JavaScript Setup & Runtime Check!\");\nconsole.log(\"=====================================================\");\nconsole.log(`✔ Node.js Version: ${process.version}`);\nconsole.log(`✔ Architecture    : ${process.arch}`);\nconsole.log(`✔ Platform        : ${process.platform}`);\nconsole.log(\"\\n👉 Next: Head over to 01-v8-engine-and-memory-layout/index.js\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 00 - JavaScript Setup & Node.js Runtime 🛠️\n"
+            "content": "# 00 — Node.js & V8 Runtime Engine\n\n## 🎯 Learning Objectives\n- Understand the V8 engine architecture: **Ignition (Bytecode Interpreter)** and **TurboFan (Optimizing JIT Compiler)**\n- Master Node.js runtime globals (`process`, `globalThis`, `Buffer`)\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "function checkV8() {\n  console.log(\"=== 00: V8 Engine & Runtime Check ===\");\n  console.log(\"Node Version:\", process.version);\n  console.log(\"V8 Version:\", process.versions.v8);\n  console.log(\"Memory Usage (MB):\", Math.round(process.memoryUsage().heapUsed / 1024 / 1024));\n}\n\ncheckV8();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Write a function that returns the total process uptime in seconds\n// and total heap allocated in MB.\n\nfunction getRuntimeStats() {\n  // FILL HERE\n}\n\nconsole.log(getRuntimeStats());\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function getRuntimeStats() {\n  return {\n    uptimeSeconds: Math.round(process.uptime()),\n    heapAllocatedMB: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),\n  };\n}\n\nconsole.log(\"Runtime Stats:\", getRuntimeStats());\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "01-v8-engine-and-memory-layout",
+        "name": "01-basics-variables-and-hoisting",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=== 01: V8 Engine Pipeline & Memory Layout ===\");\nconsole.log(\"V8 Execution: Parser -> AST -> Ignition (Bytecode) -> TurboFan (JIT)\");\n\nconst mem = process.memoryUsage();\nconsole.log(\"Memory Usage (MB):\");\nconsole.log(`- Heap Used : ${(mem.heapUsed / 1024 / 1024).toFixed(2)} MB`);\nconsole.log(`- Heap Total: ${(mem.heapTotal / 1024 / 1024).toFixed(2)} MB`);\nconsole.log(`- RSS Total : ${(mem.rss / 1024 / 1024).toFixed(2)} MB`);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 01 - V8 Engine & Memory Layout\n\n- **Call Stack**: Fixed-size LIFO execution frames.\n- **Memory Heap**: Dynamic object allocations managed by Generational Mark-and-Sweep GC.\n"
+            "content": "# 01 — Hoisting, TDZ & Execution Context\n\n## 🎯 `var` vs `let` vs `const`\n- `var`: Function-scoped, hoisted and initialized with `undefined`.\n- `let` & `const`: Block-scoped, hoisted but uninitialized in the **Temporal Dead Zone (TDZ)**.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "console.log(\"=== 01: Hoisting & TDZ ===\");\n\n// var is hoisted and initialized to undefined\nconsole.log(\"Hoisted var:\", typeof hoistedVar); // 'undefined'\nvar hoistedVar = \"I am var\";\n\n// let is in TDZ until declaration\nfunction testTDZ() {\n  // console.log(tdzLet); // ReferenceError: Cannot access before initialization\n  let tdzLet = \"I am let\";\n  console.log(\"Accessed let:\", tdzLet);\n}\ntestTDZ();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Fix the classic closure loop bug without changing the setTimeout delay.\nfor (var i = 0; i < 3; i++) {\n  setTimeout(() => {\n    console.log(\"Buggy loop index:\", i); // Prints 3, 3, 3!\n  }, 10);\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "// Fix by using block-scoped 'let' which binds a fresh 'i' per iteration\nfor (let i = 0; i < 3; i++) {\n  setTimeout(() => {\n    console.log(\"Fixed loop index:\", i); // Prints 0, 1, 2!\n  }, 10);\n}\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "02-execution-context-and-hoisting",
+        "name": "02-primitive-types-and-coercion",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=== 02: Execution Context & Hoisting ===\");\n\n// var is hoisted and initialized to undefined\nconsole.log(\"Hoisted var a:\", typeof a, a); // undefined\nvar a = 10;\n\n// let and const are hoisted but UNINITIALIZED (in Temporal Dead Zone - TDZ)\n// console.log(b); // ReferenceError!\nlet b = 20;\n\nconsole.log(\"After initialization: a =\", a, \"b =\", b);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 02 - Execution Context & Hoisting\n"
+            "content": "# 02 — Type Coercion & Primitive Mechanics\n\n## 🎯 Loose (`==`) vs Strict (`===`)\n`==` triggers implicit type coercion algorithms (`ToPrimitive`, `ToNumber`). Always prefer `===`.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "console.log(\"=== 02: Coercion & Symbols ===\");\n\n// Coercion traps\nconsole.log(\"'42' == 42:\", '42' == 42);   // true\nconsole.log(\"'42' === 42:\", '42' === 42); // false\nconsole.log(\"null == undefined:\", null == undefined); // true\nconsole.log(\"null === undefined:\", null === undefined); // false\n\n// Symbols are unique identifiers\nconst sym1 = Symbol(\"id\");\nconst sym2 = Symbol(\"id\");\nconsole.log(\"sym1 === sym2:\", sym1 === sym2); // false\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a function 'isStrictObject(val)' that returns true only if\n// val is a real object (not null, not array, not primitive, not function).\n\nfunction isStrictObject(val) {\n  // FILL HERE\n  return false;\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function isStrictObject(val) {\n  return val !== null && typeof val === 'object' && !Array.isArray(val);\n}\n\nconsole.log(\"Object:\", isStrictObject({}));\nconsole.log(\"Array:\", isStrictObject([]));\nconsole.log(\"Null:\", isStrictObject(null));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "03-scopes-lexical-env-closures",
+        "name": "03-objects-prototypes-and-proto",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "function createCounter(initial = 0) {\n  let count = initial; // Private state closed over\n  return {\n    increment: () => ++count,\n    decrement: () => --count,\n    getCount: () => count,\n  };\n}\n\nconst counter = createCounter(10);\nconsole.log(\"=== 03: Closures & Lexical Scopes ===\");\nconsole.log(\"Count:\", counter.increment());\nconsole.log(\"Count:\", counter.increment());\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 03 - Scopes & Closures\n"
+            "content": "# 03 — Prototypal Inheritance & The Prototype Chain\n\n## 🎯 How Prototypes Work\nEvery JavaScript object has an internal slot `[[Prototype]]`. Property lookups walk up the prototype chain until found or reaching `null`.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "const vehicleProto = {\n  drive() {\n    return `${this.name} is driving on highway.`;\n  }\n};\n\nconst car = Object.create(vehicleProto);\ncar.name = \"Tesla Model S\";\n\nconsole.log(\"=== 03: Prototype Delegation ===\");\nconsole.log(car.drive());\nconsole.log(\"car's prototype === vehicleProto:\", Object.getPrototypeOf(car) === vehicleProto);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a custom 'myInstanceOf(obj, constructor)' function\n// that walks the prototype chain manually using Object.getPrototypeOf.\n\nfunction myInstanceOf(obj, constructor) {\n  // FILL HERE\n  return false;\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function myInstanceOf(obj, constructor) {\n  if (obj === null || typeof obj !== 'object') return false;\n  let proto = Object.getPrototypeOf(obj);\n  while (proto !== null) {\n    if (proto === constructor.prototype) return true;\n    proto = Object.getPrototypeOf(proto);\n  }\n  return false;\n}\n\nclass Animal {}\nclass Dog extends Animal {}\nconst d = new Dog();\nconsole.log(\"myInstanceOf Dog:\", myInstanceOf(d, Dog));\nconsole.log(\"myInstanceOf Animal:\", myInstanceOf(d, Animal));\nconsole.log(\"myInstanceOf Array:\", myInstanceOf(d, Array));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "04-data-types-coercion-equality",
+        "name": "04-arrays-and-functional-methods",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=== 04: Data Types & Implicit Coercion Rules ===\");\nconsole.log(\"[] + []     :\", JSON.stringify([] + []));         // \"\"\nconsole.log(\"[] + {}     :\", [] + {});                         // \"[object Object]\"\nconsole.log(\"'5' - 3     :\", \"5\" - 3);                         // 2\nconsole.log(\"'5' + 3     :\", \"5\" + 3);                         // \"53\"\nconsole.log(\"NaN === NaN :\", NaN === NaN);                     // false\nconsole.log(\"Object.is(NaN, NaN):\", Object.is(NaN, NaN));      // true\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 04 - Data Types & Coercion\n"
+            "content": "# 04 — Higher-Order Array Pipelines\n\n## 🎯 Immutability & Pipelines\n- `map()`, `filter()`, `reduce()`, `flatMap()` do not mutate the input array.\n- `sort()`, `splice()`, `reverse()` mutate in-place.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "const orders = [\n  { id: 1, item: \"Go Track\", amount: 49 },\n  { id: 2, item: \"Rust Track\", amount: 59 },\n  { id: 3, item: \"Python Track\", amount: 39 },\n];\n\nconst totalRevenue = orders.reduce((sum, order) => sum + order.amount, 0);\n\nconsole.log(\"=== 04: Array Pipelines ===\");\nconsole.log(\"Total Revenue:\", totalRevenue);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a custom 'myReduce(array, callback, initialVal)' function\n// that mirrors Array.prototype.reduce.\n\nfunction myReduce(array, callback, initialVal) {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function myReduce(array, callback, initialVal) {\n  let acc = initialVal !== undefined ? initialVal : array[0];\n  let startIdx = initialVal !== undefined ? 0 : 1;\n  for (let i = startIdx; i < array.length; i++) {\n    acc = callback(acc, array[i], i, array);\n  }\n  return acc;\n}\n\nconst sum = myReduce([10, 20, 30], (a, b) => a + b, 0);\nconsole.log(\"Custom reduce sum:\", sum);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "05-this-keyword-and-binding-rules",
+        "name": "05-functions-closures-and-scope",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const user = {\n  name: \"Alice\",\n  greetRegular: function () { return `Hello, ${this.name}`; },\n  greetArrow: () => `Hello, ${this?.name}`,\n};\n\nconst context = { name: \"Navnath\" };\n\nconsole.log(\"=== 05: The 'this' Keyword Binding Rules ===\");\nconsole.log(\"Implicit:\", user.greetRegular());\nconsole.log(\"Explicit call():\", user.greetRegular.call(context));\nconsole.log(\"Arrow function (lexical):\", user.greetArrow());\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 05 - The `this` Keyword\n"
+            "content": "# 05 — Closures, Lexical Scopes & Currying\n\n## 🎯 What is a Closure?\nA closure is the combination of a function bundled together with references to its surrounding lexical environment.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "function createRateLimiter(maxCalls, windowMs) {\n  let calls = 0;\n  return function () {\n    if (calls < maxCalls) {\n      calls++;\n      return true;\n    }\n    return false;\n  };\n}\n\nconsole.log(\"=== 05: Closure Rate Limiter ===\");\nconst limiter = createRateLimiter(2, 1000);\nconsole.log(\"Call 1:\", limiter()); // true\nconsole.log(\"Call 2:\", limiter()); // true\nconsole.log(\"Call 3:\", limiter()); // false\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a generic curry function 'curry(fn)' for binary functions.\n\nfunction curry(fn) {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) {\n      return fn.apply(this, args);\n    }\n    return function (...nextArgs) {\n      return curried.apply(this, args.concat(nextArgs));\n    };\n  };\n}\n\nconst add = (a, b, c) => a + b + c;\nconst curriedAdd = curry(add);\nconsole.log(\"Curried result:\", curriedAdd(1)(2)(3));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "06-prototypes-and-inheritance",
+        "name": "06-this-keyword-and-binding",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "function Animal(name) {\n  this.name = name;\n}\nAnimal.prototype.speak = function () {\n  return `${this.name} makes a sound.`;\n};\n\nconst dog = new Animal(\"Rex\");\nconsole.log(\"=== 06: Prototypes & Prototype Chain ===\");\nconsole.log(dog.speak());\nconsole.log(\"dog prototype link:\", Object.getPrototypeOf(dog) === Animal.prototype);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 06 - Prototypes & Inheritance\n"
+            "content": "# 06 — The `this` Binding Rules\n\n## 🎯 The 4 Binding Rules\n1. **Default Binding**: Global object (or `undefined` in strict mode).\n2. **Implicit Binding**: Context object before the dot (`obj.method()`).\n3. **Explicit Binding**: `.call()`, `.apply()`, `.bind()`.\n4. **`new` Binding**: Fresh object instance created by constructor.\n- **Arrow Functions**: Do not have their own `this`; they inherit lexically from enclosing scope.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "const user = {\n  name: \"Navnath\",\n  greet() {\n    return `Hello, I am ${this.name}`;\n  }\n};\n\nconst standalone = user.greet;\nconst bound = user.greet.bind(user);\n\nconsole.log(\"=== 06: this Binding ===\");\nconsole.log(\"Implicit:\", user.greet());\nconsole.log(\"Explicit bind:\", bound());\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a custom 'myBind(fn, context, ...args)' function\n// that returns a bound function without using Function.prototype.bind.\n\nfunction myBind(fn, context, ...boundArgs) {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function myBind(fn, context, ...boundArgs) {\n  return function (...callArgs) {\n    return fn.apply(context, [...boundArgs, ...callArgs]);\n  };\n}\n\nfunction greet(greeting, punctuation) {\n  return `${greeting}, ${this.name}${punctuation}`;\n}\n\nconst boundGreet = myBind(greet, { name: \"Trak\" }, \"Welcome\");\nconsole.log(\"Custom bind result:\", boundGreet(\"!\"));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "07-objects-immutability-cloning",
+        "name": "07-classes-and-inheritance",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const original = { a: 1, nested: { b: 2 } };\n\n// Deep Clone (native in modern JS)\nconst deepCloned = structuredClone(original);\ndeepCloned.nested.b = 99;\n\nconsole.log(\"=== 07: Objects & structuredClone ===\");\nconsole.log(\"Original nested.b:\", original.nested.b); // 2 (Untouched!)\nconsole.log(\"Cloned nested.b  :\", deepCloned.nested.b); // 99\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 07 - Object Immutability & Cloning\n"
+            "content": "# 07 — ES6 Classes & Hard Private `#` Fields\n\n## 🎯 Hard Private Fields\nProperties prefixed with `#` are encapsulated at runtime by the JS engine and cannot be read or written outside the class body.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "class DatabaseConnection {\n  #connectionString;\n\n  constructor(connStr) {\n    this.#connectionString = connStr;\n  }\n\n  connect() {\n    return `Connected securely to ${this.#connectionString.replace(/:\\w+@/, ':***@')}`;\n  }\n}\n\nconsole.log(\"=== 07: Classes & Private Fields ===\");\nconst db = new DatabaseConnection(\"postgres://user:secret123@localhost:5432/app\");\nconsole.log(db.connect());\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a class 'EventEmitter' with 'on(event, handler)'\n// and 'emit(event, ...data)' methods.\n\nclass EventEmitter {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "class EventEmitter {\n  #events = new Map();\n\n  on(event, handler) {\n    if (!this.#events.has(event)) this.#events.set(event, []);\n    this.#events.get(event).push(handler);\n  }\n\n  emit(event, ...args) {\n    const handlers = this.#events.get(event) || [];\n    handlers.forEach(fn => fn(...args));\n  }\n}\n\nconst emitter = new EventEmitter();\nemitter.on('ready', (msg) => console.log('Received ready event:', msg));\nemitter.emit('ready', 'Trak engine loaded');\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "08-arrays-and-functional-methods",
+        "name": "08-destructuring-rest-and-spread",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const nums = [1, 2, 3, 4, 5];\nconst sumOfEvenSquares = nums\n  .filter(x => x % 2 === 0)\n  .map(x => x ** 2)\n  .reduce((acc, x) => acc + x, 0);\n\nconsole.log(\"=== 08: Array Functional Pipeline ===\");\nconsole.log(\"Sum of even squares:\", sumOfEvenSquares);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 08 - Arrays & Functional Methods\n"
+            "content": "# 08 — Destructuring, Spread & `structuredClone`\n\n## 🎯 Deep vs Shallow Cloning\n- `{ ...obj }` and `Object.assign()` only perform shallow clones.\n- `structuredClone(obj)` creates a full deep clone handling circular references, Maps, Sets, and Dates.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "const original = {\n  title: \"Trak CLI\",\n  meta: { version: \"1.2.0\", tags: [\"go\", \"rust\"] },\n  created: new Date(),\n};\n\nconst deep = structuredClone(original);\ndeep.meta.tags.push(\"typescript\");\n\nconsole.log(\"=== 08: Deep Cloning ===\");\nconsole.log(\"Original tags count:\", original.meta.tags.length); // 2\nconsole.log(\"Cloned tags count:\", deep.meta.tags.length);       // 3\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a function 'deepMerge(target, source)' that recursively merges objects.\n\nfunction deepMerge(target, source) {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function deepMerge(target, source) {\n  const result = { ...target };\n  for (const key of Object.keys(source)) {\n    if (source[key] instanceof Object && key in target) {\n      result[key] = deepMerge(target[key], source[key]);\n    } else {\n      result[key] = source[key];\n    }\n  }\n  return result;\n}\n\nconst a = { server: { port: 8080, host: 'localhost' } };\nconst b = { server: { port: 9000, tls: true } };\nconsole.log(\"Merged:\", deepMerge(a, b));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "09-promises-and-async-await",
+        "name": "09-iterators-and-generators",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "async function fetchPipeline() {\n  const p1 = Promise.resolve(\"Result 1\");\n  const p2 = Promise.resolve(\"Result 2\");\n  const results = await Promise.all([p1, p2]);\n  return results;\n}\n\nfetchPipeline().then(res => {\n  console.log(\"=== 09: Promises & Async/Await ===\");\n  console.log(\"Combined Promise Results:\", res);\n});\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 09 - Promises & Async/Await\n"
+            "content": "# 09 — Generator Functions & Custom Iterables\n\n## 🎯 `Symbol.iterator`\nAny object with a `[Symbol.iterator]()` method returning `{ next() -> { value, done } }` can be used with `for...of` and spread `...`.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "function* idGenerator(prefix) {\n  let id = 1;\n  while (true) {\n    yield `${prefix}_${id++}`;\n  }\n}\n\nconsole.log(\"=== 09: Generator IDs ===\");\nconst gen = idGenerator(\"user\");\nconsole.log(\"Next:\", gen.next().value);\nconsole.log(\"Next:\", gen.next().value);\nconsole.log(\"Next:\", gen.next().value);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a custom Range class that implements [Symbol.iterator]()\n// so it can be looped with 'for (const x of new Range(1, 5))'.\n\nclass Range {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "class Range {\n  constructor(start, end) {\n    this.start = start;\n    this.end = end;\n  }\n\n  *[Symbol.iterator]() {\n    for (let i = this.start; i <= this.end; i++) {\n      yield i;\n    }\n  }\n}\n\nconst numbers = [...new Range(1, 5)];\nconsole.log(\"Spread range:\", numbers);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "10-event-loop-microtasks-macrotasks",
+        "name": "10-async-callbacks-promises-async-await",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"1. Synchronous Code\");\n\nsetTimeout(() => {\n  console.log(\"4. Macrotask (setTimeout)\");\n}, 0);\n\nqueueMicrotask(() => {\n  console.log(\"3. Microtask (queueMicrotask)\");\n});\n\nPromise.resolve().then(() => {\n  console.log(\"2. Microtask (Promise .then)\");\n});\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 10 - Event Loop Mechanics\n\n- **Call Stack** runs first until empty.\n- **Microtask Queue** executes ALL pending microtasks before any macrotask.\n- **Macrotask Queue** picks the next macrotask (timers, I/O).\n"
+            "content": "# 10 — Asynchronous Promises & async/await\n\n## 🎯 Promise Lifecycle\n- `pending` ➔ `fulfilled` (resolved) OR `rejected` (error).\n- `.then()` chains create new promises.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "function delay(ms, value) {\n  return new Promise((resolve) => setTimeout(() => resolve(value), ms));\n}\n\nasync function main() {\n  console.log(\"=== 10: Async/Await Concurrency ===\");\n  const results = await Promise.all([\n    delay(20, \"Result A\"),\n    delay(10, \"Result B\"),\n    delay(30, \"Result C\"),\n  ]);\n  console.log(\"All completed:\", results);\n}\n\nmain();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement 'promiseAllSettledPolyfill(promises)' that resolves\n// with an array of { status: 'fulfilled', value } or { status: 'rejected', reason }.\n\nfunction promiseAllSettledPolyfill(promises) {\n  // FILL HERE\n}\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function promiseAllSettledPolyfill(promises) {\n  return Promise.all(\n    promises.map((p) =>\n      Promise.resolve(p)\n        .then((value) => ({ status: 'fulfilled', value }))\n        .catch((reason) => ({ status: 'rejected', reason }))\n    )\n  );\n}\n\nconst p1 = Promise.resolve(42);\nconst p2 = Promise.reject(\"Error\");\npromiseAllSettledPolyfill([p1, p2]).then(console.log);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "11-generators-and-async-iterators",
+        "name": "11-event-loop-and-microtasks",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "function* idGenerator() {\n  let id = 1;\n  while (true) {\n    yield `ID_${id++}`;\n  }\n}\n\nconst gen = idGenerator();\nconsole.log(\"=== 11: Generators & Yield ===\");\nconsole.log(gen.next().value);\nconsole.log(gen.next().value);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 11 - Generators & Iterators\n"
+            "content": "# 11 — The Event Loop: Microtasks vs Macrotasks\n\n## 🎯 Queue Priority\n1. **Call Stack**: Executes synchronous code.\n2. **Microtask Queue** (`Promise.then`, `queueMicrotask`, `process.nextTick`): Drained completely after every stack frame!\n3. **Macrotask Queue** (`setTimeout`, `setInterval`, `setImmediate`, I/O): Executes one task per tick.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "console.log(\"=== 11: Event Loop Execution Order ===\");\nconsole.log(\"1. Synchronous Start\");\n\nsetTimeout(() => {\n  console.log(\"4. Macrotask (setTimeout)\");\n}, 0);\n\nqueueMicrotask(() => {\n  console.log(\"3. Microtask (queueMicrotask)\");\n});\n\nPromise.resolve().then(() => {\n  console.log(\"3. Microtask (Promise)\");\n});\n\nconsole.log(\"2. Synchronous End\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Predict the output order: [1, 2, 3, 4] and write a test confirming it.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "const executionOrder = [];\n\nexecutionOrder.push(\"sync-1\");\n\nsetTimeout(() => {\n  executionOrder.push(\"macro-1\");\n  console.log(\"Final Execution Order:\", executionOrder);\n}, 0);\n\nqueueMicrotask(() => {\n  executionOrder.push(\"micro-1\");\n});\n\nexecutionOrder.push(\"sync-2\");\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "12-symbols-and-well-known-symbols",
+        "name": "12-error-handling-custom-errors",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const iterableObj = {\n  data: [\"A\", \"B\", \"C\"],\n  [Symbol.iterator]() {\n    let index = 0;\n    return {\n      next: () => ({\n        value: this.data[index++],\n        done: index > this.data.length,\n      }),\n    };\n  },\n};\n\nconsole.log(\"=== 12: Well-Known Symbols (Symbol.iterator) ===\");\nfor (const item of iterableObj) {\n  console.log(\"Item:\", item);\n}\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 12 - Symbols & Well-Known Symbols\n"
+            "content": "# 12 — Custom Error Hierarchies & Stack Traces\n\n## 🎯 `Error.captureStackTrace`\nV8 API that excludes internal framework constructors from the user-facing error stack trace.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "class AppError extends Error {\n  constructor(message, statusCode = 500) {\n    super(message);\n    this.name = this.constructor.name;\n    this.statusCode = statusCode;\n    if (Error.captureStackTrace) {\n      Error.captureStackTrace(this, this.constructor);\n    }\n  }\n}\n\nclass NotFoundError extends AppError {\n  constructor(resource) {\n    super(`Resource '${resource}' not found.`, 404);\n  }\n}\n\nconsole.log(\"=== 12: Custom Errors ===\");\nconst err = new NotFoundError(\"User\");\nconsole.log(\"Name:\", err.name, \"| Status:\", err.statusCode, \"| Message:\", err.message);\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a ValidationError class with an array of 'errors'.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "class ValidationError extends Error {\n  constructor(errors) {\n    super(\"Validation Failed\");\n    this.name = \"ValidationError\";\n    this.errors = errors;\n  }\n}\n\nconst err = new ValidationError([\"Email required\", \"Password too short\"]);\nconsole.log(\"Errors:\", err.errors);\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "13-map-set-weakmap-weakset",
+        "name": "13-modules-commonjs-vs-esm",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const map = new Map();\nconst keyObj = { id: 1 };\nmap.set(keyObj, \"Active Session\");\n\nconsole.log(\"=== 13: Map, Set, WeakMap & WeakSet ===\");\nconsole.log(\"Map value for object key:\", map.get(keyObj));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 13 - Collections (Map/Set/WeakMap)\n"
+            "content": "# 13 — CommonJS vs ESM Modules\n\n## 🎯 Key Differences\n- **CommonJS**: Synchronous, dynamic `require()`, exports copies of values.\n- **ESM**: Asynchronous parsing, static `import`/`export`, live bindings.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "export function greet(name) {\n  return `Hello, ${name}!`;\n}\n\nexport const VERSION = \"1.2.0\";\n\nconsole.log(\"=== 13: ESM Module Exports ===\");\nconsole.log(greet(\"ndk123-web\"), \"(v\" + VERSION + \")\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement dynamic import demo with import().\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "async function loadMath() {\n  const path = 'node:path';\n  const pathMod = await import(path);\n  console.log(\"Joined path:\", pathMod.join('a', 'b', 'c'));\n}\n\nloadMath();\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "14-proxy-and-reflect-api",
+        "name": "14-memory-management-and-gc",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const target = { price: 100 };\n\nconst proxy = new Proxy(target, {\n  get(target, prop, receiver) {\n    console.log(`[Proxy Trap] Reading property '${String(prop)}'`);\n    return Reflect.get(target, prop, receiver);\n  },\n  set(target, prop, value, receiver) {\n    if (prop === \"price\" && value < 0) throw new Error(\"Price cannot be negative\");\n    return Reflect.set(target, prop, value, receiver);\n  },\n});\n\nconsole.log(\"=== 14: Metaprogramming with Proxy & Reflect ===\");\nconsole.log(\"Price:\", proxy.price);\nproxy.price = 150;\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 14 - Proxy & Reflect API\n"
+            "content": "# 14 — V8 Garbage Collection & Memory Leaks\n\n## 🎯 V8 Heap Spaces\n- **New Space (Young Gen)**: Fast Cheney's copying algorithm (Semi-space Nursery).\n- **Old Space (Old Gen)**: Mark-Sweep and Mark-Compact algorithm for surviving objects.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "console.log(\"=== 14: V8 Heap Statistics ===\");\nconst v8 = await import('node:v8');\nconsole.log(\"Heap Spaces:\", v8.getHeapSpaceStatistics().map(s => s.space_name));\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Identify the memory leak in the provided code snippet.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "// Fix by using WeakMap so keys are garbage collected when unreferenced elsewhere\nconst cache = new WeakMap();\nlet user = { id: 1 };\ncache.set(user, { profile: 'admin' });\nuser = null; // Eligible for garbage collection\nconsole.log(\"WeakMap memory safety demonstrated.\");\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "15-streams-buffers-data-processing",
+        "name": "15-dom-and-browser-apis",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const buffer = Buffer.from(\"Trak JavaScript Track\", \"utf-8\");\nconsole.log(\"=== 15: Streams, Buffers & Binary Data ===\");\nconsole.log(\"Buffer raw bytes:\", buffer);\nconsole.log(\"Buffer hex string:\", buffer.toString(\"hex\"));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 15 - Streams & Buffers\n"
+            "content": "# 15 — Event Bubbling, Delegation & `AbortController`\n\n## 🎯 `AbortController`\nStandard API to cancel pending fetch requests, event listeners, or asynchronous tasks.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "const controller = new AbortController();\nconst { signal } = controller;\n\nconsole.log(\"=== 15: AbortController API ===\");\nsignal.addEventListener('abort', () => {\n  console.log(\"Operation successfully aborted!\");\n});\n\ncontroller.abort();\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a timeout helper with AbortController.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function createTimeoutSignal(ms) {\n  const controller = new AbortController();\n  setTimeout(() => controller.abort(), ms);\n  return controller.signal;\n}\n\nconst sig = createTimeoutSignal(50);\nsig.addEventListener('abort', () => console.log('Timed out!'));\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "16-modern-es-features-es2020-2024",
+        "name": "16-testing-with-node-test-runner",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "const data = { user: { profile: null } };\n\n// Optional Chaining & Nullish Coalescing\nconst bio = data?.user?.profile?.bio ?? \"Default Bio\";\nconsole.log(\"=== 16: Modern ECMAScript Features ===\");\nconsole.log(\"Extracted Bio:\", bio);\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 16 - Modern ECMAScript (ES2020 - ES2024+)\n"
+            "content": "# 16 — Native Node.js Test Runner (`node:test`)\n\n## 🎯 Built-in Testing\nNode.js 18+ includes native test runners (`test`, `describe`, `it`) and strict assertions (`node:assert/strict`) without external dependencies.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "import test from 'node:test';\nimport assert from 'node:assert/strict';\n\ntest('math addition test', () => {\n  assert.equal(2 + 2, 4);\n});\n\nconsole.log(\"Run with: node --test example.js\");\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Write a unit test for a prime number checker function.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "function isPrime(n) {\n  if (n < 2) return false;\n  for (let i = 2; i * i <= n; i++) {\n    if (n % i === 0) return false;\n  }\n  return true;\n}\n\nimport assert from 'node:assert/strict';\nassert.equal(isPrime(2), true);\nassert.equal(isPrime(4), false);\nassert.equal(isPrime(17), true);\nconsole.log(\"✔ Prime tests passed!\");\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "17-dom-and-event-delegation",
+        "name": "17-node-streams-and-buffers",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "// Debounce helper\nfunction debounce(fn, delayMs) {\n  let timeoutId;\n  return function (...args) {\n    clearTimeout(timeoutId);\n    timeoutId = setTimeout(() => fn.apply(this, args), delayMs);\n  };\n}\n\nconst debouncedLog = debounce((msg) => console.log(\"Debounced:\", msg), 100);\nconsole.log(\"=== 17: DOM, Event Delegation & Debouncing ===\");\ndebouncedLog(\"Search input changed\");\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 17 - DOM Manipulation & Event Patterns\n"
+            "content": "# 17 — Node.js Streams & Pipeline\n\n## 🎯 Streaming Architecture\nStreams process chunks of data sequentially with fixed memory footprint rather than buffering entire files into RAM.\n"
+          },
+          {
+            "name": "example.js",
+            "type": "file",
+            "content": "import { Readable } from 'node:stream';\n\nconst stream = Readable.from(['Chunk 1\\n', 'Chunk 2\\n', 'Chunk 3\\n']);\n\nconsole.log(\"=== 17: Readable Stream ===\");\nfor await (const chunk of stream) {\n  process.stdout.write(chunk);\n}\n"
+          },
+          {
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Implement a Transform stream that converts text chunks to uppercase.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "import { Transform } from 'node:stream';\n\nconst upperTransform = new Transform({\n  transform(chunk, encoding, callback) {\n    callback(null, chunk.toString().toUpperCase());\n  }\n});\n\nupperTransform.on('data', (d) => console.log('Transformed:', d.toString()));\nupperTransform.write('hello trak');\nupperTransform.end();\n"
+              }
+            ]
           }
         ]
       },
       {
-        "name": "18-modules-esm-vs-cjs",
+        "name": "18-interview-questions-and-drills",
         "type": "directory",
         "children": [
           {
-            "name": "index.js",
-            "type": "file",
-            "content": "export function calculateTotal(prices) {\n  return prices.reduce((acc, p) => acc + p, 0);\n}\n\nconsole.log(\"=== 18: Modules (ESM vs CommonJS) ===\");\nconsole.log(\"Total:\", calculateTotal([10, 20, 30]));\n"
-          },
-          {
             "name": "README.md",
             "type": "file",
-            "content": "# 18 - Modules & Interoperability\n"
-          }
-        ]
-      },
-      {
-        "name": "19-concurrency-and-worker-threads",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=== 19: Concurrency & Worker Threads ===\");\nconsole.log(\"Worker threads allow running CPU-intensive JavaScript on separate OS threads.\");\n"
+            "content": "# 18 — High-Yield JavaScript Interview Questions & Master Drills\n\n## 🧠 Top 10 Gotchas\n1. **Event Loop Tick Order**: Microtasks always run before macrotasks.\n2. **`this` in Arrow Functions**: Lexically bound to definition context.\n3. **Prototypal Delegation**: `__proto__` vs `prototype`.\n4. **Closure Memory Leaks**: Holding outer scope references in global handlers.\n5. **Coercion Edge Cases**: `[] + [] == \"\"`, `[] + {} == \"[object Object]\"`.\n6. **`NaN === NaN`**: `false` (use `Number.isNaN`).\n7. **`Object.freeze()`**: Shallow freeze only.\n8. **WeakMap vs Map**: WeakMap keys are weakly held garbage-collectible objects.\n9. **`async` Return Values**: Always wrapped in a Promise.\n10. **Tail Call Optimization**: Not reliably supported across major engines.\n"
           },
           {
-            "name": "README.md",
+            "name": "example.js",
             "type": "file",
-            "content": "# 19 - Concurrency & Worker Threads\n"
-          }
-        ]
-      },
-      {
-        "name": "20-testing-and-profiling",
-        "type": "directory",
-        "children": [
-          {
-            "name": "calc.js",
-            "type": "file",
-            "content": "export function multiply(a, b) {\n  return a * b;\n}\n"
+            "content": "console.log(\"=== 18: Master Interview Drill ===\");\nconsole.log(\"1. Microtasks vs Macrotasks\");\nconsole.log(\"2. Prototypal chain delegation\");\nconsole.log(\"3. Lexical scope and closure capture\");\nconsole.log(\"4. V8 Heap management\");\nconsole.log(\"🚀 You have completed the comprehensive JavaScript Mastery Track!\");\n"
           },
           {
-            "name": "calc.test.js",
-            "type": "file",
-            "content": "import assert from \"node:assert\";\nimport test from \"node:test\";\nimport { multiply } from \"./calc.js\";\n\ntest(\"multiplies numbers\", () => {\n  assert.strictEqual(multiply(4, 5), 20);\n});\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 20 - Testing in JavaScript\n\n```bash\nnode --test calc.test.js\n```\n"
-          }
-        ]
-      },
-      {
-        "name": "21-interview-questions-and-drills",
-        "type": "directory",
-        "children": [
-          {
-            "name": "index.js",
-            "type": "file",
-            "content": "console.log(\"=====================================================\");\nconsole.log(\"🎯 21: High-Yield JavaScript Interview Questions & Drills\");\nconsole.log(\"=====================================================\");\nconsole.log(\"1. Event Loop: Microtasks (Promises) always run before Macrotasks (setTimeout).\");\nconsole.log(\"2. Closures: Functions retain access to their lexical scope even when executed outside.\");\nconsole.log(\"3. this binding: 5 rules - new, explicit, implicit, default, and lexical arrow.\");\nconsole.log(\"4. Hoisting & TDZ: let/const are in Temporal Dead Zone until initialized.\");\nconsole.log(\"5. structuredClone: Native deep copy handling cyclic references & TypedArrays.\");\nconsole.log(\"\\n🚀 You have completed the complete JavaScript Mastery curriculum!\");\n"
-          },
-          {
-            "name": "README.md",
-            "type": "file",
-            "content": "# 21 - High-Yield JavaScript Interview Questions 🎯\n"
+            "name": "exercise",
+            "type": "directory",
+            "children": [
+              {
+                "name": "starter.js",
+                "type": "file",
+                "content": "// TODO: Master Drill: Implement a Promise concurrency pool 'promisePool(tasks, limit)'\n// that runs max 'limit' promises in parallel.\n"
+              },
+              {
+                "name": "solution.js",
+                "type": "file",
+                "content": "async function promisePool(tasks, limit) {\n  const results = [];\n  const executing = new Set();\n  for (const task of tasks) {\n    const p = Promise.resolve().then(() => task());\n    results.push(p);\n    executing.add(p);\n    const clean = () => executing.delete(p);\n    p.then(clean).catch(clean);\n    if (executing.size >= limit) {\n      await Promise.race(executing);\n    }\n  }\n  return Promise.all(results);\n}\n\nconst tasks = [1, 2, 3, 4].map(id => () => new Promise(res => setTimeout(() => res(id * 10), 20)));\npromisePool(tasks, 2).then(res => console.log('Pool results:', res));\n"
+              }
+            ]
           }
         ]
       }
