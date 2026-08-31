@@ -1,53 +1,26 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { Hero } from "@/components/Hero";
 import { AmbientVideo } from "@/components/AmbientVideo";
-import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
+import { CategoryIcon } from "@/components/CategoryIcon";
+import { TRACKS, CATEGORIES } from "@/data/tracks";
 import {
   Terminal,
   FolderTree,
   BookOpen,
   Layers,
-  Copy,
-  Check,
-  Search,
   Cpu,
   HardDrive,
   ShieldCheck,
   GitBranch,
   ArrowRight,
   ExternalLink,
+  Sparkles
 } from "lucide-react";
 
 export default function Home() {
-  const [selectedCat, setSelectedCat] = useState<string>("all");
-  const [search, setSearch] = useState<string>("");
-  const [copiedTrack, setCopiedTrack] = useState<string | null>(null);
-
-  const filteredTracks = useMemo(() => {
-    return TRACKS.filter((t) => {
-      const matchesCat = selectedCat === "all" || t.category === selectedCat;
-      const q = search.toLowerCase().trim();
-      if (!q) return matchesCat;
-      return (
-        matchesCat &&
-        (t.name.toLowerCase().includes(q) ||
-          t.id.toLowerCase().includes(q) ||
-          t.description.toLowerCase().includes(q) ||
-          t.tags.some((tag) => tag.toLowerCase().includes(q)))
-      );
-    });
-  }, [selectedCat, search]);
-
-  const copyInitCommand = (trackId: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigator.clipboard.writeText(`trak init ${trackId}`);
-    setCopiedTrack(trackId);
-    setTimeout(() => setCopiedTrack(null), 2000);
-  };
 
   return (
     <div className="space-y-16 pb-20">
@@ -78,147 +51,142 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Catalog Index Matrix */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* 2. High-Level 5-Pillar Tracks Overview (Clean & Uncluttered) */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-white/[0.08]">
           <div>
             <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
-              Curriculum Catalog
+              Curriculum Tracks & Disciplines
             </h2>
             <p className="text-slate-400 text-xs sm:text-sm mt-1 font-sans">
-              19 structured blueprints covering systems programming, operating systems, cloud, and DevOps.
+              19 structured blueprints covering systems programming, kernel internals, databases, and cloud architecture.
             </p>
           </div>
 
-          {/* Search Input */}
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search tracks, topics..."
-              className="w-full pl-9 pr-3 py-1.5 rounded-lg bg-slate-950 border border-white/[0.08] text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
-            />
-          </div>
+          <Link
+            href="/tracks"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-mono font-bold transition-all shadow-md shadow-emerald-500/20 shrink-0 w-fit"
+          >
+            <span>Explore All 19 Blueprints</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
-        {/* Pillar Filter Tabs */}
-        <div className="mt-4 flex items-center gap-1 overflow-x-auto pb-2 scrollbar-none text-xs font-mono">
-          <button
-            onClick={() => setSelectedCat("all")}
-            className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              selectedCat === "all"
-                ? "bg-white/[0.1] text-white font-bold"
-                : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]"
-            }`}
-          >
-            All Tracks ({TRACKS.length})
-          </button>
+        {/* 5-Pillar Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {CATEGORIES.map((cat) => {
-            const count = TRACKS.filter((t) => t.category === cat.id).length;
-            const isSelected = selectedCat === cat.id;
+            const tracksInCat = TRACKS.filter((t) => t.category === cat.id);
+            const totalModules = tracksInCat.reduce((acc, t) => acc + t.modulesCount, 0);
 
             return (
-              <button
+              <Link
                 key={cat.id}
-                onClick={() => setSelectedCat(cat.id)}
-                className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap flex items-center gap-1.5 ${
-                  isSelected
-                    ? "bg-white/[0.1] text-white font-bold"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]"
-                }`}
+                href={`/tracks/${cat.id}`}
+                className="p-5 rounded-2xl bg-[#080b11] border border-white/[0.08] hover:border-white/[0.18] transition-all group flex flex-col justify-between space-y-4 hover:-translate-y-0.5 shadow-sm"
               >
-                <span>{cat.icon}</span>
-                <span>{cat.title}</span>
-                <span className="text-slate-500 font-normal">({count})</span>
-              </button>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 rounded-xl bg-white/[0.04] border border-white/[0.06] group-hover:scale-105 transition-transform">
+                        <CategoryIcon category={cat.id} className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">
+                          {cat.title}
+                        </h3>
+                        <p className="text-[11px] font-mono text-slate-500">
+                          {tracksInCat.length} Blueprints • {totalModules} Modules
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                    {cat.description}
+                  </p>
+                </div>
+
+                {/* Track Tags in this Category */}
+                <div className="pt-3 border-t border-white/[0.04] flex items-center justify-between">
+                  <div className="flex flex-wrap gap-1">
+                    {tracksInCat.slice(0, 4).map((t) => (
+                      <span
+                        key={t.slug}
+                        className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.03] text-slate-300 border border-white/[0.06]"
+                      >
+                        {t.name.split(" ")[0]}
+                      </span>
+                    ))}
+                    {tracksInCat.length > 4 && (
+                      <span className="px-1.5 py-0.5 text-[10px] font-mono text-slate-500">
+                        +{tracksInCat.length - 4} more
+                      </span>
+                    )}
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                </div>
+              </Link>
             );
           })}
+
+          {/* Quickstart Callout Box */}
+          <Link
+            href="/quickstart"
+            className="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-[#080b11] to-transparent border border-emerald-500/25 hover:border-emerald-500/40 transition-all group flex flex-col justify-between space-y-4 hover:-translate-y-0.5"
+          >
+            <div className="space-y-2">
+              <span className="text-[10px] font-mono font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/25 w-fit inline-block">
+                CLI Quickstart
+              </span>
+              <h3 className="font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">
+                1-Minute Setup Guide
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Install the single standalone Trak binary via PowerShell or Bash, then generate your first learning laboratory.
+              </p>
+            </div>
+            <div className="pt-3 border-t border-white/[0.04] flex items-center justify-between text-xs font-mono text-emerald-400 font-semibold">
+              <span>View Quickstart Guide</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </Link>
         </div>
+      </section>
 
-        {/* Structured Tracks Table / Grid */}
-        <div className="mt-4 border border-white/[0.08] rounded-xl overflow-hidden bg-[#080b11]">
-          <div className="divide-y divide-white/[0.06]">
-            {filteredTracks.map((track) => {
-              const isCopied = copiedTrack === track.id;
-
-              return (
-                <div
-                  key={track.id}
-                  className="p-4 hover:bg-white/[0.02] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
-                >
-                  {/* Left: Track ID & Info */}
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-emerald-400">
-                        {track.id}
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-500 px-1.5 py-0.2 rounded bg-white/[0.04]">
-                        {track.modulesCount} modules
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-500">
-                        v{track.version}
-                      </span>
-                    </div>
-
-                    <div className="text-sm font-semibold text-white">
-                      <Link
-                        href={`/tracks/${track.category}/${track.slug}`}
-                        className="hover:text-emerald-400 hover:underline"
-                      >
-                        {track.name}
-                      </Link>
-                      <span className="text-slate-400 font-normal text-xs ml-2 hidden sm:inline">
-                        — {track.highlight}
-                      </span>
-                    </div>
-
-                    {/* Topic Tags */}
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {track.tags.slice(0, 5).map((t, idx) => (
-                        <span
-                          key={idx}
-                          className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-black/40 text-slate-400 border border-white/[0.04]"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right: Quick Copy Command & Syllabus Link */}
-                  <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 pt-2 sm:pt-0 border-t border-white/[0.04] sm:border-t-0">
-                    <button
-                      onClick={(e) => copyInitCommand(track.id, e)}
-                      className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-950 hover:bg-slate-900 border border-white/[0.08] text-xs font-mono text-slate-300 hover:text-white transition-colors cursor-pointer"
-                      title="Copy init command"
-                    >
-                      {isCopied ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-semibold">Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 text-slate-500" />
-                          <span>trak init {track.id}</span>
-                        </>
-                      )}
-                    </button>
-
-                    <Link
-                      href={`/tracks/${track.category}/${track.slug}`}
-                      className="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs text-slate-300 hover:text-white transition-colors border border-white/[0.06] flex items-center justify-center gap-1"
-                    >
-                      <span>Syllabus</span>
-                      <ArrowRight className="w-3 h-3 text-slate-500" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
+      {/* 3. Visual Blueprint Studio Spotlight (For Creators & Customizers) */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#0c121e] via-[#080b11] to-[#0a101d] border border-emerald-500/25 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-medium">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Blueprint Studio • In-Browser Template IDE</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              Design, Customize & Contribute Track Templates
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Want to add a new curriculum track or customize templates for your team? Blueprint Studio provides a full in-browser VS Code workspace to scaffold files, write starter code in Monaco Editor, and export valid AST JSON with 1 click.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-300 pt-1">
+              <span className="flex items-center gap-1.5 text-emerald-400">
+                • Zero manual JSON writing
+              </span>
+              <span className="flex items-center gap-1.5 text-cyan-400">
+                • Real Monaco Code Editor
+              </span>
+              <span className="flex items-center gap-1.5 text-indigo-400">
+                • 1-Click AST Export for PRs
+              </span>
+            </div>
           </div>
+
+          <Link
+            href="/studio"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono transition-all shadow-lg shadow-emerald-500/20 shrink-0 cursor-pointer"
+          >
+            <span>Open Blueprint Studio</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 

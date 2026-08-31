@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import { Search, Terminal, Copy, Check, BookOpen, Sparkles, Layers, ArrowUpRight } from "lucide-react";
 import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
 import { SyllabusModal } from "./SyllabusModal";
+import { CategoryIcon } from "./CategoryIcon";
 
 export function CatalogExplorer() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -41,39 +42,40 @@ export function CatalogExplorer() {
   };
 
   return (
-    <section id="catalog" className="py-20 bg-[#07090e] border-t border-white/5 relative">
+    <section id="catalog" className="w-full relative pb-16">
       {/* Background Radial Tint */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-emerald-500/5 blur-[160px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono font-medium">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        {/* Section Heading - Centered & Responsive */}
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium">
             <Layers className="w-3.5 h-3.5" />
             <span>Interactive Catalog Explorer</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white mt-4 tracking-tight">
-            Browse All 19 Engineering Blueprints
-          </h2>
-          <p className="text-slate-400 mt-3 text-base sm:text-lg">
-            Each track comes with 17 to 24 in-depth modules containing source code, configurations, and structured cheatsheet READMEs.
+          <h1 className="text-2xl sm:text-4xl font-serif font-normal text-[#f5f4ef] tracking-tight">
+            All 19 Engineering Blueprints
+          </h1>
+          <p className="text-slate-400 text-xs sm:text-sm font-sans leading-relaxed">
+            Each track includes 17 to 24 in-depth modules with working starter code, hints, auto-verification tests, and solution guides.
           </p>
         </div>
 
         {/* Filter Controls & Search Bar */}
-        <div className="mt-12 space-y-4">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none justify-start md:justify-center">
+        <div className="space-y-4">
+          {/* Category Tabs - Natural Centered Wrap (Zero Clipping on All Screens) */}
+          <div className="flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
                 selectedCategory === "all"
-                  ? "bg-emerald-500 text-slate-950 font-bold shadow-lg shadow-emerald-500/20"
+                  ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
                   : "bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5"
               }`}
             >
-              <span>✨ All Tracks</span>
-              <span className="px-1.5 py-0.5 rounded-full bg-black/20 text-[10px]">
+              <Layers className="w-3.5 h-3.5" />
+              <span>All Tracks</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-black/20 text-[10px]">
                 {TRACKS.length}
               </span>
             </button>
@@ -86,14 +88,15 @@ export function CatalogExplorer() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-medium transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
                     isSelected
-                      ? "bg-emerald-500 text-slate-950 font-bold shadow-lg shadow-emerald-500/20"
+                      ? "bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20"
                       : "bg-white/5 hover:bg-white/10 text-slate-300 border border-white/5"
                   }`}
                 >
-                  <span>{cat.icon} {cat.title}</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-black/20 text-[10px]">
+                  <CategoryIcon category={cat.id} className="w-3.5 h-3.5" />
+                  <span>{cat.title}</span>
+                  <span className="px-1.5 py-0.2 rounded-full bg-black/20 text-[10px]">
                     {count}
                   </span>
                 </button>
@@ -102,19 +105,19 @@ export function CatalogExplorer() {
           </div>
 
           {/* Search Input Box */}
-          <div className="max-w-xl mx-auto relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+          <div className="max-w-md mx-auto relative">
+            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search tracks by name, tag, or topic (e.g. concurrency, mvcc, tokio, fastapi)..."
-              className="w-full pl-11 pr-4 py-3 rounded-xl bg-slate-900/80 border border-white/10 text-slate-100 placeholder:text-slate-500 text-sm focus:outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 backdrop-blur-md transition-all font-sans"
+              placeholder="Search by name, tag, or topic..."
+              className="w-full pl-9 pr-16 py-2 rounded-xl bg-slate-950/80 border border-white/10 text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 transition-all shadow-inner"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white px-2 py-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] font-mono text-slate-400 hover:text-white px-1.5 py-0.5 rounded bg-white/5"
               >
                 Clear
               </button>
@@ -123,17 +126,17 @@ export function CatalogExplorer() {
         </div>
 
         {/* Results Counter */}
-        <div className="mt-8 flex items-center justify-between text-xs text-slate-400 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between text-xs text-slate-400 font-mono pb-2 border-b border-white/[0.06]">
           <span>
             Showing <strong className="text-white">{filteredTracks.length}</strong> of {TRACKS.length} blueprints
           </span>
-          <span className="font-mono text-emerald-400">
+          <span className="hidden sm:inline text-emerald-400">
             $ trak init &lt;category&gt;/&lt;track&gt;
           </span>
         </div>
 
         {/* Tracks Grid */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredTracks.map((track) => {
             const isCopied = copiedTrackId === track.id;
 
@@ -141,68 +144,68 @@ export function CatalogExplorer() {
               <div
                 key={track.id}
                 onClick={() => setActiveModalTrack(track)}
-                className="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between cursor-pointer group relative overflow-hidden"
+                className="glass-panel glass-panel-hover rounded-2xl p-5 flex flex-col justify-between cursor-pointer group relative overflow-hidden bg-[#080b11] border border-white/[0.08] hover:border-white/[0.18] transition-all"
               >
                 {/* Top Subtle Gradient Accent */}
                 <div
                   className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${track.accentGradient}`}
                 />
 
-                <div>
+                <div className="space-y-3">
                   {/* Top Category & Version Badge */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-[11px] font-mono text-slate-300">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-[10px] font-mono text-slate-300">
                       <span>{track.categoryName}</span>
                     </span>
-                    <span className="text-[11px] font-mono text-slate-400">
+                    <span className="text-[10px] font-mono text-slate-400">
                       v{track.version}
                     </span>
                   </div>
 
                   {/* Title & Modules Count */}
-                  <div className="mt-4 flex items-start justify-between gap-2">
-                    <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
                       {track.name}
                     </h3>
-                    <span className="shrink-0 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-mono font-medium">
+                    <span className="shrink-0 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-medium">
                       {track.modulesCount} Modules
                     </span>
                   </div>
 
                   {/* Highlight sentence */}
-                  <div className="mt-1.5 text-xs text-emerald-400 font-medium flex items-center gap-1">
+                  <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
                     <Sparkles className="w-3 h-3 shrink-0" />
-                    <span>{track.highlight}</span>
+                    <span className="line-clamp-1">{track.highlight}</span>
                   </div>
 
                   {/* Description */}
-                  <p className="mt-3 text-xs text-slate-400 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 font-sans">
                     {track.description}
                   </p>
 
                   {/* Tags */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1 pt-1">
                     {track.tags.slice(0, 4).map((tag, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900/80 text-slate-400 border border-white/5"
+                        className="px-1.5 py-0.2 rounded text-[10px] font-mono bg-slate-900 text-slate-400 border border-white/5"
                       >
                         #{tag}
                       </span>
                     ))}
                     {track.tags.length > 4 && (
-                      <span className="px-1.5 py-0.5 text-[10px] font-mono text-slate-500">
-                        +{track.tags.length - 4} more
+                      <span className="px-1 py-0.2 text-[10px] font-mono text-slate-500">
+                        +{track.tags.length - 4}
                       </span>
                     )}
                   </div>
                 </div>
 
                 {/* Card Action Footer */}
-                <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between gap-3">
+                <div className="mt-5 pt-3 border-t border-white/[0.06] flex items-center justify-between gap-2">
                   <button
                     onClick={(e) => handleCopyCommand(track, e)}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-xs font-mono text-slate-200 transition-all cursor-pointer group/btn"
+                    className="flex-1 flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-900 border border-white/10 text-xs font-mono text-slate-300 hover:text-white transition-all cursor-pointer"
                     title="Copy CLI command"
                   >
                     {isCopied ? (
@@ -213,17 +216,20 @@ export function CatalogExplorer() {
                     ) : (
                       <>
                         <Terminal className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>trak init {track.id}</span>
+                        <span className="truncate">trak init {track.id}</span>
                       </>
                     )}
                   </button>
 
                   <button
-                    onClick={() => setActiveModalTrack(track)}
-                    className="p-2 rounded-xl bg-white/5 hover:bg-emerald-500/20 text-slate-400 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer"
-                    title="View complete syllabus"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveModalTrack(track);
+                    }}
+                    className="p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors border border-white/5"
+                    title="View Full Syllabus"
                   >
-                    <BookOpen className="w-4 h-4" />
+                    <BookOpen className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -231,19 +237,21 @@ export function CatalogExplorer() {
           })}
         </div>
 
+        {/* Empty Search State */}
         {filteredTracks.length === 0 && (
-          <div className="mt-12 text-center py-16 glass-panel rounded-2xl max-w-xl mx-auto">
-            <Search className="w-8 h-8 text-slate-500 mx-auto" />
-            <h3 className="text-base font-bold text-white mt-3">No matching tracks found</h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Try searching with another keyword like &quot;concurrency&quot;, &quot;docker&quot;, or &quot;python&quot;.
+          <div className="text-center py-16 bg-[#080b11] border border-white/5 rounded-2xl space-y-3">
+            <p className="text-base text-slate-300 font-medium">
+              No matching tracks found for &quot;{searchQuery}&quot;
+            </p>
+            <p className="text-xs text-slate-500">
+              Try searching by general topic, such as &quot;concurrency&quot;, &quot;kernel&quot;, &quot;postgres&quot;, or &quot;kubernetes&quot;.
             </p>
             <button
               onClick={() => {
-                setSelectedCategory("all");
                 setSearchQuery("");
+                setSelectedCategory("all");
               }}
-              className="mt-4 px-4 py-1.5 rounded-lg bg-emerald-500 text-slate-950 text-xs font-bold"
+              className="mt-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white transition-colors font-mono"
             >
               Reset Filters
             </button>

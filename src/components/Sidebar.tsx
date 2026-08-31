@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { CATEGORIES, TRACKS } from "@/data/tracks";
 import { TrakLogo } from "./TrakLogo";
+import { CategoryIcon } from "./CategoryIcon";
 
 interface SidebarProps {
   isOpenMobile?: boolean;
@@ -73,7 +74,7 @@ export function Sidebar({
           return {
             name: cat.title,
             href: `/tracks/${cat.id}`,
-            icon: () => <span className="text-sm select-none">{cat.icon}</span>,
+            icon: () => <CategoryIcon category={cat.id} className="w-4 h-4" />,
             badge: `${count}`,
           };
         }),

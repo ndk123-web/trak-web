@@ -210,28 +210,25 @@ export function Hero() {
   return (
     <section className="relative pt-8 pb-14 lg:pt-12 lg:pb-20 border-b border-white/[0.06]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Calm, Professional Metadata Row */}
-        <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400 mb-5">
-          <span className="font-semibold text-slate-200">Trak v1.0.0</span>
+        {/* Clean, Minimalist Text Row */}
+        <div className="flex flex-wrap items-center gap-2.5 text-xs font-mono text-slate-400 mb-5 select-none">
+          <span className="text-slate-200 font-semibold">Trak v1.0.0</span>
           <span className="text-slate-600">•</span>
-          <span className="text-slate-400">Last updated: August 30, 2026</span>
+          <span className="text-slate-300">19 Curated Blueprints</span>
           <span className="text-slate-600 hidden sm:inline">•</span>
-          <span className="text-slate-500 hidden sm:inline">19 Curriculum Tracks</span>
+          <span className="text-slate-400 hidden sm:inline">Offline & Filesystem Based</span>
         </div>
 
-        {/* Main Headline */}
+        {/* Main Headline & Simple Value Proposition */}
         <div className="max-w-3xl space-y-3">
           <h1 className="font-serif text-2xl sm:text-4xl lg:text-[40px] font-normal tracking-[-0.015em] text-[#f5f4ef] leading-[1.2]">
-            The CLI workspace generator for{" "}
+            Generate hands-on learning workspaces{" "}
             <span className="italic font-serif text-emerald-400 font-normal">
-              hands-on
-            </span>{" "}
-            technical learning.
+              in your terminal.
+            </span>
           </h1>
           <p className="text-sm sm:text-base text-slate-400 font-sans leading-relaxed max-w-2xl font-normal">
-            Scaffold structured, multi-module engineering laboratories with
-            working source code, build manifests, and documentation directly on
-            your local filesystem.
+            A developer CLI tool that scaffolds structured, multi-module project folders directly onto your computer—complete with runnable code examples, exercises, and reference notes.
           </p>
         </div>
 
