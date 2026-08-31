@@ -126,7 +126,7 @@ export default function QuickstartPage() {
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
-                      🪟 PowerShell
+                      PowerShell
                     </button>
                     <button
                       onClick={() => setInstallMethod("cmd")}
@@ -136,7 +136,7 @@ export default function QuickstartPage() {
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
-                      💻 CMD
+                      CMD
                     </button>
                     <button
                       onClick={() => setInstallMethod("bash")}
@@ -146,7 +146,7 @@ export default function QuickstartPage() {
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
-                      🐧 🍎 Bash
+                      Bash / Linux / macOS
                     </button>
                     <button
                       onClick={() => setInstallMethod("go")}
@@ -156,7 +156,7 @@ export default function QuickstartPage() {
                           : "text-slate-500 hover:text-slate-300"
                       }`}
                     >
-                      🐹 go install
+                      go install
                     </button>
                   </div>
 

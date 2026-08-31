@@ -12,6 +12,7 @@ import {
   FileJson,
   Layers,
   FolderTree,
+  HelpCircle,
 } from "lucide-react";
 import {
   TemplateBlueprint,
@@ -23,6 +24,7 @@ import { FileTreePane } from "./FileTreePane";
 import { EditorPane } from "./EditorPane";
 import { JsonPreviewPane } from "./JsonPreviewPane";
 import { MetadataModal } from "./MetadataModal";
+import { StudioGuideModal } from "./StudioGuideModal";
 
 // Pure Blank Template (100% Empty Workspace)
 const BLANK_TEMPLATE: TemplateBlueprint = {
@@ -44,6 +46,7 @@ export function BlueprintStudio() {
   const [activeFilePath, setActiveFilePath] = useState<string | null>(null);
   const [activeContent, setActiveContent] = useState<string>("");
   const [isMetaModalOpen, setIsMetaModalOpen] = useState<boolean>(false);
+  const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
   const [isLoadingPreset, setIsLoadingPreset] = useState<boolean>(false);
 
   // Resizable Panes Dimensions (in pixels)
@@ -415,6 +418,16 @@ export function BlueprintStudio() {
             </button>
           </div>
 
+          {/* Guide / How It Works Button */}
+          <button
+            onClick={() => setIsGuideOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/25 text-xs font-mono font-medium transition-colors cursor-pointer"
+            title="Learn how Blueprint Studio works"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Guide</span>
+          </button>
+
           {/* Metadata pill */}
           <button
             onClick={() => setIsMetaModalOpen(true)}
@@ -496,6 +509,12 @@ export function BlueprintStudio() {
         isOpen={isMetaModalOpen}
         onClose={() => setIsMetaModalOpen(false)}
         onSave={(updated) => setBlueprint((prev) => ({ ...prev, ...updated }))}
+      />
+
+      {/* Studio Guide & Explanation Modal */}
+      <StudioGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
       />
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Terminal, Heart, Sparkles, ExternalLink } from "lucide-react";
+import { Heart, Sparkles, ExternalLink } from "lucide-react";
+import { TrakLogo } from "./TrakLogo";
 
 export function Footer() {
   return (
@@ -11,11 +12,7 @@ export function Footer() {
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-cyan-500 p-0.5 flex items-center justify-center">
-                <div className="w-full h-full bg-[#090d16] rounded-[6px] flex items-center justify-center">
-                  <Terminal className="w-4 h-4 text-emerald-400" />
-                </div>
-              </div>
+              <TrakLogo size={28} />
               <span className="font-bold text-lg text-white">Trak</span>
               <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 v1.0.0
