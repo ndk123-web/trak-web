@@ -41,7 +41,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
             <div className="flex items-center gap-2">
               <Link
                 href={`/tracks/${track.category}`}
-                className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 font-medium hover:bg-white/[0.08] transition-colors"
+                className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold hover:bg-emerald-500/20 transition-colors"
               >
                 {track.categoryName}
               </Link>
@@ -54,7 +54,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               {track.name}
             </h1>
 
-            <p className="text-xs font-mono text-slate-400">
+            <p className="text-xs font-mono text-emerald-400 font-medium">
               {track.highlight}
             </p>
 
@@ -79,12 +79,12 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
           <div className="lg:w-80 shrink-0 space-y-3">
             <div className="p-4 rounded-xl bg-[#080a0f] border border-white/[0.08] space-y-2.5">
               <div className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
-                <Terminal className="w-3.5 h-3.5" />
+                <Terminal className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Initialize Workspace</span>
               </div>
 
               <div className="p-2.5 rounded-lg bg-black/60 border border-white/[0.06] font-mono text-xs text-slate-200 select-all">
-                $ {track.initCommand}
+                <span className="text-emerald-400 font-bold">$ </span>{track.initCommand}
               </div>
 
               <button
@@ -93,7 +93,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               >
                 {copied ? (
                   <>
-                    <Check className="w-3.5 h-3.5" />
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Copied Command</span>
                   </>
                 ) : (
@@ -118,7 +118,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
         <div className="lg:col-span-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
             <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
-              <BookOpen className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
               <span>Curriculum Modules ({track.modules.length})</span>
             </div>
           </div>
@@ -132,14 +132,14 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
                   onClick={() => setSelectedModuleIdx(idx)}
                   className={`w-full text-left p-3 rounded-lg transition-colors border flex items-start gap-2.5 cursor-pointer ${
                     isSelected
-                      ? "bg-white/[0.08] border-white/[0.18] text-white"
+                      ? "bg-emerald-500/10 border-emerald-500/30 text-white"
                       : "bg-[#0d0f15] hover:bg-white/[0.04] border-white/[0.06] text-slate-300"
                   }`}
                 >
                   <div
                     className={`w-6 h-6 rounded flex items-center justify-center font-mono text-[11px] font-bold shrink-0 ${
                       isSelected
-                        ? "bg-white text-zinc-950"
+                        ? "bg-emerald-500 text-slate-950 font-bold"
                         : "bg-white/[0.06] text-slate-400"
                     }`}
                   >
@@ -163,7 +163,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
         <div className="lg:col-span-7">
           <div className="rounded-xl p-6 bg-[#0d0f15] border border-white/[0.08] space-y-5 sticky top-24">
             <div className="flex items-center justify-between">
-              <span className="px-2 py-0.5 rounded bg-white/[0.04] text-slate-300 border border-white/[0.08] font-mono text-xs font-medium">
+              <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-bold">
                 Module {selectedModule.number}
               </span>
               <span className="text-xs font-mono text-slate-500">
@@ -188,7 +188,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
                 {selectedModule.topics.map((t, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#080a0f] text-slate-300 border border-white/[0.06]"
+                    className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#080a0f] text-emerald-300 border border-white/[0.06]"
                   >
                     {t}
                   </span>
@@ -198,13 +198,13 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
 
             <div className="p-3.5 rounded-lg bg-[#080a0f] border border-white/[0.06] text-xs text-slate-400 space-y-1.5">
               <div className="flex items-center gap-1.5 text-slate-300 font-bold font-mono text-[11px]">
-                <FolderTree className="w-3.5 h-3.5" />
+                <FolderTree className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Generated File Structure:</span>
               </div>
               <div className="font-mono text-slate-400 text-[11px] pl-4 space-y-0.5">
                 <div>├── {selectedModule.number}-{selectedModule.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}</div>
-                <div className="pl-4 text-slate-300">├── README.md (Comprehensive Guide &amp; Architecture)</div>
-                <div className="pl-4 text-slate-400">└── main (Hands-on Source Code Exercises)</div>
+                <div className="pl-4 text-emerald-400">├── README.md (Comprehensive Guide &amp; Architecture)</div>
+                <div className="pl-4 text-cyan-400">└── main (Hands-on Source Code Exercises)</div>
               </div>
             </div>
 
@@ -246,17 +246,17 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               <Link
                 key={rel.id}
                 href={`/tracks/${rel.category}/${rel.slug}`}
-                className="p-4 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.18] flex items-center justify-between group transition-colors"
+                className="p-4 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 flex items-center justify-between group transition-colors"
               >
                 <div className="space-y-0.5">
-                  <h4 className="text-sm font-bold text-white group-hover:text-slate-200 transition-colors">
+                  <h4 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">
                     {rel.name}
                   </h4>
                   <p className="text-xs text-slate-400 line-clamp-1 font-sans">
                     {rel.highlight}
                   </p>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors shrink-0 ml-2" />
+                <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400 transition-colors shrink-0 ml-2" />
               </Link>
             ))}
           </div>

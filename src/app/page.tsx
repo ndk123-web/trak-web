@@ -189,17 +189,17 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <div className="text-xs font-mono font-bold text-slate-300">
+          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-2">
+            <div className="text-xs font-mono font-bold text-emerald-400">
               01 / Remote AST Resolution
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Queries the remote GitHub registry for <code className="text-slate-200 font-mono">templates/&lt;category&gt;/&lt;tool&gt;.json</code> without requiring binary updates.
+              Queries the remote GitHub registry for <code className="text-emerald-300 font-mono">templates/&lt;category&gt;/&lt;tool&gt;.json</code> without requiring binary updates.
             </p>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <div className="text-xs font-mono font-bold text-slate-300">
+          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-2">
+            <div className="text-xs font-mono font-bold text-emerald-400">
               02 / Recursive File Generation
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -207,12 +207,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <div className="text-xs font-mono font-bold text-slate-300">
+          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-2">
+            <div className="text-xs font-mono font-bold text-emerald-400">
               03 / Metadata Stamping
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Stamps an immutable <code className="text-slate-200 font-mono">trak.json</code> manifest locally to track the template version and creation timestamp.
+              Stamps an immutable <code className="text-emerald-300 font-mono">trak.json</code> manifest locally to track the template version and creation timestamp.
             </p>
           </div>
         </div>
@@ -227,19 +227,19 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-2">
             <div className="flex items-center gap-2">
-              <HardDrive className="w-4 h-4 text-slate-400" />
-              <h3 className="text-sm font-bold text-white">Local-First & Offline</h3>
+              <HardDrive className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-white">Local-First &amp; Offline</h3>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
               No cloud accounts, telemetry, or browser sandbox constraints. Workspaces exist natively on your disk and work 100% offline with your preferred IDE (VS Code, GoLand, Neovim).
             </p>
           </div>
 
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
+          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-2">
             <div className="flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-slate-400" />
+              <Cpu className="w-4 h-4 text-emerald-400" />
               <h3 className="text-sm font-bold text-white">Production Internals Depth</h3>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -263,11 +263,11 @@ function HomeFAQItem({ q, children }: { q: string; children: React.ReactNode }) 
         onClick={() => setOpen(!open)}
         className="w-full flex items-start justify-between gap-4 py-4 text-left cursor-pointer group"
       >
-        <span className="text-[13px] font-medium text-slate-200 group-hover:text-white transition-colors leading-snug">
+        <span className="text-[13px] font-medium text-slate-200 group-hover:text-emerald-400 transition-colors leading-snug">
           {q}
         </span>
         <svg
-          className={`w-4 h-4 text-slate-500 shrink-0 mt-0.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 text-slate-500 group-hover:text-emerald-400 shrink-0 mt-0.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -295,23 +295,23 @@ function HomeFAQ() {
         {/* Column 1 */}
         <div className="rounded-lg border border-white/[0.08] px-4 bg-[#0d0f15]">
           <HomeFAQItem q="How does Trak work offline?">
-            When you run <code className="text-slate-300 font-mono">trak init</code>, Trak fetches the blueprint JSON once, then writes every directory, source file, and build manifest directly to your local disk. After that initial fetch, your entire workspace is yours — no servers, no telemetry, no browser sandbox. Open it in VS Code, GoLand, or Neovim and work completely offline.
+            When you run <code className="text-emerald-400 font-mono bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20">trak init</code>, Trak fetches the blueprint JSON once, then writes every directory, source file, and build manifest directly to your local disk. After that initial fetch, your entire workspace is yours — no servers, no telemetry, no browser sandbox. Open it in VS Code, GoLand, or Neovim and work completely offline.
           </HomeFAQItem>
           <HomeFAQItem q="What is the difference between Official and Community tracks?">
-            <strong className="text-slate-300">Official tracks</strong> (e.g. <code className="text-slate-300 font-mono">trak init lang/go</code>) are curated by the Trak maintainers and live under <code className="text-slate-300 font-mono">templates/</code> in the registry. <strong className="text-slate-300">Community tracks</strong> (e.g. <code className="text-slate-300 font-mono">trak init alice/lang/go</code>) are authored by developers worldwide and live under <code className="text-slate-300 font-mono">users/alice/</code>. Both go through the same CI validation.
+            <strong className="text-white">Official tracks</strong> (e.g. <code className="text-emerald-400 font-mono">trak init lang/go</code>) are curated by the Trak maintainers and live under <code className="text-slate-300 font-mono">templates/</code> in the registry. <strong className="text-white">Community tracks</strong> (e.g. <code className="text-emerald-300 font-mono">trak init alice/lang/go</code>) are authored by developers worldwide and live under <code className="text-slate-300 font-mono">users/alice/</code>. Both go through the same CI validation.
           </HomeFAQItem>
           <HomeFAQItem q="Can I customize where Trak creates the workspace?">
-            Yes. By default, Trak creates a <code className="text-slate-300 font-mono">./learn-&lt;tool&gt;</code> folder. Use the <code className="text-slate-300 font-mono">--path</code> flag to pick any location: <code className="text-slate-300 font-mono">trak init lang/rust --path ./my-rust-lab</code>.
+            Yes. By default, Trak creates a <code className="text-slate-300 font-mono">./learn-&lt;tool&gt;</code> folder. Use the <code className="text-emerald-400 font-mono">--path</code> flag to pick any location: <code className="text-slate-300 font-mono">trak init lang/rust --path ./my-rust-lab</code>.
           </HomeFAQItem>
         </div>
 
         {/* Column 2 */}
         <div className="rounded-lg border border-white/[0.08] px-4 bg-[#0d0f15]">
           <HomeFAQItem q="How do I publish a custom track for my team or students?">
-            Build your curriculum in <Link href="/studio" className="text-white underline">Blueprint Studio</Link>, export the AST JSON, fork the <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-white underline">trak-registry</a> repo, place your file at <code className="text-slate-300 font-mono">users/&lt;your-username&gt;/&lt;category&gt;/&lt;track&gt;.json</code>, and submit a PR. See the <Link href="/registry" className="text-white underline">full publishing guide</Link> for details.
+            Build your curriculum in <Link href="/studio" className="text-emerald-400 hover:underline">Blueprint Studio</Link>, export the AST JSON, fork the <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">trak-registry</a> repo, place your file at <code className="text-slate-300 font-mono">users/&lt;your-username&gt;/&lt;category&gt;/&lt;track&gt;.json</code>, and submit a PR. See the <Link href="/registry" className="text-emerald-400 hover:underline">full publishing guide</Link> for details.
           </HomeFAQItem>
           <HomeFAQItem q="Can I publish multiple versions of the same track?">
-            Yes. Append <code className="text-slate-300 font-mono">@version</code> to the filename (e.g. <code className="text-slate-300 font-mono">postgres@v2.0.0.json</code>). Users install a specific version with <code className="text-slate-300 font-mono">trak init alice/db/postgres@v2.0.0</code>. The default (no version) resolves to <code className="text-slate-300 font-mono">postgres.json</code>.
+            Yes. Append <code className="text-emerald-400 font-mono bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20">@version</code> to the filename (e.g. <code className="text-slate-300 font-mono">postgres@v1.1.0.json</code>). Users install a specific version with <code className="text-slate-300 font-mono">trak init alice/db/postgres@v1.1.0</code>. The default (no version) resolves to <code className="text-slate-300 font-mono">postgres.json</code>.
           </HomeFAQItem>
           <HomeFAQItem q="What languages and tools are supported?">
             Trak currently ships 19 official tracks across 5 pillars: programming languages (Go, Rust, Python, C, C++, Java, JavaScript), databases (PostgreSQL, Redis, SQL), operating systems (Linux), cloud platforms (AWS, Docker, Kubernetes, Terraform, Ansible), and devtools (Git, GitHub Actions, Nginx). Community contributors can add any topic.

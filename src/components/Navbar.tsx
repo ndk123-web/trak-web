@@ -28,7 +28,7 @@ export function Navbar() {
                 Trak
               </span>
               <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                v1.0.0
+                v1.1.0
               </span>
             </div>
           </a>

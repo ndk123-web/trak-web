@@ -32,8 +32,8 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
         {/* Header */}
         <div className="px-6 py-4 border-b border-white/[0.08] bg-[#11141d] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-white/[0.06] border border-white/[0.1] text-white">
-              <Sparkles className="w-4 h-4 text-slate-300" />
+            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
             </div>
             <div>
               <h2 className="text-base font-bold text-white">
@@ -46,7 +46,7 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -57,11 +57,11 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
           {/* 1. Why Studio Exists */}
           <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
             <h3 className="font-bold text-white text-sm flex items-center gap-2">
-              <span className="text-slate-400 font-mono">01.</span>
+              <span className="text-emerald-400 font-mono">01.</span>
               Why Does Blueprint Studio Exist?
             </h3>
             <p className="text-slate-400 leading-relaxed">
-              Trak stores curriculums as **Abstract Syntax Tree (AST) JSON files** (e.g. <code className="text-slate-200 font-mono">templates/lang/go.json</code>). Writing hundreds of lines of nested JSON manually with escaped newlines and quotes is tedious and error-prone.
+              Trak stores curriculums as **Abstract Syntax Tree (AST) JSON files** (e.g. <code className="text-emerald-400 font-mono">templates/lang/go.json</code>). Writing hundreds of lines of nested JSON manually with escaped newlines and quotes is tedious and error-prone.
             </p>
             <p className="text-slate-400 leading-relaxed">
               **Blueprint Studio** provides a visual VS Code environment directly in your browser to scaffold folders, author code in Monaco Editor, and export valid AST JSON with 1 click.
@@ -72,10 +72,10 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
           <div className="p-4 rounded-xl bg-[#090b10] border border-white/[0.08] space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                <span className="text-slate-400 font-mono">02.</span>
+                <span className="text-emerald-400 font-mono">02.</span>
                 Publish Your Community Track in 4 Steps (100% GitOps)
               </h3>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-slate-300 border border-white/[0.08]">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
                 Zero Sign-Up Required
               </span>
             </div>
@@ -87,7 +87,8 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
             <div className="space-y-2.5 pt-1 font-mono text-[11px]">
               <div className="p-3 rounded-lg bg-black/40 border border-white/[0.06] space-y-1">
                 <div className="text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-white">1. Design & Export</span>
+                  <span className="text-emerald-400 font-bold">1.</span>
+                  <span className="text-white">Design & Export</span>
                 </div>
                 <p className="text-slate-400 font-sans text-xs">
                   Create your workspace tree in Studio, write starter code, and click <strong>Download AST JSON</strong>.
@@ -96,33 +97,36 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
 
               <div className="p-3 rounded-lg bg-black/40 border border-white/[0.06] space-y-1">
                 <div className="text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-white">2. Fork the Registry</span>
+                  <span className="text-emerald-400 font-bold">2.</span>
+                  <span className="text-white">Fork the Registry</span>
                 </div>
                 <p className="text-slate-400 font-sans text-xs">
-                  Fork <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-slate-200 underline font-mono">github.com/ndk123-web/trak-registry</a> to your GitHub account.
+                  Fork <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline font-mono">github.com/ndk123-web/trak-registry</a> to your GitHub account.
                 </p>
               </div>
 
               <div className="p-3 rounded-lg bg-black/40 border border-white/[0.06] space-y-1">
                 <div className="text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-white">3. Place in Your User Namespace</span>
+                  <span className="text-emerald-400 font-bold">3.</span>
+                  <span className="text-white">Place in Your User Namespace</span>
                 </div>
                 <p className="text-slate-400 font-sans text-xs">
                   Add your JSON file under: <code className="text-slate-200 bg-white/5 px-1 py-0.5 rounded">users/&lt;your-github-username&gt;/&lt;category&gt;/&lt;tool&gt;[@version].json</code>
                   <br />
-                  <span className="text-slate-500 text-[11px]">(Allowed categories: <code className="text-slate-400">lang</code>, <code className="text-slate-400">os</code>, <code className="text-slate-400">cloud</code>, <code className="text-slate-400">db</code>, <code className="text-slate-400">tool</code>. Tag versions with <code className="text-amber-400">@v1.0.0</code>)</span>
+                  <span className="text-slate-500 text-[11px]">(Allowed categories: <code className="text-emerald-400">lang</code>, <code className="text-emerald-400">os</code>, <code className="text-emerald-400">cloud</code>, <code className="text-emerald-400">db</code>, <code className="text-emerald-400">tool</code>. Tag versions with <code className="text-emerald-300 font-bold">@v1.1.0</code>)</span>
                 </p>
               </div>
 
               <div className="p-3 rounded-lg bg-black/40 border border-white/[0.06] space-y-1">
                 <div className="text-slate-200 font-bold flex items-center gap-2">
-                  <span className="text-white">4. Open Pull Request (PR)</span>
+                  <span className="text-emerald-400 font-bold">4.</span>
+                  <span className="text-white">Open Pull Request (PR)</span>
                 </div>
                 <p className="text-slate-400 font-sans text-xs">
                   Submit a PR. GitHub Actions automatically verifies your AST schema and identity. Once merged, anyone can immediately run:
                 </p>
                 <div className="p-2 rounded bg-[#07090e] border border-white/[0.06] text-slate-200 text-xs">
-                  $ trak init &lt;your-username&gt;/&lt;category&gt;/&lt;tool&gt;[@version]
+                  <span className="text-emerald-400 font-bold">$ </span>trak init &lt;your-username&gt;/&lt;category&gt;/&lt;tool&gt;[@version]
                 </div>
               </div>
             </div>
@@ -130,14 +134,14 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
 
           {/* 3. Security & Guarantees */}
           <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
-            <h3 className="font-bold text-white text-xs flex items-center gap-1.5 text-slate-300">
-              <ShieldCheck className="w-4 h-4 text-slate-400" />
-              Automated Safety & Creator Isolation
+            <h3 className="font-bold text-white text-xs flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Automated Safety & Creator Isolation</span>
             </h3>
             <ul className="space-y-1 text-[11px] text-slate-400">
-              <li>• <strong>Actor Isolation:</strong> Contributors can only modify their own <code className="text-slate-300">users/&lt;username&gt;/</code> namespace.</li>
-              <li>• <strong>Binary Prohibition:</strong> AST validator rejects executable binaries (<code className="text-slate-300">.exe</code>, <code className="text-slate-300">.dll</code>, <code className="text-slate-300">.so</code>).</li>
-              <li>• <strong>Instant Distribution:</strong> No manual server deployments or database sync needed.</li>
+              <li>• <strong className="text-slate-300">Actor Isolation:</strong> Contributors can only modify their own <code className="text-slate-300">users/&lt;username&gt;/</code> namespace.</li>
+              <li>• <strong className="text-slate-300">Binary Prohibition:</strong> AST validator rejects executable binaries (<code className="text-slate-300">.exe</code>, <code className="text-slate-300">.dll</code>, <code className="text-slate-300">.so</code>).</li>
+              <li>• <strong className="text-slate-300">Instant Distribution:</strong> No manual server deployments or database sync needed.</li>
             </ul>
           </div>
         </div>

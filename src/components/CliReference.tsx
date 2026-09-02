@@ -101,12 +101,12 @@ export function CliReference() {
               <span className="text-sm font-bold text-white font-mono">
                 {current.title}
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.06]">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 Subcommand
               </span>
             </div>
             <div className="p-2.5 rounded-lg bg-black/50 border border-white/[0.06] font-mono text-xs text-slate-200">
-              $ {current.syntax}
+              <span className="text-emerald-400 font-bold">$ </span>{current.syntax}
             </div>
             <p className="text-xs text-slate-400 leading-relaxed font-sans pt-1">
               {current.description}
@@ -124,7 +124,7 @@ export function CliReference() {
                   key={idx}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-2 rounded-lg bg-[#080a0f] border border-white/[0.06] text-xs font-mono"
                 >
-                  <span className="text-slate-200 font-medium">
+                  <span className="text-emerald-300 font-medium">
                     {f.flag}
                   </span>
                   <span className="text-slate-400 font-sans text-xs">{f.desc}</span>
@@ -147,7 +147,7 @@ export function CliReference() {
                     className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-[#080a0f] border border-white/[0.06] text-xs font-mono"
                   >
                     <div className="flex items-center gap-2 overflow-x-auto">
-                      <span className="text-slate-500">$</span>
+                      <span className="text-emerald-400 font-bold">$</span>
                       <span className="text-slate-200 select-all">{ex.code}</span>
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
@@ -160,7 +160,7 @@ export function CliReference() {
                         title="Copy example"
                       >
                         {isCopied ? (
-                          <Check className="w-3.5 h-3.5 text-slate-200" />
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}

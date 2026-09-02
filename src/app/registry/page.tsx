@@ -70,8 +70,8 @@ export default function RegistryPage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-12">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-400 text-xs font-mono font-medium mb-3">
-          <BookOpen className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
+          <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
           <span>Registry Documentation</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-serif font-normal text-white tracking-tight">
@@ -85,42 +85,42 @@ export default function RegistryPage() {
       {/* ── How CLI Resolves Blueprints ── */}
       <section className="space-y-4">
         <h2 className="text-sm font-bold text-white flex items-center gap-2">
-          <Terminal className="w-4 h-4 text-slate-500" />
+          <Terminal className="w-4 h-4 text-emerald-400" />
           How the CLI resolves blueprints
         </h2>
         <p className="text-xs text-slate-400 font-sans leading-relaxed">
-          When you run <code className="text-slate-200 font-mono">trak init</code>, the CLI determines whether you want an official or community track based on the path format, then fetches the JSON blueprint from the registry via a raw GitHub URL.
+          When you run <code className="text-emerald-400 font-mono bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20">trak init</code>, the CLI determines whether you want an official or community track based on the path format, then fetches the JSON blueprint from the registry via a raw GitHub URL.
         </p>
 
         <div className="overflow-x-auto rounded-lg border border-white/[0.08]">
           <table className="w-full text-left text-xs font-mono">
             <thead>
               <tr className="bg-white/[0.02]">
-                <th className="px-4 py-2.5 text-slate-500 font-normal border-b border-white/[0.06]">You type</th>
-                <th className="px-4 py-2.5 text-slate-500 font-normal border-b border-white/[0.06]">Type</th>
-                <th className="px-4 py-2.5 text-slate-500 font-normal border-b border-white/[0.06]">File resolved in registry</th>
+                <th className="px-4 py-2.5 text-slate-400 font-normal border-b border-white/[0.06]">You type</th>
+                <th className="px-4 py-2.5 text-slate-400 font-normal border-b border-white/[0.06]">Type</th>
+                <th className="px-4 py-2.5 text-slate-400 font-normal border-b border-white/[0.06]">File resolved in registry</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
               <tr>
-                <td className="px-4 py-2.5 text-white">trak init lang/go</td>
+                <td className="px-4 py-2.5 text-emerald-400 font-semibold">trak init lang/go</td>
                 <td className="px-4 py-2.5 text-slate-400">Official</td>
                 <td className="px-4 py-2.5 text-slate-300">templates/lang/go.json</td>
               </tr>
               <tr>
-                <td className="px-4 py-2.5 text-white">trak init trak/lang/go</td>
+                <td className="px-4 py-2.5 text-emerald-400 font-semibold">trak init trak/lang/go</td>
                 <td className="px-4 py-2.5 text-slate-400">Official (explicit)</td>
                 <td className="px-4 py-2.5 text-slate-300">templates/lang/go.json</td>
               </tr>
               <tr>
-                <td className="px-4 py-2.5 text-white">{`trak init alice/db/postgres`}</td>
+                <td className="px-4 py-2.5 text-emerald-300 font-semibold">{`trak init alice/db/postgres`}</td>
                 <td className="px-4 py-2.5 text-slate-400">Community</td>
                 <td className="px-4 py-2.5 text-slate-300">users/alice/db/postgres.json</td>
               </tr>
               <tr>
-                <td className="px-4 py-2.5 text-white">{`trak init alice/db/postgres@v2.0.0`}</td>
+                <td className="px-4 py-2.5 text-amber-400 font-semibold">{`trak init alice/db/postgres@v1.1.0`}</td>
                 <td className="px-4 py-2.5 text-slate-400">Community (versioned)</td>
-                <td className="px-4 py-2.5 text-slate-300">users/alice/db/postgres@v2.0.0.json</td>
+                <td className="px-4 py-2.5 text-slate-300">users/alice/db/postgres@v1.1.0.json</td>
               </tr>
             </tbody>
           </table>
@@ -139,12 +139,12 @@ export default function RegistryPage() {
             {
               step: "1",
               title: "Create your blueprint",
-              desc: <>Use <Link href="/studio" className="text-white underline">Blueprint Studio</Link> to visually scaffold directories and files, or write the JSON by hand. Export a valid AST JSON file when done.</>,
+              desc: <>Use <Link href="/studio" className="text-emerald-400 hover:underline">Blueprint Studio</Link> to visually scaffold directories and files, or write the JSON by hand. Export a valid AST JSON file when done.</>,
             },
             {
               step: "2",
               title: "Fork & commit",
-              desc: <>Fork <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-white underline">ndk123-web/trak-registry</a> on GitHub. Place your file at:<br /><code className="text-slate-200 font-mono text-[11px]">users/&lt;your-github-username&gt;/&lt;category&gt;/&lt;track-name&gt;.json</code><br /><span className="text-slate-500 text-[11px]">For versioned releases: <code className="text-slate-300 font-mono">track-name@v1.0.0.json</code></span></>,
+              desc: <>Fork <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:underline">ndk123-web/trak-registry</a> on GitHub. Place your file at:<br /><code className="text-slate-200 font-mono text-[11px] bg-black/40 px-1 py-0.5 rounded border border-white/[0.06]">users/&lt;your-github-username&gt;/&lt;category&gt;/&lt;track-name&gt;.json</code><br /><span className="text-slate-500 text-[11px]">For versioned releases: <code className="text-emerald-300 font-mono">track-name@v1.1.0.json</code></span></>,
             },
             {
               step: "3",
@@ -154,11 +154,11 @@ export default function RegistryPage() {
             {
               step: "4",
               title: "Your track is live",
-              desc: <>Once merged, anyone can immediately run:<br /><code className="text-slate-200 font-mono text-[11px]">$ trak init &lt;your-username&gt;/&lt;category&gt;/&lt;track-name&gt;</code></>,
+              desc: <>Once merged, anyone can immediately run:<br /><code className="text-emerald-400 font-mono text-[11px] bg-black/40 px-2 py-1 rounded border border-white/[0.06] inline-block mt-1">$ trak init &lt;your-username&gt;/&lt;category&gt;/&lt;track-name&gt;</code></>,
             },
           ].map((s) => (
             <div key={s.step} className="flex gap-4 items-start p-4 bg-[#0d0f15] border-b border-white/[0.04] last:border-b-0">
-              <span className="text-xs font-mono font-bold text-slate-500 bg-white/[0.04] rounded px-2 py-0.5 shrink-0">{s.step}</span>
+              <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded px-2 py-0.5 shrink-0">{s.step}</span>
               <div className="space-y-1">
                 <div className="text-[13px] font-medium text-white">{s.title}</div>
                 <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
@@ -177,9 +177,9 @@ export default function RegistryPage() {
 
         {/* Pass 1 */}
         <div className="rounded-lg border border-white/[0.08] overflow-hidden">
-          <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.06]">
-            <span className="text-xs font-mono font-bold text-slate-300">Pass 1 — PR author &amp; file security</span>
-            <p className="text-[11px] text-slate-500 mt-0.5">Only runs on pull_request events. Uses git diff to detect which files changed.</p>
+          <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.06] flex items-center justify-between">
+            <span className="text-xs font-mono font-bold text-emerald-400">Pass 1 — PR author &amp; file security</span>
+            <span className="text-[10px] font-mono text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Security Check</span>
           </div>
           <div className="p-4 space-y-2.5 text-xs">
             {[
@@ -188,11 +188,11 @@ export default function RegistryPage() {
               { rule: "Cannot modify another user's namespace", detail: <>You can only touch <code className="text-slate-300 font-mono">users/&lt;your-username&gt;/</code>. If your GitHub username is <code className="text-slate-300 font-mono">alice</code>, you can&apos;t modify <code className="text-slate-300 font-mono">users/bob/</code>.</> },
               { rule: "Cannot modify root repository files", detail: <>Files like <code className="text-slate-300 font-mono">README.md</code> or <code className="text-slate-300 font-mono">LICENSE</code> at the repo root are blocked.</> },
               { rule: "Path must be exactly 4 segments", detail: <><code className="text-slate-300 font-mono">users/&lt;you&gt;/&lt;category&gt;/&lt;file&gt;.json</code> — no deeper, no shallower.</> },
-              { rule: "Must use a valid category", detail: <>Allowed: <code className="text-slate-300 font-mono">lang</code>, <code className="text-slate-300 font-mono">os</code>, <code className="text-slate-300 font-mono">cloud</code>, <code className="text-slate-300 font-mono">db</code>, <code className="text-slate-300 font-mono">tool</code>.</> },
+              { rule: "Must use a valid category", detail: <>Allowed: <code className="text-emerald-400 font-mono">lang</code>, <code className="text-emerald-400 font-mono">os</code>, <code className="text-emerald-400 font-mono">cloud</code>, <code className="text-emerald-400 font-mono">db</code>, <code className="text-emerald-400 font-mono">tool</code>.</> },
               { rule: "File must end in .json", detail: "Only .json files are accepted inside user namespaces." },
             ].map((r, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <span className="text-slate-600 shrink-0 mt-px">•</span>
+                <span className="text-emerald-400 shrink-0 mt-px font-bold">•</span>
                 <div>
                   <span className="text-slate-200 font-medium">{r.rule}</span>
                   <span className="text-slate-500"> — </span>
@@ -205,9 +205,9 @@ export default function RegistryPage() {
 
         {/* Pass 2 */}
         <div className="rounded-lg border border-white/[0.08] overflow-hidden">
-          <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.06]">
-            <span className="text-xs font-mono font-bold text-slate-300">Pass 2 — Blueprint schema &amp; safety</span>
-            <p className="text-[11px] text-slate-500 mt-0.5">Runs on every push and PR. Walks the entire repository and validates every .json blueprint.</p>
+          <div className="px-4 py-2.5 bg-white/[0.02] border-b border-white/[0.06] flex items-center justify-between">
+            <span className="text-xs font-mono font-bold text-emerald-400">Pass 2 — Blueprint schema &amp; safety</span>
+            <span className="text-[10px] font-mono text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AST Validation</span>
           </div>
           <div className="p-4 space-y-2.5 text-xs">
             {[
@@ -219,7 +219,7 @@ export default function RegistryPage() {
               { rule: "Every node must have a valid type", detail: <> Must be <code className="text-slate-300 font-mono">&quot;file&quot;</code> or <code className="text-slate-300 font-mono">&quot;directory&quot;</code>. File nodes cannot have children.</> },
             ].map((r, i) => (
               <div key={i} className="flex gap-3 items-start">
-                <span className="text-slate-600 shrink-0 mt-px">•</span>
+                <span className="text-emerald-400 shrink-0 mt-px font-bold">•</span>
                 <div>
                   <span className="text-slate-200 font-medium">{r.rule}</span>
                   <span className="text-slate-500"> — </span>
@@ -239,27 +239,27 @@ export default function RegistryPage() {
       <section className="space-y-4">
         <h2 className="text-sm font-bold text-white">Multi-version releases</h2>
         <p className="text-xs text-slate-400 font-sans leading-relaxed">
-          You can publish multiple versions of the same track side by side. Append <code className="text-slate-200 font-mono">@version</code> to the filename. Useful for major upgrades, difficulty levels, or LTS releases.
+          You can publish multiple versions of the same track side by side. Append <code className="text-emerald-400 font-mono bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20">@version</code> to the filename. Useful for major upgrades, difficulty levels, or LTS releases.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="p-4 rounded-lg bg-[#0d0f15] border border-white/[0.08] space-y-2">
             <div className="text-xs font-mono text-slate-400">File layout</div>
             <pre className="text-[11px] font-mono text-slate-300 leading-relaxed">{`users/alice/db/
-├── postgres.json          # default
-├── postgres@v1.0.0.json   # stable LTS
-└── postgres@v2.0.0.json   # latest major`}</pre>
+├── postgres.json          # default (latest)
+├── postgres@v1.1.0.json   # stable release
+└── postgres@v2.0.0.json   # major upgrade`}</pre>
           </div>
           <div className="p-4 rounded-lg bg-[#0d0f15] border border-white/[0.08] space-y-2.5">
             <div className="text-xs font-mono text-slate-400">CLI usage</div>
             <div className="space-y-1.5 text-[11px] font-mono">
               <div className="px-3 py-1.5 rounded bg-black/40 border border-white/[0.04] text-slate-300">
-                $ trak init alice/db/postgres
-                <span className="text-slate-600 block">→ resolves postgres.json</span>
+                <span className="text-emerald-400 font-semibold">$ trak init alice/db/postgres</span>
+                <span className="text-slate-500 block text-[10px]">→ resolves postgres.json (latest)</span>
               </div>
               <div className="px-3 py-1.5 rounded bg-black/40 border border-white/[0.04] text-slate-300">
-                $ trak init alice/db/postgres@v1.0.0
-                <span className="text-slate-600 block">→ resolves postgres@v1.0.0.json</span>
+                <span className="text-emerald-400 font-semibold">$ trak init alice/db/postgres@v1.1.0</span>
+                <span className="text-slate-500 block text-[10px]">→ resolves postgres@v1.1.0.json</span>
               </div>
             </div>
           </div>
@@ -329,7 +329,7 @@ export default function RegistryPage() {
             Five: <code className="text-slate-300 font-mono">lang</code> (programming languages), <code className="text-slate-300 font-mono">os</code> (operating systems), <code className="text-slate-300 font-mono">cloud</code> (cloud platforms), <code className="text-slate-300 font-mono">db</code> (databases), and <code className="text-slate-300 font-mono">tool</code> (devtools &amp; frameworks). Using anything else fails validation.
           </FAQItem>
           <FAQItem q="How do I publish multiple versions of the same track?">
-            Add <code className="text-slate-300 font-mono">@version</code> to the filename. <code className="text-slate-300 font-mono">postgres.json</code> is the default, <code className="text-slate-300 font-mono">postgres@v1.0.0.json</code> is v1, <code className="text-slate-300 font-mono">postgres@v2.0.0.json</code> is v2. Users choose with <code className="text-slate-300 font-mono">trak init alice/db/postgres@v1.0.0</code>.
+            Add <code className="text-emerald-400 font-mono">@version</code> to the filename. <code className="text-slate-300 font-mono">postgres.json</code> is the default, <code className="text-slate-300 font-mono">postgres@v1.1.0.json</code> is v1.1, <code className="text-slate-300 font-mono">postgres@v2.0.0.json</code> is v2. Users choose with <code className="text-emerald-400 font-mono">trak init alice/db/postgres@v1.1.0</code>.
           </FAQItem>
           <FAQItem q="Do I need to edit registry.json or any index file?">
             No. Community blueprints are resolved via deterministic GitHub raw URLs based on the file path. No central index to update — multiple contributors can submit PRs at the same time with zero merge conflicts.

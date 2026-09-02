@@ -144,7 +144,7 @@ export function Sidebar({
                   trak
                 </span>
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                  v1.0.0
+                  v1.1.0
                 </span>
               </div>
             )}
@@ -268,7 +268,7 @@ export function Sidebar({
               </div>
               <div className="text-[10px] text-slate-500 flex items-center justify-between">
                 <span>MIT License</span>
-                <span className="font-mono text-slate-400">v1.0.0</span>
+                <span className="font-mono text-emerald-400">v1.1.0</span>
               </div>
             </div>
           )}
