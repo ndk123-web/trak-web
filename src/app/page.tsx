@@ -21,7 +21,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="space-y-14 pb-20">
+    <div className="space-y-10 pb-20">
       {/* 1. Hero Showcase */}
       <Hero />
 
@@ -30,9 +30,9 @@ export default function Home() {
         <div className="rounded-xl border border-white/[0.08] bg-[#090b10] p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
-              <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
-              <span className="w-2.5 h-2.5 rounded-full bg-white/10" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
               <span className="text-xs font-mono text-slate-400 ml-2">trak-terminal-demo.mp4</span>
             </div>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.08]">
@@ -250,54 +250,74 @@ export default function Home() {
       </section>
 
       {/* 6. Frequently Asked Questions (FAQ) */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="pb-4 border-b border-white/[0.08]">
-          <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 font-sans">
-            Common questions about local-first workspaces, community tracks, and the GitOps registry.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans">
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <h3 className="font-bold text-white font-mono text-xs">
-              How does Trak work completely offline?
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              When you run <code className="text-slate-200 font-mono">trak init</code>, Trak fetches the blueprint once and writes real directories, source code files, and build manifests directly onto your disk. There are no background servers, telemetry, or browser sandbox constraints.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <h3 className="font-bold text-white font-mono text-xs">
-              What is the difference between Official and Community tracks?
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Official tracks (<code className="text-slate-200 font-mono">lang/go</code> or <code className="text-slate-200 font-mono">trak/lang/go</code>) are core curriculums curated by maintainers. Community tracks (<code className="text-slate-200 font-mono">&lt;username&gt;/lang/go</code>) are authored by developers worldwide and published via GitOps.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <h3 className="font-bold text-white font-mono text-xs">
-              How do I publish a custom track for my team or students?
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Build your files in <Link href="/studio" className="text-white underline">Blueprint Studio</Link>, export the AST JSON, fork the <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-white underline">trak-registry</a> repo, and submit a PR under <code className="text-slate-200 font-mono">users/&lt;your-username&gt;/...</code>. Zero account signup or database configuration required!
-            </p>
-          </div>
-
-          <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] space-y-2">
-            <h3 className="font-bold text-white font-mono text-xs">
-              Can I customize the destination directory for my workspace?
-            </h3>
-            <p className="text-slate-400 leading-relaxed">
-              Yes! By default, Trak creates a <code className="text-slate-200 font-mono">./learn-&lt;tool&gt;</code> folder in your current directory. You can use the <code className="text-slate-200 font-mono">--path</code> (or <code className="text-slate-200 font-mono">-p</code>) flag to specify any custom location, such as <code className="text-slate-200 font-mono">trak init lang/rust -p ./my-rust-lab</code>.
-            </p>
-          </div>
-        </div>
-      </section>
+      <HomeFAQ />
     </div>
+  );
+}
+
+function HomeFAQItem({ q, children }: { q: string; children: React.ReactNode }) {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="border-b border-white/[0.06] last:border-b-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-start justify-between gap-4 py-4 text-left cursor-pointer group"
+      >
+        <span className="text-[13px] font-medium text-slate-200 group-hover:text-white transition-colors leading-snug">
+          {q}
+        </span>
+        <svg
+          className={`w-4 h-4 text-slate-500 shrink-0 mt-0.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="pb-4 text-xs text-slate-400 leading-relaxed font-sans -mt-1 pr-8">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HomeFAQ() {
+  return (
+    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="pb-4 border-b border-white/[0.08]">
+        <h2 className="font-serif text-xl sm:text-2xl font-normal text-[#f5f4ef] tracking-tight">
+          Frequently Asked Questions
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0">
+        {/* Column 1 */}
+        <div className="rounded-lg border border-white/[0.08] px-4 bg-[#0d0f15]">
+          <HomeFAQItem q="How does Trak work offline?">
+            When you run <code className="text-slate-300 font-mono">trak init</code>, Trak fetches the blueprint JSON once, then writes every directory, source file, and build manifest directly to your local disk. After that initial fetch, your entire workspace is yours — no servers, no telemetry, no browser sandbox. Open it in VS Code, GoLand, or Neovim and work completely offline.
+          </HomeFAQItem>
+          <HomeFAQItem q="What is the difference between Official and Community tracks?">
+            <strong className="text-slate-300">Official tracks</strong> (e.g. <code className="text-slate-300 font-mono">trak init lang/go</code>) are curated by the Trak maintainers and live under <code className="text-slate-300 font-mono">templates/</code> in the registry. <strong className="text-slate-300">Community tracks</strong> (e.g. <code className="text-slate-300 font-mono">trak init alice/lang/go</code>) are authored by developers worldwide and live under <code className="text-slate-300 font-mono">users/alice/</code>. Both go through the same CI validation.
+          </HomeFAQItem>
+          <HomeFAQItem q="Can I customize where Trak creates the workspace?">
+            Yes. By default, Trak creates a <code className="text-slate-300 font-mono">./learn-&lt;tool&gt;</code> folder. Use the <code className="text-slate-300 font-mono">--path</code> flag to pick any location: <code className="text-slate-300 font-mono">trak init lang/rust --path ./my-rust-lab</code>.
+          </HomeFAQItem>
+        </div>
+
+        {/* Column 2 */}
+        <div className="rounded-lg border border-white/[0.08] px-4 bg-[#0d0f15]">
+          <HomeFAQItem q="How do I publish a custom track for my team or students?">
+            Build your curriculum in <Link href="/studio" className="text-white underline">Blueprint Studio</Link>, export the AST JSON, fork the <a href="https://github.com/ndk123-web/trak-registry" target="_blank" rel="noopener noreferrer" className="text-white underline">trak-registry</a> repo, place your file at <code className="text-slate-300 font-mono">users/&lt;your-username&gt;/&lt;category&gt;/&lt;track&gt;.json</code>, and submit a PR. See the <Link href="/registry" className="text-white underline">full publishing guide</Link> for details.
+          </HomeFAQItem>
+          <HomeFAQItem q="Can I publish multiple versions of the same track?">
+            Yes. Append <code className="text-slate-300 font-mono">@version</code> to the filename (e.g. <code className="text-slate-300 font-mono">postgres@v2.0.0.json</code>). Users install a specific version with <code className="text-slate-300 font-mono">trak init alice/db/postgres@v2.0.0</code>. The default (no version) resolves to <code className="text-slate-300 font-mono">postgres.json</code>.
+          </HomeFAQItem>
+          <HomeFAQItem q="What languages and tools are supported?">
+            Trak currently ships 19 official tracks across 5 pillars: programming languages (Go, Rust, Python, C, C++, Java, JavaScript), databases (PostgreSQL, Redis, SQL), operating systems (Linux), cloud platforms (AWS, Docker, Kubernetes, Terraform, Ansible), and devtools (Git, GitHub Actions, Nginx). Community contributors can add any topic.
+          </HomeFAQItem>
+        </div>
+      </div>
+    </section>
   );
 }
