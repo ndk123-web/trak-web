@@ -47,8 +47,8 @@ export function CatalogExplorer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.08] text-slate-300 text-xs font-mono font-medium">
-            <Layers className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium">
+            <Layers className="w-3.5 h-3.5 text-emerald-400" />
             <span>Interactive Catalog</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-serif font-normal text-[#f5f4ef] tracking-tight">
@@ -110,7 +110,7 @@ export function CatalogExplorer() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, tag, or topic..."
-              className="w-full pl-9 pr-16 py-2 rounded-lg bg-[#090b10] border border-white/10 text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-white/30 transition-colors"
+              className="w-full pl-9 pr-16 py-2 rounded-lg bg-[#090b10] border border-white/10 text-xs font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/40 transition-colors"
             />
             {searchQuery && (
               <button
@@ -129,7 +129,7 @@ export function CatalogExplorer() {
             Showing <strong className="text-white">{filteredTracks.length}</strong> of {TRACKS.length} blueprints
           </span>
           <span className="hidden sm:inline text-slate-400">
-            $ trak init &lt;category&gt;/&lt;track&gt;
+            <span className="text-emerald-400 font-bold">$ </span>trak init &lt;category&gt;/&lt;track&gt;
           </span>
         </div>
 
@@ -142,12 +142,12 @@ export function CatalogExplorer() {
               <div
                 key={track.id}
                 onClick={() => setActiveModalTrack(track)}
-                className="rounded-xl p-5 flex flex-col justify-between cursor-pointer group bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.2] transition-colors"
+                className="rounded-xl p-5 flex flex-col justify-between cursor-pointer group bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors"
               >
                 <div className="space-y-2.5">
                   {/* Top Category & Version */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400">
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-mono text-emerald-400">
                       <span>{track.categoryName}</span>
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">
@@ -157,7 +157,7 @@ export function CatalogExplorer() {
 
                   {/* Title & Modules Count */}
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
+                    <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
                       {track.name}
                     </h3>
                     <span className="shrink-0 px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 text-[10px] font-mono font-medium">
@@ -202,7 +202,7 @@ export function CatalogExplorer() {
                       </>
                     ) : (
                       <>
-                        <Terminal className="w-3.5 h-3.5 text-slate-400" />
+                        <Terminal className="w-3.5 h-3.5 text-emerald-400" />
                         <span className="truncate">trak init {track.id}</span>
                       </>
                     )}

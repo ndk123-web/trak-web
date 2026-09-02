@@ -12,7 +12,7 @@
   <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-15.3+-black?style=flat-square&logo=next.js" alt="Next.js" /></a>
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=flat-square&logo=tailwind-css" alt="Tailwind CSS" /></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript" alt="TypeScript" /></a>
-  <a href="https://github.com/ndk123-web/trak"><img src="https://img.shields.io/badge/CLI-v1.0.0-emerald?style=flat-square" alt="CLI Release" /></a>
+  <a href="https://github.com/ndk123-web/trak"><img src="https://img.shields.io/badge/CLI-v1.1.0-emerald?style=flat-square" alt="CLI Release" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License" /></a>
 </p>
 
@@ -24,7 +24,7 @@
 
 ---
 
-## 🎬 Demo (v1.0.0)
+## 🎬 Demo (v1.1.0)
 
 <p align="center">
   <video src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3" controls="controls" width="100%" style="max-width: 900px; border-radius: 12px;"></video>

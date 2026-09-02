@@ -34,7 +34,7 @@ export default function QuickstartPage() {
       title: "Verify the Installation",
       description: "Verify that Trak is installed properly by checking its version information:",
       command: "trak version",
-      tip: "You should see the version card (v1.0.0) with Go runtime and platform specs.",
+      tip: "You should see the version card (v1.1.0) with Go runtime and platform specs.",
     },
     {
       number: "3",
@@ -63,8 +63,8 @@ export default function QuickstartPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 text-xs font-mono font-medium mb-3">
-          <Terminal className="w-3.5 h-3.5 text-slate-400" />
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
+          <Terminal className="w-3.5 h-3.5 text-emerald-400" />
           <span>Quickstart Guide</span>
         </div>
         <h1 className="text-2xl sm:text-4xl font-serif font-normal text-white tracking-tight">
@@ -75,23 +75,6 @@ export default function QuickstartPage() {
         </p>
       </div>
 
-      {/* Video Walkthrough Card
-      <div className="rounded-xl border border-white/[0.08] bg-[#090b10] p-4 sm:p-5 space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-          <span className="text-xs font-mono font-bold text-white">18-Seconds Video Walkthrough (v1.0.0)</span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.08]">HD Demo</span>
-        </div>
-        <div className="rounded-lg overflow-hidden bg-black aspect-video border border-white/[0.06]">
-          <video
-            src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3"
-            controls
-            playsInline
-            preload="metadata"
-            className="w-full h-full object-contain"
-          />
-        </div>
-      </div> */}
-
       {/* Steps List */}
       <div className="space-y-6">
         {steps.map((s, idx) => {
@@ -99,10 +82,10 @@ export default function QuickstartPage() {
           return (
             <div
               key={idx}
-              className="rounded-xl p-5 sm:p-6 bg-[#0d0f15] border border-white/[0.08] space-y-3.5"
+              className="rounded-xl p-5 sm:p-6 bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors space-y-3.5"
             >
               <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-lg bg-white/[0.06] border border-white/[0.1] text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">
                   {s.number}
                 </div>
                 <h3 className="text-base font-bold text-white">

@@ -34,7 +34,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="text-2xl">{categoryInfo.icon}</span>
-              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 font-medium">
+              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
                 {categoryInfo.id} / pillar
               </span>
             </div>
@@ -47,7 +47,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
 
           <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
-            <span className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white font-mono text-xs font-medium">
+            <span className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold">
               {tracks.length} Blueprints
             </span>
             <span className="px-3 py-1 rounded-lg bg-white/[0.02] border border-white/[0.06] text-slate-400 font-mono text-xs">
@@ -62,11 +62,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {tracks.map((track) => (
           <div
             key={track.id}
-            className="rounded-xl p-5 bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.18] transition-colors flex flex-col justify-between group space-y-4"
+            className="rounded-xl p-5 bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/20 transition-colors flex flex-col justify-between group space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400">
+                <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-mono text-emerald-400 font-semibold">
                   {track.id}
                 </span>
                 <span className="text-[10px] font-mono text-slate-300 font-medium">
@@ -75,7 +75,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </div>
 
               <div>
-                <h3 className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
+                <h3 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
                   {track.name}
                 </h3>
                 <p className="text-xs text-slate-400 mt-1 font-mono">

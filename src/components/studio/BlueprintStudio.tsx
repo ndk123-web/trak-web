@@ -335,7 +335,7 @@ export function BlueprintStudio() {
                 Blueprint Studio
               </h1>
               <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold">
-                AST v1.0.0
+                AST v1.1.0
               </span>
             </div>
           </div>

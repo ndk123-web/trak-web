@@ -372,7 +372,7 @@ export function FileTreePane({
       {/* Explorer Footer summary */}
       <div className="px-3 py-1.5 bg-[#0d0f14] border-t border-white/[0.04] text-[10px] font-mono text-slate-500 flex items-center justify-between">
         <span>Virtual Workspace</span>
-        <span>AST v1.0.0</span>
+        <span>AST v1.1.0</span>
       </div>
     </div>
   );
