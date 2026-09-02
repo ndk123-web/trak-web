@@ -27,30 +27,30 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const totalModules = tracks.reduce((acc, curr) => acc + curr.modulesCount, 0);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       {/* Category Header */}
-      <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-white/10">
+      <div className="rounded-xl p-6 sm:p-8 bg-[#0d0f15] border border-white/[0.08] relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="text-4xl">{categoryInfo.icon}</span>
-              <span className="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded bg-white/5 border border-white/10 text-emerald-400 font-bold">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{categoryInfo.icon}</span>
+              <span className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 font-medium">
                 {categoryInfo.id} / pillar
               </span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-4 tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-serif font-normal text-white tracking-tight">
               {categoryInfo.title}
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base mt-2 max-w-2xl leading-relaxed">
+            <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed font-sans">
               {categoryInfo.description}
             </p>
           </div>
 
-          <div className="flex sm:flex-col items-center sm:items-end gap-3 shrink-0">
-            <span className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold">
+          <div className="flex sm:flex-col items-center sm:items-end gap-2 shrink-0">
+            <span className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-white font-mono text-xs font-medium">
               {tracks.length} Blueprints
             </span>
-            <span className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 font-mono text-xs">
+            <span className="px-3 py-1 rounded-lg bg-white/[0.02] border border-white/[0.06] text-slate-400 font-mono text-xs">
               {totalModules} Total Modules
             </span>
           </div>
@@ -58,41 +58,41 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </div>
 
       {/* Tracks Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {tracks.map((track) => (
           <div
             key={track.id}
-            className="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between group relative overflow-hidden"
+            className="rounded-xl p-5 bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.18] transition-colors flex flex-col justify-between group space-y-4"
           >
-            <div>
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[11px] font-mono text-slate-400">
+                <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-[10px] font-mono text-slate-400">
                   {track.id}
                 </span>
-                <span className="text-[11px] font-mono text-emerald-400 font-bold">
+                <span className="text-[10px] font-mono text-slate-300 font-medium">
                   {track.modulesCount} Modules
                 </span>
               </div>
 
-              <h3 className="text-xl font-bold text-white mt-4 group-hover:text-emerald-400 transition-colors">
-                {track.name}
-              </h3>
-
-              <div className="mt-1.5 text-xs text-emerald-400 font-medium flex items-center gap-1">
-                <Sparkles className="w-3 h-3 shrink-0" />
-                <span>{track.highlight}</span>
+              <div>
+                <h3 className="text-base font-bold text-white group-hover:text-slate-200 transition-colors">
+                  {track.name}
+                </h3>
+                <p className="text-xs text-slate-400 mt-1 font-mono">
+                  {track.highlight}
+                </p>
               </div>
 
-              <p className="mt-3 text-xs text-slate-400 leading-relaxed line-clamp-3">
+              <p className="text-xs text-slate-400 leading-relaxed line-clamp-3 font-sans">
                 {track.description}
               </p>
 
               {/* Tags */}
-              <div className="mt-4 flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1 pt-1">
                 {track.tags.slice(0, 4).map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900/90 text-slate-400 border border-white/5"
+                    className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-black/40 text-slate-400 border border-white/[0.04]"
                   >
                     #{tag}
                   </span>
@@ -101,10 +101,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
 
             {/* Actions */}
-            <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between gap-3">
+            <div className="pt-3 border-t border-white/[0.04]">
               <Link
                 href={`/tracks/${track.category}/${track.slug}`}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 transition-all"
+                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-white text-zinc-950 hover:bg-slate-200 font-bold text-xs font-mono transition-colors"
               >
                 <span>View Full Syllabus</span>
                 <ArrowRight className="w-3.5 h-3.5" />

@@ -33,42 +33,41 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
   const selectedModule = track.modules[selectedModuleIdx] || track.modules[0];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       {/* Track Hero Banner */}
-      <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-white/10">
+      <div className="rounded-xl p-6 sm:p-8 bg-[#0d0f15] border border-white/[0.08] relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="space-y-4 max-w-3xl">
+          <div className="space-y-3.5 max-w-3xl">
             <div className="flex items-center gap-2">
               <Link
                 href={`/tracks/${track.category}`}
-                className="text-xs font-mono uppercase tracking-wider px-2.5 py-1 rounded bg-white/5 border border-white/10 text-emerald-400 font-bold hover:bg-white/10 transition-colors"
+                className="text-xs font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-300 font-medium hover:bg-white/[0.08] transition-colors"
               >
                 {track.categoryName}
               </Link>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-500">
                 v{track.version}
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-serif font-normal text-white tracking-tight">
               {track.name}
             </h1>
 
-            <div className="text-sm font-semibold text-emerald-400 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4" />
-              <span>{track.highlight}</span>
-            </div>
+            <p className="text-xs font-mono text-slate-400">
+              {track.highlight}
+            </p>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-400 text-xs sm:text-sm leading-relaxed font-sans">
               {track.description}
             </p>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-1.5 pt-1">
               {track.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 rounded-md text-xs font-mono bg-slate-900 text-slate-300 border border-white/5"
+                  className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/40 text-slate-400 border border-white/[0.04]"
                 >
                   #{tag}
                 </span>
@@ -77,30 +76,30 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
           </div>
 
           {/* Quick CLI Box */}
-          <div className="lg:w-80 shrink-0 space-y-4">
-            <div className="p-5 rounded-2xl bg-slate-950 border border-white/10 space-y-3">
-              <div className="text-xs font-mono text-slate-400 flex items-center gap-2">
-                <Terminal className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="lg:w-80 shrink-0 space-y-3">
+            <div className="p-4 rounded-xl bg-[#080a0f] border border-white/[0.08] space-y-2.5">
+              <div className="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+                <Terminal className="w-3.5 h-3.5" />
                 <span>Initialize Workspace</span>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#07090e] border border-white/5 font-mono text-xs text-emerald-400 select-all">
+              <div className="p-2.5 rounded-lg bg-black/60 border border-white/[0.06] font-mono text-xs text-slate-200 select-all">
                 $ {track.initCommand}
               </div>
 
               <button
                 onClick={handleCopy}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+                className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-white text-zinc-950 hover:bg-slate-200 font-bold text-xs font-mono transition-colors cursor-pointer"
               >
                 {copied ? (
                   <>
-                    <Check className="w-4 h-4" />
-                    <span>Copied to Clipboard!</span>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Copied Command</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" />
-                    <span>Copy Init Command</span>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy Command</span>
                   </>
                 )}
               </button>
@@ -114,34 +113,34 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
       </div>
 
       {/* Interactive Curriculum Modules Viewer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Module List Navigator */}
         <div className="lg:col-span-5 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-white/5">
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
-              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+            <div className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              <BookOpen className="w-3.5 h-3.5" />
               <span>Curriculum Modules ({track.modules.length})</span>
             </div>
           </div>
 
-          <div className="max-h-[600px] overflow-y-auto space-y-2 pr-2">
+          <div className="max-h-[600px] overflow-y-auto space-y-1.5 pr-1">
             {track.modules.map((mod, idx) => {
               const isSelected = selectedModuleIdx === idx;
               return (
                 <button
                   key={idx}
                   onClick={() => setSelectedModuleIdx(idx)}
-                  className={`w-full text-left p-3.5 rounded-xl transition-all border flex items-start gap-3 cursor-pointer ${
+                  className={`w-full text-left p-3 rounded-lg transition-colors border flex items-start gap-2.5 cursor-pointer ${
                     isSelected
-                      ? "bg-emerald-500/15 border-emerald-500/30 text-white shadow-sm"
-                      : "bg-slate-900/60 hover:bg-slate-900 border-white/5 text-slate-300"
+                      ? "bg-white/[0.08] border-white/[0.18] text-white"
+                      : "bg-[#0d0f15] hover:bg-white/[0.04] border-white/[0.06] text-slate-300"
                   }`}
                 >
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
+                    className={`w-6 h-6 rounded flex items-center justify-center font-mono text-[11px] font-bold shrink-0 ${
                       isSelected
-                        ? "bg-emerald-500 text-slate-950"
-                        : "bg-white/5 text-slate-400"
+                        ? "bg-white text-zinc-950"
+                        : "bg-white/[0.06] text-slate-400"
                     }`}
                   >
                     {mod.number}
@@ -150,7 +149,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
                     <div className="text-xs font-bold truncate">
                       {mod.title}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate mt-0.5">
+                    <div className="text-[11px] text-slate-400 truncate mt-0.5 font-sans">
                       {mod.description}
                     </div>
                   </div>
@@ -162,9 +161,9 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
 
         {/* Right: Selected Module Deep-Dive Inspector */}
         <div className="lg:col-span-7">
-          <div className="glass-panel rounded-2xl p-8 border border-white/10 space-y-6 sticky top-24">
+          <div className="rounded-xl p-6 bg-[#0d0f15] border border-white/[0.08] space-y-5 sticky top-24">
             <div className="flex items-center justify-between">
-              <span className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-xs font-bold">
+              <span className="px-2 py-0.5 rounded bg-white/[0.04] text-slate-300 border border-white/[0.08] font-mono text-xs font-medium">
                 Module {selectedModule.number}
               </span>
               <span className="text-xs font-mono text-slate-500">
@@ -172,24 +171,24 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               </span>
             </div>
 
-            <div>
-              <h3 className="text-2xl font-bold text-white">
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-bold text-white">
                 {selectedModule.title}
               </h3>
-              <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed font-sans">
                 {selectedModule.description}
               </p>
             </div>
 
-            <div className="pt-4 border-t border-white/5 space-y-3">
-              <h4 className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">
-                Topics Covered in this Module:
+            <div className="pt-3 border-t border-white/[0.06] space-y-2">
+              <h4 className="text-xs font-mono uppercase tracking-wider text-slate-500 font-semibold">
+                Topics in this Module:
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {selectedModule.topics.map((t, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1 rounded-lg text-xs font-mono bg-white/5 text-slate-200 border border-white/10"
+                    className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#080a0f] text-slate-300 border border-white/[0.06]"
                   >
                     {t}
                   </span>
@@ -197,27 +196,27 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-950 border border-white/5 text-xs text-slate-400 space-y-2">
-              <div className="flex items-center gap-2 text-slate-300 font-bold font-mono">
-                <FolderTree className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="p-3.5 rounded-lg bg-[#080a0f] border border-white/[0.06] text-xs text-slate-400 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-slate-300 font-bold font-mono text-[11px]">
+                <FolderTree className="w-3.5 h-3.5" />
                 <span>Generated File Structure:</span>
               </div>
-              <div className="font-mono text-slate-400 text-[11px] pl-5 space-y-1">
+              <div className="font-mono text-slate-400 text-[11px] pl-4 space-y-0.5">
                 <div>├── {selectedModule.number}-{selectedModule.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}</div>
-                <div className="pl-4 text-emerald-400">├── README.md (Comprehensive Guide & Cheatsheet)</div>
-                <div className="pl-4 text-cyan-400">└── main (Hands-on Source Code Exercises)</div>
+                <div className="pl-4 text-slate-300">├── README.md (Comprehensive Guide &amp; Architecture)</div>
+                <div className="pl-4 text-slate-400">└── main (Hands-on Source Code Exercises)</div>
               </div>
             </div>
 
-            <div className="pt-4 flex items-center justify-between">
+            <div className="pt-3 flex items-center justify-between">
               <button
                 onClick={() =>
                   setSelectedModuleIdx((prev) => Math.max(0, prev - 1))
                 }
                 disabled={selectedModuleIdx === 0}
-                className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-white/[0.06] cursor-pointer"
               >
-                ← Previous Module
+                ← Previous
               </button>
 
               <button
@@ -227,9 +226,9 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
                   )
                 }
                 disabled={selectedModuleIdx === track.modules.length - 1}
-                className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                className="px-3 py-1.5 rounded-lg bg-white text-zinc-950 hover:bg-slate-200 text-xs font-mono font-bold disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
-                Next Module →
+                Next →
               </button>
             </div>
           </div>
@@ -238,26 +237,26 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
 
       {/* Related Tracks */}
       {relatedTracks.length > 0 && (
-        <div className="pt-8 border-t border-white/5 space-y-6">
-          <h3 className="text-xl font-bold text-white">
+        <div className="pt-6 border-t border-white/[0.06] space-y-4">
+          <h3 className="text-base font-bold text-white">
             More in {track.categoryName}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {relatedTracks.map((rel) => (
               <Link
                 key={rel.id}
                 href={`/tracks/${rel.category}/${rel.slug}`}
-                className="glass-panel glass-panel-hover rounded-2xl p-6 flex items-center justify-between group"
+                className="p-4 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.18] flex items-center justify-between group transition-colors"
               >
-                <div>
-                  <h4 className="text-base font-bold text-white group-hover:text-emerald-400 transition-colors">
+                <div className="space-y-0.5">
+                  <h4 className="text-sm font-bold text-white group-hover:text-slate-200 transition-colors">
                     {rel.name}
                   </h4>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                  <p className="text-xs text-slate-400 line-clamp-1 font-sans">
                     {rel.highlight}
                   </p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors shrink-0 ml-2" />
               </Link>
             ))}
           </div>

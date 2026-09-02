@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Search, Terminal, Check, BookOpen, Layers } from "lucide-react";
+import Link from "next/link";
+import { Search, Terminal, Check, BookOpen, Layers, ArrowRight } from "lucide-react";
 import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
 import { SyllabusModal } from "./SyllabusModal";
 import { CategoryIcon } from "./CategoryIcon";
@@ -243,6 +244,25 @@ export function CatalogExplorer() {
             </button>
           </div>
         )}
+
+        {/* Community Blueprints Callout */}
+        <div className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="text-xs font-mono font-bold text-white flex items-center gap-2">
+              <span>Looking for community or versioned tracks?</span>
+            </div>
+            <p className="text-xs text-slate-400 font-sans">
+              Initialize tracks from any creator with <code className="text-slate-300 font-mono">trak init &lt;username&gt;/&lt;category&gt;/&lt;tool&gt;[@version]</code>, or publish your own via GitOps.
+            </p>
+          </div>
+          <Link
+            href="/registry"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-slate-300 hover:text-white transition-colors border border-white/[0.06] shrink-0 w-fit"
+          >
+            <span>Publishing Guide</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* Syllabus Modal */}

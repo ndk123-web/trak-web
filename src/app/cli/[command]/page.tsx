@@ -25,11 +25,11 @@ const COMMAND_DATA: Record<
   init: {
     name: "trak init",
     command: "init",
-    syntax: "trak init <category>/<template> [flags]",
+    syntax: "trak init [<author>/]<category>/<template>[@<version>] [flags]",
     overview:
-      "Fetches the requested curriculum blueprint from trak-registry and recursively generates all directories, files, and trak.json on disk.",
+      "Fetches official or community blueprints from trak-registry and recursively materializes the entire workspace directory tree on disk.",
     details:
-      "When running 'trak init <category>/<template>', Trak performs category normalization (e.g. mapping 'mac' to 'macos'), validates the target template against the remote catalog, and builds the entire nested directory tree in the destination directory. If --path is omitted, it defaults to './learn-<template>' in the current working directory.",
+      "Supports official templates (e.g. 'trak init lang/go'), explicit namespace ('trak init trak/lang/go'), community author tracks ('trak init <username>/<category>/<tool>'), and pinned version releases ('trak init <username>/<category>/<tool>@<version>'). If --path is omitted, it defaults to './learn-<template>' in the current working directory.",
     flags: [
       {
         flag: "-p, --path",
@@ -45,27 +45,32 @@ const COMMAND_DATA: Record<
       },
     ],
     lifecycle: [
-      "Resolves template URL: https://raw.githubusercontent.com/ndk123-web/trak-registry/main/templates/<category>/<template>.json",
-      "Parses JSON blueprint AST containing nested Node objects (directories & files)",
+      "Resolves blueprint URL (official: templates/<category>/<tool>.json, community: users/<username>/<category>/<tool>[@<version>].json)",
+      "Parses recursive JSON AST node hierarchy (directories, files, and build manifests)",
       "Creates target directory and recursively writes all files with UTF-8 encoding",
-      "Stamps immutable trak.json manifest containing template ID, version, and UTC timestamp",
+      "Stamps immutable trak.json manifest containing author attribution, version, and UTC timestamp",
       "Prints success banner with total resource count and recommended next steps",
     ],
     examples: [
       {
-        title: "Default Current Directory Initialization",
+        title: "Official Blueprint Initialization",
         cmd: "trak init lang/go",
-        explanation: "Generates the Go workspace in ./learn-go in your current folder.",
+        explanation: "Generates the official Go workspace in ./learn-go in your current folder.",
+      },
+      {
+        title: "Community Author Track",
+        cmd: "trak init alice/db/postgres",
+        explanation: "Fetches community track from users/alice/db/postgres.json in the registry.",
+      },
+      {
+        title: "Version-Pinned Release",
+        cmd: "trak init alice/db/postgres@v2.0.0",
+        explanation: "Pulls tagged release postgres@v2.0.0.json, preserving stability for learners.",
       },
       {
         title: "Custom Workspace Path",
-        cmd: "trak init db/postgres --path ./my-postgres-lab",
-        explanation: "Materializes the PostgreSQL track inside ./my-postgres-lab.",
-      },
-      {
-        title: "Absolute Path on Windows/Linux",
-        cmd: "trak init tool/docker -p D:/devops/docker-curriculum",
-        explanation: "Generates the container architecture lab at an absolute location.",
+        cmd: "trak init lang/rust --path ./my-rust-lab",
+        explanation: "Materializes the Rust workspace inside custom ./my-rust-lab directory.",
       },
     ],
   },

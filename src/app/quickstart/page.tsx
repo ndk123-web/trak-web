@@ -46,9 +46,9 @@ export default function QuickstartPage() {
     {
       number: "4",
       title: "Initialize Your First Learning Workspace",
-      description: "Materialize a complete, multi-module learning lab on your local disk:",
+      description: "Materialize an official or community learning lab on your local disk:",
       command: "trak init lang/go --path ./learn-go",
-      tip: "If you omit --path, Trak will default to creating ./learn-go in your current folder.",
+      tip: "Supports official tracks (lang/go), community tracks (alice/db/postgres), and pinned versions (alice/db/postgres@v2.0.0).",
     },
     {
       number: "5",
@@ -75,7 +75,7 @@ export default function QuickstartPage() {
         </p>
       </div>
 
-      {/* Video Walkthrough Card */}
+      {/* Video Walkthrough Card
       <div className="rounded-xl border border-white/[0.08] bg-[#090b10] p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
           <span className="text-xs font-mono font-bold text-white">18-Seconds Video Walkthrough (v1.0.0)</span>
@@ -90,7 +90,7 @@ export default function QuickstartPage() {
             className="w-full h-full object-contain"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* Steps List */}
       <div className="space-y-6">

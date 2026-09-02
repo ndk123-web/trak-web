@@ -108,9 +108,9 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
                   <span className="text-white">3. Place in Your User Namespace</span>
                 </div>
                 <p className="text-slate-400 font-sans text-xs">
-                  Add your JSON file under: <code className="text-slate-200 bg-white/5 px-1 py-0.5 rounded">users/&lt;your-github-username&gt;/&lt;category&gt;/&lt;tool&gt;.json</code>
+                  Add your JSON file under: <code className="text-slate-200 bg-white/5 px-1 py-0.5 rounded">users/&lt;your-github-username&gt;/&lt;category&gt;/&lt;tool&gt;[@version].json</code>
                   <br />
-                  <span className="text-slate-500 text-[11px]">(Allowed categories: <code className="text-slate-400">lang</code>, <code className="text-slate-400">os</code>, <code className="text-slate-400">cloud</code>, <code className="text-slate-400">db</code>, <code className="text-slate-400">tool</code>)</span>
+                  <span className="text-slate-500 text-[11px]">(Allowed categories: <code className="text-slate-400">lang</code>, <code className="text-slate-400">os</code>, <code className="text-slate-400">cloud</code>, <code className="text-slate-400">db</code>, <code className="text-slate-400">tool</code>. Tag versions with <code className="text-amber-400">@v1.0.0</code>)</span>
                 </p>
               </div>
 
@@ -122,7 +122,7 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
                   Submit a PR. GitHub Actions automatically verifies your AST schema and identity. Once merged, anyone can immediately run:
                 </p>
                 <div className="p-2 rounded bg-[#07090e] border border-white/[0.06] text-slate-200 text-xs">
-                  $ trak init &lt;your-username&gt;/&lt;category&gt;/&lt;tool&gt;
+                  $ trak init &lt;your-username&gt;/&lt;category&gt;/&lt;tool&gt;[@version]
                 </div>
               </div>
             </div>

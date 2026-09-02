@@ -12,77 +12,77 @@ export default function CliPage() {
     {
       name: "trak init",
       slug: "init",
-      description: "Resolves blueprint from registry and materializes full workspace on local disk.",
-      syntax: "trak init <category>/<template> [--path <dir>]",
+      description: "Resolves official or community blueprints from the registry and materializes the workspace on local disk.",
+      syntax: "trak init [<author>/]<category>/<tool>[@<version>] [--path <dir>]",
       flags: ["-p, --path <string>", "-h, --help"],
     },
     {
       name: "trak list",
       slug: "list",
-      description: "Visualizes the catalog as an interactive ASCII tree graph with colored tags.",
+      description: "Visualizes the catalog as a formatted ASCII tree graph with module counts and descriptions.",
       syntax: "trak list [category] [-a, --all]",
       flags: ["-c, --category <name>", "-a, --all", "-h, --help"],
     },
     {
       name: "trak version",
       slug: "version",
-      description: "Displays CLI version, Go runtime, host architecture, and registry Git branch.",
+      description: "Displays CLI version, Go compiler runtime, OS/architecture, and connected registry source.",
       syntax: "trak version",
       flags: ["-h, --help"],
     },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-medium mb-3">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.08] text-slate-400 text-xs font-mono font-medium mb-3">
           <Terminal className="w-3.5 h-3.5" />
           <span>CLI Reference</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+        <h1 className="text-2xl sm:text-4xl font-serif font-normal text-white tracking-tight">
           Command Line Interface Manual
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg mt-3 max-w-2xl leading-relaxed">
-          Trak is built with standard POSIX conventions, Cobra flags, and clear feedback loops.
+        <p className="text-slate-400 text-sm mt-2 max-w-2xl leading-relaxed font-sans">
+          POSIX-standard commands, Cobra flags, deterministic GitHub Raw blueprint resolution, and local workspace generation.
         </p>
       </div>
 
       {/* Commands Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {commandCards.map((cmd) => (
           <Link
             key={cmd.slug}
             href={`/cli/${cmd.slug}`}
-            className="glass-panel glass-panel-hover rounded-2xl p-6 flex flex-col justify-between group"
+            className="p-5 rounded-xl bg-[#0d0f15] border border-white/[0.08] hover:border-white/[0.18] transition-colors flex flex-col justify-between group space-y-4"
           >
-            <div>
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-lg font-bold text-white font-mono group-hover:text-emerald-400 transition-colors">
+                <span className="text-sm font-bold text-white font-mono group-hover:text-slate-200 transition-colors">
                   {cmd.name}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-white/5 text-[11px] font-mono text-slate-400">
+                <span className="px-2 py-0.5 rounded bg-white/[0.04] text-[10px] font-mono text-slate-400 border border-white/[0.06]">
                   Command
                 </span>
               </div>
 
-              <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed font-sans">
                 {cmd.description}
               </p>
 
-              <div className="mt-4 p-2.5 rounded-lg bg-slate-950 border border-white/5 font-mono text-[11px] text-emerald-400 truncate">
+              <div className="p-2 rounded-lg bg-black/50 border border-white/[0.06] font-mono text-[11px] text-slate-200 truncate">
                 $ {cmd.syntax}
               </div>
 
-              <div className="mt-4 space-y-1">
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider font-bold">
-                  Key Flags:
+              <div className="space-y-1 pt-1">
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider font-semibold">
+                  Flags:
                 </span>
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                <div className="flex flex-wrap gap-1 pt-0.5">
                   {cmd.flags.map((f, fIdx) => (
                     <span
                       key={fIdx}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 text-slate-300 border border-white/5"
+                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/[0.04] text-slate-400 border border-white/[0.06]"
                     >
                       {f}
                     </span>
@@ -91,9 +91,9 @@ export default function CliPage() {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-emerald-400 font-mono font-semibold">
-              <span>Inspect docs</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <div className="pt-3 border-t border-white/[0.04] flex items-center justify-between text-xs text-slate-300 font-mono font-medium">
+              <span>View documentation</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </Link>
         ))}
