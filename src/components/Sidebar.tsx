@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { TrakConfig } from "@/shared/config";
 import {
   Sparkles,
   Layers,
@@ -144,7 +145,7 @@ export function Sidebar({
                   trak
                 </span>
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                  v1.1.0
+                  {TrakConfig.version}
                 </span>
               </div>
             )}
@@ -268,7 +269,7 @@ export function Sidebar({
               </div>
               <div className="text-[10px] text-slate-500 flex items-center justify-between">
                 <span>MIT License</span>
-                <span className="font-mono text-emerald-400">v1.1.0</span>
+                <span className="font-mono text-emerald-400">{TrakConfig.version}</span>
               </div>
             </div>
           )}
