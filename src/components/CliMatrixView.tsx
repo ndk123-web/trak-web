@@ -17,8 +17,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 
+export type CommandId = "init" | "list" | "status" | "done" | "undo" | "version";
+
 interface CommandDetail {
-  id: "init" | "list" | "version";
+  id: CommandId;
   name: string;
   tagline: string;
   description: string;
@@ -205,10 +207,140 @@ const COMMANDS: CommandDetail[] = [
       "Card Output — Formats and prints styled terminal info card to stdout",
     ],
   },
+  {
+    id: "status",
+    name: "trak status",
+    tagline: "Workspace Progress & State Inspector",
+    description:
+      "Inspects the current workspace for trak.json, calculates curriculum progress metrics, renders an ASCII progress bar, and displays detailed module completion states.",
+    syntax: "trak status",
+    args: [],
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display status command help and options.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak status",
+        title: "Inspect Workspace Progress",
+        desc: "Displays visual progress dashboard and status checklist of all curriculum modules.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Discovery — Searches current working directory for trak.json manifest",
+      "State Deserialization — Parses module_breakdown completion map",
+      "Progress Calculation — Computes completed vs total modules and exact percentage",
+      "Dashboard Output — Renders track metadata, ASCII progress bar, and checklist",
+      "Next Step Guidance — Suggests the next pending module to work on",
+    ],
+  },
+  {
+    id: "done",
+    name: "trak done",
+    tagline: "Curriculum Module Completion Marker",
+    description:
+      "Marks a specific learning module as completed in trak.json, recalculates progress metrics, and provides rewarding completion feedback.",
+    syntax: "trak done <module>",
+    args: [
+      {
+        token: "<module>",
+        label: "Module Number or Name",
+        desc: "Module number (e.g. '00', '1'), keyword (e.g. 'runtime'), or exact folder name.",
+      },
+    ],
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display done command help.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak done 00",
+        title: "Mark by Module Number",
+        desc: "Marks Module 00 as complete using numeric prefix.",
+      },
+      {
+        cmd: "trak done 1",
+        title: "Padded Prefix Matching",
+        desc: "Automatically matches 01-runtime-and-escape-analysis.",
+      },
+      {
+        cmd: "trak complete 02",
+        title: "Using Command Alias",
+        desc: "Marks Module 02 as complete using the complete alias.",
+      },
+      {
+        cmd: "trak mark goroutines",
+        title: "Keyword Matching",
+        desc: "Matches module containing 'goroutines' in its folder name.",
+      },
+    ],
+    lifecycle: [
+      "Manifest Inspection — Verifies workspace context by locating trak.json",
+      "Smart Resolution — Matches module by exact key, numeric prefix, or keyword substring",
+      "State Mutation — Flips module completion to true and formats trak.json with 2-space indentation",
+      "Metric Recalculation — Computes updated completion count and progress percentage",
+      "Rewarding Feedback — Prints completion confirmation, updated progress bar, and next exercise tip",
+    ],
+  },
+  {
+    id: "undo",
+    name: "trak undo",
+    tagline: "Curriculum Module State Reset",
+    description:
+      "Reverts a previously completed curriculum module back to pending in trak.json, allowing learners to redo exercises or reset progress.",
+    syntax: "trak undo <module>",
+    args: [
+      {
+        token: "<module>",
+        label: "Module Number or Name",
+        desc: "Module number (e.g. '00', '1'), keyword, or exact folder name.",
+      },
+    ],
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display undo command help.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak undo 01",
+        title: "Reset Module by Number",
+        desc: "Reverts Module 01 back to pending status.",
+      },
+      {
+        cmd: "trak reset 00",
+        title: "Using Reset Alias",
+        desc: "Resets Module 00 using the reset alias.",
+      },
+      {
+        cmd: "trak unmark 02",
+        title: "Using Unmark Alias",
+        desc: "Unmarks Module 02 using the unmark alias.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Discovery — Locates trak.json in current directory",
+      "Module Resolution — Resolves target module using exact name or fuzzy prefix matching",
+      "State Rollback — Reverts module status to false in trak.json",
+      "Progress Recalculation — Recalculates workspace metrics and writes indented JSON",
+      "Confirmation Output — Prints clean reset confirmation with updated completion percentage",
+    ],
+  },
 ];
 
 export function CliMatrixView() {
-  const [activeTab, setActiveTab] = useState<"init" | "list" | "version">("init");
+  const [activeTab, setActiveTab] = useState<CommandId>("init");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   const current = COMMANDS.find((c) => c.id === activeTab) || COMMANDS[0];

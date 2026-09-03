@@ -157,6 +157,124 @@ const COMMAND_DATA: Record<
       },
     ],
   },
+  status: {
+    name: "trak status",
+    command: "status",
+    syntax: "trak status",
+    overview:
+      "Inspects the current workspace for trak.json, calculates module completion metrics, and renders a visual progress dashboard.",
+    details:
+      "Scans the current working directory for trak.json manifest. Displays track metadata, formatted creation date, ASCII progress bar with exact completion percentages, and a status checklist of all curriculum modules.",
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show status command help.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Discovery — Searches current directory for trak.json manifest",
+      "State Deserialization — Parses module_breakdown completion map",
+      "Progress Calculation — Computes completed vs total modules and percentage",
+      "Dashboard Output — Renders track info, ASCII progress bar, and module breakdown",
+      "Next Step Guidance — Suggests the next pending module to work on",
+    ],
+    examples: [
+      {
+        title: "Inspect Workspace Progress",
+        cmd: "trak status",
+        explanation: "Displays visual progress dashboard and status of all modules in current workspace.",
+      },
+    ],
+  },
+  done: {
+    name: "trak done",
+    command: "done",
+    syntax: "trak done <module> [flags]",
+    overview:
+      "Marks a curriculum module as completed in trak.json, updates completion metrics, and points to your next exercise.",
+    details:
+      "Supports smart prefix matching ('trak done 00', 'trak done 1'), keyword search ('trak done runtime'), and full folder names ('trak done 00-setup-and-prerequisites'). Aliases include 'trak complete' and 'trak mark'.",
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show done command help.",
+      },
+    ],
+    lifecycle: [
+      "Manifest Inspection — Verifies workspace context by locating trak.json",
+      "Smart Resolution — Matches module by exact key, numeric prefix, or keyword substring",
+      "State Mutation — Flips module completion to true and formats trak.json with 2-space indentation",
+      "Metric Recalculation — Computes updated completion count and progress percentage",
+      "Rewarding Feedback — Prints completion confirmation, updated progress bar, and next exercise tip",
+    ],
+    examples: [
+      {
+        title: "Mark by Module Number",
+        cmd: "trak done 00",
+        explanation: "Marks Module 00 as complete using numeric prefix.",
+      },
+      {
+        title: "Padded Number Matching",
+        cmd: "trak done 1",
+        explanation: "Automatically matches 01-runtime-and-escape-analysis.",
+      },
+      {
+        title: "Using Command Alias",
+        cmd: "trak complete 02",
+        explanation: "Marks Module 02 as complete using the complete alias.",
+      },
+      {
+        title: "Keyword Matching",
+        cmd: "trak mark goroutines",
+        explanation: "Matches module containing 'goroutines' in its name.",
+      },
+    ],
+  },
+  undo: {
+    name: "trak undo",
+    command: "undo",
+    syntax: "trak undo <module> [flags]",
+    overview:
+      "Reverts a previously completed curriculum module back to pending in trak.json.",
+    details:
+      "Allows developers to reset exercises for revision or practice. Recalculates workspace completion metrics automatically. Supports aliases 'trak reset' and 'trak unmark'.",
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show undo command help.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Discovery — Locates trak.json in current directory",
+      "Module Resolution — Resolves target module using exact name or fuzzy prefix matching",
+      "State Rollback — Reverts module status to false in trak.json",
+      "Progress Recalculation — Recalculates workspace metrics and writes indented JSON",
+      "Confirmation Output — Prints clean reset confirmation with updated completion percentage",
+    ],
+    examples: [
+      {
+        title: "Reset Module by Number",
+        cmd: "trak undo 01",
+        explanation: "Reverts Module 01 back to pending status.",
+      },
+      {
+        title: "Using Reset Alias",
+        cmd: "trak reset 00",
+        explanation: "Resets Module 00 using the reset alias.",
+      },
+      {
+        title: "Using Unmark Alias",
+        cmd: "trak unmark 02",
+        explanation: "Unmarks Module 02 using the unmark alias.",
+      },
+    ],
+  },
 };
 
 export async function generateStaticParams() {

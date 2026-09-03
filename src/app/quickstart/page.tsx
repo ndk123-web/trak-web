@@ -58,6 +58,13 @@ export default function QuickstartPage() {
       command: "cd ./learn-go && code .",
       tip: "Read README.md and start completing code exercises in Module 00!",
     },
+    {
+      number: "6",
+      title: "Track Progress & Mark Modules Complete",
+      description: "Inspect workspace state or mark completed modules with smart prefix matching:",
+      command: "trak status && trak done 00",
+      tip: "Run 'trak status' for your visual progress dashboard, 'trak done <module>' to mark progress, and 'trak undo <module>' to reset.",
+    },
   ];
 
   return (
