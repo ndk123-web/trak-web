@@ -56,8 +56,38 @@ function getMonacoLanguage(filename: string): string {
 }
 
 // ----------------------------------------------------
-// Rich Markdown Document Renderer
+// Rich Markdown Document Renderer with GFM Table Support
 // ----------------------------------------------------
+
+function isTableDelimiterRow(line: string): boolean {
+  const trimmed = line.trim();
+  if (!trimmed.includes("|")) return false;
+  let content = trimmed;
+  if (content.startsWith("|")) content = content.slice(1);
+  if (content.endsWith("|")) content = content.slice(0, -1);
+  const cells = content.split("|");
+  if (cells.length === 0) return false;
+  return cells.every((cell) => {
+    const c = cell.trim();
+    return /^:?-+:?$/.test(c);
+  });
+}
+
+function parseTableCells(line: string): string[] {
+  let trimmed = line.trim();
+  if (trimmed.startsWith("|")) trimmed = trimmed.slice(1);
+  if (trimmed.endsWith("|")) trimmed = trimmed.slice(0, -1);
+  return trimmed.split("|").map((c) => c.trim());
+}
+
+function getColumnAlign(delimiterCell: string): "left" | "center" | "right" {
+  const c = delimiterCell.trim();
+  const startsWithColon = c.startsWith(":");
+  const endsWithColon = c.endsWith(":");
+  if (startsWithColon && endsWithColon) return "center";
+  if (endsWithColon) return "right";
+  return "left";
+}
 
 function renderMarkdownDocument(mdText: string) {
   const lines = mdText.split("\n");
@@ -67,19 +97,21 @@ function renderMarkdownDocument(mdText: string) {
 
   const elements: React.ReactNode[] = [];
 
-  lines.forEach((line, idx) => {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
     // Fenced Code Block
     if (line.trim().startsWith("```")) {
       if (!inCodeBlock) {
         inCodeBlock = true;
         codeBlockLang = line.trim().slice(3).trim();
         codeBlockLines = [];
-        return;
+        continue;
       } else {
         inCodeBlock = false;
         elements.push(
           <div
-            key={`code-${idx}`}
+            key={`code-${i}`}
             className="my-3 rounded-lg overflow-hidden border border-white/[0.08] bg-[#12141a] font-mono text-[11.5px]"
           >
             {codeBlockLang && (
@@ -92,45 +124,136 @@ function renderMarkdownDocument(mdText: string) {
             </pre>
           </div>
         );
-        return;
+        continue;
       }
     }
 
     if (inCodeBlock) {
       codeBlockLines.push(line);
-      return;
+      continue;
+    }
+
+    // Markdown Table Detection (Header line followed by delimiter line)
+    if (
+      line.includes("|") &&
+      i + 1 < lines.length &&
+      isTableDelimiterRow(lines[i + 1])
+    ) {
+      const headers = parseTableCells(line);
+      const delimiterCells = parseTableCells(lines[i + 1]);
+      const alignments = headers.map((_, colIdx) => {
+        return colIdx < delimiterCells.length
+          ? getColumnAlign(delimiterCells[colIdx])
+          : "left";
+      });
+
+      const tableStartIdx = i;
+      i += 2; // Skip header and delimiter lines
+      const rows: string[][] = [];
+
+      while (
+        i < lines.length &&
+        lines[i].trim().includes("|") &&
+        lines[i].trim() !== ""
+      ) {
+        rows.push(parseTableCells(lines[i]));
+        i++;
+      }
+      i--; // Step back one line as loop will increment
+
+      elements.push(
+        <div
+          key={`table-${tableStartIdx}`}
+          className="my-4 overflow-x-auto rounded-lg border border-white/[0.08] bg-[#12141a]"
+        >
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-[#181a22] border-b border-white/[0.08]">
+              <tr>
+                {headers.map((header, hIdx) => {
+                  const align = alignments[hIdx] || "left";
+                  return (
+                    <th
+                      key={hIdx}
+                      className={`px-3.5 py-2.5 text-[11px] font-mono font-semibold text-slate-200 uppercase tracking-wider ${
+                        align === "center"
+                          ? "text-center"
+                          : align === "right"
+                          ? "text-right"
+                          : "text-left"
+                      }`}
+                    >
+                      {formatInlineMarkdown(header)}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.04]">
+              {rows.map((row, rIdx) => (
+                <tr
+                  key={rIdx}
+                  className="hover:bg-white/[0.02] transition-colors"
+                >
+                  {headers.map((_, colIdx) => {
+                    const cellText = row[colIdx] || "";
+                    const align = alignments[colIdx] || "left";
+                    return (
+                      <td
+                        key={colIdx}
+                        className={`px-3.5 py-2.5 text-slate-300 leading-relaxed font-sans ${
+                          align === "center"
+                            ? "text-center"
+                            : align === "right"
+                            ? "text-right"
+                            : "text-left"
+                        }`}
+                      >
+                        {formatInlineMarkdown(cellText)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+      continue;
     }
 
     // Headings
     if (line.startsWith("# ")) {
       elements.push(
         <h1
-          key={idx}
+          key={`h1-${i}`}
           className="font-serif text-xl sm:text-2xl font-normal text-white mt-4 mb-2 pb-1.5 border-b border-white/10"
         >
           {line.slice(2)}
         </h1>
       );
-      return;
+      continue;
     }
     if (line.startsWith("## ")) {
       elements.push(
         <h2
-          key={idx}
+          key={`h2-${i}`}
           className="font-serif text-lg font-normal text-slate-100 mt-4 mb-2 pb-1 border-b border-white/[0.06]"
         >
           {line.slice(3)}
         </h2>
       );
-      return;
+      continue;
     }
     if (line.startsWith("### ")) {
       elements.push(
-        <h3 key={idx} className="font-serif text-sm font-semibold text-emerald-400 mt-3 mb-1">
+        <h3
+          key={`h3-${i}`}
+          className="font-serif text-sm font-semibold text-emerald-400 mt-3 mb-1"
+        >
           {line.slice(4)}
         </h3>
       );
-      return;
+      continue;
     }
 
     // Task Checklist items: - [ ] or - [x]
@@ -138,7 +261,10 @@ function renderMarkdownDocument(mdText: string) {
       const isChecked = line.trim().startsWith("- [x]");
       const taskText = line.trim().slice(5).trim();
       elements.push(
-        <div key={idx} className="flex items-center gap-2 py-0.5 text-xs text-slate-300">
+        <div
+          key={`task-${i}`}
+          className="flex items-center gap-2 py-0.5 text-xs text-slate-300"
+        >
           {isChecked ? (
             <CheckSquare className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
           ) : (
@@ -149,59 +275,62 @@ function renderMarkdownDocument(mdText: string) {
           </span>
         </div>
       );
-      return;
+      continue;
     }
 
     // Bullet list: - item or * item
     if (line.trim().startsWith("- ") || line.trim().startsWith("* ")) {
       elements.push(
-        <li key={idx} className="ml-4 list-disc text-xs text-slate-300 py-0.5 leading-relaxed">
+        <li
+          key={`li-${i}`}
+          className="ml-4 list-disc text-xs text-slate-300 py-0.5 leading-relaxed"
+        >
           {formatInlineMarkdown(line.trim().slice(2))}
         </li>
       );
-      return;
+      continue;
     }
 
     // Blockquotes: > quote
     if (line.startsWith("> ")) {
       elements.push(
         <blockquote
-          key={idx}
+          key={`quote-${i}`}
           className="pl-3 my-2 border-l-2 border-emerald-500 text-slate-400 italic text-xs leading-relaxed"
         >
           {formatInlineMarkdown(line.slice(2))}
         </blockquote>
       );
-      return;
+      continue;
     }
 
     // Horizontal Rule: ---
     if (line.trim() === "---" || line.trim() === "***") {
-      elements.push(<hr key={idx} className="my-4 border-white/[0.08]" />);
-      return;
+      elements.push(<hr key={`hr-${i}`} className="my-4 border-white/[0.08]" />);
+      continue;
     }
 
     // Empty line
     if (!line.trim()) {
-      elements.push(<div key={idx} className="h-2" />);
-      return;
+      elements.push(<div key={`empty-${i}`} className="h-2" />);
+      continue;
     }
 
     // Standard paragraph
     elements.push(
-      <p key={idx} className="text-xs text-slate-300 leading-relaxed">
+      <p key={`p-${i}`} className="text-xs text-slate-300 leading-relaxed">
         {formatInlineMarkdown(line)}
       </p>
     );
-  });
+  }
 
   return <div className="space-y-1">{elements}</div>;
 }
 
-// Inline Markdown formatter (**bold**, `code`, *italic*)
+// Inline Markdown formatter (**bold**, `code`, *italic*, [link](url))
 function formatInlineMarkdown(text: string): React.ReactNode {
   const parts: React.ReactNode[] = [];
-  const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  const regex = /(`[^`]+`|\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g;
 
   let lastIdx = 0;
   let match: RegExpExecArray | null;
@@ -221,6 +350,21 @@ function formatInlineMarkdown(text: string): React.ReactNode {
           {token.slice(1, -1)}
         </code>
       );
+    } else if (token.startsWith("[") && token.includes("](") && token.endsWith(")")) {
+      const linkMatch = token.match(/^\[(.*)\]\((.*)\)$/);
+      if (linkMatch) {
+        parts.push(
+          <a
+            key={match.index}
+            href={linkMatch[2]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 hover:underline underline-offset-2"
+          >
+            {linkMatch[1]}
+          </a>
+        );
+      }
     } else if (token.startsWith("**") && token.endsWith("**")) {
       parts.push(
         <strong key={match.index} className="text-white font-semibold">
