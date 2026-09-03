@@ -63,7 +63,7 @@ export default function QuickstartPage() {
       title: "Track Progress & Mark Modules Complete",
       description: "Inspect workspace state or mark completed modules with smart prefix matching:",
       command: "trak status && trak done 00",
-      tip: "Run 'trak status' for your visual progress dashboard, 'trak done <module>' to mark progress, and 'trak undo <module>' to reset.",
+      tip: "Use 'trak next' to find what to study next, 'trak status' for your progress dashboard, and 'trak undo <module>' to reset.",
     },
   ];
 

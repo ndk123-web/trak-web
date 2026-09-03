@@ -87,6 +87,7 @@ export function Sidebar({
         { name: "Commands Matrix", href: "/cli", icon: Terminal },
         { name: "trak init", href: "/cli/init", icon: Terminal, isCode: true },
         { name: "trak list", href: "/cli/list", icon: Terminal, isCode: true },
+        { name: "trak next", href: "/cli/next", icon: Terminal, isCode: true },
         { name: "trak status", href: "/cli/status", icon: Terminal, isCode: true },
         { name: "trak done", href: "/cli/done", icon: Terminal, isCode: true },
         { name: "trak undo", href: "/cli/undo", icon: Terminal, isCode: true },

@@ -17,7 +17,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-export type CommandId = "init" | "list" | "status" | "done" | "undo" | "version";
+export type CommandId = "init" | "list" | "next" | "status" | "done" | "undo" | "version";
 
 interface CommandDetail {
   id: CommandId;
@@ -205,6 +205,49 @@ const COMMANDS: CommandDetail[] = [
       "Runtime Detection — Queries Go runtime.Version(), host GOOS, and GOARCH",
       "Registry Verification — Confirms active GitHub Raw registry endpoint",
       "Card Output — Formats and prints styled terminal info card to stdout",
+    ],
+  },
+  {
+    id: "next",
+    name: "trak next",
+    tagline: "Sequential Exercise & Curriculum Navigator",
+    description:
+      "Inspects trak.json, determines the next sequential incomplete module, and displays its folder path, overview, files, and navigation commands.",
+    syntax: "trak next [flags]",
+    args: [],
+    flags: [
+      {
+        flag: "-o, --open",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Automatically open the next module directory in VS Code or default editor.",
+      },
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display next command help and examples.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak next",
+        title: "Identify Next Pending Exercise",
+        desc: "Resolves the next module in sorted order and prints starter command.",
+      },
+      {
+        cmd: "trak next --open",
+        title: "Launch Directly in VS Code",
+        desc: "Opens the next module workspace folder directly in your editor.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Verification — Confirms trak.json exists in active working directory",
+      "Deterministic Sorting — Sorts module keys alphabetically and numerically",
+      "State Scan — Finds the first module where completion status is false",
+      "Metadata Extraction — Reads module README overview snippet and file entries",
+      "Terminal Card Output — Renders module name, track progress bar, and cd command",
+      "Optional Editor Launch — Spawns code editor if --open flag is supplied",
     ],
   },
   {

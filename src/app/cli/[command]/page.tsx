@@ -157,6 +157,49 @@ const COMMAND_DATA: Record<
       },
     ],
   },
+  next: {
+    name: "trak next",
+    command: "next",
+    syntax: "trak next [flags]",
+    overview:
+      "Inspects trak.json, determines the next sequential incomplete module, and displays its folder path, overview, files, and navigation commands.",
+    details:
+      "Sorts all curriculum modules in deterministic order to find the next incomplete exercise. Reads the module README snippet, lists workspace files, and provides direct copyable shell commands. Use --open to automatically launch the module in VS Code.",
+    flags: [
+      {
+        flag: "-o, --open",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Open the next module workspace folder directly in VS Code or default editor.",
+      },
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show next command help and examples.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Verification — Confirms trak.json exists in active working directory",
+      "Deterministic Sorting — Sorts module keys alphabetically and numerically",
+      "State Scan — Finds the first module where completion status is false",
+      "Metadata Extraction — Reads module README overview snippet and file entries",
+      "Terminal Card Output — Renders module name, track progress bar, and cd command",
+      "Optional Editor Launch — Spawns code editor if --open flag is supplied",
+    ],
+    examples: [
+      {
+        title: "Find Next Exercise",
+        cmd: "trak next",
+        explanation: "Resolves the next incomplete module and displays directory and starter tips.",
+      },
+      {
+        title: "Launch Directly in VS Code",
+        cmd: "trak next --open",
+        explanation: "Finds the next pending module and opens its directory in VS Code immediately.",
+      },
+    ],
+  },
   status: {
     name: "trak status",
     command: "status",
