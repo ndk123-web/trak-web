@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Terminal, Copy, Check, Sparkles, Flame, CheckCircle2, ArrowRight } from "lucide-react";
+import { TrakConfig } from "@/shared/config";
 
 export default function QuickstartPage() {
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
@@ -34,7 +35,7 @@ export default function QuickstartPage() {
       title: "Verify the Installation",
       description: "Verify that Trak is installed properly by checking its version information:",
       command: "trak version",
-      tip: "You should see the version card (v1.1.0) with Go runtime and platform specs.",
+      tip: `You should see the version card (${TrakConfig.version}) with Go runtime and platform specs.`,
     },
     {
       number: "3",

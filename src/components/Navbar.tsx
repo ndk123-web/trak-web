@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Terminal, Sparkles, Copy, Check } from "lucide-react";
+import { TrakConfig } from "@/shared/config";
 
 export function Navbar() {
   const [copied, setCopied] = useState(false);
@@ -28,7 +29,7 @@ export function Navbar() {
                 Trak
               </span>
               <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-                v1.1.0
+                {TrakConfig.version}
               </span>
             </div>
           </a>

@@ -24,7 +24,9 @@ import { FileTreePane } from "./FileTreePane";
 import { EditorPane } from "./EditorPane";
 import { JsonPreviewPane } from "./JsonPreviewPane";
 import { MetadataModal } from "./MetadataModal";
+import { TrakLogo } from "../TrakLogo";
 import { StudioGuideModal } from "./StudioGuideModal";
+import { TrakConfig } from "@/shared/config";
 
 // Pure Blank Template (100% Empty Workspace)
 const BLANK_TEMPLATE: TemplateBlueprint = {
@@ -335,7 +337,7 @@ export function BlueprintStudio() {
                 Blueprint Studio
               </h1>
               <span className="px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold">
-                AST v1.1.0
+                AST {TrakConfig.version}
               </span>
             </div>
           </div>

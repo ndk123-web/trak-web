@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { TrakConfig } from "@/shared/config";
 import {
   Terminal,
   Copy,
@@ -194,7 +195,7 @@ const COMMANDS: CommandDetail[] = [
       {
         cmd: "trak version",
         title: "Print Environment Card",
-        desc: "Prints styled ASCII card with version v1.1.0, Go runtime, and system architecture.",
+        desc: `Prints styled ASCII card with version ${TrakConfig.version}, Go runtime, and system architecture.`,
       },
     ],
     lifecycle: [

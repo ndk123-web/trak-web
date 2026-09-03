@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Heart, Sparkles, ExternalLink, Code2, Cpu, Cloud, Database, Wrench, BookOpen, Terminal, Flame } from "lucide-react";
+import { TrakConfig } from "@/shared/config";
 import { TrakLogo } from "./TrakLogo";
 import { CategoryIcon } from "./CategoryIcon";
 
@@ -17,7 +18,7 @@ export function Footer() {
               <TrakLogo size={26} />
               <span className="font-bold text-base text-white font-mono">trak</span>
               <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/[0.04] text-slate-300 border border-white/[0.08]">
-                v1.1.0
+                {TrakConfig.version}
               </span>
             </div>
 
@@ -119,7 +120,7 @@ export function Footer() {
                   rel="noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  Releases & Changelog (v1.1.0)
+                  Releases & Changelog ({TrakConfig.version})
                 </a>
               </li>
               <li>

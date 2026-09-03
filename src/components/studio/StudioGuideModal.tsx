@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Globe,
 } from "lucide-react";
+import { TrakConfig } from "@/shared/config";
 
 interface StudioGuideModalProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
                 Blueprint Studio & Community Publishing Guide
               </h2>
               <p className="text-[11px] font-mono text-slate-400">
-                Trak v1.1.0 • Pure GitOps Registry Architecture
+                Trak {TrakConfig.version} • Pure GitOps Registry Architecture
               </p>
             </div>
           </div>
@@ -149,7 +150,7 @@ export function StudioGuideModal({ isOpen, onClose }: StudioGuideModalProps) {
         {/* Footer */}
         <div className="px-6 py-3.5 border-t border-white/[0.08] bg-[#11141d] flex items-center justify-between">
           <span className="text-[11px] font-mono text-slate-500">
-            Trak Registry Specification v1.1.0
+            Trak Registry Specification {TrakConfig.version}
           </span>
           <button
             onClick={onClose}
