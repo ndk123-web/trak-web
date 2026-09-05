@@ -131,7 +131,7 @@ export function QuickSearchModal({ isOpen, onClose }: QuickSearchModalProps) {
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-white/5 group transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-7 h-7 rounded-lg bg-slate-900 border border-white/5 flex items-center justify-center text-xs font-mono font-bold text-cyan-400 shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-slate-900 border border-white/5 flex items-center justify-center text-xs font-mono font-bold text-emerald-400 shrink-0">
                       {track.modulesCount}
                     </div>
                     <div className="min-w-0">

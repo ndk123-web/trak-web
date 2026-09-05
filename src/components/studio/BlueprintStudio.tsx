@@ -436,7 +436,7 @@ export function BlueprintStudio() {
             className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-mono text-slate-300 border border-white/[0.08] transition-colors cursor-pointer"
           >
             <span className="text-slate-500">ID:</span>
-            <span className="text-cyan-400 font-bold">{blueprint.id}</span>
+            <span className="text-emerald-400 font-bold">{blueprint.id}</span>
             <span className="text-slate-600">•</span>
             <span className="text-emerald-400">v{blueprint.version}</span>
           </button>
@@ -467,7 +467,7 @@ export function BlueprintStudio() {
         {!isLeftCollapsed && (
           <div
             onMouseDown={startDragLeft}
-            className="w-1 hover:w-1.5 active:w-1.5 bg-white/[0.06] hover:bg-cyan-500 active:bg-cyan-500 cursor-col-resize shrink-0 transition-colors z-10 select-none"
+            className="w-1 hover:w-1.5 active:w-1.5 bg-white/[0.06] hover:bg-emerald-500 active:bg-emerald-500 cursor-col-resize shrink-0 transition-colors z-10 select-none"
             title="Drag to resize Explorer width"
           />
         )}

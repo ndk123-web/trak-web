@@ -186,7 +186,7 @@ export function JsonPreviewPane({
       {/* VS Code Pane Header */}
       <div className="px-3 py-1.5 bg-[#121215] border-b border-white/[0.06] flex items-center justify-between gap-2 select-none">
         <div className="flex items-center gap-2">
-          <FileJson className="w-3.5 h-3.5 text-amber-400" />
+          <FileJson className="w-3.5 h-3.5 text-emerald-400" />
           <span className="font-mono text-xs font-bold text-slate-200">
             Registry AST JSON
           </span>
@@ -196,7 +196,7 @@ export function JsonPreviewPane({
               <span>Valid AST</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-mono font-medium">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-white/5 text-slate-300 border border-white/10 text-[9px] font-mono font-medium">
               <AlertCircle className="w-2.5 h-2.5" />
               <span>Incomplete</span>
             </span>
@@ -246,7 +246,7 @@ export function JsonPreviewPane({
       <div className="px-3 py-1 bg-[#141416] border-b border-white/[0.04] text-[10px] font-mono text-slate-400 flex items-center justify-between select-none">
         <div className="flex items-center gap-2.5">
           <span>
-            ID: <strong className="text-cyan-400">{blueprint.id}</strong>
+            ID: <strong className="text-emerald-400">{blueprint.id}</strong>
           </span>
           <span>
             v<strong className="text-slate-200">{blueprint.version}</strong>

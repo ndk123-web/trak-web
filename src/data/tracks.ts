@@ -35,35 +35,35 @@ export const CATEGORIES: CategoryInfo[] = [
     id: "lang",
     title: "Programming Languages",
     icon: "",
-    badgeColor: "from-blue-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30",
+    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
     description: "Deep-dive syntax, runtime internals, memory models, and concurrency architectures",
   },
   {
     id: "os",
     title: "Operating Systems & Kernels",
     icon: "",
-    badgeColor: "from-emerald-500/20 to-teal-500/20 text-emerald-400 border-emerald-500/30",
+    badgeColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
     description: "Kernel architecture, process signals, filesystems, permissions, and shell administration",
   },
   {
     id: "cloud",
     title: "Cloud Infrastructure",
     icon: "",
-    badgeColor: "from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30",
+    badgeColor: "bg-white/[0.05] text-slate-300 border-white/10",
     description: "Global cloud networking, compute, serverless architectures, and FinOps design",
   },
   {
     id: "db",
     title: "Databases & Storage",
     icon: "",
-    badgeColor: "from-indigo-500/20 to-violet-500/20 text-indigo-400 border-indigo-500/30",
+    badgeColor: "bg-white/[0.05] text-slate-300 border-white/10",
     description: "Relational schemas, MVCC internals, indexing engines, in-memory caching, and replication",
   },
   {
     id: "tool",
     title: "DevOps & Developer Tools",
     icon: "",
-    badgeColor: "from-rose-500/20 to-pink-500/20 text-rose-400 border-rose-500/30",
+    badgeColor: "bg-white/[0.05] text-slate-300 border-white/10",
     description: "Containerization, orchestration, IaC pipelines, configuration automation, and version control",
   },
 ];
@@ -153,7 +153,7 @@ export const TRACKS: TrackItem[] = [
     description: "Comprehensive Go engineering from memory pointers and interfaces to Goroutines, Channels, CSP concurrency, and microservices.",
     highlight: "CSP Concurrency, Memory Pointers & Clean Architecture",
     color: "#00ADD8",
-    accentGradient: "from-cyan-500/20 via-blue-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["golang", "concurrency", "goroutines", "channels", "microservices", "interfaces"],
     initCommand: "trak init lang/go",
     modules: [
@@ -190,7 +190,7 @@ export const TRACKS: TrackItem[] = [
     description: "End-to-end Rust systems programming: Ownership, Borrowing, Lifetimes, Tokio Async, Axum web APIs, and Unsafe FFI.",
     highlight: "Zero-Cost Abstractions, Ownership & Tokio Concurrency",
     color: "#DEA584",
-    accentGradient: "from-orange-500/20 via-amber-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["rust", "systems", "ownership", "lifetimes", "tokio", "axum", "traits"],
     initCommand: "trak init lang/rust",
     modules: [
@@ -229,7 +229,7 @@ export const TRACKS: TrackItem[] = [
     description: "CPython internals, GIL architecture, Metaclasses, Pydantic v2 schemas, Asyncio event loops, and production FastAPI.",
     highlight: "CPython Internals, Asyncio & Production FastAPI",
     color: "#3776AB",
-    accentGradient: "from-blue-500/20 via-yellow-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["python", "cpython", "fastapi", "asyncio", "pydantic", "gil", "metaclasses"],
     initCommand: "trak init lang/python",
     modules: [
@@ -267,7 +267,7 @@ export const TRACKS: TrackItem[] = [
     description: "Strict TypeScript mastery: Discriminated unions, conditional types, infer keyword, template literal types, Zod, and fullstack typing.",
     highlight: "Advanced Type-System, Conditional Types & Zod",
     color: "#3178C6",
-    accentGradient: "from-blue-500/20 via-indigo-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["typescript", "types", "generics", "infer", "zod", "discriminated-unions"],
     initCommand: "trak init lang/typescript",
     modules: [
@@ -308,7 +308,7 @@ export const TRACKS: TrackItem[] = [
     description: "V8 engine internals, Event Loop mechanics, Closures, Prototypal inheritance, Asynchronous patterns, and ES2024+ features.",
     highlight: "V8 Internals, Event Loop & Advanced JavaScript",
     color: "#F7DF1E",
-    accentGradient: "from-yellow-500/20 via-amber-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["javascript", "v8", "event-loop", "closures", "prototypes", "async", "proxies"],
     initCommand: "trak init lang/javascript",
     modules: [
@@ -347,7 +347,7 @@ export const TRACKS: TrackItem[] = [
     description: "Modern C++ systems programming: RAII, Move Semantics, Vtables, Templates, Concepts, Ranges, Coroutines, and Concurrency.",
     highlight: "Modern C++20/23, RAII, Move Semantics & Concepts",
     color: "#00599C",
-    accentGradient: "from-blue-600/20 via-indigo-600/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["cpp", "cplusplus", "systems", "raii", "move-semantics", "templates", "concepts"],
     initCommand: "trak init lang/cpp",
     modules: [
@@ -382,7 +382,7 @@ export const TRACKS: TrackItem[] = [
     description: "Low-level C systems architecture: Memory layout, Pointer arithmetic, Heap allocators, Struct padding, POSIX threads, and Socket programming.",
     highlight: "Low-Level Systems, Pointer Arithmetic & POSIX",
     color: "#A8B9CC",
-    accentGradient: "from-slate-500/20 via-zinc-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["c", "systems", "pointers", "memory", "pthreads", "posix", "low-level"],
     initCommand: "trak init lang/c",
     modules: [
@@ -416,7 +416,7 @@ export const TRACKS: TrackItem[] = [
     description: "Java & JVM Enterprise Architecture: Memory regions, Garbage Collection, Records, Sealed Classes, Virtual Threads, and Spring Boot 3.",
     highlight: "JVM Internals, Virtual Threads & Spring Boot 3",
     color: "#ED8B00",
-    accentGradient: "from-red-500/20 via-amber-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["java", "jvm", "spring-boot", "virtual-threads", "garbage-collection", "records"],
     initCommand: "trak init lang/java",
     modules: [
@@ -454,7 +454,7 @@ export const TRACKS: TrackItem[] = [
     description: "Linux systems mastery: Kernel space architecture, FHS, permissions (SUID/SGID/ACL), systemd services, grep/sed/awk, process signals, and Bash automation.",
     highlight: "Kernel Architecture, systemd & DevOps Shell Power",
     color: "#FCC624",
-    accentGradient: "from-amber-500/20 via-yellow-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["linux", "kernel", "systemd", "bash", "grep", "sed", "awk", "permissions"],
     initCommand: "trak init os/linux",
     modules: [
@@ -490,7 +490,7 @@ export const TRACKS: TrackItem[] = [
     description: "Windows NT Kernel architecture, PowerShell Object Pipeline, Registry, NTFS DACLs, Event Viewer, WinRM remoting, WSL2, and CIM/WMI.",
     highlight: "NT Kernel, PowerShell Pipeline & Enterprise Admin",
     color: "#0078D4",
-    accentGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["windows", "powershell", "sysadmin", "winrm", "wsl2", "registry", "ntfs"],
     initCommand: "trak init os/windows",
     modules: [
@@ -525,7 +525,7 @@ export const TRACKS: TrackItem[] = [
     description: "Darwin XNU kernel architecture, Apple Silicon ARM64, APFS snapshots, Homebrew, launchd daemons, SIP/Gatekeeper security, and defaults plists.",
     highlight: "Darwin XNU Kernel, APFS & Apple Silicon Power",
     color: "#999999",
-    accentGradient: "from-zinc-500/20 via-neutral-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["macos", "mac", "darwin", "xnu", "homebrew", "zsh", "launchd", "apfs"],
     initCommand: "trak init os/macos",
     modules: [
@@ -562,7 +562,7 @@ export const TRACKS: TrackItem[] = [
     description: "AWS Solutions Architecture: IAM zero-trust, VPC routing, EC2/ALB/ASG, S3/EBS storage, Aurora/DynamoDB, Serverless Lambda, ECS/Fargate, and FinOps.",
     highlight: "AWS Solutions Architect, Serverless & VPC Networking",
     color: "#FF9900",
-    accentGradient: "from-amber-500/20 via-orange-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["aws", "cloud", "serverless", "lambda", "vpc", "iam", "dynamodb", "ecs"],
     initCommand: "trak init cloud/aws",
     modules: [
@@ -599,7 +599,7 @@ export const TRACKS: TrackItem[] = [
     description: "Postgres internals: MVCC tuple lifecycle, JSONB operators, GIN/BRIN indexing, EXPLAIN BUFFERS, Autovacuum tuning, Streaming Replication, and PITR.",
     highlight: "MVCC Internals, GIN/BRIN Indexing & Production DBA",
     color: "#336791",
-    accentGradient: "from-sky-500/20 via-blue-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["postgres", "postgresql", "rdbms", "jsonb", "dba", "mvcc", "indexing"],
     initCommand: "trak init db/postgres",
     modules: [
@@ -634,7 +634,7 @@ export const TRACKS: TrackItem[] = [
     description: "Redis mastery: Single-threaded event loop, Streams, RDB/AOF persistence, Sentinel HA, Cluster sharding, and caching design patterns.",
     highlight: "Event Loop, Streams, Sentinel HA & Redis Cluster",
     color: "#DC382D",
-    accentGradient: "from-rose-500/20 via-red-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["redis", "cache", "nosql", "in-memory", "streams", "pubsub", "cluster"],
     initCommand: "trak init db/redis",
     modules: [
@@ -670,7 +670,7 @@ export const TRACKS: TrackItem[] = [
     description: "Comprehensive relational database engineering: 3NF schema design, complex joins, CTEs, Window Functions, B-Tree indexes, and ACID transactions.",
     highlight: "Relational Schemas, Window Functions & Indexing",
     color: "#00758F",
-    accentGradient: "from-teal-500/20 via-cyan-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["sql", "rdbms", "postgres", "sqlite", "indexing", "transactions", "ctes"],
     initCommand: "trak init db/sql",
     modules: [
@@ -707,7 +707,7 @@ export const TRACKS: TrackItem[] = [
     description: "Linux container internals: Namespaces, cgroups, Overlay2 storage driver, Multi-stage builds, Docker Compose, BuildKit, and container security.",
     highlight: "Linux Namespaces, Multi-Stage Builds & Security",
     color: "#2496ED",
-    accentGradient: "from-blue-500/20 via-sky-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["docker", "containers", "namespaces", "cgroups", "compose", "buildkit", "security"],
     initCommand: "trak init tool/docker",
     modules: [
@@ -742,7 +742,7 @@ export const TRACKS: TrackItem[] = [
     description: "Kubernetes mastery (CKA/CKAD): Control Plane, Pod lifecycle, Deployments, Services, Ingress, StatefulSets, RBAC, Helm charts, and Custom Operators.",
     highlight: "CKA/CKAD Syllabus, Pod Lifecycle & Helm Charts",
     color: "#326CE5",
-    accentGradient: "from-blue-500/20 via-indigo-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["kubernetes", "k8s", "devops", "cloud-native", "helm", "cka", "ckad"],
     initCommand: "trak init tool/k8s",
     modules: [
@@ -778,7 +778,7 @@ export const TRACKS: TrackItem[] = [
     description: "Terraform mastery: HCL syntax, S3/DynamoDB remote state locking, reusable modules, dynamic blocks, import blocks, and native testing.",
     highlight: "HCL Syntax, S3 State Locking & Reusable Modules",
     color: "#7B42BC",
-    accentGradient: "from-purple-500/20 via-violet-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["terraform", "iac", "devops", "opentofu", "aws", "hcl", "modules"],
     initCommand: "trak init tool/terraform",
     modules: [
@@ -813,7 +813,7 @@ export const TRACKS: TrackItem[] = [
     description: "Git object internals (Blobs, Trees, Commits), Three Trees staging, Interactive rebasing, Worktrees, Reflog disaster recovery, and Bisect debugging.",
     highlight: "Git Object Model, Reflog Recovery & Worktrees",
     color: "#F05032",
-    accentGradient: "from-orange-500/20 via-red-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["git", "vcs", "version-control", "rebase", "worktrees", "reflog", "bisect"],
     initCommand: "trak init tool/git",
     modules: [
@@ -848,7 +848,7 @@ export const TRACKS: TrackItem[] = [
     description: "Jenkins automation mastery: Declarative/Scripted pipelines, Docker agents, Shared Libraries, K8s dynamic agents, and Jenkins Configuration as Code (JCasC).",
     highlight: "Declarative Pipelines, Shared Libraries & K8s Agents",
     color: "#D24939",
-    accentGradient: "from-red-500/20 via-orange-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["jenkins", "cicd", "devops", "groovy", "pipeline", "jcasc", "docker"],
     initCommand: "trak init tool/jenkins",
     modules: [
@@ -883,7 +883,7 @@ export const TRACKS: TrackItem[] = [
     description: "Agentless configuration management: Playbooks, dynamic inventories, Jinja2 templating, Ansible Vault encryption, custom Roles, and Molecule testing.",
     highlight: "Agentless Architecture, Jinja2 & Molecule Testing",
     color: "#EE0000",
-    accentGradient: "from-red-500/20 via-rose-500/10 to-transparent",
+    accentGradient: "from-emerald-500/10 via-transparent to-transparent",
     tags: ["ansible", "automation", "devops", "iac", "configuration", "vault", "molecule"],
     initCommand: "trak init tool/ansible",
     modules: [

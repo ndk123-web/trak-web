@@ -275,6 +275,16 @@ const COMMANDS: CommandDetail[] = [
         desc: "Runs native tests on Module 00 using numeric prefix matching.",
       },
       {
+        cmd: "trak verify 00-",
+        title: "Verify with Trailing Hyphen",
+        desc: "Matches Module 00 using prefix notation with trailing hyphen.",
+      },
+      {
+        cmd: "trak verify .\\00-setup*\\",
+        title: "Verify Tab-Completed Path",
+        desc: "Automatically normalizes trailing slashes and relative path separators.",
+      },
+      {
         cmd: "trak verify 01 --detail",
         title: "Detailed Failure Diagnostics",
         desc: "Outputs compiler stderr and failed test assertions for Module 01.",
@@ -329,6 +339,11 @@ const COMMANDS: CommandDetail[] = [
         desc: "Marks Module 00 as complete using numeric prefix.",
       },
       {
+        cmd: "trak done 00-",
+        title: "Mark by Prefix with Hyphen",
+        desc: "Marks Module 00 using shorthand prefix with trailing hyphen.",
+      },
+      {
         cmd: "trak done 1",
         title: "Padded Prefix Matching",
         desc: "Automatically matches 01-runtime-and-escape-analysis.",
@@ -380,6 +395,11 @@ const COMMANDS: CommandDetail[] = [
         cmd: "trak undo 01",
         title: "Reset Module by Number",
         desc: "Reverts Module 01 back to pending status.",
+      },
+      {
+        cmd: "trak undo 01-",
+        title: "Reset by Prefix with Hyphen",
+        desc: "Reverts Module 01 using prefix notation with trailing hyphen.",
       },
       {
         cmd: "trak reset 00",
@@ -591,6 +611,19 @@ export function CliMatrixView() {
           </div>
         )}
 
+        {/* Smart Module Resolution Note (for verify, done, undo) */}
+        {["verify", "done", "undo"].includes(current.id) && (
+          <div className="p-3.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-xs space-y-1">
+            <div className="flex items-center justify-between text-emerald-400 font-mono font-semibold text-[11px]">
+              <span>Smart Module Resolution (Prefix &amp; Fuzzy Matching)</span>
+              <span className="text-[10px] text-slate-400">Full name not mandatory</span>
+            </div>
+            <p className="text-slate-400 text-[11px] leading-relaxed font-sans">
+              Typing full directory names is completely optional. Trak automatically resolves targets via numeric prefixes (<code className="text-slate-200 font-mono">00</code>, <code className="text-slate-200 font-mono">00-</code>, <code className="text-slate-200 font-mono">1</code>), tab-completed paths with trailing slashes (<code className="text-slate-200 font-mono">.\00-setup*\</code>), or keyword substrings (<code className="text-slate-200 font-mono">toolchain</code>, <code className="text-slate-200 font-mono">pointer</code>).
+            </p>
+          </div>
+        )}
+
         {/* 7 Supported Verification Runtimes Matrix */}
         {current.id === "verify" && (
           <div className="space-y-3 pt-4 border-t border-white/[0.06]">
@@ -617,43 +650,43 @@ export function CliMatrixView() {
                     <td className="px-3.5 py-2.5 font-bold text-white">Go</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/go</td>
                     <td className="px-3.5 py-2.5 text-slate-300">go test -v ./...</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">go</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">go</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">Python</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/python</td>
                     <td className="px-3.5 py-2.5 text-slate-300">python -m unittest discover</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">python / python3</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">python / python3</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">Rust</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/rust</td>
                     <td className="px-3.5 py-2.5 text-slate-300">cargo test</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">cargo</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">cargo</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">JavaScript</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/javascript (lang/js)</td>
                     <td className="px-3.5 py-2.5 text-slate-300">node --test</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">node / bun</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">node / bun</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">TypeScript</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/typescript (lang/ts)</td>
                     <td className="px-3.5 py-2.5 text-slate-300">node --test</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">node / bun</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">node / bun</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">C</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/c</td>
                     <td className="px-3.5 py-2.5 text-slate-300">gcc / clang (-std=c11 -lm)</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">gcc / clang</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">gcc / clang</td>
                   </tr>
                   <tr className="hover:bg-white/[0.01]">
                     <td className="px-3.5 py-2.5 font-bold text-white">C++</td>
                     <td className="px-3.5 py-2.5 text-emerald-400">lang/cpp</td>
                     <td className="px-3.5 py-2.5 text-slate-300">g++ / clang++ (-std=c++17)</td>
-                    <td className="px-3.5 py-2.5 text-cyan-300">g++ / clang++</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">g++ / clang++</td>
                   </tr>
                 </tbody>
               </table>

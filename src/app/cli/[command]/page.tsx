@@ -158,6 +158,21 @@ const COMMAND_DATA: Record<string, CommandEntry> = {
         explanation: "Matches and runs tests for Module 02 automatically.",
       },
       {
+        title: "Verify by Prefix with Trailing Hyphen",
+        cmd: "trak verify 00-",
+        explanation: "Matches Module 00 using prefix notation with trailing hyphen.",
+      },
+      {
+        title: "Verify Using Tab-Completed Folder Path",
+        cmd: "trak verify .\\00-setup-toolchain-and-first-program\\",
+        explanation: "Trak automatically cleans trailing slashes, backslashes, and relative dots from shell autocompletion.",
+      },
+      {
+        title: "Verify by Keyword Substring",
+        cmd: "trak verify toolchain",
+        explanation: "Matches module containing the keyword 'toolchain' in its directory name.",
+      },
+      {
         title: "Verify with Detailed Failure Logs",
         cmd: "trak verify 01 --detail",
         explanation: "Displays compiler errors and assertion failure output to diagnose test failures.",
@@ -174,6 +189,10 @@ const COMMAND_DATA: Record<string, CommandEntry> = {
       },
     ],
     important: [
+      {
+        title: "Full Folder Names are Never Required (Prefix & Fuzzy Matching)",
+        text: "You never need to copy or type full directory names. Trak resolves targets using multi-tier matching: '00', '00-', '1', relative paths with trailing slashes (.\\00-setup*\\), or keyword substrings ('toolchain', 'pointer', 'memory'). This same smart matching works across 'trak verify', 'trak done', and 'trak undo'.",
+      },
       {
         title: "Toolchain Availability in System PATH",
         text: "Trak uses your local operating system toolchains rather than downloading massive bundled compilers. To verify Go exercises, install Go; for Rust, install Cargo; for JavaScript/TypeScript, install Node.js; for Python, install Python; and for C/C++, install GCC/Clang or MinGW. Run 'trak verify allowlists' to audit your machine.",
@@ -493,6 +512,11 @@ const COMMAND_DATA: Record<string, CommandEntry> = {
         explanation: "Automatically matches 01-runtime-and-escape-analysis.",
       },
       {
+        title: "Mark Using Trailing Hyphen Prefix",
+        cmd: "trak done 00-",
+        explanation: "Marks Module 00 using prefix notation with trailing hyphen.",
+      },
+      {
         title: "Using Command Alias",
         cmd: "trak complete 02",
         explanation: "Marks Module 02 as complete using the complete alias.",
@@ -500,10 +524,19 @@ const COMMAND_DATA: Record<string, CommandEntry> = {
       {
         title: "Keyword Matching",
         cmd: "trak mark goroutines",
-        explanation: "Matches module containing 'goroutines' in its name.",
+        explanation: "Matches module containing 'goroutines' in its name without typing full path.",
+      },
+      {
+        title: "Using Tab-Completed Folder Path",
+        cmd: "trak done .\\00-setup-toolchain-and-first-program\\",
+        explanation: "Trak automatically cleans trailing slashes and relative path dots.",
       },
     ],
     important: [
+      {
+        title: "Shorthand Targeting: Full Folder Name is Not Required",
+        text: "You do not need to type the full module folder name. You can pass '00', '00-', '1', a unique keyword (e.g. 'docker', 'runtime'), or tab-complete the relative path (.\\00-setup*\\). Trak normalizes and resolves the target automatically.",
+      },
       {
         title: "Essential for Architectural Labs",
         text: "While language tracks can be completed automatically via 'trak verify', architectural tracks (Docker, AWS, PostgreSQL, Linux, Kubernetes) rely on 'trak done <module>' once you finish the hands-on commands in the module README.",
@@ -547,17 +580,31 @@ const COMMAND_DATA: Record<string, CommandEntry> = {
         explanation: "Reverts Module 01 back to pending status.",
       },
       {
+        title: "Reset by Prefix with Trailing Hyphen",
+        cmd: "trak undo 00-",
+        explanation: "Reverts Module 00 back to pending status using prefix with hyphen.",
+      },
+      {
         title: "Using Reset Alias",
         cmd: "trak reset 00",
         explanation: "Resets Module 00 using the reset alias.",
       },
       {
-        title: "Using Unmark Alias",
+        title: "Using Unmark Alias with Keyword",
+        cmd: "trak unmark goroutines",
+        explanation: "Resets module containing 'goroutines' using keyword substring.",
+      },
+      {
+        title: "Unmark with Padded Number",
         cmd: "trak unmark 02",
         explanation: "Unmarks Module 02 using the unmark alias.",
       },
     ],
     important: [
+      {
+        title: "Shorthand Targeting: Full Folder Name is Not Required",
+        text: "Like 'verify' and 'done', 'undo' accepts unpadded numbers ('1'), padded numbers ('01'), prefixes with hyphens ('01-'), keywords, or tab-completed paths. You never need to write the complete folder name.",
+      },
       {
         title: "Non-Destructive State Reset",
         text: "Running 'trak undo' only updates the boolean flag in trak.json. It never modifies or deletes your source code or exercise files.",

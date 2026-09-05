@@ -204,7 +204,7 @@ export function TrackDetailClient({ track, relatedTracks }: TrackDetailClientPro
               <div className="font-mono text-slate-400 text-[11px] pl-4 space-y-0.5">
                 <div>├── {selectedModule.number}-{selectedModule.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}</div>
                 <div className="pl-4 text-emerald-400">├── README.md (Comprehensive Guide &amp; Architecture)</div>
-                <div className="pl-4 text-cyan-400">└── main (Hands-on Source Code Exercises)</div>
+                <div className="pl-4 text-emerald-400">└── main (Hands-on Source Code Exercises)</div>
               </div>
             </div>
 

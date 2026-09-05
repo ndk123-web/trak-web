@@ -19,7 +19,7 @@ export function TrakLogo({ size = 28, className = "" }: TrakLogoProps) {
         <linearGradient id="trakGrad" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#34d399" />
           <stop offset="50%" stopColor="#10b981" />
-          <stop offset="100%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="#059669" />
         </linearGradient>
         <linearGradient id="trakTrackGrad" x1="12" y1="8" x2="28" y2="32" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />

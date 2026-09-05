@@ -9,15 +9,15 @@ interface CategoryIconProps {
 export function CategoryIcon({ category, className = "w-4 h-4" }: CategoryIconProps) {
   switch (category) {
     case "lang":
-      return <Code2 className={`${className} text-cyan-400`} />;
+      return <Code2 className={`${className} text-emerald-400`} />;
     case "os":
       return <Cpu className={`${className} text-emerald-400`} />;
     case "cloud":
-      return <Cloud className={`${className} text-blue-400`} />;
+      return <Cloud className={`${className} text-emerald-400`} />;
     case "db":
-      return <Database className={`${className} text-indigo-400`} />;
+      return <Database className={`${className} text-emerald-400`} />;
     case "tool":
-      return <Wrench className={`${className} text-amber-400`} />;
+      return <Wrench className={`${className} text-emerald-400`} />;
     case "all":
     default:
       return <Layers className={`${className} text-emerald-400`} />;

@@ -118,7 +118,7 @@ export default function RegistryPage() {
                 <td className="px-4 py-2.5 text-slate-300">users/alice/db/postgres.json</td>
               </tr>
               <tr>
-                <td className="px-4 py-2.5 text-amber-400 font-semibold">{`trak init alice/db/postgres@v1.1.0`}</td>
+                <td className="px-4 py-2.5 text-emerald-400 font-semibold">{`trak init alice/db/postgres@v1.1.0`}</td>
                 <td className="px-4 py-2.5 text-slate-400">Community (versioned)</td>
                 <td className="px-4 py-2.5 text-slate-300">users/alice/db/postgres@v1.1.0.json</td>
               </tr>

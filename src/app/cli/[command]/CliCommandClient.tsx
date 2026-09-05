@@ -15,6 +15,7 @@ import {
   Cpu,
   ShieldCheck,
   Code2,
+  Sparkles,
 } from "lucide-react";
 
 interface CliCommandClientProps {
@@ -121,6 +122,75 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
         </p>
       </div>
 
+      {/* Smart Module Resolution Feature Card (verify, done, undo) */}
+      {["verify", "done", "undo"].includes(data.command) && (
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-5 border-emerald-500/20 bg-emerald-500/[0.03]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-emerald-400" />
+              <span>Smart Module Resolution (No Full Names Required)</span>
+            </h3>
+            <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-medium w-fit">
+              Prefix &amp; Fuzzy Matching
+            </span>
+          </div>
+
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+            Typing or copying full folder names like <code className="text-white font-mono bg-white/5 px-1.5 py-0.5 rounded text-xs">00-setup-toolchain-and-first-program</code> is completely optional. Trak CLI automatically resolves module targets through 4 multi-tier matching rules:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-white/5 space-y-2">
+              <div className="text-xs font-mono font-bold text-emerald-400">
+                01. Numeric Prefix
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Type unpadded numbers or numeric prefixes. Trak normalizes leading zeros and trailing hyphens.
+              </p>
+              <div className="font-mono text-xs text-slate-300 bg-black/50 p-2.5 rounded-lg border border-white/5 space-y-1">
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} 00</div>
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} 00-</div>
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} 1</div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-white/5 space-y-2">
+              <div className="text-xs font-mono font-bold text-emerald-400">
+                02. Shell Tab-Completion
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Terminal tab-completion with relative paths and trailing slashes (<code className="text-slate-300">.\</code> or <code className="text-slate-300">/</code>) is cleanly sanitized.
+              </p>
+              <div className="font-mono text-xs text-slate-300 bg-black/50 p-2.5 rounded-lg border border-white/5 space-y-1">
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} .\00-setup*\</div>
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} 01-var*/</div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-white/5 space-y-2">
+              <div className="text-xs font-mono font-bold text-emerald-400">
+                03. Keyword Search
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Type any distinct keyword or topic from the module name. Case-insensitive substring matching.
+              </p>
+              <div className="font-mono text-xs text-slate-300 bg-black/50 p-2.5 rounded-lg border border-white/5 space-y-1">
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} toolchain</div>
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} pointer</div>
+                <div><span className="text-emerald-400 font-bold">$</span> trak {data.command} memory</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-black/50 border border-white/10 text-xs text-slate-400 flex items-start gap-2.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <span>
+              <strong className="text-slate-200">Ambiguity Guard:</strong> If a keyword matches multiple modules (for example, typing a generic query like <code className="text-slate-300 font-mono">test</code>), Trak stops execution safely, displays all matching module candidates in your terminal, and prompts you to specify.
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Supported Runtimes (if present, e.g. for verify) */}
       {data.runtimes && data.runtimes.length > 0 && (
         <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
@@ -157,7 +227,7 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
                     <td className="px-4 py-3 text-emerald-400 whitespace-nowrap">
                       {rt.track}
                     </td>
-                    <td className="px-4 py-3 text-cyan-300 whitespace-nowrap">
+                    <td className="px-4 py-3 text-slate-300 whitespace-nowrap">
                       {rt.executables.join(" / ")}
                     </td>
                     <td className="px-4 py-3 text-slate-200 whitespace-nowrap">
@@ -262,7 +332,7 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
               className="p-4 rounded-xl bg-slate-950 border border-white/5 space-y-1.5"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-cyan-400 font-bold text-xs">
+                <span className="font-mono text-emerald-400 font-bold text-xs">
                   {f.flag}
                 </span>
                 <span className="text-[11px] font-mono text-slate-500">
@@ -316,18 +386,18 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
 
       {/* Important Technical Notices */}
       {data.important && data.important.length > 0 && (
-        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4 border-amber-500/20 bg-gradient-to-b from-amber-500/[0.04] to-transparent">
-          <h3 className="text-lg font-bold text-amber-300 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-amber-400" />
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4 border-white/10 bg-white/[0.02]">
+          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-emerald-400" />
             <span>Important Technical Guidelines</span>
           </h3>
           <div className="grid grid-cols-1 gap-4 pt-1">
             {data.important.map((item, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-xl bg-slate-950/80 border border-amber-500/20 space-y-1.5"
+                className="p-4 rounded-xl bg-slate-950/80 border border-white/10 space-y-1.5"
               >
-                <div className="text-xs font-bold text-amber-300 font-mono">
+                <div className="text-xs font-bold text-white font-mono">
                   {item.title}
                 </div>
                 <p className="text-xs text-slate-300 font-sans leading-relaxed">

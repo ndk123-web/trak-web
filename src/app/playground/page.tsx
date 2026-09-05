@@ -170,22 +170,22 @@ export default function PlaygroundPage() {
                 <FolderTree className="w-4 h-4 text-emerald-400" />
                 <span>Materialized Workspace Tree Preview</span>
               </div>
-              <span className="text-xs font-mono text-cyan-400">
+              <span className="text-xs font-mono text-emerald-400">
                 {targetDirDisplay}
               </span>
             </div>
 
             {/* Tree Box */}
             <div className="p-5 rounded-xl bg-slate-950 border border-white/10 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto max-h-[420px]">
-              <div className="text-emerald-400 font-bold">📁 {targetDirDisplay}/</div>
-              <div className="text-slate-400 pl-4">├── 📄 README.md <span className="text-slate-600">(Master Track Guide)</span></div>
-              <div className="text-cyan-400 pl-4">├── 📄 trak.json <span className="text-slate-600">(Workspace Manifest & Version)</span></div>
+              <div className="text-emerald-400 font-bold">{targetDirDisplay}/</div>
+              <div className="text-slate-400 pl-4">├── README.md <span className="text-slate-600">(Master Track Guide)</span></div>
+              <div className="text-emerald-400 pl-4">├── trak.json <span className="text-slate-600">(Workspace Manifest & Version)</span></div>
 
               {activeTrack.modules.slice(0, 8).map((mod, idx) => (
                 <div key={idx} className="text-slate-300 pl-4">
-                  ├── 📁 {mod.number}-{mod.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}/
-                  <div className="pl-6 text-slate-500">├── 📄 README.md</div>
-                  <div className="pl-6 text-slate-500">└── 📄 main.*</div>
+                  ├── {mod.number}-{mod.title.toLowerCase().replace(/[^a-z0-9]/g, "-")}/
+                  <div className="pl-6 text-slate-500">├── README.md</div>
+                  <div className="pl-6 text-slate-500">└── main.*</div>
                 </div>
               ))}
 

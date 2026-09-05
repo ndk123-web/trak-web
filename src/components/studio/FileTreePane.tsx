@@ -182,7 +182,7 @@ export function FileTreePane({
                     if (e.key === "Escape") setRenamingPath(null);
                   }}
                   autoFocus
-                  className="w-full px-1.5 py-0.5 bg-[#18181b] border border-cyan-500 rounded text-xs text-white font-mono outline-none"
+                  className="w-full px-1.5 py-0.5 bg-[#18181b] border border-emerald-500 rounded text-xs text-white font-mono outline-none"
                 />
                 <button
                   onClick={handleConfirmRename}
@@ -219,7 +219,7 @@ export function FileTreePane({
                   <button
                     onClick={(e) => handleStartCreate(node.id, "directory", e)}
                     title="New Directory"
-                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-cyan-400 transition-colors"
+                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-emerald-400 transition-colors"
                   >
                     <FolderPlus className="w-3 h-3" />
                   </button>
@@ -230,7 +230,7 @@ export function FileTreePane({
                   <button
                     onClick={(e) => handleStartRename(node.id, node.name, e)}
                     title="Rename"
-                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-amber-400 transition-colors"
+                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
                   >
                     <Edit2 className="w-3 h-3" />
                   </button>
@@ -242,7 +242,7 @@ export function FileTreePane({
                       }
                     }}
                     title="Delete"
-                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-rose-400 transition-colors"
+                    className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-red-400 transition-colors"
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -256,7 +256,7 @@ export function FileTreePane({
         {isDir && isExpanded && isCreatingHere && (
           <div
             style={{ paddingLeft: `${(depth + 1) * 14 + 10}px` }}
-            className="flex items-center gap-1.5 py-1 pr-2 my-0.5 bg-white/[0.04] border border-cyan-500/40 rounded"
+            className="flex items-center gap-1.5 py-1 pr-2 my-0.5 bg-white/[0.04] border border-emerald-500/40 rounded"
           >
             {creatingIn.type === "directory" ? (
               <Folder className="w-3.5 h-3.5 text-[#909090] shrink-0" />
@@ -277,7 +277,7 @@ export function FileTreePane({
                 creatingIn.type === "directory" ? "folder-name" : "file.ext"
               }
               autoFocus
-              className="flex-1 px-1.5 py-0.5 bg-[#18181b] border border-cyan-500 rounded text-xs text-white font-mono outline-none"
+              className="flex-1 px-1.5 py-0.5 bg-[#18181b] border border-emerald-500 rounded text-xs text-white font-mono outline-none"
             />
             <button
               onClick={handleConfirmCreate}
@@ -313,7 +313,7 @@ export function FileTreePane({
                 </button>
                 <button
                   onClick={(e) => handleStartCreate(node.id, "directory", e)}
-                  className="px-2 py-1 rounded bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 text-[11px] font-mono border border-cyan-500/20 cursor-pointer transition-colors"
+                  className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 text-[11px] font-mono border border-white/10 cursor-pointer transition-colors"
                 >
                   + Add Folder
                 </button>
@@ -348,7 +348,7 @@ export function FileTreePane({
           </button>
           <button
             onClick={(e) => handleStartCreate(root.id, "directory", e)}
-            className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer"
+            className="p-1 rounded hover:bg-white/10 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer"
             title="New Folder at Root"
           >
             <FolderPlus className="w-3.5 h-3.5" />

@@ -111,7 +111,7 @@ export function MetadataModal({
           {/* Generated ID Badge */}
           <div className="p-2.5 rounded-lg bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-[11px]">
             <span className="text-slate-400">Registry Template ID:</span>
-            <span className="text-cyan-400 font-bold">
+            <span className="text-emerald-400 font-bold">
               {category}/{slug || "..."}
             </span>
           </div>

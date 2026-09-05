@@ -63,7 +63,7 @@ export default function QuickstartPage() {
       title: "Verify Exercises & Sync Progress",
       description: "Execute native automated unit tests on language tracks or inspect workspace metrics:",
       command: "trak verify 00 && trak status",
-      tip: "Use 'trak verify' for automated unit testing (or 'trak done <module>' for hands-on architectural labs), 'trak next' to find what to study next, and 'trak undo <module>' to reset.",
+      tip: "Full folder names are never required: type 'trak verify 00', 'trak verify 00-', or 'trak verify 1' using shorthand prefixes. Use 'trak next' to find what to study next, and 'trak done <module>' for architectural labs.",
     },
   ];
 

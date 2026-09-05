@@ -55,12 +55,10 @@
 /* Developer Aesthetics & Glows */
 .bg-radial-grid {
   background-image: 
-    radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 70%),
-    radial-gradient(circle at 100% 40%, rgba(59, 130, 246, 0.08), transparent 50%),
-    radial-gradient(circle at 0% 80%, rgba(168, 85, 247, 0.08), transparent 50%),
+    radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.12), transparent 70%),
     linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
 .glass-panel {

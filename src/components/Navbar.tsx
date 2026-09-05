@@ -19,7 +19,7 @@ export function Navbar() {
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
           <a href="#" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 p-0.5 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-emerald-600 p-0.5 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
               <div className="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
                 <Terminal className="w-4.5 h-4.5 text-emerald-400" />
               </div>
@@ -52,7 +52,7 @@ export function Navbar() {
             rel="noreferrer"
             className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Registry
           </a>
         </nav>
