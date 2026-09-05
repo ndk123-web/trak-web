@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Terminal, Copy, Check, ArrowRight, BookOpen, Layers, Sparkles } from "lucide-react";
 import { CliCommandClient } from "./CliCommandClient";
 
 interface CommandPageProps {
@@ -9,19 +8,220 @@ interface CommandPageProps {
   }>;
 }
 
-const COMMAND_DATA: Record<
-  string,
-  {
+interface CommandEntry {
+  name: string;
+  command: string;
+  syntax: string;
+  aliases?: string[];
+  overview: string;
+  details: string;
+  subcommands?: {
+    cmd: string;
+    aliases?: string[];
+    description: string;
+    example: string;
+  }[];
+  runtimes?: {
     name: string;
-    command: string;
-    syntax: string;
-    overview: string;
-    details: string;
-    flags: { flag: string; type: string; defaultVal: string; description: string }[];
-    lifecycle: string[];
-    examples: { cmd: string; title: string; explanation: string }[];
-  }
-> = {
+    track: string;
+    testRunner: string;
+    executables: string[];
+    localNote: string;
+  }[];
+  flags: { flag: string; type: string; defaultVal: string; description: string }[];
+  lifecycle: string[];
+  examples: { cmd: string; title: string; explanation: string }[];
+  important?: { title: string; text: string }[];
+  faq?: { question: string; answer: string }[];
+}
+
+const COMMAND_DATA: Record<string, CommandEntry> = {
+  verify: {
+    name: "trak verify",
+    command: "verify",
+    syntax: "trak verify [module] [-a, --all] [-d, --detail] [-l, --list]",
+    aliases: ["test", "check"],
+    overview:
+      "Executes native language test suites against your local exercise code, validates test assertions, and automatically marks completed modules in trak.json.",
+    details:
+      "The verify command runs automated test harnesses directly on your system using your installed compilers and runtime toolchains. If all tests for an exercise pass, Trak updates trak.json to mark the module complete, updates your workspace progress percentage, renders the visual progress bar, and recommends your next module. For hands-on laboratory tracks (Docker, Kubernetes, AWS, PostgreSQL, Linux, Git), Trak informs you that these tracks are architectural environments without compilers and guides you to use 'trak done <module>' instead.",
+    subcommands: [
+      {
+        cmd: "trak verify allowlists",
+        aliases: ["allowlist", "list", "supported", "runtimes"],
+        description:
+          "Displays a tabular matrix of all 7 supported programming language tracks, their native test runner commands, and checks your system PATH to report whether each compiler or interpreter is installed and ready.",
+        example: "trak verify allowlists",
+      },
+    ],
+    runtimes: [
+      {
+        name: "Go",
+        track: "lang/go",
+        testRunner: "go test -v ./...",
+        executables: ["go"],
+        localNote: "Native Go test runner testing all packages in current module.",
+      },
+      {
+        name: "Python",
+        track: "lang/python",
+        testRunner: "unittest discover",
+        executables: ["python", "python3"],
+        localNote: "Zero-dependency test discovery using standard library unittest module.",
+      },
+      {
+        name: "Rust",
+        track: "lang/rust",
+        testRunner: "cargo test",
+        executables: ["cargo"],
+        localNote: "Invokes cargo test using the module Cargo.toml manifest.",
+      },
+      {
+        name: "JavaScript",
+        track: "lang/javascript (lang/js)",
+        testRunner: "node --test",
+        executables: ["node", "bun"],
+        localNote: "Built-in Node.js native test runner (Node 18+ / 20+), zero npm install needed.",
+      },
+      {
+        name: "TypeScript",
+        track: "lang/typescript (lang/ts)",
+        testRunner: "node --test",
+        executables: ["node", "bun"],
+        localNote: "Native Node.js test runner with built-in TypeScript execution support.",
+      },
+      {
+        name: "C",
+        track: "lang/c",
+        testRunner: "gcc / clang",
+        executables: ["gcc", "clang"],
+        localNote: "Compiles test harness and implementation using -Wall -Wextra -std=c11 -lm.",
+      },
+      {
+        name: "C++",
+        track: "lang/cpp",
+        testRunner: "g++ / clang++",
+        executables: ["g++", "clang++"],
+        localNote: "Compiles test harness and implementation using -Wall -Wextra -std=c++17.",
+      },
+    ],
+    flags: [
+      {
+        flag: "-a, --all",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Verify all modules sequentially across the workspace and display full summary.",
+      },
+      {
+        flag: "-d, --detail",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show detailed compiler and test assertion output when tests fail.",
+      },
+      {
+        flag: "-l, --list",
+        type: "boolean",
+        defaultVal: "false",
+        description: "List all 7 supported language verification runtimes and local toolchain readiness.",
+      },
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show verify command synopsis, aliases, and usage examples.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Verification — Locates trak.json in current directory to confirm active learning workspace context.",
+      "Track Type Detection — Parses template ID to determine whether current track is a compiled language track ('lang') or architectural hands-on lab.",
+      "Hands-On Track Handling — If track is non-lang (Docker, AWS, PostgreSQL, Linux), explains that architectural labs use 'trak done <module>' instead of compilers.",
+      "Toolchain Resolution — Checks system PATH for the required compiler or interpreter (e.g. gcc, cargo, node, python, go). If missing, prompts installation instructions.",
+      "Module Target Selection — If argument is omitted, finds first pending module. If argument is provided, resolves by exact name, numeric prefix (e.g. '00', '1'), or keyword (e.g. 'escape'). If --all is passed, queues all modules.",
+      "Automated Execution — Runs native test harness directly on local filesystem with real-time CLI spinner.",
+      "Progress Synchronization — If tests pass, updates trak.json (module_breakdown = true), recalculates metrics, prints updated progress bar, and suggests next exercise via 'trak next'.",
+      "Diagnostics Output — If tests fail, prints failure alert. With --detail flag, streams compiler stderr and test failure assertion messages.",
+    ],
+    examples: [
+      {
+        title: "Verify Current Pending Exercise",
+        cmd: "trak verify",
+        explanation: "Automatically detects and verifies the first incomplete module in your curriculum.",
+      },
+      {
+        title: "Verify Module by Numeric Prefix",
+        cmd: "trak verify 00",
+        explanation: "Verifies Module 00 using numeric prefix matching.",
+      },
+      {
+        title: "Verify Module with Unpadded Number",
+        cmd: "trak verify 2",
+        explanation: "Matches and runs tests for Module 02 automatically.",
+      },
+      {
+        title: "Verify with Detailed Failure Logs",
+        cmd: "trak verify 01 --detail",
+        explanation: "Displays compiler errors and assertion failure output to diagnose test failures.",
+      },
+      {
+        title: "Verify All Modules Across Workspace",
+        cmd: "trak verify --all",
+        explanation: "Runs tests on every module in the workspace sequentially and outputs pass/fail statistics.",
+      },
+      {
+        title: "Inspect Supported Runtimes & Toolchains",
+        cmd: "trak verify allowlists",
+        explanation: "Checks which language compilers and test runners are installed on your machine.",
+      },
+    ],
+    important: [
+      {
+        title: "Toolchain Availability in System PATH",
+        text: "Trak uses your local operating system toolchains rather than downloading massive bundled compilers. To verify Go exercises, install Go; for Rust, install Cargo; for JavaScript/TypeScript, install Node.js; for Python, install Python; and for C/C++, install GCC/Clang or MinGW. Run 'trak verify allowlists' to audit your machine.",
+      },
+      {
+        title: "Zero External Dependencies Design",
+        text: "All language test suites are authored using native built-in runners (node --test, standard python unittest, go test, cargo test, and native C/C++ assertion runners). Learners never need to run 'npm install' or configure third-party test frameworks to complete exercises.",
+      },
+      {
+        title: "Compiled Language Tracks vs Hands-On Architectural Labs",
+        text: "Automated test verification is designed for programming language tracks (lang/go, lang/rust, lang/python, lang/javascript, lang/typescript, lang/c, lang/cpp). Architectural tracks (tool/docker, db/postgres, cloud/aws, os/linux) are practical environments without compiler test suites; use 'trak done <module>' to mark these completed after following their README instructions.",
+      },
+      {
+        title: "Automatic State Persistence in trak.json",
+        text: "When a test succeeds, Trak immediately writes the completed status to trak.json with 2-space indentation. You do not need to manually run 'trak done' on verified code.",
+      },
+    ],
+    faq: [
+      {
+        question: "How does Trak verify my code?",
+        answer: "Trak inspects trak.json in your current directory, detects the language track (e.g. lang/go, lang/c), looks up the required compiler in your PATH, and runs the test harness against your exercise files.",
+      },
+      {
+        question: "What should I do if a test fails?",
+        answer: "Run the command with the detail flag: 'trak verify <module> --detail' (or '-d'). Trak will print the compiler error or failed assertion details directly in your terminal, showing exactly which line or test case failed.",
+      },
+      {
+        question: "What happens if a compiler or runtime is not installed on my computer?",
+        answer: "Trak will display a clear 'Toolchain Not Found' notice specifying the required binary name and instructing you to install the corresponding language compiler. Run 'trak verify allowlists' at any time to see which runtimes are ready on your machine.",
+      },
+      {
+        question: "Can I test all modules at the same time?",
+        answer: "Yes, use 'trak verify --all' (or 'trak verify -a'). Trak will run tests sequentially through every module folder, show pass/fail results for each, update trak.json for passing modules, and print a final summary.",
+      },
+      {
+        question: "How does module matching work?",
+        answer: "You do not need to type the full module folder name. Trak supports exact names, padded numeric prefixes ('00', '01'), single digits ('1', '2'), and keyword substrings (e.g. 'trak verify pointers').",
+      },
+      {
+        question: "Can I use trak verify on Docker, AWS, or PostgreSQL tracks?",
+        answer: "No. Architectural and infrastructure tracks are hands-on configuration environments that do not have automated code compilers. If you run 'trak verify' on these tracks, Trak reminds you to complete the module steps and use 'trak done <module>' to record completion.",
+      },
+      {
+        question: "Does trak verify modify my code?",
+        answer: "No. Trak never modifies your exercise or starter code. It only compiles and executes your code against the module test harness, and updates completion status in trak.json.",
+      },
+    ],
+  },
   init: {
     name: "trak init",
     command: "init",
@@ -73,6 +273,26 @@ const COMMAND_DATA: Record<
         explanation: "Materializes the Rust workspace inside custom ./my-rust-lab directory.",
       },
     ],
+    important: [
+      {
+        title: "Workspace Context Receipt",
+        text: "The initialization process generates a trak.json manifest at the root of the new folder. This receipt is essential for all tracking commands (trak verify, trak next, trak status, trak done).",
+      },
+      {
+        title: "Path Clobber Safety",
+        text: "Trak safely writes to target directories and preserves folder structure. Use the --path flag if you want to isolate workspaces in custom locations.",
+      },
+    ],
+    faq: [
+      {
+        question: "Can I initialize in a custom folder?",
+        answer: "Yes, use the --path flag: 'trak init lang/go --path ./custom-folder'.",
+      },
+      {
+        question: "Can I use trak offline?",
+        answer: "Initialization requires internet access to fetch blueprints from GitHub Raw. Once materialized, your entire workspace runs 100% locally and offline.",
+      },
+    ],
   },
   list: {
     name: "trak list",
@@ -106,7 +326,7 @@ const COMMAND_DATA: Record<
       "Downloads master catalog manifest: registry.json from GitHub",
       "Filters categories based on arguments and flags",
       "Draws formatted Unicode tree graph with branches (├──, └──, │)",
-      "Displays colored category icons (📦, 🐧, ☁️, 🗄️, 🛠️) and track descriptions",
+      "Displays colored category tags and track descriptions",
       "Outputs interactive tips for initializing discovered tracks",
     ],
     examples: [
@@ -126,34 +346,16 @@ const COMMAND_DATA: Record<
         explanation: "Shows only database tracks (PostgreSQL, Redis, SQL).",
       },
     ],
-  },
-  version: {
-    name: "trak version",
-    command: "version",
-    syntax: "trak version",
-    overview:
-      "Displays active CLI build version, compilation timestamp, Go runtime, and connected registry source.",
-    details:
-      "Useful for diagnosing environment issues, checking for updates, and verifying compatibility.",
-    flags: [
+    important: [
       {
-        flag: "-h, --help",
-        type: "boolean",
-        defaultVal: "false",
-        description: "Show version command help.",
+        title: "Category Pillars",
+        text: "The catalog is organized into 5 pillars: lang (Programming Languages), os (Operating Systems), cloud (Cloud Platforms), db (Databases), and tool (DevOps Tools).",
       },
     ],
-    lifecycle: [
-      "Reads embedded compile-time variables (Version, BuildDate, GitCommit)",
-      "Queries runtime.Version() for Go compiler specifications",
-      "Detects host runtime.GOOS and runtime.GOARCH (e.g. windows/amd64, darwin/arm64)",
-      "Renders styled ASCII version card to stdout",
-    ],
-    examples: [
+    faq: [
       {
-        title: "Display Version Information",
-        cmd: "trak version",
-        explanation: "Prints version card with runtime and registry info.",
+        question: "How do I see only cloud tracks?",
+        answer: "Run 'trak list cloud' or 'trak list -c cloud'.",
       },
     ],
   },
@@ -199,6 +401,18 @@ const COMMAND_DATA: Record<
         explanation: "Finds the next pending module and opens its directory in VS Code immediately.",
       },
     ],
+    important: [
+      {
+        title: "Editor Launch Compatibility",
+        text: "The --open flag launches your editor using the system 'code' command. Ensure VS Code command line tools are installed in your PATH.",
+      },
+    ],
+    faq: [
+      {
+        question: "What happens when all modules are finished?",
+        answer: "Trak congratulates you with a 100% completion card and lets you know the curriculum track is complete.",
+      },
+    ],
   },
   status: {
     name: "trak status",
@@ -230,15 +444,28 @@ const COMMAND_DATA: Record<
         explanation: "Displays visual progress dashboard and status of all modules in current workspace.",
       },
     ],
+    important: [
+      {
+        title: "Workspace Root Context",
+        text: "Run 'trak status' from within your initialized track folder (or any of its subdirectories) where trak.json resides.",
+      },
+    ],
+    faq: [
+      {
+        question: "Where is my progress stored?",
+        answer: "Your progress is saved locally inside trak.json in your workspace root folder.",
+      },
+    ],
   },
   done: {
     name: "trak done",
     command: "done",
     syntax: "trak done <module> [flags]",
+    aliases: ["complete", "mark"],
     overview:
       "Marks a curriculum module as completed in trak.json, updates completion metrics, and points to your next exercise.",
     details:
-      "Supports smart prefix matching ('trak done 00', 'trak done 1'), keyword search ('trak done runtime'), and full folder names ('trak done 00-setup-and-prerequisites'). Aliases include 'trak complete' and 'trak mark'.",
+      "Supports smart prefix matching ('trak done 00', 'trak done 1'), keyword search ('trak done runtime'), and full folder names ('trak done 00-setup-and-prerequisites'). Essential for hands-on architectural laboratory tracks (Docker, Kubernetes, AWS, PostgreSQL, Linux, Git) that do not have automated compilers. Aliases include 'trak complete' and 'trak mark'.",
     flags: [
       {
         flag: "-h, --help",
@@ -276,11 +503,24 @@ const COMMAND_DATA: Record<
         explanation: "Matches module containing 'goroutines' in its name.",
       },
     ],
+    important: [
+      {
+        title: "Essential for Architectural Labs",
+        text: "While language tracks can be completed automatically via 'trak verify', architectural tracks (Docker, AWS, PostgreSQL, Linux, Kubernetes) rely on 'trak done <module>' once you finish the hands-on commands in the module README.",
+      },
+    ],
+    faq: [
+      {
+        question: "What is the difference between trak verify and trak done?",
+        answer: "trak verify executes native test runners to validate code correctness before marking completion. trak done allows you to mark completion directly, which is ideal for architecture labs or manual review.",
+      },
+    ],
   },
   undo: {
     name: "trak undo",
     command: "undo",
     syntax: "trak undo <module> [flags]",
+    aliases: ["reset", "unmark"],
     overview:
       "Reverts a previously completed curriculum module back to pending in trak.json.",
     details:
@@ -315,6 +555,60 @@ const COMMAND_DATA: Record<
         title: "Using Unmark Alias",
         cmd: "trak unmark 02",
         explanation: "Unmarks Module 02 using the unmark alias.",
+      },
+    ],
+    important: [
+      {
+        title: "Non-Destructive State Reset",
+        text: "Running 'trak undo' only updates the boolean flag in trak.json. It never modifies or deletes your source code or exercise files.",
+      },
+    ],
+    faq: [
+      {
+        question: "Does trak undo delete my code?",
+        answer: "No. Your written code remains untouched on disk. Only the completion status in trak.json is reset to pending.",
+      },
+    ],
+  },
+  version: {
+    name: "trak version",
+    command: "version",
+    syntax: "trak version",
+    overview:
+      "Displays active CLI build version, compilation timestamp, Go runtime, and connected registry source.",
+    details:
+      "Useful for diagnosing environment issues, checking for updates, and verifying compatibility.",
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Show version command help.",
+      },
+    ],
+    lifecycle: [
+      "Reads embedded compile-time variables (Version, BuildDate, GitCommit)",
+      "Queries runtime.Version() for Go compiler specifications",
+      "Detects host runtime.GOOS and runtime.GOARCH (e.g. windows/amd64, darwin/arm64)",
+      "Renders styled ASCII version card to stdout",
+    ],
+    examples: [
+      {
+        title: "Display Version Information",
+        cmd: "trak version",
+        explanation: "Prints version card with runtime and registry info.",
+      },
+    ],
+    important: [
+      {
+        title: "Diagnostics & Support",
+        text: "Always include the output of 'trak version' when reporting CLI issues or filing GitHub bug reports.",
+      },
+    ],
+    faq: [
+      {
+        question: "How do I upgrade Trak to the latest version?",
+        answer: "Re-run the one-line installation command from the Quickstart guide, or run 'go install github.com/ndk123-web/trak@latest'.",
       },
     ],
   },

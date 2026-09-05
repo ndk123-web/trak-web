@@ -316,6 +316,9 @@ function HomeFAQ() {
           <HomeFAQItem q="What languages and tools are supported?">
             Trak currently ships 19 official tracks across 5 pillars: programming languages (Go, Rust, Python, C, C++, Java, JavaScript), databases (PostgreSQL, Redis, SQL), operating systems (Linux), cloud platforms (AWS, Docker, Kubernetes, Terraform, Ansible), and devtools (Git, GitHub Actions, Nginx). Community contributors can add any topic.
           </HomeFAQItem>
+          <HomeFAQItem q="Which tracks support automated testing with 'trak verify'?">
+            Native automated test verification is available across <strong className="text-white">7 programming language tracks</strong>: Go (<code className="text-emerald-300 font-mono">go test</code>), Python (<code className="text-emerald-300 font-mono">unittest</code>), Rust (<code className="text-emerald-300 font-mono">cargo test</code>), JavaScript (<code className="text-emerald-300 font-mono">node --test</code>), TypeScript (<code className="text-emerald-300 font-mono">node --test</code>), C (<code className="text-emerald-300 font-mono">gcc/clang</code>), and C++ (<code className="text-emerald-300 font-mono">g++/clang++</code>). Trak detects compiler binaries directly in your PATH as defined in <code className="text-slate-300 font-mono">internal/shared/runtimes.go</code>. Run <code className="text-emerald-400 font-mono">trak verify allowlists</code> to audit your toolchain readiness. The remaining 12 tracks (OS, Cloud, DB, DevOps) are hands-on labs verified with <code className="text-white font-mono">trak done &lt;module&gt;</code>.
+          </HomeFAQItem>
         </div>
       </div>
     </section>

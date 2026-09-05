@@ -4,7 +4,7 @@ import { CliMatrixView } from "@/components/CliMatrixView";
 
 export const metadata = {
   title: "CLI Commands Matrix • Trak CLI",
-  description: "Complete command-line manual, POSIX flags, and examples for trak init, trak list, and trak version.",
+  description: "Complete command-line manual, POSIX flags, and examples for trak init, trak verify, trak next, trak status, and trak done.",
 };
 
 export default function CliPage() {
@@ -20,7 +20,7 @@ export default function CliPage() {
           Command Line Interface Reference
         </h1>
         <p className="text-slate-400 text-xs sm:text-sm mt-2 max-w-2xl leading-relaxed font-sans">
-          POSIX-standard commands, Cobra flags, deterministic GitHub Raw blueprint resolution, and local workspace generation.
+          POSIX-standard commands, automated test verification, native compiler toolchain detection, and deterministic local workspace generation.
         </p>
       </div>
 
@@ -36,7 +36,7 @@ export default function CliPage() {
         <p className="text-xs text-slate-400 leading-relaxed font-sans">
           The following standard flags and behaviors apply uniformly across all Trak subcommands:
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
           <div className="p-3.5 rounded-lg bg-[#080a0f] border border-white/[0.04] space-y-1 text-xs">
             <div className="text-emerald-300 font-mono font-bold">-h, --help</div>
             <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
@@ -44,9 +44,15 @@ export default function CliPage() {
             </p>
           </div>
           <div className="p-3.5 rounded-lg bg-[#080a0f] border border-white/[0.04] space-y-1 text-xs">
+            <div className="text-emerald-300 font-mono font-bold">trak verify</div>
+            <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+              Executes native test suites across 7 languages and automatically syncs progress in trak.json.
+            </p>
+          </div>
+          <div className="p-3.5 rounded-lg bg-[#080a0f] border border-white/[0.04] space-y-1 text-xs">
             <div className="text-emerald-300 font-mono font-bold">Exit Codes</div>
             <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-              Returns <code className="text-slate-300 font-mono">0</code> on success and non-zero on validation/network failures for CI/CD scripting.
+              Returns <code className="text-slate-300 font-mono">0</code> on success and non-zero on test, validation, or network failures.
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { Terminal, Copy, Check, FolderTree, Play, Sparkles, Layers, RefreshCw } from "lucide-react";
 import { TRACKS, CATEGORIES, TrackItem } from "@/data/tracks";
+import { CategoryIcon } from "@/components/CategoryIcon";
 
 export default function PlaygroundPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("lang");
@@ -79,7 +80,7 @@ export default function PlaygroundPage() {
                         : "bg-slate-900 hover:bg-slate-800 text-slate-300 border border-white/5"
                     }`}
                   >
-                    <span>{cat.icon}</span>
+                    <CategoryIcon category={cat.id} className="w-3.5 h-3.5" />
                     <span className="truncate">{cat.title.split(" ")[0]}</span>
                   </button>
                 ))}

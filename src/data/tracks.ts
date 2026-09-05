@@ -34,39 +34,111 @@ export const CATEGORIES: CategoryInfo[] = [
   {
     id: "lang",
     title: "Programming Languages",
-    icon: "📦",
+    icon: "",
     badgeColor: "from-blue-500/20 to-cyan-500/20 text-cyan-400 border-cyan-500/30",
     description: "Deep-dive syntax, runtime internals, memory models, and concurrency architectures",
   },
   {
     id: "os",
     title: "Operating Systems & Kernels",
-    icon: "🐧",
+    icon: "",
     badgeColor: "from-emerald-500/20 to-teal-500/20 text-emerald-400 border-emerald-500/30",
     description: "Kernel architecture, process signals, filesystems, permissions, and shell administration",
   },
   {
     id: "cloud",
     title: "Cloud Infrastructure",
-    icon: "☁️",
+    icon: "",
     badgeColor: "from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30",
     description: "Global cloud networking, compute, serverless architectures, and FinOps design",
   },
   {
     id: "db",
     title: "Databases & Storage",
-    icon: "🗄️",
+    icon: "",
     badgeColor: "from-indigo-500/20 to-violet-500/20 text-indigo-400 border-indigo-500/30",
     description: "Relational schemas, MVCC internals, indexing engines, in-memory caching, and replication",
   },
   {
     id: "tool",
     title: "DevOps & Developer Tools",
-    icon: "🛠️",
+    icon: "",
     badgeColor: "from-rose-500/20 to-pink-500/20 text-rose-400 border-rose-500/30",
     description: "Containerization, orchestration, IaC pipelines, configuration automation, and version control",
   },
 ];
+
+export interface VerifyRuntimeInfo {
+  trackId: string;
+  name: string;
+  testRunner: string;
+  toolchain: string;
+  command: string;
+  notes: string;
+}
+
+export const VERIFY_RUNTIMES: Record<string, VerifyRuntimeInfo> = {
+  "lang/go": {
+    trackId: "lang/go",
+    name: "Go",
+    testRunner: "go test -v ./...",
+    toolchain: "go",
+    command: "trak verify",
+    notes: "Native Go test runner testing all packages in current module.",
+  },
+  "lang/python": {
+    trackId: "lang/python",
+    name: "Python",
+    testRunner: "unittest discover",
+    toolchain: "python / python3",
+    command: "trak verify",
+    notes: "Standard library unittest test discovery without third-party dependencies.",
+  },
+  "lang/rust": {
+    trackId: "lang/rust",
+    name: "Rust",
+    testRunner: "cargo test",
+    toolchain: "cargo",
+    command: "trak verify",
+    notes: "Invokes cargo test using module Cargo.toml manifest.",
+  },
+  "lang/javascript": {
+    trackId: "lang/javascript",
+    name: "JavaScript",
+    testRunner: "node --test",
+    toolchain: "node / bun",
+    command: "trak verify",
+    notes: "Built-in Node.js native test runner (Node 18+ / 20+), zero npm install needed.",
+  },
+  "lang/typescript": {
+    trackId: "lang/typescript",
+    name: "TypeScript",
+    testRunner: "node --test",
+    toolchain: "node / bun",
+    command: "trak verify",
+    notes: "Native Node.js test runner with built-in TypeScript execution support.",
+  },
+  "lang/c": {
+    trackId: "lang/c",
+    name: "C Systems",
+    testRunner: "gcc / clang",
+    toolchain: "gcc / clang",
+    command: "trak verify",
+    notes: "Compiles test harness and implementation using -Wall -Wextra -std=c11 -lm.",
+  },
+  "lang/cpp": {
+    trackId: "lang/cpp",
+    name: "Modern C++",
+    testRunner: "g++ / clang++",
+    toolchain: "g++ / clang++",
+    command: "trak verify",
+    notes: "Compiles test harness and implementation using -Wall -Wextra -std=c++17.",
+  },
+};
+
+export function isVerifySupported(trackId: string): boolean {
+  return Boolean(VERIFY_RUNTIMES[trackId]);
+}
 
 export const TRACKS: TrackItem[] = [
   // ================= LANGUAGES =================

@@ -3,5 +3,5 @@ export interface Config {
 }
 
 export const TrakConfig: Config = {
-  version: "v1.2.0",
+  version: "v1.3.0",
 };

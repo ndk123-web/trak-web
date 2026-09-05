@@ -17,7 +17,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-export type CommandId = "init" | "list" | "next" | "status" | "done" | "undo" | "version";
+export type CommandId = "init" | "list" | "next" | "verify" | "done" | "undo" | "status" | "version";
 
 interface CommandDetail {
   id: CommandId;
@@ -25,6 +25,7 @@ interface CommandDetail {
   tagline: string;
   description: string;
   syntax: string;
+  aliases?: string[];
   args: { token: string; label: string; desc: string; optional?: boolean }[];
   flags: { flag: string; type: string; defaultVal: string; description: string }[];
   examples: { cmd: string; title: string; desc: string }[];
@@ -178,36 +179,6 @@ const COMMANDS: CommandDetail[] = [
     ],
   },
   {
-    id: "version",
-    name: "trak version",
-    tagline: "Build Diagnostics & Environment Specs",
-    description:
-      "Displays active CLI build version, compilation timestamp, Go runtime compiler, host OS/architecture, Git commit hash, and connected registry source.",
-    syntax: "trak version",
-    args: [],
-    flags: [
-      {
-        flag: "-h, --help",
-        type: "boolean",
-        defaultVal: "false",
-        description: "Display version command help.",
-      },
-    ],
-    examples: [
-      {
-        cmd: "trak version",
-        title: "Print Environment Card",
-        desc: `Prints styled ASCII card with version ${TrakConfig.version}, Go runtime, and system architecture.`,
-      },
-    ],
-    lifecycle: [
-      "Binary Inspection — Reads embedded compile-time metadata (Version, BuildDate, GitCommit)",
-      "Runtime Detection — Queries Go runtime.Version(), host GOOS, and GOARCH",
-      "Registry Verification — Confirms active GitHub Raw registry endpoint",
-      "Card Output — Formats and prints styled terminal info card to stdout",
-    ],
-  },
-  {
     id: "next",
     name: "trak next",
     tagline: "Sequential Exercise & Curriculum Navigator",
@@ -251,34 +222,81 @@ const COMMANDS: CommandDetail[] = [
     ],
   },
   {
-    id: "status",
-    name: "trak status",
-    tagline: "Workspace Progress & State Inspector",
+    id: "verify",
+    name: "trak verify",
+    tagline: "Automated Native Test Verification & Progress Sync",
     description:
-      "Inspects the current workspace for trak.json, calculates curriculum progress metrics, renders an ASCII progress bar, and displays detailed module completion states.",
-    syntax: "trak status",
-    args: [],
+      "Executes native language test suites against your local exercise code, validates test assertions, and automatically marks completed modules in trak.json.",
+    syntax: "trak verify [module] [-a, --all] [-d, --detail] [-l, --list]",
+    aliases: ["test", "check"],
+    args: [
+      {
+        token: "[module]",
+        label: "Target Module",
+        desc: "Optional module number ('00', '1'), keyword ('escape'), or full folder name. If omitted, tests the current pending module.",
+        optional: true,
+      },
+    ],
     flags: [
+      {
+        flag: "-a, --all",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Run automated test suites sequentially across all modules in the workspace.",
+      },
+      {
+        flag: "-d, --detail",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Print full compiler and assertion failure logs when a module fails.",
+      },
+      {
+        flag: "-l, --list",
+        type: "boolean",
+        defaultVal: "false",
+        description: "List all 7 supported language runtimes and local PATH toolchain status.",
+      },
       {
         flag: "-h, --help",
         type: "boolean",
         defaultVal: "false",
-        description: "Display status command help and options.",
+        description: "Display verify command synopsis, options, and examples.",
       },
     ],
     examples: [
       {
-        cmd: "trak status",
-        title: "Inspect Workspace Progress",
-        desc: "Displays visual progress dashboard and status checklist of all curriculum modules.",
+        cmd: "trak verify",
+        title: "Verify Current Exercise",
+        desc: "Detects and tests the active pending module in the curriculum.",
+      },
+      {
+        cmd: "trak verify 00",
+        title: "Verify Module by Number",
+        desc: "Runs native tests on Module 00 using numeric prefix matching.",
+      },
+      {
+        cmd: "trak verify 01 --detail",
+        title: "Detailed Failure Diagnostics",
+        desc: "Outputs compiler stderr and failed test assertions for Module 01.",
+      },
+      {
+        cmd: "trak verify --all",
+        title: "Full Workspace Verification",
+        desc: "Executes test runner across all modules and prints final progress summary.",
+      },
+      {
+        cmd: "trak verify allowlists",
+        title: "Audit System Toolchains",
+        desc: "Displays supported runtimes table and checks local compiler readiness in PATH.",
       },
     ],
     lifecycle: [
-      "Workspace Discovery — Searches current working directory for trak.json manifest",
-      "State Deserialization — Parses module_breakdown completion map",
-      "Progress Calculation — Computes completed vs total modules and exact percentage",
-      "Dashboard Output — Renders track metadata, ASCII progress bar, and checklist",
-      "Next Step Guidance — Suggests the next pending module to work on",
+      "Workspace Verification — Confirms trak.json exists in active working directory",
+      "Track Type Detection — Verifies whether track is an automated language track ('lang')",
+      "Architectural Track Guard — Directs learners to use 'trak done' for non-compiler labs",
+      "Toolchain Resolution — Verifies compiler binary (gcc, cargo, node, etc.) exists in PATH",
+      "Native Execution — Executes native test suite (go test, cargo test, node --test, etc.)",
+      "State Synchronization — Updates trak.json, recalculates progress %, and recommends next exercise",
     ],
   },
   {
@@ -288,6 +306,7 @@ const COMMANDS: CommandDetail[] = [
     description:
       "Marks a specific learning module as completed in trak.json, recalculates progress metrics, and provides rewarding completion feedback.",
     syntax: "trak done <module>",
+    aliases: ["complete", "mark"],
     args: [
       {
         token: "<module>",
@@ -340,6 +359,7 @@ const COMMANDS: CommandDetail[] = [
     description:
       "Reverts a previously completed curriculum module back to pending in trak.json, allowing learners to redo exercises or reset progress.",
     syntax: "trak undo <module>",
+    aliases: ["reset", "unmark"],
     args: [
       {
         token: "<module>",
@@ -378,6 +398,67 @@ const COMMANDS: CommandDetail[] = [
       "State Rollback — Reverts module status to false in trak.json",
       "Progress Recalculation — Recalculates workspace metrics and writes indented JSON",
       "Confirmation Output — Prints clean reset confirmation with updated completion percentage",
+    ],
+  },
+  {
+    id: "status",
+    name: "trak status",
+    tagline: "Workspace Progress & State Inspector",
+    description:
+      "Inspects the current workspace for trak.json, calculates curriculum progress metrics, renders an ASCII progress bar, and displays detailed module completion states.",
+    syntax: "trak status",
+    args: [],
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display status command help and options.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak status",
+        title: "Inspect Workspace Progress",
+        desc: "Displays visual progress dashboard and status checklist of all curriculum modules.",
+      },
+    ],
+    lifecycle: [
+      "Workspace Discovery — Searches current working directory for trak.json manifest",
+      "State Deserialization — Parses module_breakdown completion map",
+      "Progress Calculation — Computes completed vs total modules and exact percentage",
+      "Dashboard Output — Renders track metadata, ASCII progress bar, and checklist",
+      "Next Step Guidance — Suggests the next pending module to work on",
+    ],
+  },
+  {
+    id: "version",
+    name: "trak version",
+    tagline: "Build Diagnostics & Environment Specs",
+    description:
+      "Displays active CLI build version, compilation timestamp, Go runtime compiler, host OS/architecture, Git commit hash, and connected registry source.",
+    syntax: "trak version",
+    args: [],
+    flags: [
+      {
+        flag: "-h, --help",
+        type: "boolean",
+        defaultVal: "false",
+        description: "Display version command help.",
+      },
+    ],
+    examples: [
+      {
+        cmd: "trak version",
+        title: "Print Environment Card",
+        desc: `Prints styled ASCII card with version ${TrakConfig.version}, Go runtime, and system architecture.`,
+      },
+    ],
+    lifecycle: [
+      "Binary Inspection — Reads embedded compile-time metadata (Version, BuildDate, GitCommit)",
+      "Runtime Detection — Queries Go runtime.Version(), host GOOS, and GOARCH",
+      "Registry Verification — Confirms active GitHub Raw registry endpoint",
+      "Card Output — Formats and prints styled terminal info card to stdout",
     ],
   },
 ];
@@ -421,13 +502,18 @@ export function CliMatrixView() {
       <div className="rounded-xl p-6 sm:p-7 bg-[#0d0f15] border border-white/[0.08] space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.06]">
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-xl sm:text-2xl font-bold text-white font-mono">
                 {current.name}
               </h2>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
                 Core Command
               </span>
+              {current.aliases && current.aliases.length > 0 && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.06] text-slate-300 border border-white/[0.08]">
+                  Aliases: {current.aliases.map((a) => `trak ${a}`).join(", ")}
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-400 font-mono">
               {current.tagline}
@@ -502,6 +588,79 @@ export function CliMatrixView() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* 7 Supported Verification Runtimes Matrix */}
+        {current.id === "verify" && (
+          <div className="space-y-3 pt-4 border-t border-white/[0.06]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <div className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider font-semibold">
+                Available Automated Test Runtimes (7 Tracks)
+              </div>
+              <span className="text-[11px] font-mono text-slate-500">
+                Audit PATH: <code className="text-slate-300">trak verify allowlists</code>
+              </span>
+            </div>
+            <div className="overflow-x-auto rounded-lg border border-white/[0.06]">
+              <table className="w-full text-left text-xs font-mono">
+                <thead>
+                  <tr className="bg-white/[0.02] border-b border-white/[0.06] text-slate-400">
+                    <th className="px-3.5 py-2">Language</th>
+                    <th className="px-3.5 py-2">Track Slug</th>
+                    <th className="px-3.5 py-2">Test Runner Command</th>
+                    <th className="px-3.5 py-2">Required Compiler</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.04]">
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">Go</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/go</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">go test -v ./...</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">go</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">Python</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/python</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">python -m unittest discover</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">python / python3</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">Rust</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/rust</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">cargo test</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">cargo</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">JavaScript</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/javascript (lang/js)</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">node --test</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">node / bun</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">TypeScript</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/typescript (lang/ts)</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">node --test</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">node / bun</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">C</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/c</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">gcc / clang (-std=c11 -lm)</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">gcc / clang</td>
+                  </tr>
+                  <tr className="hover:bg-white/[0.01]">
+                    <td className="px-3.5 py-2.5 font-bold text-white">C++</td>
+                    <td className="px-3.5 py-2.5 text-emerald-400">lang/cpp</td>
+                    <td className="px-3.5 py-2.5 text-slate-300">g++ / clang++ (-std=c++17)</td>
+                    <td className="px-3.5 py-2.5 text-cyan-300">g++ / clang++</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[11px] text-slate-400 font-sans leading-relaxed pt-1">
+              Hands-on architectural laboratories (Docker, Kubernetes, AWS, PostgreSQL, Linux, Git) do not have code compilers. Complete exercises according to their README instructions and record progress using <code className="text-emerald-400 font-mono">trak done &lt;module&gt;</code>.
+            </p>
           </div>
         )}
       </div>

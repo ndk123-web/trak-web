@@ -2,28 +2,64 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Terminal, Copy, Check, ArrowRight, BookOpen, Layers, Sparkles, CheckCircle2 } from "lucide-react";
+import {
+  Terminal,
+  Copy,
+  Check,
+  ArrowRight,
+  BookOpen,
+  Layers,
+  CheckCircle2,
+  AlertCircle,
+  HelpCircle,
+  Cpu,
+  ShieldCheck,
+  Code2,
+} from "lucide-react";
 
 interface CliCommandClientProps {
   data: {
     name: string;
     command: string;
     syntax: string;
+    aliases?: string[];
     overview: string;
     details: string;
+    subcommands?: {
+      cmd: string;
+      aliases?: string[];
+      description: string;
+      example: string;
+    }[];
+    runtimes?: {
+      name: string;
+      track: string;
+      testRunner: string;
+      executables: string[];
+      localNote: string;
+    }[];
     flags: { flag: string; type: string; defaultVal: string; description: string }[];
     lifecycle: string[];
     examples: { cmd: string; title: string; explanation: string }[];
+    important?: { title: string; text: string }[];
+    faq?: { question: string; answer: string }[];
   };
 }
 
 export function CliCommandClient({ data }: CliCommandClientProps) {
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [copiedSubIdx, setCopiedSubIdx] = useState<number | null>(null);
 
   const copyCommand = (cmd: string, idx: number) => {
     navigator.clipboard.writeText(cmd);
     setCopiedIdx(idx);
     setTimeout(() => setCopiedIdx(null), 2000);
+  };
+
+  const copySubCommand = (cmd: string, idx: number) => {
+    navigator.clipboard.writeText(cmd);
+    setCopiedSubIdx(idx);
+    setTimeout(() => setCopiedSubIdx(null), 2000);
   };
 
   return (
@@ -43,38 +79,171 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-mono">
-          {data.name}
-        </h1>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight font-mono">
+            {data.name}
+          </h1>
+          {data.aliases && data.aliases.length > 0 && (
+            <div className="flex items-center gap-1.5 pt-1">
+              <span className="text-[11px] font-mono text-slate-500">Aliases:</span>
+              {data.aliases.map((al, idx) => (
+                <span
+                  key={idx}
+                  className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold"
+                >
+                  trak {al}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
 
         <p className="text-slate-300 text-base sm:text-lg mt-3 leading-relaxed">
           {data.overview}
         </p>
 
         {/* Syntax Box */}
-        <div className="mt-6 p-4 rounded-xl bg-slate-950 border border-white/10 font-mono text-sm text-emerald-400">
-          $ {data.syntax}
+        <div className="mt-6 p-4 rounded-xl bg-slate-950 border border-white/10 font-mono text-sm text-emerald-400 flex items-center justify-between gap-3">
+          <div className="overflow-x-auto select-all">
+            $ {data.syntax}
+          </div>
         </div>
       </div>
 
       {/* Deep-Dive Overview */}
       <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
-        <h3 className="text-lg font-bold text-white">Command Overview</h3>
-        <p className="text-sm text-slate-300 leading-relaxed">
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <BookOpen className="w-5 h-5 text-emerald-400" />
+          <span>Command Overview</span>
+        </h3>
+        <p className="text-sm text-slate-300 leading-relaxed font-sans">
           {data.details}
         </p>
       </div>
 
+      {/* Supported Runtimes (if present, e.g. for verify) */}
+      {data.runtimes && data.runtimes.length > 0 && (
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Cpu className="w-5 h-5 text-emerald-400" />
+              <span>Supported Language Verification Runtimes</span>
+            </h3>
+            <span className="text-xs font-mono text-slate-400">
+              {data.runtimes.length} Automated Tracks
+            </span>
+          </div>
+          <p className="text-xs text-slate-300 leading-relaxed font-sans">
+            Trak automatically detects the required toolchains in your system PATH and executes native test harnesses with zero external configuration.
+          </p>
+
+          <div className="overflow-x-auto rounded-xl border border-white/10">
+            <table className="w-full text-left text-xs font-mono">
+              <thead>
+                <tr className="bg-white/[0.03] border-b border-white/10 text-slate-400">
+                  <th className="px-4 py-3 font-semibold">Language</th>
+                  <th className="px-4 py-3 font-semibold">Track Pattern</th>
+                  <th className="px-4 py-3 font-semibold">Required Binary</th>
+                  <th className="px-4 py-3 font-semibold">Test Runner</th>
+                  <th className="px-4 py-3 font-semibold">Architecture Note</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {data.runtimes.map((rt, idx) => (
+                  <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="px-4 py-3 text-white font-bold whitespace-nowrap">
+                      {rt.name}
+                    </td>
+                    <td className="px-4 py-3 text-emerald-400 whitespace-nowrap">
+                      {rt.track}
+                    </td>
+                    <td className="px-4 py-3 text-cyan-300 whitespace-nowrap">
+                      {rt.executables.join(" / ")}
+                    </td>
+                    <td className="px-4 py-3 text-slate-200 whitespace-nowrap">
+                      <code className="px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-emerald-300">
+                        {rt.testRunner}
+                      </code>
+                    </td>
+                    <td className="px-4 py-3 text-slate-400 font-sans leading-relaxed text-[11px]">
+                      {rt.localNote}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Subcommands (if present, e.g. verify allowlists) */}
+      {data.subcommands && data.subcommands.length > 0 && (
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
+          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <Terminal className="w-5 h-5 text-emerald-400" />
+            <span>Subcommands</span>
+          </h3>
+          <div className="space-y-4">
+            {data.subcommands.map((sub, idx) => {
+              const isCopied = copiedSubIdx === idx;
+              return (
+                <div
+                  key={idx}
+                  className="p-5 rounded-xl bg-slate-950 border border-white/10 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <code className="text-emerald-400 font-mono font-bold text-sm">
+                      {sub.cmd}
+                    </code>
+                    {sub.aliases && sub.aliases.length > 0 && (
+                      <span className="text-[11px] font-mono text-slate-400">
+                        Aliases:{" "}
+                        <span className="text-slate-300">
+                          {sub.aliases.join(", ")}
+                        </span>
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                    {sub.description}
+                  </p>
+                  <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-black/60 border border-white/10 font-mono text-xs">
+                    <div className="flex items-center gap-2 overflow-x-auto text-slate-200">
+                      <span className="text-emerald-400 font-bold">$</span>
+                      <span className="select-all">{sub.example}</span>
+                    </div>
+                    <button
+                      onClick={() => copySubCommand(sub.example, idx)}
+                      className="p-1.5 rounded bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer shrink-0"
+                      title="Copy subcommand"
+                    >
+                      {isCopied ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Execution Lifecycle */}
       <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
-        <h3 className="text-lg font-bold text-white">Execution Lifecycle</h3>
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <Layers className="w-5 h-5 text-emerald-400" />
+          <span>Execution Lifecycle</span>
+        </h3>
         <div className="space-y-3">
           {data.lifecycle.map((step, idx) => (
             <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
               <div className="w-6 h-6 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center justify-center shrink-0">
                 {idx + 1}
               </div>
-              <span className="leading-relaxed mt-0.5">{step}</span>
+              <span className="leading-relaxed mt-0.5 font-sans">{step}</span>
             </div>
           ))}
         </div>
@@ -82,7 +251,10 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
 
       {/* Flags Reference Table */}
       <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4">
-        <h3 className="text-lg font-bold text-white">Available Flags</h3>
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <Terminal className="w-5 h-5 text-emerald-400" />
+          <span>Available Flags</span>
+        </h3>
         <div className="space-y-3">
           {data.flags.map((f, idx) => (
             <div
@@ -98,7 +270,7 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
                   <span className="text-slate-300">{f.defaultVal}</span>
                 </span>
               </div>
-              <p className="text-xs text-slate-300">{f.description}</p>
+              <p className="text-xs text-slate-300 font-sans leading-relaxed">{f.description}</p>
             </div>
           ))}
         </div>
@@ -106,7 +278,10 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
 
       {/* Real-World Examples */}
       <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
-        <h3 className="text-lg font-bold text-white">Usage Examples</h3>
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <Code2 className="w-5 h-5 text-emerald-400" />
+          <span>Usage Examples</span>
+        </h3>
         <div className="space-y-4">
           {data.examples.map((ex, idx) => {
             const isCopied = copiedIdx === idx;
@@ -132,12 +307,65 @@ export function CliCommandClient({ data }: CliCommandClientProps) {
                     )}
                   </button>
                 </div>
-                <p className="text-[11px] text-slate-400">{ex.explanation}</p>
+                <p className="text-[11px] text-slate-400 font-sans leading-relaxed">{ex.explanation}</p>
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Important Technical Notices */}
+      {data.important && data.important.length > 0 && (
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-4 border-amber-500/20 bg-gradient-to-b from-amber-500/[0.04] to-transparent">
+          <h3 className="text-lg font-bold text-amber-300 flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-amber-400" />
+            <span>Important Technical Guidelines</span>
+          </h3>
+          <div className="grid grid-cols-1 gap-4 pt-1">
+            {data.important.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-slate-950/80 border border-amber-500/20 space-y-1.5"
+              >
+                <div className="text-xs font-bold text-amber-300 font-mono">
+                  {item.title}
+                </div>
+                <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Frequently Asked Questions (FAQ) */}
+      {data.faq && data.faq.length > 0 && (
+        <div className="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
+          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-emerald-400" />
+            <span>Frequently Asked Questions (FAQ)</span>
+          </h3>
+          <div className="space-y-4">
+            {data.faq.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-xl bg-slate-950 border border-white/5 space-y-2"
+              >
+                <div className="text-xs sm:text-sm font-bold text-white font-sans flex items-start gap-2">
+                  <span className="text-emerald-400 font-mono font-bold shrink-0">
+                    Q:
+                  </span>
+                  <span>{item.question}</span>
+                </div>
+                <div className="text-xs text-slate-300 font-sans leading-relaxed pl-5">
+                  {item.answer}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

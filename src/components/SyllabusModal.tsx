@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { X, Copy, Check, Terminal, BookOpen, Layers, Sparkles } from "lucide-react";
-import { TrackItem } from "@/data/tracks";
+import { X, Copy, Check, Terminal, BookOpen, Layers, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import { TrackItem, VERIFY_RUNTIMES, isVerifySupported } from "@/data/tracks";
 
 interface SyllabusModalProps {
   track: TrackItem | null;
@@ -80,6 +80,31 @@ export function SyllabusModal({ track, onClose }: SyllabusModalProps) {
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? "Copied" : "Copy Command"}</span>
             </button>
+          </div>
+
+          {/* Verification Method Box */}
+          <div className="mt-2.5 p-3 rounded-xl bg-black/40 border border-white/5 font-mono text-xs">
+            {isVerifySupported(track.id) ? (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-emerald-400 font-bold">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Automated Verification: trak verify</span>
+                </div>
+                <div className="text-[11px] text-slate-300">
+                  Runner: <code className="text-emerald-300 font-mono">{VERIFY_RUNTIMES[track.id].testRunner}</code> • Toolchain: <span className="text-cyan-300 font-mono">{VERIFY_RUNTIMES[track.id].toolchain}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-slate-400">
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Terminal className="w-4 h-4 text-slate-500 shrink-0" />
+                  <span>Architectural Laboratory Track</span>
+                </div>
+                <div className="text-[11px] text-slate-400">
+                  Mark exercises via: <code className="text-emerald-400 font-mono font-bold">trak done &lt;module&gt;</code>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

@@ -60,10 +60,10 @@ export default function QuickstartPage() {
     },
     {
       number: "6",
-      title: "Track Progress & Mark Modules Complete",
-      description: "Inspect workspace state or mark completed modules with smart prefix matching:",
-      command: "trak status && trak done 00",
-      tip: "Use 'trak next' to find what to study next, 'trak status' for your progress dashboard, and 'trak undo <module>' to reset.",
+      title: "Verify Exercises & Sync Progress",
+      description: "Execute native automated unit tests on language tracks or inspect workspace metrics:",
+      command: "trak verify 00 && trak status",
+      tip: "Use 'trak verify' for automated unit testing (or 'trak done <module>' for hands-on architectural labs), 'trak next' to find what to study next, and 'trak undo <module>' to reset.",
     },
   ];
 
@@ -196,7 +196,8 @@ export default function QuickstartPage() {
 
               {/* Tip text */}
               <div className="text-[11px] font-mono text-slate-500 pt-1">
-                💡 <span className="text-slate-400">{s.tip}</span>
+                <span className="text-emerald-400 font-bold font-mono">Tip:</span>{" "}
+                <span className="text-slate-400">{s.tip}</span>
               </div>
             </div>
           );
