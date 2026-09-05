@@ -35,9 +35,6 @@ export default function Home() {
               <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
               <span className="text-xs font-mono text-slate-400 ml-2">trak-terminal-demo.mp4</span>
             </div>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.08]">
-              HD Demo (18s)
-            </span>
           </div>
 
           <AmbientVideo src="https://github.com/user-attachments/assets/9156fea7-4da7-4431-9039-4db4a1ed0b4a" />
