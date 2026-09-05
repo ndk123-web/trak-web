@@ -27,7 +27,7 @@
 ## 🎬 Demo (v1.1.0)
 
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/4210baaf-ef0d-469b-9a8a-f0e244d9b9a3" controls="controls" width="100%" style="max-width: 900px; border-radius: 12px;"></video>
+  <video src="https://github.com/user-attachments/assets/9156fea7-4da7-4431-9039-4db4a1ed0b4a" controls="controls" width="100%" style="max-width: 900px; border-radius: 12px;"></video>
 </p>
 
 ---
