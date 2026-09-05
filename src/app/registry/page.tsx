@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { BookOpen, Terminal, Copy, Check, ChevronDown, ArrowRight } from "lucide-react";
+import { BookOpen, Terminal, Copy, Check, ChevronDown, ArrowRight, Layers, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { CategoryIcon } from "@/components/CategoryIcon";
 
 function FAQItem({ q, children }: { q: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -124,6 +125,130 @@ export default function RegistryPage() {
               </tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/* ── Allowed Categories Specification ── */}
+      <section className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 className="text-sm font-bold text-white flex items-center gap-2">
+            <Layers className="w-4 h-4 text-emerald-400" />
+            Allowed Track Categories (5 Canonical Pillars)
+          </h2>
+          <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto">
+            Strict CI Validation
+          </span>
+        </div>
+        <p className="text-xs text-slate-400 font-sans leading-relaxed">
+          Every blueprint submitted to Trak Registry must belong to one of the <strong>5 canonical engineering categories</strong> below. The CLI uses this category to resolve runtimes, parse commands, and route exercises. Any PR using custom or unlisted categories (e.g. <code className="text-slate-300 font-mono">web</code>, <code className="text-slate-300 font-mono">frontend</code>, <code className="text-slate-300 font-mono">misc</code>) will fail GitHub Actions CI Pass 1.
+        </p>
+
+        <div className="space-y-3">
+          {[
+            {
+              id: "lang",
+              name: "Programming Languages",
+              scope: "Syntax, memory management, concurrency models, compiler flags, and native standard libraries.",
+              examples: ["go", "rust", "python", "typescript", "javascript", "c", "cpp", "zig", "java"],
+              automatedVerify: true,
+              verificationLabel: "Native Compiler Testing (trak verify)",
+            },
+            {
+              id: "os",
+              name: "Operating Systems & Kernel",
+              scope: "Kernel internals, POSIX syscalls, process scheduling, eBPF, memory paging, and Linux systems administration.",
+              examples: ["linux", "kernel", "freebsd", "unix"],
+              automatedVerify: false,
+              verificationLabel: "Milestone Laboratories (trak done <module>)",
+            },
+            {
+              id: "cloud",
+              name: "Cloud & Distributed Systems",
+              scope: "Cloud infrastructure architectures, distributed consensus, microservices, messaging, and cloud networking.",
+              examples: ["aws", "gcp", "azure", "distributed-systems"],
+              automatedVerify: false,
+              verificationLabel: "Milestone Laboratories (trak done <module>)",
+            },
+            {
+              id: "db",
+              name: "Databases & Storage Internals",
+              scope: "Storage engines, Write-Ahead Logging (WAL), B-Trees/LSM-Trees, indexing, crash recovery, and ACID isolation.",
+              examples: ["postgres", "redis", "mysql", "sqlite", "mongodb"],
+              automatedVerify: false,
+              verificationLabel: "Milestone Laboratories (trak done <module>)",
+            },
+            {
+              id: "tool",
+              name: "DevOps & Developer Tooling",
+              scope: "Container engines, CI/CD orchestration, Infrastructure as Code, configuration managers, and dev tools.",
+              examples: ["docker", "kubernetes", "ansible", "git", "terraform"],
+              automatedVerify: false,
+              verificationLabel: "Milestone Laboratories (trak done <module>)",
+            },
+          ].map((cat) => (
+            <div
+              key={cat.id}
+              className="p-4 rounded-lg bg-[#0d0f15] border border-white/[0.08] hover:border-emerald-500/30 transition-colors space-y-3"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/[0.04]">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-1.5 rounded bg-white/[0.04] border border-white/[0.06]">
+                    <CategoryIcon category={cat.id} className="w-4 h-4 text-emerald-400" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-mono font-bold text-emerald-400 mr-2">{cat.id}</span>
+                    <span className="text-xs font-medium text-white">{cat.name}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono text-slate-400 bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.06]">
+                    users/&lt;you&gt;/{cat.id}/&lt;tool&gt;.json
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-400 font-sans leading-relaxed">
+                {cat.scope}
+              </p>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-mono text-slate-500 mr-1">Examples:</span>
+                  {cat.examples.map((ex) => (
+                    <span
+                      key={ex}
+                      className="text-[10px] font-mono text-slate-300 bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.06]"
+                    >
+                      {ex}
+                    </span>
+                  ))}
+                </div>
+                <div className="shrink-0">
+                  {cat.automatedVerify ? (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                      {cat.verificationLabel}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-slate-400 bg-white/[0.03] px-2 py-0.5 rounded border border-white/[0.06]">
+                      <Layers className="w-3 h-3 text-slate-500" />
+                      {cat.verificationLabel}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="p-3.5 rounded-lg bg-emerald-500/[0.04] border border-emerald-500/20 text-xs text-slate-300 space-y-1">
+          <div className="font-semibold text-emerald-400 flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4" />
+            Guideline for Contributors:
+          </div>
+          <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+            When creating a <code className="text-emerald-400 font-mono">lang</code> track, include runnable test harnesses (<code className="text-slate-300 font-mono">exercise_test.go</code>, <code className="text-slate-300 font-mono">exercise_test.py</code>, etc.) so users can run <code className="text-emerald-400 font-mono">trak verify</code> with their native compiler. For <code className="text-slate-300 font-mono">os</code>, <code className="text-slate-300 font-mono">cloud</code>, <code className="text-slate-300 font-mono">db</code>, and <code className="text-slate-300 font-mono">tool</code> tracks, focus on declarative config files (<code className="text-slate-300 font-mono">docker-compose.yml</code>, playbooks, SQL scripts) and step-by-step architectural READMEs.
+          </p>
         </div>
       </section>
 
@@ -326,7 +451,7 @@ export default function RegistryPage() {
             No. Official templates are maintained by the repo owner. If you try to modify anything under <code className="text-slate-300 font-mono">templates/</code>, the CI rejects with: <code className="text-slate-300 font-mono">&quot;cannot modify official templates/&quot;</code>. Create your own version under <code className="text-slate-300 font-mono">users/alice/lang/go.json</code> instead.
           </FAQItem>
           <FAQItem q="What categories can I use?">
-            Five: <code className="text-slate-300 font-mono">lang</code> (programming languages), <code className="text-slate-300 font-mono">os</code> (operating systems), <code className="text-slate-300 font-mono">cloud</code> (cloud platforms), <code className="text-slate-300 font-mono">db</code> (databases), and <code className="text-slate-300 font-mono">tool</code> (devtools &amp; frameworks). Using anything else fails validation.
+            You must use one of the five canonical categories: <code className="text-emerald-400 font-mono">lang</code> (programming languages), <code className="text-emerald-400 font-mono">os</code> (operating systems &amp; kernel), <code className="text-emerald-400 font-mono">cloud</code> (cloud platforms &amp; distributed systems), <code className="text-emerald-400 font-mono">db</code> (databases &amp; storage internals), and <code className="text-emerald-400 font-mono">tool</code> (DevOps, containers &amp; tooling). Tracks under <code className="text-emerald-400 font-mono">lang</code> support automated compiler verification via <code className="text-emerald-400 font-mono">trak verify</code>, whereas <code className="text-emerald-400 font-mono">os</code>, <code className="text-emerald-400 font-mono">cloud</code>, <code className="text-emerald-400 font-mono">db</code>, and <code className="text-emerald-400 font-mono">tool</code> are hands-on architectural milestone labs marked with <code className="text-emerald-400 font-mono">trak done &lt;module&gt;</code>. Custom or arbitrary categories (e.g. &apos;web&apos;, &apos;frontend&apos;, &apos;misc&apos;) are strictly rejected by the automated CI validator.
           </FAQItem>
           <FAQItem q="How do I publish multiple versions of the same track?">
             Add <code className="text-emerald-400 font-mono">@version</code> to the filename. <code className="text-slate-300 font-mono">postgres.json</code> is the default, <code className="text-slate-300 font-mono">postgres@v1.1.0.json</code> is v1.1, <code className="text-slate-300 font-mono">postgres@v2.0.0.json</code> is v2. Users choose with <code className="text-emerald-400 font-mono">trak init alice/db/postgres@v1.1.0</code>.
