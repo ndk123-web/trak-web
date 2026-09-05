@@ -19,6 +19,7 @@ import {
   Code2,
   HardDrive,
   Cpu,
+  CheckCircle2,
 } from "lucide-react";
 import { CATEGORIES, TRACKS } from "@/data/tracks";
 import { TrakLogo } from "./TrakLogo";
@@ -70,6 +71,7 @@ export function Sidebar({
       title: "Learning Tracks",
       items: [
         { name: "All Blueprints", href: "/tracks", icon: Layers, badge: `${TRACKS.length}` },
+        { name: "Automated Verify", href: "/cli/verify", icon: CheckCircle2, badge: "7 Auto" },
         ...CATEGORIES.map((cat) => {
           const count = TRACKS.filter((t) => t.category === cat.id).length;
           return {
@@ -86,10 +88,11 @@ export function Sidebar({
       items: [
         { name: "Commands Matrix", href: "/cli", icon: Terminal },
         { name: "trak init", href: "/cli/init", icon: Terminal, isCode: true },
-        { name: "trak list", href: "/cli/list", icon: Terminal, isCode: true },
+        { name: "trak verify", href: "/cli/verify", icon: CheckCircle2, isCode: true, badge: "7 Runtimes" },
+        { name: "trak done", href: "/cli/done", icon: Terminal, isCode: true },
         { name: "trak next", href: "/cli/next", icon: Terminal, isCode: true },
         { name: "trak status", href: "/cli/status", icon: Terminal, isCode: true },
-        { name: "trak done", href: "/cli/done", icon: Terminal, isCode: true },
+        { name: "trak list", href: "/cli/list", icon: Terminal, isCode: true },
         { name: "trak undo", href: "/cli/undo", icon: Terminal, isCode: true },
         { name: "trak version", href: "/cli/version", icon: Terminal, isCode: true },
       ],
@@ -259,21 +262,43 @@ export function Sidebar({
               <PanelLeft className="w-4 h-4 text-emerald-400" />
             </button>
           ) : (
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-white/[0.06] text-[11px] space-y-1.5">
-              <div className="flex items-center justify-between text-slate-400">
-                <span className="font-mono text-slate-300 font-medium">ndk123-web/trak</span>
-                <a
-                  href="https://github.com/ndk123-web/trak"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-400 hover:text-emerald-300"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-              <div className="text-[10px] text-slate-500 flex items-center justify-between">
-                <span>MIT License</span>
-                <span className="font-mono text-emerald-400">{TrakConfig.version}</span>
+            <div className="space-y-2">
+              {/* Quick Verification Status Pill */}
+              <Link
+                href="/cli/verify"
+                className="block p-2 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors group"
+                title="View automated test verification runtimes"
+              >
+                <div className="flex items-center justify-between text-[11px] font-mono">
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>trak verify</span>
+                  </span>
+                  <span className="text-[10px] text-emerald-300 bg-emerald-500/20 px-1.5 py-0.2 rounded border border-emerald-500/30">
+                    7 runtimes
+                  </span>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1 leading-tight font-sans">
+                  Automated testing: Go, Python, Rust, Node, TS, C, C++.
+                </p>
+              </Link>
+
+              <div className="p-2.5 rounded-xl bg-slate-950/80 border border-white/[0.06] text-[11px] space-y-1.5">
+                <div className="flex items-center justify-between text-slate-400">
+                  <span className="font-mono text-slate-300 font-medium">ndk123-web/trak</span>
+                  <a
+                    href="https://github.com/ndk123-web/trak"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-emerald-400 hover:text-emerald-300"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+                <div className="text-[10px] text-slate-500 flex items-center justify-between">
+                  <span>MIT License</span>
+                  <span className="font-mono text-emerald-400">{TrakConfig.version}</span>
+                </div>
               </div>
             </div>
           )}
