@@ -264,7 +264,7 @@ export function Sidebar({
           ) : (
             <div className="space-y-2">
               {/* Quick Verification Status Pill */}
-              <Link
+              {/* <Link
                 href="/cli/verify"
                 className="block p-2 rounded-xl bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors group"
                 title="View automated test verification runtimes"
@@ -299,7 +299,7 @@ export function Sidebar({
                   <span>MIT License</span>
                   <span className="font-mono text-emerald-400">{TrakConfig.version}</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
         </div>
